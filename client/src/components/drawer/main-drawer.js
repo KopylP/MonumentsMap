@@ -4,6 +4,7 @@ import DrawerContainer from "../common/drawer-container/drawer-container";
 import DrawerHeader from "./drawer-header/drawer-header";
 import DrawerContent from "./drawer-content/drawer-content";
 import AppContext from "../../context/app-context";
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { makeStyles } from "@material-ui/core";
 
 // width: 350px;

@@ -21,4 +21,3 @@ export default function Map(props) {
     ></GoogleMapReact>
   );
 }
-asdfasdfasdf

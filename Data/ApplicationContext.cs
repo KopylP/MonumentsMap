@@ -1,0 +1,23 @@
+using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Models;
+
+namespace MonumentsMap.Data
+{
+    public class ApplicationContext : DbContext
+    {
+        #region constructor
+        public ApplicationContext(DbContextOptions options) : base(options) { }
+        #endregion
+
+        #region  props
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Condition> Conditions { get; set; }
+        public DbSet<Culture> Cultures { get; set; }
+        public DbSet<Localization> Localizations { get; set; }
+        public DbSet<LocalizationSet> LocalizationSets { get; set; }
+        public DbSet<Monument> Monuments { get; set; }
+        public DbSet<MonumentPhoto> MonumentPhotos { get; set; }
+        public DbSet<Status> Statuses { get; set; }
+        #endregion
+    }
+}

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
+import { findByLabelText } from "@testing-library/react";
 
 export default function DrawerContainer(props) {
-  const { onClose } = props;
   return (
-    <Grid
-      container
-      xs="12"
-      direction="column"
-      justify="flex-start"
-      alignItems="stretch"
-    >
+    <div style={{
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
+        justifyContent: "start"
+    }}>
       {props.children}
-    </Grid>
+    </div>
   );
 }

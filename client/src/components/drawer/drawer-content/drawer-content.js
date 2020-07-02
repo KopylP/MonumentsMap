@@ -34,7 +34,17 @@ const useStyles = makeStyles((theme) => ({
     bottom: 10,
     right: 10,
     zIndex: 999,
+    visibility: "hidden",
+    [theme.breakpoints.up('sm')]: {
+        visibility: 'visible',
+    },
   },
+  searchField: {
+      marginBottom: 20,
+    [theme.breakpoints.up('sm')]: {
+        marginBottom: 0
+    },     
+  }
 }));
 
 export default function DrawerContent(props) {
@@ -60,6 +70,7 @@ export default function DrawerContent(props) {
             {...defaultProps}
             id="clear-on-escape"
             clearOnEscape
+            multiple
             renderInput={(params) => (
               <TextField {...params} label="Місто" margin="normal" />
             )}
@@ -68,7 +79,7 @@ export default function DrawerContent(props) {
         <Grid item xs="12" className={classes.marginTop13}>
           <FormControl className={classes.width100per}>
             <InputLabel>Статус пам'ятки</InputLabel>
-            <Select>
+            <Select multiple value={[]}>
               <MenuItem value="">Всі</MenuItem>
               <MenuItem value={10}>Пам'ятка національного значення</MenuItem>
               <MenuItem value={20}>Пам'ятка місцевого значення</MenuItem>
@@ -78,7 +89,7 @@ export default function DrawerContent(props) {
         <Grid item xs="12" className={classes.marginTop20}>
           <FormControl className={classes.width100per}>
             <InputLabel>Стан пам'ятки архітектури</InputLabel>
-            <Select>
+            <Select multiple value={[]}>
               <MenuItem value="">Всі</MenuItem>
               <MenuItem value={10}>Задовільний</MenuItem>
               <MenuItem value={20}>Потребує відновлення</MenuItem>
@@ -93,6 +104,7 @@ export default function DrawerContent(props) {
             spacing={1}
             alignItems="flex-end"
             justify="space-between"
+            className={classes.searchField}
           >
             <Grid item xs="1">
               <SearchIcon />

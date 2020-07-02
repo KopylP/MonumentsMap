@@ -23,7 +23,7 @@ const theme = createMuiTheme({
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
-    position: "absolute",
+    position: "fixed",
     left: 10,
     top: 10,
   },

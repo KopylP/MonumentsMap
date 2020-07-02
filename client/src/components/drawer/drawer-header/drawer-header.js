@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(${DrawerImage})`,
     backgroundSize: "cover",
     position: "relative",
+    backgroundPosition: "center"
   },
   fabBack: {
     position: "absolute",
@@ -24,7 +25,6 @@ function DrawerHeader(props) {
   const classes = useStyles(props);
   const { onBack } = props;
   return (
-    <div>
       <div className={classes.backButtonContainer}>
         <Fab
           size="small"
@@ -35,7 +35,6 @@ function DrawerHeader(props) {
           <ArrowBackIcon style={{ color: "white" }} />
         </Fab>
       </div>
-    </div>
   );
 }
 

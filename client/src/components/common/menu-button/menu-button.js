@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 5,
     paddingLeft: 5,
     paddingRight: 5,
+    '&:hover': {
+        background: "#eee"
+    }
   },
 }));
 
