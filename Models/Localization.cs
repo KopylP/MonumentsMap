@@ -2,10 +2,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
 {
-    public class Localization
+    public class Localization : Entity
     {
         #region props
-        public int Id {get; set;}
         public int LocalizationSetId { get; set; }
         public string CultureCode { get; set; }
         public string Value { get; set; }

@@ -2,10 +2,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
 {
-    public class Monument
+    public class Monument : Entity
     {
         #region props
-        public int Id { get; set; }
         public int Year { get; set; }
         public Period Period { get; set; }
         public int NameId { get; set; }
