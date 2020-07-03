@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using MonumentsMap.Models;
 using MonumentsMap.ViewModels.LocalizedModels;
 using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
@@ -35,14 +34,14 @@ namespace MonumentsMap.Data.Repositories
         {
             var entities = context.Set<TEntity>().AsQueryable();
             var filteredEntities = entities.Where(predicate);
-            return IncludeNessesaryProps(filteredEntities.AsQueryable()).Select(GetSelectHandler(cultureCode)).ToList();
+            return IncludeNecessaryProps(filteredEntities.AsQueryable()).Select(GetSelectHandler(cultureCode)).ToList();
         }
 
         public async Task<TLocalizedEntity> Get(string cultureCode, int id)
         {
             var query = context.Set<TEntity>()
                 .Where(p => p.Id == id);
-                return IncludeNessesaryProps(query)
+                return IncludeNecessaryProps(query)
                 .Select(GetSelectHandler(cultureCode))
                 .FirstOrDefault();
         }
@@ -50,11 +49,11 @@ namespace MonumentsMap.Data.Repositories
         public async Task<List<TLocalizedEntity>> GetAll(string cultureCode)
         {
             var entities = context.Set<TEntity>().AsQueryable();
-            return IncludeNessesaryProps(entities).Select(GetSelectHandler(cultureCode)).ToList();
+            return IncludeNecessaryProps(entities).Select(GetSelectHandler(cultureCode)).ToList();
         }
 
         public abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode);
-        public abstract IQueryable<TEntity> IncludeNessesaryProps(IQueryable<TEntity> source);
+        public abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source);
 
         public async Task<TEntity> Update(TEditableLocalizedEntity editableLocalizedEntity)
         {

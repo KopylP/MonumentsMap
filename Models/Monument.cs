@@ -12,6 +12,7 @@ namespace MonumentsMap.Models
         public int CityId { get; set; }
         public int StatusId { get; set; }
         public int ConditionId { get; set; }
+        public bool Accepted { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         #endregion
