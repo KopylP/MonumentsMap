@@ -36,6 +36,8 @@ namespace MonumentsMap
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddScoped<CityLocalizedRepository>();
+            services.AddScoped<StatusLocalizedRepository>();
+            services.AddScoped<ConditionLocalizedRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

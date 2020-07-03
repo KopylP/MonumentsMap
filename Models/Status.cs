@@ -3,10 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
 {
-    public class Status
+    public class Status : Entity
     {
         #region props
-        public int Id { get; set; }
         public int NameId { get; set; }
         public int? DescriptionId { get; set; }
         public string Abbreviation { get; set; }
