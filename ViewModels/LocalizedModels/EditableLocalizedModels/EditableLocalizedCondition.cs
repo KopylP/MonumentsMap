@@ -5,23 +5,33 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
 {
     public class EditableLocalizedCondition : EditableLocalizedEntity<Condition>
     {
-        public int Id { get; set; }
         public List<CultureValuePair> Name { get; set; }
         public List<CultureValuePair> Description { get; set; }
         public string Abbreviation { get; set; }
 
-        public override Condition CreateEntity()
+        public override Condition CreateEntity(Condition editCondition = null)
         {
-           var condition = new Condition
+            Condition condition = null;
+            if (editCondition != null)
             {
-                Id = this.Id,
-                Abbreviation = this.Abbreviation,
-                Name = new LocalizationSet
+                condition = editCondition;
+                condition.Name.Localizations.Clear();
+                condition.Description?.Localizations?.Clear();
+            }
+            else
+            {
+                condition = new Condition
                 {
-                    Localizations = new List<Localization>()
-                },
+                    Name = new LocalizationSet
+                    {
+                        Localizations = new List<Localization>()
+                    },
 
-            };
+                };
+            }
+
+                condition.Id = this.Id;
+                condition.Abbreviation = this.Abbreviation;
 
             foreach (var cultureValue in Name)
             {
@@ -31,7 +41,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
                     Value = cultureValue.Value
                 });
             }
-            
+
             if (Description == null || Description.ToArray().Length == 0)
             {
                 condition.DescriptionId = null;

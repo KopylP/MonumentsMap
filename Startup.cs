@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MonumentsMap.Data;
 using MonumentsMap.Data.Repositories;
+using MonumentsMap.Models;
 
 namespace MonumentsMap
 {
@@ -38,6 +39,7 @@ namespace MonumentsMap
             services.AddScoped<CityLocalizedRepository>();
             services.AddScoped<StatusLocalizedRepository>();
             services.AddScoped<ConditionLocalizedRepository>();
+            services.AddScoped<MonumentPhotoLocalizedRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +62,16 @@ namespace MonumentsMap
             {
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationContext>();
+                context.Database.Migrate();
+                var cultures = Configuration.GetSection("SupportedCultures").Get<List<Culture>>();
+                DbSeed.Seed(context, cultures);
+            }
+
+
         }
     }
 }

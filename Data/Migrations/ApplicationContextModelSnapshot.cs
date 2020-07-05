@@ -110,6 +110,9 @@ namespace MonumentsMap.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Accepted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("CityId")
                         .HasColumnType("INTEGER");
 
@@ -161,16 +164,13 @@ namespace MonumentsMap.Data.Migrations
                     b.Property<int?>("DescriptionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FileName")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("MonumentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Path")
-                        .HasColumnType("TEXT");
-
                     b.Property<int?>("Period")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PhotoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("Year")
@@ -180,7 +180,26 @@ namespace MonumentsMap.Data.Migrations
 
                     b.HasIndex("DescriptionId");
 
+                    b.HasIndex("PhotoId");
+
                     b.ToTable("MonumentPhotos");
+                });
+
+            modelBuilder.Entity("MonumentsMap.Models.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("MonumentsMap.Models.Status", b =>
@@ -280,6 +299,12 @@ namespace MonumentsMap.Data.Migrations
                     b.HasOne("MonumentsMap.Models.LocalizationSet", "Description")
                         .WithMany()
                         .HasForeignKey("DescriptionId");
+
+                    b.HasOne("MonumentsMap.Models.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MonumentsMap.Models.Status", b =>

@@ -17,6 +17,7 @@ namespace MonumentsMap.Data
         public DbSet<LocalizationSet> LocalizationSets { get; set; }
         public DbSet<Monument> Monuments { get; set; }
         public DbSet<MonumentPhoto> MonumentPhotos { get; set; }
+        public DbSet<Photo> Photos { get; set; }
         public DbSet<Status> Statuses { get; set; }
         #endregion
     }

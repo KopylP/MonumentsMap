@@ -5,9 +5,9 @@ using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Controllers
 {
-    public class StatusController : LocalizedController<StatusLocalizedRepository, LocalizedStatus, EditableLocalizedStatus, Status>
+    public class MonumentController : LocalizedController<MonumentLocalizedRepository, LocalizedMonument, EditableLocalizedMonument, Monument>
     {
-        public StatusController(StatusLocalizedRepository localizedRepository) : base(localizedRepository)
+        public MonumentController(MonumentLocalizedRepository localizedRepository) : base(localizedRepository)
         {
         }
     }

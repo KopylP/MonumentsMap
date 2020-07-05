@@ -57,7 +57,8 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<TEntity> Update(TEditableLocalizedEntity editableLocalizedEntity)
         {
-            var entity = editableLocalizedEntity.CreateEntity();
+            var editEntity = IncludeNecessaryProps(context.Set<TEntity>().AsQueryable()).FirstOrDefault(p => p.Id == editableLocalizedEntity.Id);
+            var entity = editableLocalizedEntity.CreateEntity(editEntity);
             context.Set<TEntity>().Update(entity);
             await context.SaveChangesAsync();
             return entity;        

@@ -5,23 +5,34 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
 {
     public class EditableLocalizedStatus : EditableLocalizedEntity<Status>
     {
-        public int Id { get; set; }
         public List<CultureValuePair> Name { get; set; }
         public List<CultureValuePair> Description { get; set; }
         public string Abbreviation { get; set; }
 
-        public override Status CreateEntity()
+        public override Status CreateEntity(Status editStatus = null)
         {
-            var status = new Status
+            Status status = null;
+            if (editStatus != null)
             {
-                Id = this.Id,
-                Abbreviation = this.Abbreviation,
-                Name = new LocalizationSet
+                status = editStatus;
+                status.Name.Localizations.Clear();
+                status.Description?.Localizations?.Clear();
+            }
+            else
+            {
+                status = new Status
                 {
-                    Localizations = new List<Localization>()
-                },
+                    Name = new LocalizationSet
+                    {
+                        Localizations = new List<Localization>()
+                    },
 
-            };
+                };
+            }
+
+            status.Id = this.Id;
+            status.Abbreviation = this.Abbreviation;
+
 
             foreach (var cultureValue in Name)
             {
@@ -31,7 +42,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
                     Value = cultureValue.Value
                 });
             }
-            
+
             if (Description == null || Description.ToArray().Length == 0)
             {
                 status.DescriptionId = null;
