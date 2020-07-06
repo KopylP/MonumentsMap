@@ -13,6 +13,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
         public int StatusId { get; set; }
         public int ConditionId { get; set; }
         public bool Accepted { get; set; }
+        public Creator Creator { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public override Monument CreateEntity(Monument entity = null)
@@ -35,7 +36,8 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
                     Name = new LocalizationSet
                     {
                         Localizations = new List<Localization>()
-                    }
+                    },
+                    Creator = this.Creator
                 };
             }
             monument.Year = this.Year;

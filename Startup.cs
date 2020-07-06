@@ -29,6 +29,11 @@ namespace MonumentsMap
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("WebClientPolicy", builder => {
+                builder.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin();
+            }));
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
@@ -40,6 +45,7 @@ namespace MonumentsMap
             services.AddScoped<StatusLocalizedRepository>();
             services.AddScoped<ConditionLocalizedRepository>();
             services.AddScoped<MonumentPhotoLocalizedRepository>();
+            services.AddScoped<MonumentLocalizedRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,9 +56,11 @@ namespace MonumentsMap
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("WebClientPolicy");
+
             app.UseStaticFiles();
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -70,8 +78,6 @@ namespace MonumentsMap
                 var cultures = Configuration.GetSection("SupportedCultures").Get<List<Culture>>();
                 DbSeed.Seed(context, cultures);
             }
-
-
         }
     }
 }
