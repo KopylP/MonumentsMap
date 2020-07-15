@@ -20,6 +20,8 @@ export default class MonumentService {
     return response.data;
   }
 
+  
+
   async getAllStatuses() {
     return await this._getRequest("status/");
   }
