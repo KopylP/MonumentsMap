@@ -26,6 +26,7 @@ import AppContext from "../../context/app-context";
 import Source from "./source/source";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import GoogleMapsService from "../../services/google-maps-service";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -78,45 +79,74 @@ TabPanel.propTypes = {
 export default function AddModal({ openAddModal, setOpenAddModal }) {
   const [value, setValue] = React.useState(0);
   const { monumentService } = useContext(AppContext);
-  const [name, setName] = useState([
+
+  const defaultDescription = [
     ...supportedCultures.map(({ code }) => ({
       code,
       value: "",
     })),
-  ]);
-  const [description, setDescription] = useState([
-    ...supportedCultures.map(({ code }) => ({
-      code,
-      value: "",
-    })),
-  ]);
-  const [cities, setCities] = useState([]);
-  const [conditions, setConditions] = useState([]);
-  const [statuses, setStatuses] = useState([]);
-  const [sources, setSources] = useState([
+  ];
+  const defaultSources = [
     {
       title: "",
       sourceLink: "",
     },
-  ]);
+  ];
 
-  const onFormSubmit = (values) => {
-    delete values.cityName;
-    values.name = name;
-    values.description = description;
-    values.sources = sources;
-    console.log(values);
+  const defaultName = [
+    ...supportedCultures.map(({ code }) => ({
+      code,
+      value: "",
+    })),
+  ];
+
+  const [name, setName] = useState(defaultName);
+
+  const [description, setDescription] = useState(defaultDescription);
+  const [cities, setCities] = useState([]);
+  const [conditions, setConditions] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [sources, setSources] = useState(defaultSources);
+
+  
+
+  const onFormSubmit = (values, { resetForm }) => {
+    const monument = JSON.parse(JSON.stringify(values));
+    delete monument.cityName;
+    monument.name = name;
+    monument.description = description;
+    monument.sources = sources;
+    const { getLatLngFromAddress } = new GoogleMapsService();
+    getLatLngFromAddress(`${monument.city.name}, ${monument.address}`)
+      .then(({ lat, lng }) => {
+        delete monument.address;
+        delete monument.cityName;
+        monument.cityId = monument.city.id;
+        delete monument.city;
+        monument.latitude = lat;
+        monument.longitude = lng;
+        monumentService
+          .createMonument(monument)
+          .then((e) => {
+            console.log(e);
+            resetForm({ values: "" });
+            setName(defaultName);
+            setDescription(defaultDescription);
+            setSources(defaultSources);
+          })
+          .catch(); //TODO handle error
+      })
+      .catch(); //TODO handle error
   };
 
   const formik = useFormik({
     initialValues: {
       year: "",
       period: "",
-      cityId: "",
       statusId: "",
       conditionId: "",
       address: "",
-      cityName: ""
+      cityName: "",
     },
     validationSchema: Yup.object({
       year: Yup.number().required("Це поле є обов'язковим"),
@@ -126,7 +156,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
       conditionId: Yup.number().required("Це поле є обов'язковим"),
       address: Yup.string().required("Це поле є обов'язковим"),
     }),
-    onSubmit: onFormSubmit
+    onSubmit: onFormSubmit,
   });
 
   const onCitiesLoad = (cities) => {

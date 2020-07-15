@@ -17,7 +17,7 @@ namespace MonumentsMap.Data.Repositories
         {
             return p =>
             {
-                var localizationDescription = p.Description?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode) 
+                var localizationDescription = p.Description?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode)
                     ?? p.Description?.Localizations?.FirstOrDefault();
                 var localizationName = p.Name?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode)
                     ?? p.Name?.Localizations?.FirstOrDefault();
@@ -39,16 +39,18 @@ namespace MonumentsMap.Data.Repositories
             };
         }
 
-        public override IQueryable<Monument> IncludeNecessaryProps(IQueryable<Monument> source)
+        public override IQueryable<Monument> IncludeNecessaryProps(IQueryable<Monument> source, bool minimized = false)
         {
-            return source
-                .Include(p => p.Description)
-                .ThenInclude(p => p.Localizations)
-                .Include(p => p.Name)
-                .ThenInclude(p => p.Localizations)
-                .Include(p => p.City)
-                .Include(p => p.Condition)
-                .Include(p => p.Sources);
+            var result = source.Include(p => p.Name)
+                .ThenInclude(p => p.Localizations);
+            if (!minimized)
+            {
+                return result.Include(p => p.Description)
+                    .ThenInclude(p => p.Localizations)
+                    .Include(p => p.Sources);
+            }
+
+            return result;
         }
     }
 }

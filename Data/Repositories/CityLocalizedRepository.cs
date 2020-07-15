@@ -28,7 +28,7 @@ namespace MonumentsMap.Data.Repositories
             };
         }
 
-        public override IQueryable<City> IncludeNecessaryProps(IQueryable<City> source)
+        public override IQueryable<City> IncludeNecessaryProps(IQueryable<City> source, bool minimized = false)
         {
             return source.Include(p => p.Name).ThenInclude(p => p.Localizations);
         }

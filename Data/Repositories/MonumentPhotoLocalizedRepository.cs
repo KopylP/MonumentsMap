@@ -32,7 +32,7 @@ namespace MonumentsMap.Data.Repositories
             };
         }
 
-        public override IQueryable<MonumentPhoto> IncludeNecessaryProps(IQueryable<MonumentPhoto> source)
+        public override IQueryable<MonumentPhoto> IncludeNecessaryProps(IQueryable<MonumentPhoto> source, bool minimized = false)
         {
             return source
                 .Include(p => p.Description)

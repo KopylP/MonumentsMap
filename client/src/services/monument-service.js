@@ -20,6 +20,11 @@ export default class MonumentService {
     return response.data;
   }
 
+  async _postRequest(path, data) {
+    const response = await this._axios.post(path, data);
+    return response.data;
+  }
+
   
 
   async getAllStatuses() {
@@ -32,5 +37,9 @@ export default class MonumentService {
 
   async getAllCities() {
     return await this._getRequest("city/");
+  }
+
+  async createMonument(monument) {
+    return await this._postRequest('monument/', monument);
   }
 }

@@ -49,11 +49,11 @@ namespace MonumentsMap.Data.Repositories
         public async Task<List<TLocalizedEntity>> GetAll(string cultureCode)
         {
             var entities = context.Set<TEntity>().AsQueryable();
-            return IncludeNecessaryProps(entities).Select(GetSelectHandler(cultureCode)).ToList();
+            return IncludeNecessaryProps(entities, true).Select(GetSelectHandler(cultureCode)).ToList();
         }
 
         public abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode);
-        public abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source);
+        public abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source, bool minimized = false);
 
         public async Task<TEntity> Update(TEditableLocalizedEntity editableLocalizedEntity)
         {
