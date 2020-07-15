@@ -27,6 +27,7 @@ namespace MonumentsMap.Data.Repositories
                     PhotoId = p.PhotoId,
                     Photo = p.Photo,
                     Description = Description,
+                    Sources = p.Sources
                 };
             };
         }
@@ -36,7 +37,8 @@ namespace MonumentsMap.Data.Repositories
             return source
                 .Include(p => p.Description)
                 .ThenInclude(p => p.Localizations)
-                .Include(p => p.Photo);
+                .Include(p => p.Photo)
+                .Include(p => p.Sources);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
@@ -16,6 +17,7 @@ namespace MonumentsMap.Models
         public virtual LocalizationSet Description { get; set; }
         [ForeignKey("PhotoId")]
         public virtual Photo Photo { get; set; }
+        public virtual List<Source> Sources { get; set; }
         #endregion
     }
 }

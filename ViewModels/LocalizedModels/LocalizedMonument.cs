@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MonumentsMap.Models;
 
 namespace MonumentsMap.ViewModels.LocalizedModels
@@ -15,5 +16,6 @@ namespace MonumentsMap.ViewModels.LocalizedModels
         public bool Accepted { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public List<Source> Sources { get; set; }
     }
 }

@@ -15,16 +15,14 @@ export default function SelectLanguage(props) {
   };
 
   const handleMenuClose = (culture = null) => {
-    console.log(culture);
     if (culture !== null) {
-        console.log("culture", culture);
       setSelectedLanguage(culture);
     }
     setAnchorEl(null);
   };
 
-  const menuItems = supportedCultures.map((culture) => (
-    <MenuItem onClick={() => handleMenuClose(culture)}>{culture.name}</MenuItem>
+  const menuItems = supportedCultures.map((culture, i) => (
+    <MenuItem key={i} onClick={() => handleMenuClose(culture)}>{culture.name}</MenuItem>
   ));
 
   return (

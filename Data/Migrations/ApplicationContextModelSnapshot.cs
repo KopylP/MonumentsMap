@@ -202,6 +202,33 @@ namespace MonumentsMap.Data.Migrations
                     b.ToTable("Photos");
                 });
 
+            modelBuilder.Entity("MonumentsMap.Models.Source", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MonumentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MonumentPhotoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SourceLink")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MonumentId");
+
+                    b.HasIndex("MonumentPhotoId");
+
+                    b.ToTable("Sources");
+                });
+
             modelBuilder.Entity("MonumentsMap.Models.Status", b =>
                 {
                     b.Property<int>("Id")
@@ -305,6 +332,17 @@ namespace MonumentsMap.Data.Migrations
                         .HasForeignKey("PhotoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MonumentsMap.Models.Source", b =>
+                {
+                    b.HasOne("MonumentsMap.Models.Monument", "Monument")
+                        .WithMany("Sources")
+                        .HasForeignKey("MonumentId");
+
+                    b.HasOne("MonumentsMap.Models.MonumentPhoto", "MonumentPhoto")
+                        .WithMany("Sources")
+                        .HasForeignKey("MonumentPhotoId");
                 });
 
             modelBuilder.Entity("MonumentsMap.Models.Status", b =>

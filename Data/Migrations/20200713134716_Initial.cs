@@ -225,6 +225,34 @@ namespace MonumentsMap.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Sources",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MonumentPhotoId = table.Column<int>(nullable: true),
+                    MonumentId = table.Column<int>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
+                    SourceLink = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sources", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sources_Monuments_MonumentId",
+                        column: x => x.MonumentId,
+                        principalTable: "Monuments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Sources_MonumentPhotos_MonumentPhotoId",
+                        column: x => x.MonumentPhotoId,
+                        principalTable: "MonumentPhotos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_NameId",
                 table: "Cities",
@@ -286,6 +314,16 @@ namespace MonumentsMap.Data.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sources_MonumentId",
+                table: "Sources",
+                column: "MonumentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sources_MonumentPhotoId",
+                table: "Sources",
+                column: "MonumentPhotoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Statuses_DescriptionId",
                 table: "Statuses",
                 column: "DescriptionId");
@@ -302,16 +340,16 @@ namespace MonumentsMap.Data.Migrations
                 name: "Localizations");
 
             migrationBuilder.DropTable(
-                name: "MonumentPhotos");
-
-            migrationBuilder.DropTable(
-                name: "Monuments");
+                name: "Sources");
 
             migrationBuilder.DropTable(
                 name: "Cultures");
 
             migrationBuilder.DropTable(
-                name: "Photos");
+                name: "Monuments");
+
+            migrationBuilder.DropTable(
+                name: "MonumentPhotos");
 
             migrationBuilder.DropTable(
                 name: "Cities");
@@ -321,6 +359,9 @@ namespace MonumentsMap.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Statuses");
+
+            migrationBuilder.DropTable(
+                name: "Photos");
 
             migrationBuilder.DropTable(
                 name: "LocalizationSets");

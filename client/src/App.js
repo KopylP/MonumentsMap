@@ -45,7 +45,7 @@ function App(props) {
   const [selectedLanguage, setSelectedLanguage] = useState(supportedCultures[0]);
 
   useEffect(() => {
-    const userCultureIndex = supportedCultures.findIndex(p => p.code === navigator.language);
+    const userCultureIndex = supportedCultures.findIndex(p => p.code.split('-')[0] === navigator.language.split('-')[0]);
     const culture = userCultureIndex > -1 ? supportedCultures[userCultureIndex] : supportedCultures[1];//en-GB
     setSelectedLanguage(culture);
   }, []);

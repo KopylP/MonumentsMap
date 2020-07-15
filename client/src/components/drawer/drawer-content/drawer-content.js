@@ -15,6 +15,7 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import SelectLanguage from "../../select-language/select-language";
 import AppContext from "../../../context/app-context";
+import { usePrevious } from "../../../hooks/hooks";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +53,7 @@ export default function DrawerContent(props) {
   const classes = useStyles(props);
   const { onAdd } = props;
 
-  const { monumentService } = useContext(AppContext);
+  const { monumentService, selectedLanguage } = useContext(AppContext);
   const [cities, setCities] = useState([]);
   const [conditions, setConditions] = useState([]);
   const [statuses, setStatuses] = useState([]);
@@ -61,19 +62,16 @@ export default function DrawerContent(props) {
   const [selectedCities, setSelectedCities] = useState([]);
   
   const onCitiesLoad = (cities) => {
-    console.log(cities);
     setCities(cities);
   }
 
   const onStatusesLoad = (statuses) => {
-    console.log(statuses);
     setStatuses(statuses);
   }
 
   const onConditionsLoad = (conditions) => {
-    console.log(conditions);
     setConditions(conditions);
-  }
+  } 
 
   const update = () => {
     monumentService.getAllStatuses().then(onStatusesLoad);
@@ -81,9 +79,13 @@ export default function DrawerContent(props) {
     monumentService.getAllCities().then(onCitiesLoad);
   }
 
+  const prevSelectedLanguage = usePrevious(selectedLanguage);
+
   useEffect(() => {
-    update();
-  }, [monumentService]);
+    console.log("aha");
+    if(prevSelectedLanguage == null || selectedLanguage.code !== prevSelectedLanguage.code)
+      update();
+  }, [selectedLanguage]);
 
   useEffect(() => {
     const newSelectedCities = selectedCities.map(selectedCity => {
@@ -102,12 +104,12 @@ export default function DrawerContent(props) {
     getOptionLabel: (option) => option.name,
   };
 
-  const statusViews = statuses.map(status => {
-    return <MenuItem style={{whiteSpace: 'normal'}} value={status.id}>{status.name}</MenuItem>
+  const statusViews = statuses.map((status, i) => {
+    return <MenuItem key={i} style={{whiteSpace: 'normal'}} value={status.id}>{status.name}</MenuItem>
   });
 
-  const conditionViews = conditions.map(condition => {
-    return <MenuItem style={{whiteSpace: 'normal'}} value={condition.id}>{condition.name}</MenuItem>
+  const conditionViews = conditions.map((condition, i) => {
+    return <MenuItem key={i} style={{whiteSpace: 'normal'}} value={condition.id}>{condition.name}</MenuItem>
   });
 
   const onSelectedStatusesChange = (e) => {

@@ -13,9 +13,9 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
         public int StatusId { get; set; }
         public int ConditionId { get; set; }
         public bool Accepted { get; set; }
-        public Creator Creator { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public List<Source> Sources { get; set; }
         public override Monument CreateEntity(Monument entity = null)
         {
             Monument monument = null;
@@ -24,6 +24,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
                 monument = entity;
                 monument.Description?.Localizations?.Clear();
                 monument.Name?.Localizations?.Clear();
+                monument.Sources?.Clear();
             }
             else
             {
@@ -37,7 +38,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
                     {
                         Localizations = new List<Localization>()
                     },
-                    Creator = this.Creator
+                    Sources = new List<Source>()
                 };
             }
             monument.Year = this.Year;
@@ -48,6 +49,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
             monument.Accepted = this.Accepted;
             monument.Latitude = this.Latitude;
             monument.Longitude = this.Longitude;
+            monument.Sources.AddRange(Sources);
             foreach (var cultureValuePair in Name)
             {
                 monument.Name.Localizations.Add(new Localization

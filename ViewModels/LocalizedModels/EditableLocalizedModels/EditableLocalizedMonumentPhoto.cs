@@ -10,6 +10,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
         public int MonumentId { get; set; }
         public int PhotoId { get; set; }
         public List<CultureValuePair> Description { get; set; }
+        public List<Source> Sources { get; set; }
         public override MonumentPhoto CreateEntity(MonumentPhoto entity = null)
         {
             MonumentPhoto monumentPhoto = null;
@@ -17,6 +18,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
             {
                 monumentPhoto = entity;
                 monumentPhoto.Description?.Localizations?.Clear();
+                monumentPhoto.Sources?.Clear();
             }
             else
             {
@@ -25,13 +27,15 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
                     Description = new LocalizationSet
                     {
                         Localizations = new List<Localization>()
-                    }
+                    },
+                    Sources = new List<Source>()
                 };
             }
             monumentPhoto.Id = this.Id;
             monumentPhoto.Year = this.Year;
             monumentPhoto.Period = this.Period;
             monumentPhoto.PhotoId = this.PhotoId;
+            monumentPhoto.Sources.AddRange(Sources);
             if (Description == null || Description.ToArray().Length == 0)
             {
                 monumentPhoto.DescriptionId = null;

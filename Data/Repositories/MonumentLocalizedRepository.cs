@@ -33,7 +33,8 @@ namespace MonumentsMap.Data.Repositories
                     ConditionId = p.ConditionId,
                     Accepted = p.Accepted,
                     Latitude = p.Latitude,
-                    Longitude = p.Longitude
+                    Longitude = p.Longitude,
+                    Sources = p.Sources
                 };
             };
         }
@@ -46,7 +47,8 @@ namespace MonumentsMap.Data.Repositories
                 .Include(p => p.Name)
                 .ThenInclude(p => p.Localizations)
                 .Include(p => p.City)
-                .Include(p => p.Condition);
+                .Include(p => p.Condition)
+                .Include(p => p.Sources);
         }
     }
 }

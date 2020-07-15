@@ -19,7 +19,7 @@ namespace MonumentsMap.Data
         public DbSet<MonumentPhoto> MonumentPhotos { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Status> Statuses { get; set; }
-        public DbSet<Creator> Creators { get; set; }
+        public DbSet<Source> Sources { get; set; }
         #endregion
     }
 }

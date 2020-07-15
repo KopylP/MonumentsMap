@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
@@ -15,7 +16,6 @@ namespace MonumentsMap.Models
         public bool Accepted { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public int CreatorId { get; set; }
         #endregion
         #region lazy props
         [ForeignKey("CityId")]
@@ -28,8 +28,7 @@ namespace MonumentsMap.Models
         public virtual LocalizationSet Name { get; set; }
         [ForeignKey("DescriptionId")]
         public virtual LocalizationSet Description { get; set; }
-        [ForeignKey("CreatorId")]
-        public virtual Creator Creator { get; set; }
+        public virtual List<Source> Sources { get; set; }
         #endregion
     }
 }

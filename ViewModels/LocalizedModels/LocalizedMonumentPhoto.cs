@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MonumentsMap.Models;
 
 namespace MonumentsMap.ViewModels.LocalizedModels
@@ -11,5 +12,6 @@ namespace MonumentsMap.ViewModels.LocalizedModels
         public string Description { get; set; }
         public int PhotoId { get; set; }
         public Photo Photo { get; set; }
+        public List<Source> Sources {get; set;}
     }
 }
