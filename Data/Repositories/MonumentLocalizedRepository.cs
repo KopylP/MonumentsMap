@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using MonumentsMap.Models;
+using MonumentsMap.ViewModels;
 using MonumentsMap.ViewModels.LocalizedModels;
 using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
@@ -9,11 +11,22 @@ namespace MonumentsMap.Data.Repositories
 {
     public class MonumentLocalizedRepository : LocalizedRepository<LocalizedMonument, EditableLocalizedMonument, Monument, ApplicationContext>
     {
-        public MonumentLocalizedRepository(ApplicationContext context) : base(context)
+        private readonly StatusLocalizedRepository statusLocalizedRepository;
+        private readonly CityLocalizedRepository cityLocalizedRepository;
+        private readonly ConditionLocalizedRepository conditionLocalizedRepository;
+        public MonumentLocalizedRepository(
+            ApplicationContext context,
+            CityLocalizedRepository cityLocalizedRepository,
+            ConditionLocalizedRepository conditionLocalizedRepository,
+            StatusLocalizedRepository statusLocalizedRepository
+        ) : base(context)
         {
+            this.statusLocalizedRepository = statusLocalizedRepository;
+            this.conditionLocalizedRepository = conditionLocalizedRepository;
+            this.cityLocalizedRepository = cityLocalizedRepository;
         }
 
-        public override Func<Monument, LocalizedMonument> GetSelectHandler(string cultureCode)
+        public override Func<Monument, LocalizedMonument> GetSelectHandler(string cultureCode, bool minimized = false)
         {
             return p =>
             {
@@ -21,7 +34,9 @@ namespace MonumentsMap.Data.Repositories
                     ?? p.Description?.Localizations?.FirstOrDefault();
                 var localizationName = p.Name?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode)
                     ?? p.Name?.Localizations?.FirstOrDefault();
-                return new LocalizedMonument
+                
+
+                var monument =  new LocalizedMonument
                 {
                     Id = p.Id,
                     Year = p.Year,
@@ -33,9 +48,17 @@ namespace MonumentsMap.Data.Repositories
                     ConditionId = p.ConditionId,
                     Accepted = p.Accepted,
                     Latitude = p.Latitude,
-                    Longitude = p.Longitude,
-                    Sources = p.Sources
+                    Longitude = p.Longitude
                 };
+
+                if(minimized == false) {
+                    monument.City = cityLocalizedRepository.Get(cultureCode, monument.CityId).Result;
+                    monument.Condition = conditionLocalizedRepository.Get(cultureCode, monument.ConditionId).Result;
+                    monument.Status = statusLocalizedRepository.Get(cultureCode, monument.StatusId).Result;
+                    monument.Sources = p.Sources.Adapt<SourceViewModel[]>().ToList();
+                }
+
+                return monument;
             };
         }
 

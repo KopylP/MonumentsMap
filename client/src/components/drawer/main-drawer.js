@@ -13,7 +13,7 @@ import AddModal from "../add-modal/add-modal";
 
 const useStyles = makeStyles(theme => ({
   drawerClass: {
-    width: 350,
+    width: theme.drawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {

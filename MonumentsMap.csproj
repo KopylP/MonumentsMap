@@ -7,5 +7,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.5"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5"/>
+    <PackageReference Include="Mapster" Version="5.3.2"/>
   </ItemGroup>
 </Project>

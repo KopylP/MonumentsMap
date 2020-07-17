@@ -49,11 +49,8 @@ namespace MonumentsMap.Data.Repositories
         public async Task<List<TLocalizedEntity>> GetAll(string cultureCode)
         {
             var entities = context.Set<TEntity>().AsQueryable();
-            return IncludeNecessaryProps(entities, true).Select(GetSelectHandler(cultureCode)).ToList();
+            return IncludeNecessaryProps(entities, true).Select(GetSelectHandler(cultureCode, true)).ToList();
         }
-
-        public abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode);
-        public abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source, bool minimized = false);
 
         public async Task<TEntity> Update(TEditableLocalizedEntity editableLocalizedEntity)
         {
@@ -63,5 +60,10 @@ namespace MonumentsMap.Data.Repositories
             await context.SaveChangesAsync();
             return entity;        
         }
+
+        //Convert model to localized model
+        public abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode, bool minimized = false);
+        //Including required property models that are associated with the main model
+        public abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source, bool minimized = false);
     }
 }

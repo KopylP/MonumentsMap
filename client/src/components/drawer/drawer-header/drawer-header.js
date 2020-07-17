@@ -3,6 +3,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Fab from "@material-ui/core/Fab";
 import DrawerImage from "./drawer-image.jpg";
 import { makeStyles } from "@material-ui/core";
+import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
 
 const useStyles = makeStyles((theme) => ({
   backButtonContainer: {
@@ -26,14 +27,7 @@ function DrawerHeader(props) {
   const { onBack } = props;
   return (
       <div className={classes.backButtonContainer}>
-        <Fab
-          size="small"
-          aria-label="close"
-          onClick={onBack}
-          className={classes.fabBack}
-        >
-          <ArrowBackIcon style={{ color: "white" }} />
-        </Fab>
+        <DrawerBackButton onClick={onBack}/>
       </div>
   );
 }

@@ -26,7 +26,7 @@ export default function SelectLanguage(props) {
   ));
 
   return (
-    <div style={{ float: "right" }}>
+    <div>
       <Button
         color="secondary"
         aria-haspopup="true"

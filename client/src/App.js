@@ -11,6 +11,7 @@ import MenuButton from "./components/common/menu-button/menu-button";
 import Map from "./components/map/map";
 import { supportedCultures, serverHost } from "./config";
 import MonumentService from "./services/monument-service";
+import DetailDrawer from "./components/detail-drawer/detail-drawer";
 
 const theme = createMuiTheme({
   palette: {
@@ -43,6 +44,7 @@ function App(props) {
   const classes = useStyles(props);
   const [mainDrawerOpen, setMainDrawerOpen] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState(supportedCultures[0]);
+  const [selectedMonumentId, setSelectedMonumentId] = useState(0);
 
   useEffect(() => {
     const userCultureIndex = supportedCultures.findIndex(p => p.code.split('-')[0] === navigator.language.split('-')[0]);
@@ -57,8 +59,18 @@ function App(props) {
     setMainDrawerOpen,
     selectedLanguage, 
     setSelectedLanguage,
-    monumentService
+    monumentService,
+    selectedMonumentId,
+    setSelectedMonumentId
   };
+
+  //For tests
+  useEffect(() => {
+    setTimeout(() => {
+      setSelectedMonumentId(9);
+    }, 1000);
+  }, []);
+  //!For tests
 
   return (
     <AppContext.Provider value={contextValues}>
@@ -73,6 +85,7 @@ function App(props) {
           </div>
         </div>
         <MainDrawer className={classes.menuButton} />
+        <DetailDrawer />
       </MuiThemeProvider>
     </AppContext.Provider>
   );

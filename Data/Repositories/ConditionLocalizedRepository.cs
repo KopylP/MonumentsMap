@@ -13,7 +13,7 @@ namespace MonumentsMap.Data.Repositories
         {
         }
 
-        public override Func<Condition, LocalizedCondition> GetSelectHandler(string cultureCode)
+        public override Func<Condition, LocalizedCondition> GetSelectHandler(string cultureCode, bool minimized = false)
         {
             return p =>
             {

@@ -19,12 +19,7 @@ import { usePrevious } from "../../../hooks/hooks";
 
 
 const useStyles = makeStyles((theme) => ({
-  marginTop13: {
-    marginTop: 13,
-  },
-  marginTop20: {
-    marginTop: 20,
-  },
+
   colorWhite: {
     color: "white",
   },
@@ -126,7 +121,7 @@ export default function DrawerContent(props) {
 
   return (
     <div style={{ flexGrow: 1, padding: 15 }}>
-      <Grid xs="12" vertical>
+      <Grid container vertical spacing={2}>
         <SelectLanguage />
         <Grid item xs="12">
           <Autocomplete
@@ -141,7 +136,7 @@ export default function DrawerContent(props) {
             )}
           />
         </Grid>
-        <Grid item xs="12" className={classes.marginTop13}>
+        <Grid item xs="12">
           <FormControl className={classes.width100per}>
             <InputLabel>Статус пам'ятки</InputLabel>
             <Select multiple value={selectedStatuses} onChange={onSelectedStatusesChange}>
@@ -149,7 +144,7 @@ export default function DrawerContent(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs="12" className={classes.marginTop20}>
+        <Grid item xs="12">
           <FormControl className={classes.width100per}>
             <InputLabel>Стан пам'ятки архітектури</InputLabel>
             <Select multiple value={selectedConditions} onChange={onSelectedConditionsChange}>
@@ -157,7 +152,7 @@ export default function DrawerContent(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs="12" className={classes.marginTop20}>
+        <Grid item xs="12">
           <Grid
             container
             spacing={1}

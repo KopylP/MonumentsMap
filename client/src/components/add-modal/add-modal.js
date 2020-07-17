@@ -26,7 +26,7 @@ import AppContext from "../../context/app-context";
 import Source from "./source/source";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import GoogleMapsService from "../../services/google-maps-service";
+import GoogleMapsService from "../../services/geocoder-service";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -118,13 +118,13 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
     monument.sources = sources;
     const { getLatLngFromAddress } = new GoogleMapsService();
     getLatLngFromAddress(`${monument.city.name}, ${monument.address}`)
-      .then(({ lat, lng }) => {
+      .then(({ lat, lon }) => {
         delete monument.address;
         delete monument.cityName;
         monument.cityId = monument.city.id;
         delete monument.city;
         monument.latitude = lat;
-        monument.longitude = lng;
+        monument.longitude = lon;
         monumentService
           .createMonument(monument)
           .then((e) => {
@@ -304,9 +304,9 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
                       onChange={formik.handleChange}
                       error={formik.touched.period && formik.errors.period}
                     >
-                      <MenuItem value={2}>Рік</MenuItem>
-                      <MenuItem value={1}>Століття</MenuItem>
-                      <MenuItem value={3}>Десятиліття</MenuItem>
+                      <MenuItem value={1}>Рік</MenuItem>
+                      <MenuItem value={0}>Століття</MenuItem>
+                      <MenuItem value={2}>Десятиліття</MenuItem>
                     </Select>
                     <FormHelperText>
                       {formik.touched.period &&

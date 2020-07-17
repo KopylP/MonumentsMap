@@ -14,9 +14,12 @@
     "axios": "^0.19.2",
     "formik": "^2.1.4",
     "material-ui-dropzone": "^3.3.0",
+    "nominatim-geocoder": "^0.1.4",
     "react": "^16.13.1",
+    "react-content-loader": "^5.1.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.13.1",
+    "react-perfect-scrollbar": "^1.5.8",
     "react-scripts": "3.4.1",
     "yup": "^0.29.1"
   },

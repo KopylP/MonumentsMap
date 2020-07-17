@@ -25,7 +25,13 @@ export default class MonumentService {
     return response.data;
   }
 
-  
+  async getAllMonuments() {
+    return await this._getRequest("monument/");
+  }
+
+  async getMonumentById(id) {
+    return await this._getRequest(`monument/${id}`);
+  }
 
   async getAllStatuses() {
     return await this._getRequest("status/");
