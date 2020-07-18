@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using MonumentsMap.Data;
 using MonumentsMap.Data.Repositories;
 using MonumentsMap.Models;
+using MonumentsMap.Services;
 
 namespace MonumentsMap
 {
@@ -46,6 +47,8 @@ namespace MonumentsMap
             services.AddScoped<ConditionLocalizedRepository>();
             services.AddScoped<MonumentPhotoLocalizedRepository>();
             services.AddScoped<MonumentLocalizedRepository>();
+            services.AddScoped<PhotoRepository>();
+            services.AddScoped<PhotoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
