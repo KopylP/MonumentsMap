@@ -21,12 +21,12 @@ namespace MonumentsMap.Controllers
         {
             _photoRepository = photoRepository;
             _photoService = photoService;
-        } 
+        }
         #endregion
 
         #region rest methods
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm]IFormFile file)
+        public async Task<IActionResult> Post([FromForm] IFormFile file)
         {
             var photo = new Photo
             {
@@ -43,8 +43,15 @@ namespace MonumentsMap.Controllers
         public async Task<IActionResult> GetImageAsync(int id)
         {
             var photo = await _photoRepository.Get(id);
-            var (fileType, image) = _photoService.FetchImage(photo.Id.ToString(), photo.FileName);
-            return File(image, fileType);
+            try
+            {
+                var (fileType, image) = _photoService.FetchImage(photo.Id.ToString(), photo.FileName);
+                return File(image, fileType);
+            }
+            catch
+            {
+                return StatusCode(500); //TODO handle error
+            }
         }
         #endregion
     }

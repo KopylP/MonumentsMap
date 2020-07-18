@@ -11,6 +11,7 @@ namespace MonumentsMap.Models
         public int MonumentId { get; set; }
         public int? DescriptionId { get; set; }
         public int PhotoId { get; set; }
+        public bool MajorPhoto { get; set; }
         #endregion
         #region  lazy props
         [ForeignKey("DescriptionId")]

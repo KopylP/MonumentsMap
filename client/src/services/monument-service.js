@@ -25,6 +25,26 @@ export default class MonumentService {
     return response.data;
   }
 
+  async _postFormRequest(path, file) {
+    const data = new FormData();
+    data.append(
+      "file",
+      file
+    );
+
+    var config = {
+      method: "post",
+      url: `${this._baseURL}${path}`,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+
+      },
+      data: data,
+    };
+    const response = await this._axios.request(config);
+    return response.data;
+  }
+
   async getAllMonuments() {
     return await this._getRequest("monument/");
   }
@@ -46,6 +66,14 @@ export default class MonumentService {
   }
 
   async createMonument(monument) {
-    return await this._postRequest('monument/', monument);
+    return await this._postRequest("monument/", monument);
+  }
+
+  async savePhoto(photo) {
+    return await this._postFormRequest("photo/", photo);
+  }
+
+  async createPhotoMonument(monumentPhoto) {
+    return await this._postRequest("monumentphoto/", monumentPhoto);
   }
 }

@@ -36,8 +36,7 @@ namespace MonumentsMap.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FileName = table.Column<string>(nullable: true),
-                    FilePath = table.Column<string>(nullable: true)
+                    FileName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -154,7 +153,8 @@ namespace MonumentsMap.Data.Migrations
                     Period = table.Column<int>(nullable: true),
                     MonumentId = table.Column<int>(nullable: false),
                     DescriptionId = table.Column<int>(nullable: true),
-                    PhotoId = table.Column<int>(nullable: false)
+                    PhotoId = table.Column<int>(nullable: false),
+                    MajorPhoto = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

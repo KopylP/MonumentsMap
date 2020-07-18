@@ -67,7 +67,7 @@ function App(props) {
   //For tests
   useEffect(() => {
     setTimeout(() => {
-      setSelectedMonumentId(9);
+      setSelectedMonumentId(1);
     }, 1000);
   }, []);
   //!For tests

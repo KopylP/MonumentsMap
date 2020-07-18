@@ -27,6 +27,7 @@ import Source from "./source/source";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import GoogleMapsService from "../../services/geocoder-service";
+import ScrollBar from "../common/scroll-bar/scroll-bar";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -107,8 +108,6 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
   const [conditions, setConditions] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [sources, setSources] = useState(defaultSources);
-
-  
 
   const onFormSubmit = (values, { resetForm }) => {
     const monument = JSON.parse(JSON.stringify(values));
@@ -269,183 +268,190 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
     >
       <Fade in={openAddModal}>
         <Paper className={classes.paper}>
-          <h2>Нова пам'ятка</h2>
-          <div className={classes.root}>
-            <form onSubmit={formik.handleSubmit}>
-              <Grid container spacing={3}>
-                <Grid item xs={3}>
-                  <FormControl style={{ width: "100%" }}>
-                    <TextField
-                      id="standard-basic"
-                      label="Рік побудови"
-                      type="number"
-                      name="year"
-                      required
-                      value={formik.values.year}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      error={formik.touched.year && formik.errors.year}
-                      helperText={
-                        formik.touched.year &&
-                        formik.errors.year &&
-                        formik.errors.year
-                      }
-                    />
-                  </FormControl>
-                </Grid>
-                <Grid item xs={3}>
-                  <FormControl style={{ width: "100%" }} required>
-                    <InputLabel>Період</InputLabel>
-                    <Select
-                      labelId="period"
-                      name="period"
-                      value={formik.values.period}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      error={formik.touched.period && formik.errors.period}
-                    >
-                      <MenuItem value={1}>Рік</MenuItem>
-                      <MenuItem value={0}>Століття</MenuItem>
-                      <MenuItem value={2}>Десятиліття</MenuItem>
-                    </Select>
-                    <FormHelperText>
-                      {formik.touched.period &&
-                        formik.errors.period &&
-                        formik.errors.period}
-                    </FormHelperText>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={6}>
-                  <Autocomplete
-                    {...citiesAutocompleteProps}
-                    id="clear-on-escape"
-                    clearOnEscape
-                    name="city"
-                    value={formik.values.city}
-                    onBlur={formik.handleBlur}
-                    onChange={(_, newValue) =>
-                      formik.setFieldValue("city", newValue)
-                    }
-                    style={{
-                      marginTop: -16,
-                    }}
-                    renderInput={(params) => (
+          <ScrollBar>
+            <h2>Нова пам'ятка</h2>
+            <div className={classes.root}>
+              <form onSubmit={formik.handleSubmit}>
+                <Grid container spacing={3}>
+                  <Grid item xs={3}>
+                    <FormControl style={{ width: "100%" }}>
                       <TextField
+                        id="standard-basic"
+                        label="Рік побудови"
+                        type="number"
+                        name="year"
                         required
-                        {...params}
-                        label="Місто"
-                        margin="normal"
+                        value={formik.values.year}
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
-                        name="cityName"
-                        error={formik.touched.cityName && formik.errors.city}
+                        error={formik.touched.year && formik.errors.year}
                         helperText={
-                          formik.touched.cityName &&
-                          formik.errors.city &&
-                          formik.errors.city
+                          formik.touched.year &&
+                          formik.errors.year &&
+                          formik.errors.year
                         }
                       />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControl style={{ width: "100%" }} required>
-                    <InputLabel>Статус пам'ятки</InputLabel>
-                    <Select
-                      value={formik.values.statusId}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      error={formik.touched.statusId && formik.errors.statusId}
-                      name="statusId"
-                    >
-                      {statuses.map((status) => (
-                        <MenuItem key={status.id} value={status.id}>
-                          {status.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>
-                      {formik.touched.statusId &&
-                        formik.errors.statusId &&
-                        formik.errors.statusId}
-                    </FormHelperText>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControl style={{ width: "100%" }} required>
-                    <InputLabel>Стан пам'ятки</InputLabel>
-                    <Select
-                      value={formik.values.conditionId}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      error={
-                        formik.touched.conditionId && formik.errors.conditionId
-                      }
-                      error={formik.touched.year && formik.errors.year}
-                      name="conditionId"
-                    >
-                      {conditions.map((condition) => (
-                        <MenuItem key={condition.id} value={condition.id}>
-                          {condition.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>
-                      {formik.touched.year &&
-                        formik.errors.year &&
-                        formik.errors.year}
-                    </FormHelperText>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControl style={{ width: "100%" }}>
-                    <TextField
-                      required
-                      id="standard-basic"
-                      name="address"
-                      label="Адреса пам'ятки"
-                      value={formik.values.address}
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      error={formik.touched.address && formik.errors.address}
-                      helperText={
-                        formik.touched.address &&
-                        formik.errors.address &&
-                        formik.errors.address
-                      }
-                    />
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid style={{ backgroundColor: "rgba(240, 240, 240, 0.4)" }}>
-                    <AppBar position="relative">
-                      <Tabs
-                        // style={{backgroundColor: "#efefef"}}
-                        value={value}
-                        onChange={handleChange}
-                        aria-label="simple tabs example"
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <FormControl style={{ width: "100%" }} required>
+                      <InputLabel>Період</InputLabel>
+                      <Select
+                        labelId="period"
+                        name="period"
+                        value={formik.values.period}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        error={formik.touched.period && formik.errors.period}
                       >
-                        {tabViews}
-                      </Tabs>
-                    </AppBar>
-                    {panelViews}
+                        <MenuItem value={1}>Рік</MenuItem>
+                        <MenuItem value={0}>Століття</MenuItem>
+                        <MenuItem value={2}>Десятиліття</MenuItem>
+                      </Select>
+                      <FormHelperText>
+                        {formik.touched.period &&
+                          formik.errors.period &&
+                          formik.errors.period}
+                      </FormHelperText>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Autocomplete
+                      {...citiesAutocompleteProps}
+                      id="clear-on-escape"
+                      clearOnEscape
+                      name="city"
+                      value={formik.values.city}
+                      onBlur={formik.handleBlur}
+                      onChange={(_, newValue) =>
+                        formik.setFieldValue("city", newValue)
+                      }
+                      style={{
+                        marginTop: -16,
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          required
+                          {...params}
+                          label="Місто"
+                          margin="normal"
+                          onBlur={formik.handleBlur}
+                          onChange={formik.handleChange}
+                          name="cityName"
+                          error={formik.touched.cityName && formik.errors.city}
+                          helperText={
+                            formik.touched.cityName &&
+                            formik.errors.city &&
+                            formik.errors.city
+                          }
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl style={{ width: "100%" }} required>
+                      <InputLabel>Статус пам'ятки</InputLabel>
+                      <Select
+                        value={formik.values.statusId}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        error={
+                          formik.touched.statusId && formik.errors.statusId
+                        }
+                        name="statusId"
+                      >
+                        {statuses.map((status) => (
+                          <MenuItem key={status.id} value={status.id}>
+                            {status.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText>
+                        {formik.touched.statusId &&
+                          formik.errors.statusId &&
+                          formik.errors.statusId}
+                      </FormHelperText>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl style={{ width: "100%" }} required>
+                      <InputLabel>Стан пам'ятки</InputLabel>
+                      <Select
+                        value={formik.values.conditionId}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        error={
+                          formik.touched.conditionId &&
+                          formik.errors.conditionId
+                        }
+                        error={formik.touched.year && formik.errors.year}
+                        name="conditionId"
+                      >
+                        {conditions.map((condition) => (
+                          <MenuItem key={condition.id} value={condition.id}>
+                            {condition.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText>
+                        {formik.touched.year &&
+                          formik.errors.year &&
+                          formik.errors.year}
+                      </FormHelperText>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl style={{ width: "100%" }}>
+                      <TextField
+                        required
+                        id="standard-basic"
+                        name="address"
+                        label="Адреса пам'ятки"
+                        value={formik.values.address}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        error={formik.touched.address && formik.errors.address}
+                        helperText={
+                          formik.touched.address &&
+                          formik.errors.address &&
+                          formik.errors.address
+                        }
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid
+                      style={{ backgroundColor: "rgba(240, 240, 240, 0.4)" }}
+                    >
+                      <AppBar position="relative">
+                        <Tabs
+                          // style={{backgroundColor: "#efefef"}}
+                          value={value}
+                          onChange={handleChange}
+                          aria-label="simple tabs example"
+                        >
+                          {tabViews}
+                        </Tabs>
+                      </AppBar>
+                      {panelViews}
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Source setSources={setSources} sources={sources} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      type="submit"
+                      style={{ float: "right" }}
+                      color="secondary"
+                    >
+                      Додати
+                    </Button>
                   </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Source setSources={setSources} sources={sources} />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    style={{ float: "right" }}
-                    color="secondary"
-                  >
-                    Додати
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
-          </div>
+              </form>
+            </div>
+          </ScrollBar>
         </Paper>
       </Fade>
     </Modal>

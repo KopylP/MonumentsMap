@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using MonumentsMap.Models;
+using MonumentsMap.ViewModels;
 using MonumentsMap.ViewModels.LocalizedModels;
 using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
@@ -27,7 +29,8 @@ namespace MonumentsMap.Data.Repositories
                     PhotoId = p.PhotoId,
                     Photo = p.Photo,
                     Description = Description,
-                    Sources = p.Sources
+                    Sources = p.Sources.Adapt<SourceViewModel[]>().ToList(),
+                    MonumentId = p.MonumentId
                 };
             };
         }

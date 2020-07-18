@@ -164,6 +164,9 @@ namespace MonumentsMap.Data.Migrations
                     b.Property<int?>("DescriptionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("MajorPhoto")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("MonumentId")
                         .HasColumnType("INTEGER");
 
@@ -192,9 +195,6 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FileName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FilePath")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

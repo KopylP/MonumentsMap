@@ -35,6 +35,8 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
             monumentPhoto.Year = this.Year;
             monumentPhoto.Period = this.Period;
             monumentPhoto.PhotoId = this.PhotoId;
+            monumentPhoto.MonumentId = this.MonumentId;
+
             monumentPhoto.Sources.AddRange(Sources);
             if (Description == null || Description.ToArray().Length == 0)
             {
