@@ -2,28 +2,33 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using MonumentsMap.POCO;
 
 namespace MonumentsMap.Services
 {
     public class PhotoService
     {
         #region private fields
-        private string _imagePath;
+        private ImageFilesParams _imageFilesParams;
         private IHostEnvironment _env;
         #endregion
 
         #region constructor
-        public PhotoService(IConfiguration configuration, IHostEnvironment env)
+        public PhotoService(ImageFilesParams imageFilesParams, IHostEnvironment env)
         {
-            _imagePath = configuration["ImagesFolder"];
             _env = env;
+            _imageFilesParams = imageFilesParams;
         }
         #endregion
 
         #region public methods
         public async void SavePhotoAsync(IFormFile file, string subDir)
         {
-            string dirPath = Path.Combine(_env.ContentRootPath, $"{_imagePath}{Path.DirectorySeparatorChar}{subDir}");
+            string dirPath = _imageFilesParams.AbsolutePath switch {
+                false => Path.Combine(_env.ContentRootPath, $"{_imageFilesParams.ImagesFolder}{Path.DirectorySeparatorChar}{subDir}"),
+                true => Path.Combine(_imageFilesParams.ImagesFolder, subDir)
+            };
             DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
             if(!dirInfo.Exists)
             {
@@ -38,7 +43,11 @@ namespace MonumentsMap.Services
 
         public (string fileType, FileStream image) FetchImage(string subDir, string fileName) 
         {
-            string path = Path.Combine(_env.ContentRootPath, $"{_imagePath}{Path.DirectorySeparatorChar}{subDir}{Path.DirectorySeparatorChar}{fileName}");
+            string dirPath = _imageFilesParams.AbsolutePath switch {
+                false => Path.Combine(_env.ContentRootPath, $"{_imageFilesParams.ImagesFolder}{Path.DirectorySeparatorChar}{subDir}"),
+                true => Path.Combine(_imageFilesParams.ImagesFolder, subDir)
+            };
+            string path = Path.Combine(dirPath, $"{fileName}");
             var imageStream = File.OpenRead(path);
             return ("image/jpeg", imageStream);
         }
