@@ -21,6 +21,7 @@ import ScrollBar from "../../../common/scroll-bar/scroll-bar";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import AppContext from "../../../../context/app-context";
+import DetailDrawerContext from "../../../detail-drawer/context/detail-drawer-context";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
   const classes = useStyles(props);
   const { monumentService } = useContext(AppContext);
+  const { onPhotoSave } = useContext(DetailDrawerContext);
 
   const handleClose = () => {
     setOpen(false);
@@ -78,14 +80,19 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
     return values;
   }
 
-  const submitPhotoForm = (values) => {
+  const submitPhotoForm = (values, { resetForm }) => {
     monumentService
       .savePhoto(file)
       .then((photo) => {
         const monumentPhotoValues = JSON.parse(JSON.stringify(values));
         const monumentPhoto = getMonumentPhotoFromForm(monumentPhotoValues, photo.id);
         monumentService.createPhotoMonument(monumentPhoto)
-            .then(mp => console.log(mp))//TOTO handle successful result
+            .then(mp => {
+                onPhotoSave(mp);
+                setSources(defaultSources);
+                resetForm({ values: "" });
+                setOpen(false);
+            })
             .catch()//TODO handle error
       })
       .catch(); //TODO handle error

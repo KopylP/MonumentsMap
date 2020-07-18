@@ -7,6 +7,7 @@ import AppContext from "../../context/app-context";
 import { usePrevious } from "../../hooks/hooks";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ScrollBar from "../common/scroll-bar/scroll-bar";
+import DetailDrawerContext from "./context/detail-drawer-context";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -34,6 +35,10 @@ export default function DetailDrawer(props) {
       .catch(); //TODO handle error
   };
 
+  const onPhotoSave = (monumentPhoto) => {
+    console.log(monumentPhoto);
+  }
+
   const prevSelectedMonumentId = usePrevious(selectedMonumentId);
 
   useEffect(() => {
@@ -60,12 +65,14 @@ export default function DetailDrawer(props) {
       }}
       open={open}
     >
-      <ScrollBar>
-        <DrawerContainer>
-          <DetailDrawerHeader onBack={() => setOpen(false)} />
-          <DetailDrawerContent monument={monument} />
-        </DrawerContainer>
-      </ScrollBar>
+      <DetailDrawerContext.Provider value={{ onPhotoSave }}>
+        <ScrollBar>
+          <DrawerContainer>
+            <DetailDrawerHeader onBack={() => setOpen(false)} />
+            <DetailDrawerContent monument={monument} />
+          </DrawerContainer>
+        </ScrollBar>
+      </DetailDrawerContext.Provider>
     </Drawer>
   );
 }
