@@ -51,11 +51,12 @@ namespace MonumentsMap.Data.Repositories
                     Longitude = p.Longitude
                 };
 
-                if(MinimizeResult == false) {
+                if(!MinimizeResult) {
                     monument.City = cityLocalizedRepository.Get(cultureCode, monument.CityId).Result;
                     monument.Condition = conditionLocalizedRepository.Get(cultureCode, monument.ConditionId).Result;
                     monument.Status = statusLocalizedRepository.Get(cultureCode, monument.StatusId).Result;
                     monument.Sources = p.Sources.Adapt<SourceViewModel[]>().ToList();
+                    monument.MonumentPhotos = p.MonumentPhotos.Adapt<MonumentPhotoViewModel[]>().ToList();
                 }
 
                 return monument;
@@ -70,7 +71,8 @@ namespace MonumentsMap.Data.Repositories
             {
                 return result.Include(p => p.Description)
                     .ThenInclude(p => p.Localizations)
-                    .Include(p => p.Sources);
+                    .Include(p => p.Sources)
+                    .Include(p => p.MonumentPhotos);
             }
 
             return result;

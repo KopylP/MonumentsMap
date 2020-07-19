@@ -20,6 +20,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels
         public LocalizedCity City { get; set; }
         public LocalizedCondition Condition { get; set; }
         public LocalizedStatus Status { get; set; }
+        public List<MonumentPhotoViewModel> MonumentPhotos { get; set; }
 
     }
 }

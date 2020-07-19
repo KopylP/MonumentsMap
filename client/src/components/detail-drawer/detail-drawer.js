@@ -11,11 +11,11 @@ import DetailDrawerContext from "./context/detail-drawer-context";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
-    width: theme.drawerWidth + 20,
+    width: theme.detailDrawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {
-    width: theme.drawerWidth + 20,
+    width: theme.detailDrawerWidth,
   },
 }));
 
@@ -68,7 +68,7 @@ export default function DetailDrawer(props) {
       <DetailDrawerContext.Provider value={{ onPhotoSave }}>
         <ScrollBar>
           <DrawerContainer>
-            <DetailDrawerHeader onBack={() => setOpen(false)} />
+            <DetailDrawerHeader monument={monument} onBack={() => setOpen(false)} />
             <DetailDrawerContent monument={monument} />
           </DrawerContainer>
         </ScrollBar>
@@ -76,3 +76,4 @@ export default function DetailDrawer(props) {
     </Drawer>
   );
 }
+

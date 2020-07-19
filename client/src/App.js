@@ -22,6 +22,7 @@ const theme = createMuiTheme({
     error: { main: "#DB5461" },
   },
   drawerWidth: 350,
+  detailDrawerWidth: 360
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -67,7 +68,7 @@ function App(props) {
   //For tests
   useEffect(() => {
     setTimeout(() => {
-      setSelectedMonumentId(1);
+      setSelectedMonumentId(2);
     }, 1000);
   }, []);
   //!For tests

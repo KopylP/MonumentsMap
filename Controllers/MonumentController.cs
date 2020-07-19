@@ -14,25 +14,9 @@ namespace MonumentsMap.Controllers
         #region private fields
         private readonly MonumentPhotoLocalizedRepository _monumentPhotoLocalizedRepository;
         #endregion
-        public MonumentController(MonumentLocalizedRepository localizedRepository,
-            MonumentPhotoLocalizedRepository monumentPhotoLocalizedRepository) : base(localizedRepository)
+        public MonumentController(MonumentLocalizedRepository localizedRepository) : base(localizedRepository)
         {
-            _monumentPhotoLocalizedRepository = monumentPhotoLocalizedRepository;
         }
 
-        #region methods
-        [HttpGet("{id}/photo/ids")]
-        public async Task<IActionResult> GetPhotoIds(int id)
-        {
-            var monument = await localizedRepository.Find("uk-UA", p => p.Id == id);
-            if(!monument.Any()) return NotFound(); //TODO handle errors
-            var monumentPhotos = await _monumentPhotoLocalizedRepository.Find("uk-UA", p => p.MonumentId == id);
-            if(monumentPhotos == null)
-            {
-                return NotFound(); //TODO handle errors
-            }
-            return Ok(monumentPhotos.Select(p => p.PhotoId));
-        }
-        #endregion
     }
 }

@@ -384,7 +384,6 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
                           formik.touched.conditionId &&
                           formik.errors.conditionId
                         }
-                        error={formik.touched.year && formik.errors.year}
                         name="conditionId"
                       >
                         {conditions.map((condition) => (
@@ -394,9 +393,9 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
                         ))}
                       </Select>
                       <FormHelperText>
-                        {formik.touched.year &&
-                          formik.errors.year &&
-                          formik.errors.year}
+                        {formik.touched.conditionId &&
+                          formik.errors.conditionId &&
+                          formik.errors.conditionId}
                       </FormHelperText>
                     </FormControl>
                   </Grid>

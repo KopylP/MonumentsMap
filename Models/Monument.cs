@@ -29,6 +29,7 @@ namespace MonumentsMap.Models
         [ForeignKey("DescriptionId")]
         public virtual LocalizationSet Description { get; set; }
         public virtual List<Source> Sources { get; set; }
+        public virtual List<MonumentPhoto> MonumentPhotos { get; set; }
         #endregion
     }
 }

@@ -23,7 +23,7 @@ namespace MonumentsMap.Services
         #endregion
 
         #region public methods
-        public void SavePhoto(IFormFile file, string subDir)
+        public async System.Threading.Tasks.Task SavePhotoAsync(IFormFile file, string subDir)
         {
             string dirPath = _imageFilesParams.AbsolutePath switch {
                 false => Path.Combine(_env.ContentRootPath, $"{_imageFilesParams.ImagesFolder}{Path.DirectorySeparatorChar}{subDir}"),
@@ -37,7 +37,7 @@ namespace MonumentsMap.Services
             string filePath = Path.Combine(dirPath, file.FileName);
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                file.CopyToAsync(fileStream);
+                await file.CopyToAsync(fileStream);
             }
         }
 

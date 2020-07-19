@@ -76,4 +76,12 @@ export default class MonumentService {
   async createPhotoMonument(monumentPhoto) {
     return await this._postRequest("monumentphoto/", monumentPhoto);
   }
+
+  async getPhotoIds(monumentId) {
+    return await this._getRequest(`monument/${monumentId}/photo/ids`);
+  }
+
+  getPhotoLink(photoId) {
+    return `${this._baseURL}photo/${photoId}/image`;
+  }
 }

@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     right: 10,
     top: 10,
     backgroundColor: "rgba(100, 100, 100, 0.3)",
+    zIndex: 999
   },
 }));
 
