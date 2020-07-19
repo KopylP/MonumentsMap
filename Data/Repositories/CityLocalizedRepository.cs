@@ -13,7 +13,7 @@ namespace MonumentsMap.Data.Repositories
         {
         }
 
-        public override Func<City, LocalizedCity> GetSelectHandler(string cultureCode, bool minimized = false)
+        public override Func<City, LocalizedCity> GetSelectHandler(string cultureCode)
         {
 
             return p => 
@@ -28,7 +28,7 @@ namespace MonumentsMap.Data.Repositories
             };
         }
 
-        public override IQueryable<City> IncludeNecessaryProps(IQueryable<City> source, bool minimized = false)
+        public override IQueryable<City> IncludeNecessaryProps(IQueryable<City> source)
         {
             return source.Include(p => p.Name).ThenInclude(p => p.Localizations);
         }

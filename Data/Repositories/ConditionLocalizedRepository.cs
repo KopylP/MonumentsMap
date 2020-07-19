@@ -13,7 +13,7 @@ namespace MonumentsMap.Data.Repositories
         {
         }
 
-        public override Func<Condition, LocalizedCondition> GetSelectHandler(string cultureCode, bool minimized = false)
+        public override Func<Condition, LocalizedCondition> GetSelectHandler(string cultureCode)
         {
             return p =>
             {
@@ -31,7 +31,7 @@ namespace MonumentsMap.Data.Repositories
             };
         }
 
-        public override IQueryable<Condition> IncludeNecessaryProps(IQueryable<Condition> source, bool minimized = false)
+        public override IQueryable<Condition> IncludeNecessaryProps(IQueryable<Condition> source)
         {
             return source
                 .Include(p => p.Name)

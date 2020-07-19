@@ -15,28 +15,33 @@ namespace MonumentsMap.Data.Repositories
         {
         }
 
-        public override Func<MonumentPhoto, LocalizedMonumentPhoto> GetSelectHandler(string cultureCode, bool minimized = false)
+        public override Func<MonumentPhoto, LocalizedMonumentPhoto> GetSelectHandler(string cultureCode)
         {
             return p =>
             {
-                var localizationDescription = p.Description?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode);
-                var Description = localizationDescription?.Value ?? "";
-                return new LocalizedMonumentPhoto
+                var lmp = new LocalizedMonumentPhoto
                 {
                     Id = p.Id,
                     Year = p.Year,
                     Period = p.Period,
                     PhotoId = p.PhotoId,
-                    Photo = p.Photo,
-                    Description = Description,
-                    Sources = p.Sources.Adapt<SourceViewModel[]>().ToList(),
                     MonumentId = p.MonumentId
                 };
+                if (!MinimizeResult)
+                {
+                    var localizationDescription = p.Description?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode);
+                    var description = localizationDescription?.Value ?? "";
+                    lmp.Description = description;
+                    lmp.Sources = p.Sources.Adapt<SourceViewModel[]>().ToList();
+                    lmp.Photo = p.Photo;
+                }
+                return lmp;
             };
         }
 
-        public override IQueryable<MonumentPhoto> IncludeNecessaryProps(IQueryable<MonumentPhoto> source, bool minimized = false)
+        public override IQueryable<MonumentPhoto> IncludeNecessaryProps(IQueryable<MonumentPhoto> source)
         {
+            if (MinimizeResult) return source;
             return source
                 .Include(p => p.Description)
                 .ThenInclude(p => p.Localizations)

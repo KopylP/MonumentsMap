@@ -9,7 +9,7 @@ using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Data.Repositories
 {
-    public abstract class LocalizedRepository<TLocalizedEntity, TEditableLocalizedEntity, TEntity, TContext> 
+    public abstract class LocalizedRepository<TLocalizedEntity, TEditableLocalizedEntity, TEntity, TContext>
     : ILocalizedRepository<TLocalizedEntity, TEditableLocalizedEntity, TEntity>
     where TLocalizedEntity : LocalizedEntity
     where TEntity : Entity
@@ -17,6 +17,7 @@ namespace MonumentsMap.Data.Repositories
     where TContext : DbContext
     {
         private readonly TContext context;
+        protected bool MinimizeResult { get; set; } = false;
         public LocalizedRepository(TContext context)
         {
             this.context = context;
@@ -24,46 +25,57 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<TEntity> Create(TEditableLocalizedEntity editableLocalizedEntity)
         {
+            MinimizeResult = false;
             var entity = editableLocalizedEntity.CreateEntity();
             context.Set<TEntity>().Add(entity);
             await context.SaveChangesAsync();
             return entity;
         }
 
+        /// <summary>
+        /// Return found elements or return an empty enumerable if there were no elements found
+        /// </summary>
+        /// <param name="cultureCode"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public async Task<List<TLocalizedEntity>> Find(string cultureCode, Func<TEntity, bool> predicate)
         {
-            var entities = context.Set<TEntity>().AsQueryable();
+            MinimizeResult = true;
+            var entities = IncludeNecessaryProps(context.Set<TEntity>().AsQueryable());
             var filteredEntities = entities.Where(predicate);
-            return IncludeNecessaryProps(filteredEntities.AsQueryable()).Select(GetSelectHandler(cultureCode)).ToList();
+            return filteredEntities.Select(GetSelectHandler(cultureCode)).ToList();
         }
 
         public async Task<TLocalizedEntity> Get(string cultureCode, int id)
         {
+            MinimizeResult = false;
             var query = context.Set<TEntity>()
                 .Where(p => p.Id == id);
-                return IncludeNecessaryProps(query)
-                .Select(GetSelectHandler(cultureCode))
-                .FirstOrDefault();
+            return IncludeNecessaryProps(query)
+            .Select(GetSelectHandler(cultureCode))
+            .FirstOrDefault();
         }
 
         public async Task<List<TLocalizedEntity>> GetAll(string cultureCode)
         {
+            MinimizeResult = true;
             var entities = context.Set<TEntity>().AsQueryable();
-            return IncludeNecessaryProps(entities, true).Select(GetSelectHandler(cultureCode, true)).ToList();
+            return IncludeNecessaryProps(entities).Select(GetSelectHandler(cultureCode)).ToList();
         }
 
         public async Task<TEntity> Update(TEditableLocalizedEntity editableLocalizedEntity)
         {
+            MinimizeResult = false;
             var editEntity = IncludeNecessaryProps(context.Set<TEntity>().AsQueryable()).FirstOrDefault(p => p.Id == editableLocalizedEntity.Id);
             var entity = editableLocalizedEntity.CreateEntity(editEntity);
             context.Set<TEntity>().Update(entity);
             await context.SaveChangesAsync();
-            return entity;        
+            return entity;
         }
 
         //Convert model to localized model
-        public abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode, bool minimized = false);
+        public abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode);
         //Including required property models that are associated with the main model
-        public abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source, bool minimized = false);
+        public abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source);
     }
 }

@@ -17,9 +17,13 @@ namespace MonumentsMap.Controllers
     where TEntity : Entity
     where TEditableLocalizedEntity : EditableLocalizedEntity<TEntity>
     {
-        private readonly TLocalizedRepository localizedRepository;
+        protected readonly TLocalizedRepository localizedRepository;
+        protected readonly string DefaultCulture;
 
-        public LocalizedController(TLocalizedRepository localizedRepository) => this.localizedRepository = localizedRepository;
+        public LocalizedController(TLocalizedRepository localizedRepository)
+        {
+            this.localizedRepository = localizedRepository;
+        }
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string cultureCode = "uk-UA")
         {

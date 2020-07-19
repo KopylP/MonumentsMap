@@ -33,7 +33,7 @@ namespace MonumentsMap.Controllers
                 FileName = file.FileName
             };
             await _photoRepository.Add(photo);
-            _photoService.SavePhotoAsync(file, photo.Id.ToString());
+            _photoService.SavePhoto(file, photo.Id.ToString());
             return Ok(photo);
         }
         #endregion
