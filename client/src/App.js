@@ -22,7 +22,8 @@ const theme = createMuiTheme({
     error: { main: "#DB5461" },
   },
   drawerWidth: 350,
-  detailDrawerWidth: 360
+  detailDrawerWidth: 360,
+  detailDrawerHeaderHeight: 250
 });
 
 const useStyles = makeStyles((theme) => ({

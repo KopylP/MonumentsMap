@@ -1,1 +1,8 @@
 .focusRing___1airF.carousel__slide-focus-ring { outline: none !important; }
+.move-button {
+    background-color: transparent;
+    outline: transparent;
+    border: 0px solid transparent;
+    padding: 5;
+    border-radius: 50%;
+}

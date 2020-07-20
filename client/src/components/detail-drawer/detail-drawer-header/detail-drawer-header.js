@@ -4,12 +4,10 @@ import { makeStyles } from "@material-ui/core";
 import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
 import PhotoCarousel from "./photo-carousel/photo-carousel";
 
-const headerHeight = 250;
-
 const useStyles = makeStyles((theme) => ({
   imagesContainer: {
     width: "100%",
-    height: headerHeight,
+    height: theme.detailDrawerHeaderHeight,
     backgroundSize: "cover",
     position: "relative",
     backgroundPosition: "center",
@@ -22,7 +20,7 @@ export default function DetailDrawerHeader({monument, onBack = p => p, ...props}
   return (
     <div className={classes.imagesContainer}>
       <DrawerBackButton onClick={onBack} />
-      <PhotoCarousel headerHeight={headerHeight} data={monument && monument.monumentPhotos}/>
+      <PhotoCarousel data={monument && monument.monumentPhotos}/>
     </div>
   );
 }
