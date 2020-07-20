@@ -21,13 +21,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DetailDrawer(props) {
   const classes = useStyles(props);
-  const { selectedMonumentId, monumentService } = useContext(AppContext);
+  const { selectedMonument, monumentService } = useContext(AppContext);
   const [open, setOpen] = useState(false);
   const [monument, setMonument] = useState(null);
 
   const loadMonument = () => {
     monumentService
-      .getMonumentById(selectedMonumentId)
+      .getMonumentById(selectedMonument.id)
       .then((monument) => {
         setMonument(monument);
         console.log(monument);
@@ -39,21 +39,19 @@ export default function DetailDrawer(props) {
     console.log(monumentPhoto);
   }
 
-  const prevSelectedMonumentId = usePrevious(selectedMonumentId);
+  const prevSelectedMonument = usePrevious(selectedMonument);
 
   useEffect(() => {
     if (
-      selectedMonumentId !== 0 &&
-      selectedMonumentId !== prevSelectedMonumentId
+      selectedMonument.id !== 0 && (prevSelectedMonument.id !== selectedMonument.id || open === false)
     ) {
       setMonument(null);
       setOpen(true);
       loadMonument();
-    } else if (selectedMonumentId === 0) {
+    } else if (selectedMonument.id === 0) {
       setMonument(null);
-      // setOpen(false);
     }
-  }, [selectedMonumentId]);
+  }, [selectedMonument]);
 
   return (
     <Drawer

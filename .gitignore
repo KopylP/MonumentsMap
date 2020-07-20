@@ -32,9 +32,8 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-
+monuments.db
 # Visual Studio 2015
 .vs/
 
-monuments.db
 /Images

@@ -6,10 +6,8 @@ const supportedCultures = [
 ];
 
 const serverHost = "http://localhost:5000/";
-const googleMapsKey = "AIzaSyDTjU-QE2HsjmJsveLmcmtVfI2CpUppW6Q"
 
 export {
     supportedCultures,
     serverHost,
-    googleMapsKey
 }

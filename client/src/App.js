@@ -23,14 +23,15 @@ const theme = createMuiTheme({
   },
   drawerWidth: 350,
   detailDrawerWidth: 360,
-  detailDrawerHeaderHeight: 250
+  detailDrawerHeaderHeight: 250,
 });
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     position: "fixed",
-    left: 10,
+    left: 50,
     top: 10,
+    zIndex: 999
   },
   app: {
     display: "flex",
@@ -45,46 +46,52 @@ const useStyles = makeStyles((theme) => ({
 function App(props) {
   const classes = useStyles(props);
   const [mainDrawerOpen, setMainDrawerOpen] = useState(true);
-  const [selectedLanguage, setSelectedLanguage] = useState(supportedCultures[0]);
-  const [selectedMonumentId, setSelectedMonumentId] = useState(0);
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    supportedCultures[0]
+  );
+  const [selectedMonument, setSelectedMonument] = useState({ id: 0 });
 
   useEffect(() => {
-    const userCultureIndex = supportedCultures.findIndex(p => p.code.split('-')[0] === navigator.language.split('-')[0]);
-    const culture = userCultureIndex > -1 ? supportedCultures[userCultureIndex] : supportedCultures[1];//en-GB
+    const userCultureIndex = supportedCultures.findIndex(
+      (p) => p.code.split("-")[0] === navigator.language.split("-")[0]
+    );
+    const culture =
+      userCultureIndex > -1
+        ? supportedCultures[userCultureIndex]
+        : supportedCultures[1]; //en-GB
     setSelectedLanguage(culture);
   }, []);
 
-  const monumentService = new MonumentService(serverHost, selectedLanguage.code);
+  const monumentService = new MonumentService(
+    serverHost,
+    selectedLanguage.code
+  );
 
   const contextValues = {
     mainDrawerOpen,
     setMainDrawerOpen,
-    selectedLanguage, 
+    selectedLanguage,
     setSelectedLanguage,
     monumentService,
-    selectedMonumentId,
-    setSelectedMonumentId
+    selectedMonument,
+    setSelectedMonument,
   };
-
-  //For tests
-  useEffect(() => {
-    setTimeout(() => {
-      setSelectedMonumentId(2);
-    }, 1000);
-  }, []);
-  //!For tests
 
   return (
     <AppContext.Provider value={contextValues}>
       <MuiThemeProvider theme={theme}>
         <div className={classes.app}>
           <div className={classes.mapContainer}>
-            <Map />
-            <MenuButton
-              className={classes.menuButton}
-              onClick={() => setMainDrawerOpen(true)}
+            <Map
+              onMonumentSelected={(monumentId) =>
+                setSelectedMonument({ id: monumentId })
+              }
             />
           </div>
+          <MenuButton
+            className={classes.menuButton}
+            onClick={() => setMainDrawerOpen(true)}
+          />
         </div>
         <MainDrawer className={classes.menuButton} />
         <DetailDrawer />

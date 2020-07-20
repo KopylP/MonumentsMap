@@ -50,13 +50,12 @@ namespace MonumentsMap.Data.Repositories
                     Latitude = p.Latitude,
                     Longitude = p.Longitude
                 };
-
+                monument.Condition = conditionLocalizedRepository.Get(cultureCode, monument.ConditionId).Result;
                 if(!MinimizeResult) {
                     monument.City = cityLocalizedRepository.Get(cultureCode, monument.CityId).Result;
-                    monument.Condition = conditionLocalizedRepository.Get(cultureCode, monument.ConditionId).Result;
-                    monument.Status = statusLocalizedRepository.Get(cultureCode, monument.StatusId).Result;
                     monument.Sources = p.Sources.Adapt<SourceViewModel[]>().ToList();
                     monument.MonumentPhotos = p.MonumentPhotos.Adapt<MonumentPhotoViewModel[]>().ToList();
+                    monument.Status = statusLocalizedRepository.Get(cultureCode, monument.StatusId).Result;
                 }
 
                 return monument;
@@ -66,7 +65,8 @@ namespace MonumentsMap.Data.Repositories
         public override IQueryable<Monument> IncludeNecessaryProps(IQueryable<Monument> source)
         {
             var result = source.Include(p => p.Name)
-                .ThenInclude(p => p.Localizations);
+                .ThenInclude(p => p.Localizations)
+                .Include(p => p.Status);
             if (!MinimizeResult)
             {
                 return result.Include(p => p.Description)

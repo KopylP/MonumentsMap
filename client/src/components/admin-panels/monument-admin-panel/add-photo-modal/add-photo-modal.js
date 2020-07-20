@@ -63,10 +63,11 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
   const [file, setFile] = useState(null);
 
   const getMonumentPhotoFromForm = (values, photoId) => {
+    console.log(values);
     delete values.file;
     const description = [
         ...supportedCultures.map(culture => ({
-            code: culture.code,
+            culture: culture.code,
             value: values[culture.code]
         }))
     ];
@@ -77,6 +78,7 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
     values.sources = sources;
     values.monumentId = monumentId;
     values.photoId = photoId;
+    console.log("values", values);
     return values;
   }
 

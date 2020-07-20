@@ -1,43 +1,40 @@
-import React, { useState } from "react";
-import { googleMapsKey } from "../../config";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import React, { useState, useEffect, useContext } from "react";
+import { Map as LeafMap, TileLayer, Marker, Popup } from "react-leaflet";
+import AppContext from "../../context/app-context";
+import MonumentMarker from "./marker/monument-marker";
 
 const center = {
   lat: -3.745,
-  lng: -38.523
+  lng: -38.523,
 };
 
-function Map(props) {
-  const [map, setMap] = React.useState(null);
+function Map({onMonumentSelected = p => p}) {
+  const { monumentService } = useContext(AppContext);
+  const [monuments, setMonuments] = useState([]);
 
-  const onLoad = React.useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds();
-    map.fitBounds(bounds);
-    setMap(map);
+  useEffect(() => {
+    monumentService.getAllMonuments()
+      .then(monuments => setMonuments(monuments));
   }, []);
 
-  const containerStyle = {
-    width: '100%',
-    height: '100%'
-  };
-   
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
+  const markers = monuments.length > 0 ? monuments.map((monument, i) => {
+    return <MonumentMarker onClick={onMonumentSelected} monument={monument} key={i}/>;
+  }) : null;
 
   return (
-      <LoadScript googleMapsApiKey={googleMapsKey}>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-          options={{ styles: [{ elementType: "labels", featureType: "poi.business", stylers: [{ visibility: "off", }], }], }}
-        ><Marker position={center} >
-          </Marker></GoogleMap>
-      </LoadScript>
+    <LeafMap
+      center={center}
+      zoom={12}
+      style={{ width: "100%", height: "100vh" }}
+      // key={monuments.length}
+    >
+      <TileLayer
+        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {markers}
+    </LeafMap>
   );
 }
 

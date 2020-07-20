@@ -198,7 +198,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
       setName([
         ...name.slice(0, oldNameIndex),
         {
-          code: cultureCode,
+          culture: cultureCode,
           value: newValue,
         },
         ...name.slice(oldNameIndex + 1),
@@ -212,7 +212,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
       setDescription([
         ...description.slice(0, oldNameIndex),
         {
-          code: cultureCode,
+          culture: cultureCode,
           value: newValue,
         },
         ...description.slice(oldNameIndex + 1),
