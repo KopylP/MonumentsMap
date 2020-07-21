@@ -6,3 +6,7 @@
     padding: 5;
     border-radius: 50%;
 }
+
+.move-button:disabled {
+    visibility: hidden;
+}

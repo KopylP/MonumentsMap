@@ -55,24 +55,20 @@ function PhotoCarousel({ data, ...props }) {
           </Slide>
         ))}
       </Slider>
-      {data.length > 1
-        ? [
-            <CarouselButtonContainer>
-              <ButtonBack className="move-button">
-                <StrokeIcon>
-                  <ArrowBackIosIcon className={styles.arrowIcon} />
-                </StrokeIcon>
-              </ButtonBack>
-            </CarouselButtonContainer>,
-            <CarouselButtonContainer attachTo="right">
-              <ButtonNext className="move-button">
-                <StrokeIcon>
-                  <ArrowForwardIosIcon className={styles.arrowIcon} />
-                </StrokeIcon>
-              </ButtonNext>
-            </CarouselButtonContainer>,
-          ]
-        : null}
+      <CarouselButtonContainer>
+        <ButtonBack className="move-button">
+          <StrokeIcon>
+            <ArrowBackIosIcon className={styles.arrowIcon} />
+          </StrokeIcon>
+        </ButtonBack>
+      </CarouselButtonContainer>
+      <CarouselButtonContainer attachTo="right">
+        <ButtonNext className="move-button">
+          <StrokeIcon>
+            <ArrowForwardIosIcon className={styles.arrowIcon} />
+          </StrokeIcon>
+        </ButtonNext>
+      </CarouselButtonContainer>
     </CarouselProvider>
   );
 }
@@ -81,7 +77,10 @@ export default WithLoadingData(PhotoCarousel)(() => {
   const theme = useTheme();
   console.log(theme);
   return (
-    <ContentLoader height={theme.detailDrawerHeaderHeight} width={theme.detailDrawerWidth}>
+    <ContentLoader
+      height={theme.detailDrawerHeaderHeight}
+      width={theme.detailDrawerWidth}
+    >
       <rect
         x="0"
         y="0"
