@@ -79,8 +79,9 @@ function PhotoCarousel({ data, ...props }) {
 
 export default WithLoadingData(PhotoCarousel)(() => {
   const theme = useTheme();
+  console.log(theme);
   return (
-    <ContentLoader height="18">
+    <ContentLoader height={theme.detailDrawerHeaderHeight} width={theme.detailDrawerWidth}>
       <rect
         x="0"
         y="0"

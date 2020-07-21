@@ -1,5 +1,5 @@
 import React from "react";
-import { Marker } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import markerIcon from "./marker-icon";
 
 export default function MonumentMarker({ monument, onClick = (p) => p }) {
@@ -32,6 +32,8 @@ export default function MonumentMarker({ monument, onClick = (p) => p }) {
         lat: monument.latitude,
         lng: monument.longitude,
       }}
-    ></Marker>
+    >
+      <Popup>{monument.name}</Popup>
+    </Marker>
   );
 }

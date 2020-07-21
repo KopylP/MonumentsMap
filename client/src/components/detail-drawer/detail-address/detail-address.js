@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { makeStyles, Grid } from "@material-ui/core";
 import RoomIcon from "@material-ui/icons/Room";
-import GeocoderService from "../../../services/geocoder-service";
-import ContentLoader from 'react-content-loader';
+import ContentLoader from "react-content-loader";
+import AppContext from "../../../context/app-context";
+import WithLoadingData from "../../hoc-helpers/with-loading-data";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -20,20 +21,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DetailAddress({ data, ...props }) {
+function DetailAddress({ data, ...props }) {
   const styles = useStyles(props);
   const [address, setAddress] = useState(null);
-  const geocoderService = new GeocoderService();
+  const {
+    geocoderService: { getAddressInformationFromLatLng },
+  } = useContext(AppContext);
 
   useEffect(() => {
     if (data != null) {
-      console.log(data);
-      geocoderService
-        .getAddressInformationFromLatLng(data.lat, data.lng)
-        .then(({ address }) => {
+      getAddressInformationFromLatLng(data.lat, data.lng).then(
+        ({ address }) => {
           setAddress(address);
-          console.log(address);
-        });
+        }
+      );
+    } else {
+      setAddress(null);
     }
   }, [data]);
 
@@ -56,3 +59,9 @@ export default function DetailAddress({ data, ...props }) {
     </React.Fragment>
   );
 }
+
+export default WithLoadingData(DetailAddress)(() => (
+  <ContentLoader height="18">
+    <rect x="0" y="0" rx="5" ry="5" width="200" height="10" />
+  </ContentLoader>
+));

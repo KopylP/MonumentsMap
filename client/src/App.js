@@ -12,6 +12,7 @@ import Map from "./components/map/map";
 import { supportedCultures, serverHost } from "./config";
 import MonumentService from "./services/monument-service";
 import DetailDrawer from "./components/detail-drawer/detail-drawer";
+import GeocoderService from "./services/geocoder-service";
 
 const theme = createMuiTheme({
   palette: {
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 function App(props) {
   const classes = useStyles(props);
   const [mainDrawerOpen, setMainDrawerOpen] = useState(true);
+  const [detailDrawerOpen, setDetailDrawerOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
     supportedCultures[0]
   );
@@ -67,6 +69,10 @@ function App(props) {
     selectedLanguage.code
   );
 
+  const geocoderService = new GeocoderService(
+    selectedLanguage.code.split('-')[0]
+  );
+
   const contextValues = {
     mainDrawerOpen,
     setMainDrawerOpen,
@@ -75,6 +81,9 @@ function App(props) {
     monumentService,
     selectedMonument,
     setSelectedMonument,
+    detailDrawerOpen,
+    setDetailDrawerOpen,
+    geocoderService
   };
 
   return (

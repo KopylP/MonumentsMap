@@ -6,6 +6,7 @@ import ReactDOMServer from "react-dom/server";
 export default function markerIcon(color) {
   return divIcon({
     iconAnchor: [17, 32],
+    popupAnchor: [1, -19],
     className: "custom-icon",
     html: ReactDOMServer.renderToString(
         <LocationOnIcon style={{

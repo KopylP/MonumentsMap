@@ -26,7 +26,6 @@ import AppContext from "../../context/app-context";
 import Source from "./source/source";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import GoogleMapsService from "../../services/geocoder-service";
 import ScrollBar from "../common/scroll-bar/scroll-bar";
 
 const useStyles = makeStyles((theme) => ({
@@ -79,7 +78,7 @@ TabPanel.propTypes = {
 
 export default function AddModal({ openAddModal, setOpenAddModal }) {
   const [value, setValue] = React.useState(0);
-  const { monumentService } = useContext(AppContext);
+  const { monumentService, geocoderService } = useContext(AppContext);
 
   const defaultDescription = [
     ...supportedCultures.map(({ code }) => ({
@@ -115,9 +114,9 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
     monument.name = name;
     monument.description = description;
     monument.sources = sources;
-    const { getLatLngFromAddress } = new GoogleMapsService();
+    const { getLatLngFromAddress } = geocoderService;
     getLatLngFromAddress(`${monument.city.name}, ${monument.address}`)
-      .then(({ lat, lon }) => {
+      .then(({ lat, lon }) => {//TODO if address does`t found
         delete monument.address;
         delete monument.cityName;
         monument.cityId = monument.city.id;

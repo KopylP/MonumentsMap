@@ -77,7 +77,6 @@ export default function DrawerContent(props) {
   const prevSelectedLanguage = usePrevious(selectedLanguage);
 
   useEffect(() => {
-    console.log("aha");
     if(prevSelectedLanguage == null || selectedLanguage.code !== prevSelectedLanguage.code)
       update();
   }, [selectedLanguage]);

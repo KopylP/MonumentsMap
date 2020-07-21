@@ -14,9 +14,14 @@ namespace MonumentsMap.Controllers
         #region private fields
         private readonly MonumentPhotoLocalizedRepository _monumentPhotoLocalizedRepository;
         #endregion
+        #region constructor
         public MonumentController(MonumentLocalizedRepository localizedRepository) : base(localizedRepository)
         {
         }
+        #endregion
+
+        // #region metods
+        // #endregion
 
     }
 }

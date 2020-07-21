@@ -21,32 +21,35 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DetailDrawer(props) {
   const classes = useStyles(props);
-  const { selectedMonument, monumentService } = useContext(AppContext);
-  const [open, setOpen] = useState(false);
+  const { selectedMonument, monumentService, detailDrawerOpen, setDetailDrawerOpen } = useContext(AppContext);
   const [monument, setMonument] = useState(null);
 
   const loadMonument = () => {
     monumentService
       .getMonumentById(selectedMonument.id)
       .then((monument) => {
-        setMonument(monument);
-        console.log(monument);
+        ((monument) => {
+          setTimeout(() => {
+            setMonument(monument);
+          }, 200);
+        })(monument);
       })
       .catch(); //TODO handle error
   };
 
   const onPhotoSave = (monumentPhoto) => {
     console.log(monumentPhoto);
-  }
+  };
 
   const prevSelectedMonument = usePrevious(selectedMonument);
 
   useEffect(() => {
     if (
-      selectedMonument.id !== 0 && (prevSelectedMonument.id !== selectedMonument.id || open === false)
+      selectedMonument.id !== 0 &&
+      (prevSelectedMonument.id !== selectedMonument.id || detailDrawerOpen === false)
     ) {
       setMonument(null);
-      setOpen(true);
+      setDetailDrawerOpen(true);
       loadMonument();
     } else if (selectedMonument.id === 0) {
       setMonument(null);
@@ -61,12 +64,17 @@ export default function DetailDrawer(props) {
       classes={{
         paper: classes.drawerPaper,
       }}
-      open={open}
+      open={detailDrawerOpen}
     >
       <DetailDrawerContext.Provider value={{ onPhotoSave }}>
         <ScrollBar>
           <DrawerContainer>
-            <DetailDrawerHeader monument={monument} onBack={() => setOpen(false)} />
+            <DetailDrawerHeader
+              monument={monument}
+              onBack={() => {
+                setDetailDrawerOpen(false);
+              }}
+            />
             <DetailDrawerContent monument={monument} />
           </DrawerContainer>
         </ScrollBar>
@@ -74,4 +82,3 @@ export default function DetailDrawer(props) {
     </Drawer>
   );
 }
-
