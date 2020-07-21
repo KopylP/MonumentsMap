@@ -83,7 +83,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
 
   const defaultDescription = [
     ...supportedCultures.map(({ code }) => ({
-      code,
+      culture: code,
       value: "",
     })),
   ];
@@ -96,7 +96,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
 
   const defaultName = [
     ...supportedCultures.map(({ code }) => ({
-      code,
+      culture: code,
       value: "",
     })),
   ];
@@ -193,7 +193,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
   });
 
   const onNameChange = (newValue, cultureCode) => {
-    const oldNameIndex = name.findIndex((p) => p.code === cultureCode);
+    const oldNameIndex = name.findIndex((p) => p.culture === cultureCode);
     if (oldNameIndex !== -1) {
       setName([
         ...name.slice(0, oldNameIndex),
@@ -207,7 +207,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
   };
 
   const onDescriptionChange = (newValue, cultureCode) => {
-    const oldNameIndex = description.findIndex((p) => p.code === cultureCode);
+    const oldNameIndex = description.findIndex((p) => p.culture === cultureCode);
     if (oldNameIndex !== -1) {
       setDescription([
         ...description.slice(0, oldNameIndex),

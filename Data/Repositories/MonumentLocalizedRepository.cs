@@ -30,19 +30,30 @@ namespace MonumentsMap.Data.Repositories
         {
             return p =>
             {
-                var localizationDescription = p.Description?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode)
-                    ?? p.Description?.Localizations?.FirstOrDefault();
-                var localizationName = p.Name?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode)
-                    ?? p.Name?.Localizations?.FirstOrDefault();
-                
+                var localizationDescription = p.Description?
+                    .Localizations?
+                    .FirstOrDefault(p => p.CultureCode == cultureCode)?
+                    .Value;
+                localizationDescription = localizationDescription != null && localizationDescription != string.Empty
+                 ? localizationDescription : p.Description?
+                    .Localizations?
+                    .FirstOrDefault(p => p.CultureCode == "uk-UA")?.Value;
 
-                var monument =  new LocalizedMonument
+                var localizationName = p.Name?
+                    .Localizations?
+                    .FirstOrDefault(p => p.CultureCode == cultureCode)?
+                    .Value;
+                localizationName = localizationName != null && localizationName != string.Empty ? localizationName :
+                    p.Name?.Localizations?.FirstOrDefault(p => p.CultureCode == "uk-UA")?.Value;
+
+
+                var monument = new LocalizedMonument
                 {
                     Id = p.Id,
                     Year = p.Year,
                     Period = p.Period,
-                    Name = localizationName?.Value ?? "",
-                    Description = localizationDescription?.Value ?? "",
+                    Name = localizationName,
+                    Description = localizationDescription,
                     CityId = p.CityId,
                     StatusId = p.StatusId,
                     ConditionId = p.ConditionId,
@@ -51,7 +62,8 @@ namespace MonumentsMap.Data.Repositories
                     Longitude = p.Longitude
                 };
                 monument.Condition = conditionLocalizedRepository.Get(cultureCode, monument.ConditionId).Result;
-                if(!MinimizeResult) {
+                if (!MinimizeResult)
+                {
                     monument.City = cityLocalizedRepository.Get(cultureCode, monument.CityId).Result;
                     monument.Sources = p.Sources.Adapt<SourceViewModel[]>().ToList();
                     monument.MonumentPhotos = p.MonumentPhotos.Adapt<MonumentPhotoViewModel[]>().ToList();
