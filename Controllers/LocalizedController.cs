@@ -30,7 +30,7 @@ namespace MonumentsMap.Controllers
             var localizedEntities = await localizedRepository.GetAll(cultureCode);
             return Ok(localizedEntities);
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id, [FromQuery] string cultureCode = "uk-UA")
         {
             var localizedEntity = await localizedRepository.Get(cultureCode, id);

@@ -20,8 +20,25 @@ namespace MonumentsMap.Controllers
         }
         #endregion
 
-        // #region metods
-        // #endregion
+        #region metods
+        [HttpGet("filter")]
+        public async Task<IActionResult> Get
+        (
+            [FromQuery] int[] statuses,
+            [FromQuery] int[] conditions,
+            [FromQuery] int[] cities,
+            [FromQuery] string cultureCode = "uk-UA"
+        )
+        {
+
+            var monuments = await localizedRepository
+                .Find(cultureCode,
+                    p => (statuses.Length == 0 || statuses.Contains(p.StatusId))
+                    && (conditions.Length == 0 || conditions.Contains(p.ConditionId))
+                    && (cities.Length == 0 || cities.Contains(p.CityId)));
+            return Ok(monuments);
+        }
+        #endregion
 
     }
 }
