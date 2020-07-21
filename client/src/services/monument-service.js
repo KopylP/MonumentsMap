@@ -13,9 +13,14 @@ export default class MonumentService {
     });
   }
 
-  async _getRequest(path) {
+  async _getRequest(path, params = {}) {
     const response = await this._axios.get(
-      path + `?cultureCode=${this._cultureCode}`
+      path, {
+        params: {
+          cultureCode: this._cultureCode,
+          ...params
+        }
+      }
     );
     return response.data;
   }
@@ -47,6 +52,18 @@ export default class MonumentService {
 
   async getAllMonuments() {
     return await this._getRequest("monument/");
+  }
+
+  /**
+   * 
+   * @param {*} cities - array of selected cities ids
+   * @param {*} statuses - array of selected statuses ids 
+   * @param {*} conditions - array of selected conditions ids
+   */
+  async getMonumentsByFilter(cities, statuses, conditions) {
+    return await this._getRequest("monument/filter", {
+      cities, statuses, conditions
+    });
   }
 
   async getMonumentById(id) {

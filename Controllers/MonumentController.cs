@@ -24,9 +24,9 @@ namespace MonumentsMap.Controllers
         [HttpGet("filter")]
         public async Task<IActionResult> Get
         (
-            [FromQuery] int[] statuses,
-            [FromQuery] int[] conditions,
-            [FromQuery] int[] cities,
+            [FromQuery(Name = "statuses[]")] int[] statuses,
+            [FromQuery(Name = "conditions[]")] int[] conditions,
+            [FromQuery(Name = "cities[]")] int[] cities,
             [FromQuery] string cultureCode = "uk-UA"
         )
         {

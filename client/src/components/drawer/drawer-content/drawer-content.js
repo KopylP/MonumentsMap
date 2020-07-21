@@ -17,9 +17,7 @@ import SelectLanguage from "../../select-language/select-language";
 import AppContext from "../../../context/app-context";
 import { usePrevious } from "../../../hooks/hooks";
 
-
 const useStyles = makeStyles((theme) => ({
-
   colorWhite: {
     color: "white",
   },
@@ -48,50 +46,59 @@ export default function DrawerContent(props) {
   const classes = useStyles(props);
   const { onAdd } = props;
 
-  const { monumentService, selectedLanguage } = useContext(AppContext);
+  const {
+    monumentService,
+    selectedLanguage,
+    selectedConditions,
+    setSelectedConditions,
+    selectedCities,
+    setSelectedCities,
+    selectedStatuses,
+    setSelectedStatuses,
+  } = useContext(AppContext);
+  
   const [cities, setCities] = useState([]);
   const [conditions, setConditions] = useState([]);
   const [statuses, setStatuses] = useState([]);
-  const [selectedConditions, setSelectedConditions] = useState([]);
-  const [selectedStatuses, setSelectedStatuses] = useState([]);
-  const [selectedCities, setSelectedCities] = useState([]);
-  
+
   const onCitiesLoad = (cities) => {
     setCities(cities);
-  }
+  };
 
   const onStatusesLoad = (statuses) => {
     setStatuses(statuses);
-  }
+  };
 
   const onConditionsLoad = (conditions) => {
     setConditions(conditions);
-  } 
+  };
 
   const update = () => {
     monumentService.getAllStatuses().then(onStatusesLoad);
     monumentService.getAllConditions().then(onConditionsLoad);
     monumentService.getAllCities().then(onCitiesLoad);
-  }
+  };
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
 
   useEffect(() => {
-    if(prevSelectedLanguage == null || selectedLanguage.code !== prevSelectedLanguage.code)
+    if (
+      prevSelectedLanguage == null ||
+      selectedLanguage.code !== prevSelectedLanguage.code
+    )
       update();
   }, [selectedLanguage]);
 
   useEffect(() => {
-    const newSelectedCities = selectedCities.map(selectedCity => {
-      const cityIndex = cities.findIndex(p => p.id === selectedCity.id);
-      if(cityIndex !== -1) {
+    const newSelectedCities = selectedCities.map((selectedCity) => {
+      const cityIndex = cities.findIndex((p) => p.id === selectedCity.id);
+      if (cityIndex !== -1) {
         return cities[cityIndex];
       }
       return selectedCity;
     });
     setSelectedCities(newSelectedCities);
-  }, [cities])
-
+  }, [cities]);
 
   const autoCompliteCitiesOptions = {
     options: cities,
@@ -99,11 +106,19 @@ export default function DrawerContent(props) {
   };
 
   const statusViews = statuses.map((status, i) => {
-    return <MenuItem key={i} style={{whiteSpace: 'normal'}} value={status.id}>{status.name}</MenuItem>
+    return (
+      <MenuItem key={i} style={{ whiteSpace: "normal" }} value={status.id}>
+        {status.name}
+      </MenuItem>
+    );
   });
 
   const conditionViews = conditions.map((condition, i) => {
-    return <MenuItem key={i} style={{whiteSpace: 'normal'}} value={condition.id}>{condition.name}</MenuItem>
+    return (
+      <MenuItem key={i} style={{ whiteSpace: "normal" }} value={condition.id}>
+        {condition.name}
+      </MenuItem>
+    );
   });
 
   const onSelectedStatusesChange = (e) => {
@@ -116,7 +131,7 @@ export default function DrawerContent(props) {
 
   const onSelectedCitiesChange = (e, newValue) => {
     setSelectedCities(newValue);
-  }
+  };
 
   return (
     <div style={{ flexGrow: 1, padding: 15 }}>
@@ -138,7 +153,11 @@ export default function DrawerContent(props) {
         <Grid item xs="12">
           <FormControl className={classes.width100per}>
             <InputLabel>Статус пам'ятки</InputLabel>
-            <Select multiple value={selectedStatuses} onChange={onSelectedStatusesChange}>
+            <Select
+              multiple
+              value={selectedStatuses}
+              onChange={onSelectedStatusesChange}
+            >
               {statusViews}
             </Select>
           </FormControl>
@@ -146,7 +165,11 @@ export default function DrawerContent(props) {
         <Grid item xs="12">
           <FormControl className={classes.width100per}>
             <InputLabel>Стан пам'ятки архітектури</InputLabel>
-            <Select multiple value={selectedConditions} onChange={onSelectedConditionsChange}>
+            <Select
+              multiple
+              value={selectedConditions}
+              onChange={onSelectedConditionsChange}
+            >
               {conditionViews}
             </Select>
           </FormControl>

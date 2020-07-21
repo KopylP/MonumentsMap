@@ -6,10 +6,16 @@ import { defaultCity, defaultZoom } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 
 function Map({ onMonumentSelected = (p) => p }) {
-  const { monumentService, detailDrawerOpen, selectedLanguage } = useContext(
-    AppContext
-  );
+  const {
+    monumentService,
+    detailDrawerOpen,
+    selectedLanguage,
+    selectedConditions,
+    selectedCities,
+    selectedStatuses,
+  } = useContext(AppContext);
   const [monuments, setMonuments] = useState([]);
+  const [markers, setMarkers] = useState([]);
   const mapRef = React.useRef(null);
 
   const closePopups = () => {
@@ -18,8 +24,19 @@ function Map({ onMonumentSelected = (p) => p }) {
 
   const update = () => {
     monumentService
-      .getAllMonuments()
-      .then((monuments) => setMonuments(monuments));
+      .getMonumentsByFilter(selectedCities.map(c => c.id), selectedStatuses, selectedConditions)
+      .then((monuments) => {
+        setMonuments(monuments);
+        setMarkers(monuments.map((monument, i) => {
+          return (
+            <MonumentMarker
+              onClick={onMonumentSelected}
+              monument={monument}
+              key={i}
+            />
+          );
+        }));
+      });
   };
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
@@ -33,21 +50,12 @@ function Map({ onMonumentSelected = (p) => p }) {
   }, [selectedLanguage]);
 
   useEffect(() => {
+    update();
+  }, [selectedConditions, selectedCities, selectedStatuses])
+
+  useEffect(() => {
     if (detailDrawerOpen === false) closePopups();
   }, [detailDrawerOpen]);
-
-  const markers =
-    monuments.length > 0
-      ? monuments.map((monument, i) => {
-          return (
-            <MonumentMarker
-              onClick={onMonumentSelected}
-              monument={monument}
-              key={i}
-            />
-          );
-        })
-      : null;
 
   return (
     <LeafMap

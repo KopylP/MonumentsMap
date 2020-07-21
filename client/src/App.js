@@ -52,6 +52,9 @@ function App(props) {
     supportedCultures[0]
   );
   const [selectedMonument, setSelectedMonument] = useState({ id: 0 });
+  const [selectedConditions, setSelectedConditions] = useState([]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [selectedCities, setSelectedCities] = useState([]);
 
   useEffect(() => {
     const userCultureIndex = supportedCultures.findIndex(
@@ -83,7 +86,13 @@ function App(props) {
     setSelectedMonument,
     detailDrawerOpen,
     setDetailDrawerOpen,
-    geocoderService
+    geocoderService,
+    selectedConditions,
+    setSelectedConditions,
+    selectedCities,
+    setSelectedCities,
+    selectedStatuses,
+    setSelectedStatuses
   };
 
   return (
