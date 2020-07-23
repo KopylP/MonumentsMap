@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Map as LeafMap, TileLayer, Marker, Popup } from "react-leaflet";
 import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
-import { defaultCity, defaultZoom } from "../../config";
+import { defaultCity, defaultZoom, accessToken } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 
 function Map({ onMonumentSelected = (p) => p }) {
@@ -65,8 +65,8 @@ function Map({ onMonumentSelected = (p) => p }) {
       ref={mapRef}
     >
       <TileLayer
-        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
+        url={`https://tile.jawg.io/13da1c9b-4dd5-4a96-84a0-d0464fc95920/{z}/{x}/{y}.png?access-token=${accessToken}`}
       />
       {markers}
     </LeafMap>

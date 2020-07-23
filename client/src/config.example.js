@@ -14,7 +14,7 @@ const defaultCity = {
 
 const defaultZoom = 14;
 
-const accessToken = "6gbhT4C7Kpj0YRx9mqPWxoZA2IhKXCDTk2L0wFHSurl2EtAxvun10VOtpLfS9rTX";
+const accessToken = "<Your access Jawg map token here>";
 
 export {
     supportedCultures,

@@ -37,3 +37,4 @@ monuments.db
 .vs/
 
 /Images
+client/src/config.js
