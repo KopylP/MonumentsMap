@@ -35,10 +35,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   paper: {
-    position: "absolute",
     width: 800,
     maxHeight: "90%",
-    overflow: "auto",
     outline: "none",
     boxShadow: theme.shadows[5],
     paddingLeft: 30,
@@ -49,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     width: "100%",
   },
+  scrollBar: {
+    position: "absolute",
+  }
 }));
 
 function TabPanel(props) {
@@ -116,7 +117,8 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
     monument.sources = sources;
     const { getLatLngFromAddress } = geocoderService;
     getLatLngFromAddress(`${monument.city.name}, ${monument.address}`)
-      .then(({ lat, lon }) => {//TODO if address does`t found
+      .then(({ lat, lon }) => {
+        //TODO if address does`t found
         delete monument.address;
         delete monument.cityName;
         monument.cityId = monument.city.id;
@@ -206,7 +208,9 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
   };
 
   const onDescriptionChange = (newValue, cultureCode) => {
-    const oldNameIndex = description.findIndex((p) => p.culture === cultureCode);
+    const oldNameIndex = description.findIndex(
+      (p) => p.culture === cultureCode
+    );
     if (oldNameIndex !== -1) {
       setDescription([
         ...description.slice(0, oldNameIndex),
@@ -266,8 +270,8 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
       }}
     >
       <Fade in={openAddModal}>
-        <Paper className={classes.paper}>
-          <ScrollBar>
+        <ScrollBar>
+          <Paper className={classes.paper}>
             <h2>Нова пам'ятка</h2>
             <div className={classes.root}>
               <form onSubmit={formik.handleSubmit}>
@@ -449,8 +453,8 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
                 </Grid>
               </form>
             </div>
-          </ScrollBar>
-        </Paper>
+          </Paper>
+        </ScrollBar>
       </Fade>
     </Modal>
   );

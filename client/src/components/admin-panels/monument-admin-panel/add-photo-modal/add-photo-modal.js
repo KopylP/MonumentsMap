@@ -22,6 +22,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import AppContext from "../../../../context/app-context";
 import DetailDrawerContext from "../../../detail-drawer/context/detail-drawer-context";
+import * as cx from "classnames";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -29,11 +30,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  paper: {
+  scrollBar: {
     position: "absolute",
+  },
+  paper: {
     width: 800,
     maxHeight: "90%",
-    overflow: "auto",
     outline: "none",
     boxShadow: theme.shadows[5],
     paddingLeft: 30,
@@ -66,13 +68,13 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
     console.log(values);
     delete values.file;
     const description = [
-        ...supportedCultures.map(culture => ({
-            culture: culture.code,
-            value: values[culture.code]
-        }))
+      ...supportedCultures.map((culture) => ({
+        culture: culture.code,
+        value: values[culture.code],
+      })),
     ];
-    supportedCultures.forEach(culture => {
-        delete values[culture.code]
+    supportedCultures.forEach((culture) => {
+      delete values[culture.code];
     });
     values.description = description;
     values.sources = sources;
@@ -80,22 +82,26 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
     values.photoId = photoId;
     console.log("values", values);
     return values;
-  }
+  };
 
   const submitPhotoForm = (values, { resetForm }) => {
     monumentService
       .savePhoto(file)
       .then((photo) => {
         const monumentPhotoValues = JSON.parse(JSON.stringify(values));
-        const monumentPhoto = getMonumentPhotoFromForm(monumentPhotoValues, photo.id);
-        monumentService.createPhotoMonument(monumentPhoto)
-            .then(mp => {
-                onPhotoSave(mp);
-                setSources(defaultSources);
-                resetForm({ values: "" });
-                setOpen(false);
-            })
-            .catch()//TODO handle error
+        const monumentPhoto = getMonumentPhotoFromForm(
+          monumentPhotoValues,
+          photo.id
+        );
+        monumentService
+          .createPhotoMonument(monumentPhoto)
+          .then((mp) => {
+            onPhotoSave(mp);
+            setSources(defaultSources);
+            resetForm({ values: "" });
+            setOpen(false);
+          })
+          .catch(); //TODO handle error
       })
       .catch(); //TODO handle error
   };
@@ -106,8 +112,8 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
     file: "",
   };
 
-  supportedCultures.forEach(culture => {
-    initialValues[culture.code] = ""
+  supportedCultures.forEach((culture) => {
+    initialValues[culture.code] = "";
   });
 
   const formik = useFormik({
@@ -132,8 +138,8 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
       }}
     >
       <Fade in={open}>
-        <Paper className={classes.paper}>
-          <ScrollBar>
+        <ScrollBar className={classes.scrollBar}>
+          <Paper className={classes.paper}>
             <form onSubmit={formik.handleSubmit}>
               <Grid container spacing={3}>
                 <h3>Додати фотографію</h3>
@@ -229,8 +235,8 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
                 </Grid>
               </Grid>
             </form>
-          </ScrollBar>
-        </Paper>
+          </Paper>
+        </ScrollBar>
       </Fade>
     </Modal>
   );
