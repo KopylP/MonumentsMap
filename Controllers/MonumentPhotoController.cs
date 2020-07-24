@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Data.Repositories;
 using MonumentsMap.Models;
+using MonumentsMap.Services.Interfaces;
 using MonumentsMap.ViewModels.LocalizedModels;
 using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
@@ -9,20 +10,22 @@ namespace MonumentsMap.Controllers
 {
     public class MonumentPhotoController : LocalizedController<MonumentPhotoLocalizedRepository, LocalizedMonumentPhoto, EditableLocalizedMonumentPhoto, MonumentPhoto>
     {
-        private MonumentPhotoRepository _monumentPhotoRepository;
-        public MonumentPhotoController(MonumentPhotoLocalizedRepository localizedRepository, MonumentPhotoRepository monumentPhotoRepository) : base(localizedRepository)
+        #region private fields
+        private IMonumentPhotoService _monumentPhotoService;
+        #endregion
+        #region  constructor
+        public MonumentPhotoController(MonumentPhotoLocalizedRepository localizedRepository, IMonumentPhotoService monumentPhotoService) : base(localizedRepository)
         {
-            _monumentPhotoRepository = monumentPhotoRepository;
+            _monumentPhotoService = monumentPhotoService;
         }
+        #endregion
 
         #region methods
         [HttpPatch("{id:int}/toogle/majorphoto")]
         public async Task<IActionResult> ToogleMajorPhoto([FromRoute] int id)
         {
-            var monumentPhoto = await _monumentPhotoRepository.Get(id);
-            if(monumentPhoto == null) return NotFound(); //TODO handle error
-            monumentPhoto.MajorPhoto = !monumentPhoto.MajorPhoto;
-            await _monumentPhotoRepository.Update(monumentPhoto);
+            var monumentPhoto = await _monumentPhotoService.ToogleMajorPhotoAsync(id);
+            if(monumentPhoto == null) return NotFound();//TODO handle error
             return Ok(monumentPhoto);
         }
         #endregion

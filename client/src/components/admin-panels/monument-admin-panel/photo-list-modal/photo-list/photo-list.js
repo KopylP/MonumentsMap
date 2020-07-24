@@ -3,7 +3,7 @@ import withMonumentService from "../../../../hoc-helpers/with-monument-service";
 import withData from "../../../../hoc-helpers/with-data";
 import MonumentPhotoListItem from "../photo-list-item/monument-photo-list-item";
 import AppContext from "../../../../../context/app-context";
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import { SnackbarProvider, useSnackbar } from "notistack";
 
 /**
  *
@@ -20,7 +20,7 @@ function PhotoList({ data }) {
     data[index].majorPhoto = oldValue;
     setMajorPhotos(majorPhotosModify);
     errorSnackbar();
-  }
+  };
 
   const setMonumentMajorPhotoByIndex = (index, isMajorPhoto) => {
     data[index].majorPhoto = isMajorPhoto;
@@ -32,16 +32,13 @@ function PhotoList({ data }) {
       if (prevMajorPhotoIndex > -1) {
         majorPhotosModify[prevMajorPhotoIndex] = false;
         data[prevMajorPhotoIndex].monumentPhoto = false;
-        toogleMonumentMajorPhoto(data[prevMajorPhotoIndex].id)
-            .then(e => console.log(e))
-            .catch(e => onMonumentTooglePhotoError(index, !isMajorPhoto));
       }
     }
 
     majorPhotosModify[index] = isMajorPhoto;
     toogleMonumentMajorPhoto(data[index].id)
-    .then(e => console.log(e))
-    .catch(e => onMonumentTooglePhotoError(index, !isMajorPhoto));
+      .then((e) => console.log(e))
+      .catch((e) => onMonumentTooglePhotoError(index, !isMajorPhoto));
     setMajorPhotos(majorPhotosModify);
   };
 
@@ -52,7 +49,7 @@ function PhotoList({ data }) {
   const errorSnackbar = () => {
     enqueueSnackbar("Не вдалося зберегти зміни", { variant: "error" });
     //TODO language
-  }
+  };
 
   return (
     <React.Fragment>
@@ -66,7 +63,6 @@ function PhotoList({ data }) {
           setMonumentMajorPhotoByIndex={setMonumentMajorPhotoByIndex}
         />
       ))}
-      
     </React.Fragment>
   );
 }

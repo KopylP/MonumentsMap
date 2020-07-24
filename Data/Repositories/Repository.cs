@@ -16,10 +16,14 @@ namespace MonumentsMap.Data.Repositories
         {
             this.context = context;
         }
+
+        public bool Commit { get; set; } = true;
+
         public async Task<TEntity> Add(TEntity entity)
         {
             context.Set<TEntity>().Add(entity);
-            await context.SaveChangesAsync();
+            if(Commit)
+                await context.SaveChangesAsync();
             return entity;
         }
 
@@ -32,8 +36,8 @@ namespace MonumentsMap.Data.Repositories
             }
 
             context.Set<TEntity>().Remove(entity);
-            await context.SaveChangesAsync();
-
+            if(Commit)
+                await context.SaveChangesAsync();
             return entity;
         }
 
@@ -53,10 +57,16 @@ namespace MonumentsMap.Data.Repositories
             return await context.Set<TEntity>().ToListAsync();
         }
 
+        public async Task SaveChangeAsync()
+        {
+            await context.SaveChangesAsync();
+        }
+
         public async Task<TEntity> Update(TEntity entity)
         {
             context.Set<TEntity>().Update(entity);
-            await context.SaveChangesAsync();
+            if(Commit)
+                await context.SaveChangesAsync();
             return entity;
         }
     }

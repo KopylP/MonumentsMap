@@ -16,6 +16,7 @@ using MonumentsMap.Data.Repositories;
 using MonumentsMap.Models;
 using MonumentsMap.POCO;
 using MonumentsMap.Services;
+using MonumentsMap.Services.Interfaces;
 
 namespace MonumentsMap
 {
@@ -51,6 +52,7 @@ namespace MonumentsMap
             services.AddScoped<PhotoRepository>();
             services.AddScoped<PhotoService>();
             services.AddScoped<MonumentPhotoRepository>();
+            services.AddScoped<IMonumentPhotoService, MonumentPhotoService>();
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
         }
 
