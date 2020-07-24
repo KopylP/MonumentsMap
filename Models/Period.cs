@@ -2,8 +2,10 @@ namespace MonumentsMap.Models
 {
     public enum Period
     {
-        Century,
+        StartOfCentury,
         Year,
-        Decades
+        Decades,
+        MiddleOfCentury,
+        EndOfCentury
     }
 }

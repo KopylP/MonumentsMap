@@ -21,5 +21,5 @@ const accessToken = "<Your access Jawg map token here>";
 //     serverHost,
 //     defaultCity,
 //     defaultZoom,
-//     accessToken
+//     accessToken,
 // }

@@ -23,6 +23,7 @@ import * as Yup from "yup";
 import AppContext from "../../../../context/app-context";
 import DetailDrawerContext from "../../../detail-drawer/context/detail-drawer-context";
 import * as cx from "classnames";
+import Period from "../../../../models/period";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -197,9 +198,17 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                     >
-                      <MenuItem value={1}>Рік</MenuItem>
-                      <MenuItem value={0}>Століття</MenuItem>
-                      <MenuItem value={2}>Десятиліття</MenuItem>
+                      <MenuItem value={Period.Year}>Рік</MenuItem>
+                      <MenuItem value={Period.StartOfCentury}>
+                        Початок століття
+                      </MenuItem>
+                      <MenuItem value={Period.MiddleOfCentury}>
+                        Середина століття
+                      </MenuItem>
+                      <MenuItem value={Period.EndOfCentury}>
+                        Кінець століття
+                      </MenuItem>
+                      <MenuItem value={Period.Decades}>Десятиліття</MenuItem>
                     </Select>
                     <FormHelperText>
                       {formik.touched.period &&

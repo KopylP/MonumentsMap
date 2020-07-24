@@ -21,5 +21,5 @@ export {
     serverHost,
     defaultCity,
     defaultZoom,
-    accessToken
+    accessToken,
 }

@@ -27,6 +27,7 @@ import Source from "./source/source";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ScrollBar from "../common/scroll-bar/scroll-bar";
+import Period from "../../models/period";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -307,9 +308,11 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
                         onChange={formik.handleChange}
                         error={formik.touched.period && formik.errors.period}
                       >
-                        <MenuItem value={1}>Рік</MenuItem>
-                        <MenuItem value={0}>Століття</MenuItem>
-                        <MenuItem value={2}>Десятиліття</MenuItem>
+                        <MenuItem value={Period.Year}>Рік</MenuItem>
+                        <MenuItem value={Period.StartOfCentury}>Початок століття</MenuItem>
+                        <MenuItem value={Period.MiddleOfCentury}>Середина століття</MenuItem>
+                        <MenuItem value={Period.EndOfCentury}>Кінець століття</MenuItem>
+                        <MenuItem value={Period.Decades}>Десятиліття</MenuItem>
                       </Select>
                       <FormHelperText>
                         {formik.touched.period &&
