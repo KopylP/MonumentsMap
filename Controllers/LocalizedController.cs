@@ -25,28 +25,35 @@ namespace MonumentsMap.Controllers
             this.localizedRepository = localizedRepository;
         }
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string cultureCode = "uk-UA")
+        public async virtual Task<IActionResult> Get([FromQuery] string cultureCode = "uk-UA")
         {
             var localizedEntities = await localizedRepository.GetAll(cultureCode);
             return Ok(localizedEntities);
         }
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id, [FromQuery] string cultureCode = "uk-UA")
+        public async virtual Task<IActionResult> Get(int id, [FromQuery] string cultureCode = "uk-UA")
         {
             var localizedEntity = await localizedRepository.Get(cultureCode, id);
             return Ok(localizedEntity);
         }
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] TEditableLocalizedEntity editableLocalizedEntity)
+        public async virtual Task<IActionResult> Post([FromBody] TEditableLocalizedEntity editableLocalizedEntity)
         {
             var entities = await localizedRepository.Create(editableLocalizedEntity);
             return Ok(entities);
         }
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] TEditableLocalizedEntity editableLocalizedCity)
+        public async virtual Task<IActionResult> Put([FromBody] TEditableLocalizedEntity editableLocalizedCity)
         {
             var entities = await localizedRepository.Update(editableLocalizedCity);
             return Ok(entities);
+        }
+        [HttpDelete("{id}")]
+        public async virtual Task<IActionResult> Delete(int id)
+        {
+            var entity = await localizedRepository.Remove(id);
+            if(entity == null) return NotFound(); //TODO handle error
+            return Ok(entity);
         }
     }
 }

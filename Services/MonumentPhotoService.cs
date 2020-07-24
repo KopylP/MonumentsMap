@@ -10,9 +10,15 @@ namespace MonumentsMap.Services
     {
         #region private fields
         private MonumentPhotoRepository _monumentPhotoRepository;
+        private PhotoRepository _photoRepository;
         #endregion
         #region constructor
-        public MonumentPhotoService(MonumentPhotoRepository monumentPhotoRepository) => _monumentPhotoRepository = monumentPhotoRepository;
+        public MonumentPhotoService(MonumentPhotoRepository monumentPhotoRepository, PhotoRepository photoRepository)
+        {
+            _monumentPhotoRepository = monumentPhotoRepository;
+            _photoRepository = photoRepository;
+        }
+
         #endregion
         #region interface methods
         public async Task<MonumentPhoto> ToogleMajorPhotoAsync(int monumentPhotoId)
@@ -23,7 +29,7 @@ namespace MonumentsMap.Services
                 .Find(p => p.MajorPhoto && p.Id != monumentPhotoId))
                 .FirstOrDefault();
             _monumentPhotoRepository.Commit = false;
-            if(prevMonumentMajorPhoto != null)
+            if (prevMonumentMajorPhoto != null)
             {
                 prevMonumentMajorPhoto.MajorPhoto = false;
                 await _monumentPhotoRepository.Update(prevMonumentMajorPhoto);
@@ -32,6 +38,13 @@ namespace MonumentsMap.Services
             await _monumentPhotoRepository.Update(monumentPhoto);
             await _monumentPhotoRepository.SaveChangeAsync();
             _monumentPhotoRepository.Commit = true;
+            return monumentPhoto;
+        }
+        public async Task<MonumentPhoto> Remove(int monumentPhotoId)
+        {
+            var monumentPhoto = await _monumentPhotoRepository.Delete(monumentPhotoId);
+            if(monumentPhoto == null) return monumentPhoto;
+            await _photoRepository.Delete(monumentPhoto.PhotoId);
             return monumentPhoto;
         }
         #endregion

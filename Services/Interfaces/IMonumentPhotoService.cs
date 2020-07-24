@@ -6,5 +6,6 @@ namespace MonumentsMap.Services.Interfaces
     public interface IMonumentPhotoService
     {
         Task<MonumentPhoto> ToogleMajorPhotoAsync(int monumentPhotoId);
+        Task<MonumentPhoto> Remove(int MonumentPhotoId);
     }
 }

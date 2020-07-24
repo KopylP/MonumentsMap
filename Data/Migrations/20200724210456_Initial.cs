@@ -250,13 +250,13 @@ namespace MonumentsMap.Data.Migrations
                         column: x => x.MonumentId,
                         principalTable: "Monuments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sources_MonumentPhotos_MonumentPhotoId",
                         column: x => x.MonumentPhotoId,
                         principalTable: "MonumentPhotos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -297,8 +297,7 @@ namespace MonumentsMap.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_MonumentPhotos_PhotoId",
                 table: "MonumentPhotos",
-                column: "PhotoId",
-                unique: true);
+                column: "PhotoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Monuments_CityId",

@@ -73,6 +73,19 @@ namespace MonumentsMap.Data.Repositories
             return entity;
         }
 
+        public async Task<TEntity> Remove(int id)
+        {
+            var entity = await context.Set<TEntity>().FindAsync(id);
+            if (entity == null)
+            {
+                return entity;
+            }
+
+            context.Set<TEntity>().Remove(entity);
+            await context.SaveChangesAsync();
+            return entity;
+        }
+
         //Convert model to localized model
         public abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode);
         //Including required property models that are associated with the main model

@@ -9,7 +9,7 @@ using MonumentsMap.Data;
 namespace MonumentsMap.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200724164627_Initial")]
+    [Migration("20200724210456_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -187,8 +187,7 @@ namespace MonumentsMap.Data.Migrations
 
                     b.HasIndex("MonumentId");
 
-                    b.HasIndex("PhotoId")
-                        .IsUnique();
+                    b.HasIndex("PhotoId");
 
                     b.ToTable("MonumentPhotos");
                 });
@@ -339,8 +338,8 @@ namespace MonumentsMap.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("MonumentsMap.Models.Photo", "Photo")
-                        .WithOne("MonumentPhoto")
-                        .HasForeignKey("MonumentsMap.Models.MonumentPhoto", "PhotoId")
+                        .WithMany()
+                        .HasForeignKey("PhotoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -349,11 +348,13 @@ namespace MonumentsMap.Data.Migrations
                 {
                     b.HasOne("MonumentsMap.Models.Monument", "Monument")
                         .WithMany("Sources")
-                        .HasForeignKey("MonumentId");
+                        .HasForeignKey("MonumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MonumentsMap.Models.MonumentPhoto", "MonumentPhoto")
                         .WithMany("Sources")
-                        .HasForeignKey("MonumentPhotoId");
+                        .HasForeignKey("MonumentPhotoId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MonumentsMap.Models.Status", b =>

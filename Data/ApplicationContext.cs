@@ -24,9 +24,13 @@ namespace MonumentsMap.Data
         #region override methods
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Photo>()
+            modelBuilder.Entity<Source>()
                 .HasOne(p => p.MonumentPhoto)
-                .WithOne(p => p.Photo)
+                .WithMany(p => p.Sources)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Source>()
+                .HasOne(p => p.Monument)
+                .WithMany(p => p.Sources)
                 .OnDelete(DeleteBehavior.Cascade);
         }
         #endregion
