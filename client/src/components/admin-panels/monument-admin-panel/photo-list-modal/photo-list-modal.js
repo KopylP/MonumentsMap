@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     width: "auto",
     maxHeight: "90%",
-    maxWidth: 345 * 3 + 78,
+    maxWidth: "98%",
     display: "flex",
     flexWrap: "wrap",
     // backgroundColor: "white",
