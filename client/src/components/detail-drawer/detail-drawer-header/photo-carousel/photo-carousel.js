@@ -37,16 +37,23 @@ function PhotoCarousel({ data, ...props }) {
   const styles = useStyles(props);
   const theme = useTheme();
 
+  const sortedPhotos = data.sort((a, b) => {
+    if(a.majorPhoto === true) return -1;
+    if(b.majorPhoto === true) return 1;
+    else return 0;
+  })
+
+
   return (
     <CarouselProvider
       naturalSlideWidth={theme.detailDrawerWidth}
       naturalSlideHeight={theme.detailDrawerHeaderHeight}
-      totalSlides={data.length}
+      totalSlides={sortedPhotos.length}
       visibleSlides={1}
       dragEnabled={false}
     >
       <Slider className={styles.slider}>
-        {data.map((monumentPhoto, i) => (
+        {sortedPhotos.map((monumentPhoto, i) => (
           <Slide index={i} onBlur={(e) => console.log(e)}>
             <img
               className={styles.img}
