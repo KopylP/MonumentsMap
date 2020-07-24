@@ -21,5 +21,14 @@ namespace MonumentsMap.Data
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Source> Sources { get; set; }
         #endregion
+        #region override methods
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Photo>()
+                .HasOne(p => p.MonumentPhoto)
+                .WithOne(p => p.Photo)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+        #endregion
     }
 }

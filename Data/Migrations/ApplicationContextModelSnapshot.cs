@@ -183,7 +183,10 @@ namespace MonumentsMap.Data.Migrations
 
                     b.HasIndex("DescriptionId");
 
-                    b.HasIndex("PhotoId");
+                    b.HasIndex("MonumentId");
+
+                    b.HasIndex("PhotoId")
+                        .IsUnique();
 
                     b.ToTable("MonumentPhotos");
                 });
@@ -327,9 +330,15 @@ namespace MonumentsMap.Data.Migrations
                         .WithMany()
                         .HasForeignKey("DescriptionId");
 
+                    b.HasOne("MonumentsMap.Models.Monument", null)
+                        .WithMany("MonumentPhotos")
+                        .HasForeignKey("MonumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MonumentsMap.Models.Photo", "Photo")
-                        .WithMany()
-                        .HasForeignKey("PhotoId")
+                        .WithOne("MonumentPhoto")
+                        .HasForeignKey("MonumentsMap.Models.MonumentPhoto", "PhotoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
