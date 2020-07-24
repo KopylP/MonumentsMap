@@ -20,11 +20,11 @@ export default function DetailYear({year, period, ...props}) {
       dateText = `Побудовано у ${year} році`;
       break;
     case 2: //decade
-      dateText = `Побудовано у ${year % 100} роках ${('' + year).slice(0, 2)} століття`;
+      dateText = `Побудовано у ${year % 100} роках ${+('' + year).slice(0, 2) + 1} століття`;
       break;
   }
 
   return (
-    <diYv className={styles.container}>{ dateText }</diYv>
+    <div className={styles.container}>{ dateText }</div>
   );
 }
