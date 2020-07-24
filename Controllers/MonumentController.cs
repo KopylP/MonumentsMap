@@ -15,8 +15,9 @@ namespace MonumentsMap.Controllers
         private readonly MonumentPhotoLocalizedRepository _monumentPhotoLocalizedRepository;
         #endregion
         #region constructor
-        public MonumentController(MonumentLocalizedRepository localizedRepository) : base(localizedRepository)
+        public MonumentController(MonumentLocalizedRepository localizedRepository, MonumentPhotoLocalizedRepository monumentPhotoLocalizedRepository) : base(localizedRepository)
         {
+            _monumentPhotoLocalizedRepository = monumentPhotoLocalizedRepository;
         }
         #endregion
 
@@ -38,7 +39,13 @@ namespace MonumentsMap.Controllers
                     && (cities.Length == 0 || cities.Contains(p.CityId)));
             return Ok(monuments);
         }
-        #endregion
 
+        [HttpGet("{id:int}/monumentPhotos")]
+        public async Task<IActionResult> MonumentPhotos(int id, [FromQuery] string cultureCode = "uk-UA")
+        {
+            var monumentPhotos = await _monumentPhotoLocalizedRepository.Find(cultureCode, p => p.MonumentId == id);
+            return Ok(monumentPhotos);
+        }
+        #endregion
     }
 }

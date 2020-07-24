@@ -30,6 +30,11 @@ export default class MonumentService {
     return response.data;
   }
 
+  async _patchRequest(path, data) {
+    const response = await this._axios.patch(path, data);
+    return response.data;
+  }
+
   async _postFormRequest(path, file) {
     const data = new FormData();
     data.append(
@@ -98,7 +103,15 @@ export default class MonumentService {
     return await this._getRequest(`monument/${monumentId}/photo/ids`);
   }
 
-  getPhotoLink(photoId) {
+  toogleMonumentMajorPhoto = async (monumentPhotoId) => {
+    return await this._patchRequest(`monumentphoto/${monumentPhotoId}/toogle/majorphoto`);
+  }
+
+  getMonumentPhotos = async (monumentId) => {
+    return await this._getRequest(`monument/${monumentId}/monumentPhotos`);
+  }
+
+  getPhotoLink = (photoId) => {
     return `${this._baseURL}photo/${photoId}/image`;
   }
 }

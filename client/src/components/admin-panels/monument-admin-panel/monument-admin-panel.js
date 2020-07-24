@@ -5,6 +5,7 @@ import {
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
 import ContentLoader from "react-content-loader";
 import AddPhotoModal from "./add-photo-modal/add-photo-modal";
+import PhotoListModal from "./photo-list-modal/photo-list-modal";
 
 /**
  * 
@@ -14,12 +15,14 @@ function MonumentAdminPanel({ data, ...props }) {
     console.log(data);
 
     const [openAddPhoto, setOpenAddPhoto] = useState(false);
+    const [openPhotoList, setOpenPhotoList] = useState(false);
 
     return (
         <Grid container justify="flex-end" spacing={2}>
-            <Button color="primary">Фотографії</Button>
+            <Button color="primary" onClick={() => setOpenPhotoList(true)}>Фотографії</Button>
             <Button color="secondary" onClick={() => setOpenAddPhoto(true)}>Додати фотографію</Button>
             <AddPhotoModal monumentId={data} open={openAddPhoto} setOpen={setOpenAddPhoto}/>
+            <PhotoListModal monumentId={data} open={openPhotoList} setOpen={setOpenPhotoList}/>
         </Grid>
     )
 }

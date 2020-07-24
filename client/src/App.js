@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { SnackbarProvider } from "notistack";
 import {
   createMuiTheme,
   MuiThemeProvider,
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     left: 50,
     top: 10,
-    zIndex: 999
+    zIndex: 999,
   },
   app: {
     display: "flex",
@@ -73,7 +73,7 @@ function App(props) {
   );
 
   const geocoderService = new GeocoderService(
-    selectedLanguage.code.split('-')[0]
+    selectedLanguage.code.split("-")[0]
   );
 
   const contextValues = {
@@ -92,27 +92,29 @@ function App(props) {
     selectedCities,
     setSelectedCities,
     selectedStatuses,
-    setSelectedStatuses
+    setSelectedStatuses,
   };
 
   return (
     <AppContext.Provider value={contextValues}>
       <MuiThemeProvider theme={theme}>
-        <div className={classes.app}>
-          <div className={classes.mapContainer}>
-            <Map
-              onMonumentSelected={(monumentId) =>
-                setSelectedMonument({ id: monumentId })
-              }
+        <SnackbarProvider maxSnack={5}>
+          <div className={classes.app}>
+            <div className={classes.mapContainer}>
+              <Map
+                onMonumentSelected={(monumentId) =>
+                  setSelectedMonument({ id: monumentId })
+                }
+              />
+            </div>
+            <MenuButton
+              className={classes.menuButton}
+              onClick={() => setMainDrawerOpen(true)}
             />
           </div>
-          <MenuButton
-            className={classes.menuButton}
-            onClick={() => setMainDrawerOpen(true)}
-          />
-        </div>
-        <MainDrawer className={classes.menuButton} />
-        <DetailDrawer />
+          <MainDrawer className={classes.menuButton} />
+          <DetailDrawer />
+        </SnackbarProvider>
       </MuiThemeProvider>
     </AppContext.Provider>
   );

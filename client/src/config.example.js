@@ -16,10 +16,10 @@ const defaultZoom = 14;
 
 const accessToken = "<Your access Jawg map token here>";
 
-export {
-    supportedCultures,
-    serverHost,
-    defaultCity,
-    defaultZoom,
-    accessToken
-}
+// export {
+//     supportedCultures,
+//     serverHost,
+//     defaultCity,
+//     defaultZoom,
+//     accessToken
+// }

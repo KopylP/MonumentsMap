@@ -12,6 +12,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels
         public string Description { get; set; }
         public int PhotoId { get; set; }
         public Photo Photo { get; set; }
+        public bool MajorPhoto { get; set; }
         public List<SourceViewModel> Sources {get; set;}
     }
 }

@@ -25,13 +25,14 @@ namespace MonumentsMap.Data.Repositories
                     Year = p.Year,
                     Period = p.Period,
                     PhotoId = p.PhotoId,
-                    MonumentId = p.MonumentId
+                    MonumentId = p.MonumentId,
+                    MajorPhoto = p.MajorPhoto
                 };
+                var localizationDescription = p.Description?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode);
+                var description = localizationDescription?.Value ?? "";
+                lmp.Description = description;
                 if (!MinimizeResult)
                 {
-                    var localizationDescription = p.Description?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode);
-                    var description = localizationDescription?.Value ?? "";
-                    lmp.Description = description;
                     lmp.Sources = p.Sources.Adapt<SourceViewModel[]>().ToList();
                     lmp.Photo = p.Photo;
                 }
@@ -41,10 +42,10 @@ namespace MonumentsMap.Data.Repositories
 
         public override IQueryable<MonumentPhoto> IncludeNecessaryProps(IQueryable<MonumentPhoto> source)
         {
+            source = source.Include(p => p.Description)
+                .ThenInclude(p => p.Localizations);
             if (MinimizeResult) return source;
             return source
-                .Include(p => p.Description)
-                .ThenInclude(p => p.Localizations)
                 .Include(p => p.Photo)
                 .Include(p => p.Sources);
         }
