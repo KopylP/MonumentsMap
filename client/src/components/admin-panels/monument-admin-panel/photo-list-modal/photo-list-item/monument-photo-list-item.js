@@ -40,7 +40,7 @@ export default function MonumentPhotoListItem({
 
   const classes = useStyles();
   return (
-    <Card className={[classes.root, className]} style={style}>
+    <Card className={[classes.root, className]} style={style} onClick={e => {e.stopPropagation();}}>
       <CardMedia
         component="img"
         alt="Contemplative Reptile"

@@ -59,7 +59,7 @@ export default function PhotoListModal({
       }}
     >
       <Fade in={open}>
-          <div className={classes.paper}>
+          <div className={classes.paper} onClick={(e) => handleClose()}>
             <PhotoList params={[monumentId]}/>
           </div>
       </Fade>
