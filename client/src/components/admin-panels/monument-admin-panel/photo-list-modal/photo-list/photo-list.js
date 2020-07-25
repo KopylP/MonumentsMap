@@ -6,6 +6,7 @@ import AppContext from "../../../../../context/app-context";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { Button } from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
+import errorNetworkSnackbar from "../../../../helpers/error-network-snackbar";
 /**
  *
  * @param {*} data - monuments
@@ -19,16 +20,16 @@ function PhotoList({ data }) {
     data.map((obj) => ({ deleted: false, ...obj }))
   );
 
-  const onMonumentTooglePhotoError = (index, oldValue) => {
+  const onMonumentTooglePhotoError = (e, index, oldValue) => {
     const monumentPhotosModify = [...monumentPhotos];
     monumentPhotos[index].majorPhoto = oldValue;
     setMonumentPhotos(monumentPhotosModify);
-    errorSnackbar();
+    errorSnackbar(e.response && e.response.status);
   };
 
   const onDeleteMonumentPhotoError = (e, i) => {
     showMonumentPhoto(i);
-    errorSnackbar();
+    errorSnackbar(e.response && e.response.status);
   };
 
   const setMonumentMajorPhotoByIndex = (index, isMajorPhoto) => {
@@ -44,15 +45,14 @@ function PhotoList({ data }) {
     monumentPhotosModify[index].majorPhoto = isMajorPhoto;
     toogleMonumentMajorPhoto(monumentPhotosModify[index].id)
       .then((e) => console.log(e))
-      .catch((e) => onMonumentTooglePhotoError(index, !isMajorPhoto));
+      .catch((e) => onMonumentTooglePhotoError(e, index, !isMajorPhoto));
     setMonumentPhotos(monumentPhotosModify);
   };
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const errorSnackbar = () => {
-    enqueueSnackbar("Не вдалося зберегти зміни", { variant: "error" });
-    //TODO language
+  const errorSnackbar = (status) => {
+    errorNetworkSnackbar(enqueueSnackbar, status);
   };
 
   const showMonumentPhoto = (index) => {
@@ -84,10 +84,10 @@ function PhotoList({ data }) {
       action,
       autoHideDuration: 2000,
       onClose: (_, reason) => {
-        if (reason !== "instructed") {
+        if (reason === "timeout") {
           deleteMonumentPhoto(monumentPhotos[monumentPhotoIndex].id)
             .then((e) => console.log(e))
-            .catch((e) => onDeleteMonumentPhotoError(e, monumentPhotoIndex));
+            .catch((e) => { onDeleteMonumentPhotoError(e, monumentPhotoIndex); console.log("onDelete", e); });
         }
       },
     });
