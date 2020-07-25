@@ -32,7 +32,7 @@ export default function MonumentPhotoListItem({
   className = {},
   setMonumentMajorPhotoByIndex = (p) => p,
   index,
-  isMajorPhoto,
+  onDelete = p => p
 }) {
   const {
     monumentService: { getPhotoLink },
@@ -53,9 +53,9 @@ export default function MonumentPhotoListItem({
           <ListItemText id="switch-major-photo-label" primary="Головне фото" />
           <ListItemSecondaryAction>
             <Switch
-              checked={isMajorPhoto}
+              checked={monumentPhoto.majorPhoto}
               onChange={() =>
-                setMonumentMajorPhotoByIndex(index, !isMajorPhoto)
+                setMonumentMajorPhotoByIndex(index, !monumentPhoto.majorPhoto)
               }
               inputProps={{ "aria-labelledby": "switch-major-photo-label" }}
             />
@@ -74,7 +74,7 @@ export default function MonumentPhotoListItem({
         <Button size="small" color="primary">
           Редагувати
         </Button>
-        <Button size="small" style={{ color: "red" }}>
+        <Button size="small" style={{ color: "red" }} onClick={() => onDelete(index)}>
           Видалити
         </Button>
       </CardActions>

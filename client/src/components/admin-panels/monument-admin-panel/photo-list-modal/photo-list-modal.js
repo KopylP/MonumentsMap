@@ -19,12 +19,13 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
     width: "auto",
-    maxHeight: "90%",
+    height: "90%",
     maxWidth: "98%",
     display: "flex",
     flexWrap: "wrap",
     // backgroundColor: "white",
     justifyContent: "flex-start",
+    alignContent: "center",
     overflow: "auto",
     outline: "none",
     '&::-webkit-scrollbar': {

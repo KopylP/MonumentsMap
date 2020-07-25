@@ -35,6 +35,11 @@ export default class MonumentService {
     return response.data;
   }
 
+  async _deleteRequest(path) {
+    const response = await this._axios.delete(path);
+    return response.data;
+  }
+
   async _postFormRequest(path, file) {
     const data = new FormData();
     data.append(
@@ -89,6 +94,10 @@ export default class MonumentService {
 
   async createMonument(monument) {
     return await this._postRequest("monument/", monument);
+  }
+
+  deleteMonumentPhoto = async (monumentPhotoId) => {
+    return await this._deleteRequest(`monumentphoto/${monumentPhotoId}`);
   }
 
   async savePhoto(photo) {
