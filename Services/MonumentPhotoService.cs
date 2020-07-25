@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MonumentsMap.Data.Repositories;
@@ -8,15 +9,25 @@ namespace MonumentsMap.Services
 {
     public class MonumentPhotoService : IMonumentPhotoService
     {
+
+        #region enums
+        public enum RemoveStatus
+        {
+            ModelNotFound,
+            FileDeleteFail,
+            Ok
+        }
+        #endregion
+
         #region private fields
-        private MonumentPhotoRepository _monumentPhotoRepository;
-        private PhotoRepository _photoRepository;
+        private readonly MonumentPhotoRepository _monumentPhotoRepository;
+        private readonly PhotoService _photoService;
         #endregion
         #region constructor
-        public MonumentPhotoService(MonumentPhotoRepository monumentPhotoRepository, PhotoRepository photoRepository)
+        public MonumentPhotoService(MonumentPhotoRepository monumentPhotoRepository, PhotoService photoService)
         {
             _monumentPhotoRepository = monumentPhotoRepository;
-            _photoRepository = photoRepository;
+            _photoService = photoService;
         }
 
         #endregion
@@ -40,12 +51,19 @@ namespace MonumentsMap.Services
             _monumentPhotoRepository.Commit = true;
             return monumentPhoto;
         }
-        public async Task<MonumentPhoto> Remove(int monumentPhotoId)
+        public async Task<(MonumentPhoto monumentPhoto, RemoveStatus removeStatus)> Remove(int monumentPhotoId)
         {
             var monumentPhoto = await _monumentPhotoRepository.Delete(monumentPhotoId);
-            if(monumentPhoto == null) return monumentPhoto;
-            await _photoRepository.Delete(monumentPhoto.PhotoId);
-            return monumentPhoto;
+            if (monumentPhoto == null) return (monumentPhoto, RemoveStatus.ModelNotFound);
+            try
+            {
+                _photoService.DeleteSubDir(monumentPhoto.PhotoId.ToString());
+            }
+            catch (IOException)
+            {
+                return (null, RemoveStatus.FileDeleteFail);
+            }
+            return (monumentPhoto, RemoveStatus.Ok);
         }
         #endregion
     }

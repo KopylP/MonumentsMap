@@ -5,6 +5,7 @@ using MonumentsMap.Models;
 using MonumentsMap.Services.Interfaces;
 using MonumentsMap.ViewModels.LocalizedModels;
 using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
+using static MonumentsMap.Services.MonumentPhotoService;
 
 namespace MonumentsMap.Controllers
 {
@@ -27,9 +28,14 @@ namespace MonumentsMap.Controllers
         [HttpDelete("{id}")]
         public override async Task<IActionResult> Delete(int id)
         {
-            var monumentPhoto = await _monumentPhotoService.Remove(id);
-            if(monumentPhoto == null) return NotFound(); //TODO handle error;
-            return Ok(monumentPhoto);
+            var (monumentPhoto, status) = await _monumentPhotoService.Remove(id);
+            return status switch
+            {
+                RemoveStatus.ModelNotFound => NotFound(),
+                RemoveStatus.FileDeleteFail => StatusCode(500),
+                RemoveStatus.Ok => Ok(monumentPhoto),
+                _ => NotFound()
+            };
         }
         #endregion
 

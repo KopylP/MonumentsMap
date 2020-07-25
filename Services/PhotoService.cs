@@ -22,13 +22,19 @@ namespace MonumentsMap.Services
         }
         #endregion
 
-        #region public methods
-        public async System.Threading.Tasks.Task SavePhotoAsync(IFormFile file, string subDir)
+        private string GetDirPath(string subDir)
         {
             string dirPath = _imageFilesParams.AbsolutePath switch {
                 false => Path.Combine(_env.ContentRootPath, $"{_imageFilesParams.ImagesFolder}{Path.DirectorySeparatorChar}{subDir}"),
                 true => Path.Combine(_imageFilesParams.ImagesFolder, subDir)
             };
+            return dirPath;
+        }
+
+        #region public methods
+        public async System.Threading.Tasks.Task SavePhotoAsync(IFormFile file, string subDir)
+        {
+            string dirPath = GetDirPath(subDir);
             DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
             if(!dirInfo.Exists)
             {
@@ -43,13 +49,19 @@ namespace MonumentsMap.Services
 
         public (string fileType, FileStream image) FetchImage(string subDir, string fileName) 
         {
-            string dirPath = _imageFilesParams.AbsolutePath switch {
-                false => Path.Combine(_env.ContentRootPath, $"{_imageFilesParams.ImagesFolder}{Path.DirectorySeparatorChar}{subDir}"),
-                true => Path.Combine(_imageFilesParams.ImagesFolder, subDir)
-            };
-            string path = Path.Combine(dirPath, $"{fileName}");
+            string dirPath = GetDirPath(subDir);
+            string path = Path.Combine(dirPath, fileName);
             var imageStream = File.OpenRead(path);
             return ("image/jpeg", imageStream);
+        }
+
+        public bool DeleteSubDir(string subDir)
+        {
+            string dirPath = GetDirPath(subDir);
+            DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+            if(!dirInfo.Exists) return false;
+            dirInfo.Delete(true);
+            return true;
         }
         #endregion
     }
