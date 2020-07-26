@@ -55,5 +55,13 @@ namespace MonumentsMap.Controllers
             if(entity == null) return NotFound(); //TODO handle error
             return Ok(entity);
         }
+        [HttpGet("{id:int}/editable")]
+        public async virtual Task<IActionResult> Editable(int id)
+        {
+            var editableEntity = await localizedRepository.GetEditableLocalizedEntity(id);
+            if(editableEntity == null) return NotFound(); //TODO handle error
+            return Ok(editableEntity); 
+        }
+
     }
 }

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Extensions;
 using MonumentsMap.Models;
 using MonumentsMap.ViewModels;
 using MonumentsMap.ViewModels.LocalizedModels;
@@ -15,7 +17,22 @@ namespace MonumentsMap.Data.Repositories
         {
         }
 
-        public override Func<MonumentPhoto, LocalizedMonumentPhoto> GetSelectHandler(string cultureCode)
+        protected override EditableLocalizedMonumentPhoto GetEditableLocalizedEntity(MonumentPhoto entity) => new EditableLocalizedMonumentPhoto
+        {
+            Id = entity.Id,
+            Year = entity.Year,
+            Period = entity.Period,
+            MonumentId = entity.MonumentId,
+            PhotoId = entity.PhotoId,
+            Sources = entity.Sources.Select(p =>
+            {
+                p.MonumentPhoto = null;
+                return p;
+            }).ToList(),
+            Description = entity.Description.GetCultureValuePairs()
+        };
+
+        protected override Func<MonumentPhoto, LocalizedMonumentPhoto> GetSelectHandler(string cultureCode)
         {
             return p =>
             {
@@ -40,7 +57,7 @@ namespace MonumentsMap.Data.Repositories
             };
         }
 
-        public override IQueryable<MonumentPhoto> IncludeNecessaryProps(IQueryable<MonumentPhoto> source)
+        protected override IQueryable<MonumentPhoto> IncludeNecessaryProps(IQueryable<MonumentPhoto> source)
         {
             source = source.Include(p => p.Description)
                 .ThenInclude(p => p.Localizations);

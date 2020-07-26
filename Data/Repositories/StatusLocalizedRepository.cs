@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Extensions;
 using MonumentsMap.Models;
 using MonumentsMap.ViewModels.LocalizedModels;
 using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
@@ -13,7 +14,15 @@ namespace MonumentsMap.Data.Repositories
         {
         }
 
-        public override Func<Status, LocalizedStatus> GetSelectHandler(string cultureCode)
+        protected override EditableLocalizedStatus GetEditableLocalizedEntity(Status entity) => new EditableLocalizedStatus
+        {
+            Id = entity.Id,
+            Abbreviation = entity.Abbreviation,
+            Name = entity.Name.GetCultureValuePairs(),
+            Description = entity.Description.GetCultureValuePairs()
+        };
+
+        protected override Func<Status, LocalizedStatus> GetSelectHandler(string cultureCode)
         {
             return p =>
             {
@@ -31,7 +40,7 @@ namespace MonumentsMap.Data.Repositories
             };
         }
 
-        public override IQueryable<Status> IncludeNecessaryProps(IQueryable<Status> source)
+        protected override IQueryable<Status> IncludeNecessaryProps(IQueryable<Status> source)
         {
             return source
                 .Include(p => p.Name)

@@ -56,6 +56,17 @@ namespace MonumentsMap.Data.Repositories
             .FirstOrDefault();
         }
 
+        public async Task<TEditableLocalizedEntity> GetEditableLocalizedEntity(int id)
+        {
+            MinimizeResult = false;
+            var query = context.Set<TEntity>()
+                .Where(p => p.Id == id);
+            var entity = await IncludeNecessaryProps(query)
+                .FirstOrDefaultAsync();
+            if(entity == null) return null;
+            return GetEditableLocalizedEntity(entity);
+        }
+
         public async Task<List<TLocalizedEntity>> GetAll(string cultureCode)
         {
             MinimizeResult = true;
@@ -87,8 +98,10 @@ namespace MonumentsMap.Data.Repositories
         }
 
         //Convert model to localized model
-        public abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode);
+        protected abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode);
         //Including required property models that are associated with the main model
-        public abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source);
+        protected abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source);
+        //Get editable entity model from entity
+        protected abstract TEditableLocalizedEntity GetEditableLocalizedEntity(TEntity entity);
     }
 }
