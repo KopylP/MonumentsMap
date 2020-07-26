@@ -1,4 +1,5 @@
 import axios from "axios";
+import withMonumentService from "../components/hoc-helpers/with-monument-service";
 
 export default class MonumentService {
   constructor(host = "http://localhost:5000/", cultureCode = "uk-UA") {
@@ -13,13 +14,16 @@ export default class MonumentService {
     });
   }
 
-  async _getRequest(path, params = {}) {
+  async _getRequest(path, withCultureCode = true, params = {}) {
+    let _params = {
+      ...params
+    };
+    if(withCultureCode){
+      _params["cultureCode"] = this._cultureCode
+    }
     const response = await this._axios.get(
       path, {
-        params: {
-          cultureCode: this._cultureCode,
-          ...params
-        }
+        params: _params
       }
     );
     return response.data;
@@ -27,6 +31,11 @@ export default class MonumentService {
 
   async _postRequest(path, data) {
     const response = await this._axios.post(path, data);
+    return response.data;
+  }
+
+  async _putRequest(path, data) {
+    const response = await this._axios.put(path, data);
     return response.data;
   }
 
@@ -108,6 +117,10 @@ export default class MonumentService {
     return await this._postRequest("monumentphoto/", monumentPhoto);
   }
 
+  async editPhotoMonument(monumentPhoto) {
+    return await this._putRequest("monumentphoto/", monumentPhoto);
+  }
+
   async getPhotoIds(monumentId) {
     return await this._getRequest(`monument/${monumentId}/photo/ids`);
   }
@@ -122,5 +135,9 @@ export default class MonumentService {
 
   getPhotoLink = (photoId) => {
     return `${this._baseURL}photo/${photoId}/image`;
+  }
+
+  getMonumentMonumentPhotoEditable = async (monumentPhotoId) => {
+    return await this._getRequest(`monumentphoto/${monumentPhotoId}/editable`, false);
   }
 }

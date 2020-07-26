@@ -44,9 +44,20 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 30,
     paddingTop: 10,
   },
+  image: {
+    width: "40%",
+    marginLeft: "auto",
+    marginRight: "auto"
+  }
 }));
 
-export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
+export default function AddPhotoModal({
+  monumentId,
+  open,
+  setOpen,
+  data = null,
+  ...props
+}) {
   const classes = useStyles(props);
   const { monumentService } = useContext(AppContext);
   const { onPhotoSave } = useContext(DetailDrawerContext);
@@ -61,12 +72,11 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
       sourceLink: "",
     },
   ];
-  const [sources, setSources] = useState(defaultSources);
+  const [sources, setSources] = useState(data ? data.sources : defaultSources);
 
   const [file, setFile] = useState(null);
 
   const getMonumentPhotoFromForm = (values, photoId) => {
-    console.log(values);
     delete values.file;
     const description = [
       ...supportedCultures.map((culture) => ({
@@ -79,51 +89,92 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
     });
     values.description = description;
     values.sources = sources;
-    values.monumentId = monumentId;
+    if (data) {
+      values.monumentId = data.monumentId;
+    } else {
+      values.monumentId = monumentId;
+    }
     values.photoId = photoId;
-    console.log("values", values);
     return values;
   };
 
+  const onCreateMonumentPhoto = (mp, resetForm) => {
+    onPhotoSave(mp);
+    setSources(defaultSources);
+    resetForm({ values: "" });
+    setOpen(false);
+  };
+
+  const onEditMonumentPhoto = (mp) => {
+    console.log(mp);
+    setOpen(false);
+  };
+
   const submitPhotoForm = (values, { resetForm }) => {
-    monumentService
-      .savePhoto(file)
-      .then((photo) => {
-        const monumentPhotoValues = JSON.parse(JSON.stringify(values));
-        const monumentPhoto = getMonumentPhotoFromForm(
-          monumentPhotoValues,
-          photo.id
-        );
-        monumentService
-          .createPhotoMonument(monumentPhoto)
-          .then((mp) => {
-            onPhotoSave(mp);
-            setSources(defaultSources);
-            resetForm({ values: "" });
-            setOpen(false);
-          })
-          .catch(); //TODO handle error
-      })
-      .catch(); //TODO handle error
+    const getMonumentPhoto = (photoId, id = null) => {
+      const monumentPhotoValues = JSON.parse(JSON.stringify(values));
+      const monumentPhoto = getMonumentPhotoFromForm(
+        monumentPhotoValues,
+        photoId
+      );
+      if (id) {
+        monumentPhoto["id"] = id;
+      }
+      return monumentPhoto;
+    };
+
+    if (data == null) {
+      console.log("Save photo kurva");
+      monumentService
+        .savePhoto(file)
+        .then((photo) => {
+          const monumentPhoto = getMonumentPhoto(photo.id);
+          console.log(monumentPhoto);
+          monumentService
+            .createPhotoMonument(monumentPhoto)
+            .then((mp) => onCreateMonumentPhoto(mp, resetForm))
+            .catch(e => console.error(e)); //TODO handle error
+        })
+        .catch(); //TODO handle error
+    } else {
+      const monumentPhoto = getMonumentPhoto(data.photoId, data.id);
+      monumentService
+        .editPhotoMonument(monumentPhoto)
+        .then(onEditMonumentPhoto)
+        .catch(); //TODO handle error
+    }
   };
 
   const initialValues = {
-    year: "",
-    period: "",
+    year: data ? data.year : "",
+    period: data ? data.period : "",
     file: "",
   };
 
-  supportedCultures.forEach((culture) => {
-    initialValues[culture.code] = "";
-  });
+  if (data) {
+    data.description.forEach((cultureValuePair) => {
+      initialValues[cultureValuePair.culture] = cultureValuePair.value;
+    });
+  } else {
+    supportedCultures.forEach((culture) => {
+      initialValues[culture.code] = "";
+    });
+  }
+
+  const validationSchemafileds = {
+    year: Yup.number().required("Це поле є обов'язковим"),
+    period: Yup.number().required("Це поле є обов'язковим"),
+  };
+
+  if (data == null) {
+    validationSchemafileds["file"] = Yup.string().required(
+      "Додайте фотографію пам'ятки"
+    );
+  }
 
   const formik = useFormik({
     initialValues,
-    validationSchema: Yup.object({
-      year: Yup.number().required("Це поле є обов'язковим"),
-      period: Yup.number().required("Це поле є обов'язковим"),
-      file: Yup.string().required("Додайте фотографію пам'ятки"),
-    }),
+    validationSchema: Yup.object(validationSchemafileds),
     onSubmit: submitPhotoForm,
   });
 
@@ -143,23 +194,26 @@ export default function AddPhotoModal({ monumentId, open, setOpen, ...props }) {
           <Paper className={classes.paper}>
             <form onSubmit={formik.handleSubmit}>
               <Grid container spacing={3}>
-                <h3>Додати фотографію</h3>
-                <DropzoneArea
-                  onChange={(file) => {
-                    formik.setFieldValue(
-                      "file",
-                      file.length > 0 ? file[0].path : ""
-                    );
-                    setFile(file[0]);
-                  }}
-                  acceptedFiles={["image/jpeg", "image/png", "image/bmp"]}
-                  showPreviews={false}
-                  filesLimit={1}
-                  name="file"
-                  showFileNames={true}
-                  showFileNamesInPreview={true}
-                  dropzoneText={"Перетягни фотографію"}
-                />
+                <h3 style={{width: "100%"}}>Додати фотографію</h3>
+                {data ? 
+                <img className={classes.image} src={monumentService.getPhotoLink(data.photoId)}/> : (
+                  <DropzoneArea
+                    onChange={(file) => {
+                      formik.setFieldValue(
+                        "file",
+                        file.length > 0 ? file[0].path : ""
+                      );
+                      setFile(file[0]);
+                    }}
+                    acceptedFiles={["image/jpeg", "image/png", "image/bmp"]}
+                    showPreviews={false}
+                    filesLimit={1}
+                    name="file"
+                    showFileNames={true}
+                    showFileNamesInPreview={true}
+                    dropzoneText={"Перетягни фотографію"}
+                  />
+                )}
                 <Grid item xs={12}>
                   <div style={{ color: "red", fontSize: 14 }}>
                     {formik.errors.file}

@@ -32,7 +32,8 @@ export default function MonumentPhotoListItem({
   className = {},
   setMonumentMajorPhotoByIndex = (p) => p,
   index,
-  onDelete = p => p
+  onDelete = p => p,
+  onEdit = p => p
 }) {
   const {
     monumentService: { getPhotoLink },
@@ -71,7 +72,7 @@ export default function MonumentPhotoListItem({
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={() => onEdit(monumentPhoto.id)}>
           Редагувати
         </Button>
         <Button size="small" style={{ color: "red" }} onClick={() => onDelete(index)}>
