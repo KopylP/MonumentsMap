@@ -13,9 +13,15 @@ const useStyles = makeStyles((theme) => ({
   drawerClass: {
     width: theme.detailDrawerWidth,
     flexShrink: 0,
+    [theme.breakpoints.down(theme.detailDrawerWidth)]: {
+      width: "100%",
+    },
   },
   drawerPaper: {
     width: theme.detailDrawerWidth,
+    [theme.breakpoints.down(theme.detailDrawerWidth)]: {
+      width: "100%",
+    },
   },
 }));
 

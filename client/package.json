@@ -27,6 +27,7 @@
     "react-perfect-scrollbar": "^1.5.8",
     "react-scripts": "3.4.1",
     "react-thumbnail": "^1.0.0",
+    "react-transition-group": "^4.4.1",
     "yup": "^0.29.1"
   },
   "scripts": {

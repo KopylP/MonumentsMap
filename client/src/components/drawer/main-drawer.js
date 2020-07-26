@@ -14,10 +14,16 @@ import AddModal from "../add-modal/add-modal";
 const useStyles = makeStyles(theme => ({
   drawerClass: {
     width: theme.drawerWidth,
+    [theme.breakpoints.down(theme.drawerWidth)]: {
+      width: "100%",
+    },
     flexShrink: 0,
   },
   drawerPaper: {
-    width: theme.drawerWidth
+    width: theme.drawerWidth,
+    [theme.breakpoints.down(theme.drawerWidth)]: {
+      width: "100%",
+    },
   }
 }));
 

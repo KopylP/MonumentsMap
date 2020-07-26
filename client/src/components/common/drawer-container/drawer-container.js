@@ -10,6 +10,7 @@ export default function DrawerContainer(props) {
         display: "flex",
         width: "100%",
         height: "100%",
+        overflowX: "hidden",
         flexDirection: "column",
         justifyContent: "start"
     }}
