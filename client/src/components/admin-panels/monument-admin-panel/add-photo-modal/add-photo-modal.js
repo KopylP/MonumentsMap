@@ -195,7 +195,7 @@ export default function AddPhotoModal({
           <Paper className={classes.paper}>
             <form onSubmit={formik.handleSubmit}>
               <Grid container spacing={3}>
-                <h3 style={{width: "100%"}}>Додати фотографію</h3>
+                <h3 style={{width: "100%"}}>{ data ? "Редагувати" : "Додати"} фотографію</h3>
                 {data ? 
                 <img className={classes.image} src={monumentService.getPhotoLink(data.photoId)}/> : (
                   <DropzoneArea
@@ -294,7 +294,7 @@ export default function AddPhotoModal({
                     style={{ float: "right" }}
                     color="secondary"
                   >
-                    Додати
+                    { data ? "Редагувати" : "Додати"}
                   </Button>
                 </Grid>
               </Grid>

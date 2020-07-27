@@ -80,7 +80,7 @@ export default class MonumentService {
    * @param {*} conditions - array of selected conditions ids
    */
   async getMonumentsByFilter(cities, statuses, conditions) {
-    return await this._getRequest("monument/filter", {
+    return await this._getRequest("monument/filter", false, {
       cities, statuses, conditions
     });
   }
