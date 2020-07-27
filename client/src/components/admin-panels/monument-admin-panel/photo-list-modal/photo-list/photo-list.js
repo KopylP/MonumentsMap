@@ -35,12 +35,12 @@ function PhotoList({ data, onUpdate = p => p }) {
       setOpenEditMonumentPhotoModal(true);
     }
   }, [editMonumentPhotoId]);
-  useEffect(() => {
-    if (openEditMonumentPhotoModal === false && prevOpenEditMonumentPhotoModal === true) {
+
+  const onCloseModalEnded = () => {
       setEditMonumentPhotoId(null);
       onUpdate();
-    }
-  }, [openEditMonumentPhotoModal]);
+  }
+
 
   const onMonumentTooglePhotoError = (e, index, oldValue) => {
     const monumentPhotosModify = [...monumentPhotos];
@@ -151,6 +151,7 @@ function PhotoList({ data, onUpdate = p => p }) {
         <EditPhotoModal
           params={[editMonumentPhotoId]}
           open={openEditMonumentPhotoModal}
+          onCloseAnimationEnded={onCloseModalEnded}
           setOpen={setOpenEditMonumentPhotoModal}
         />
       )}

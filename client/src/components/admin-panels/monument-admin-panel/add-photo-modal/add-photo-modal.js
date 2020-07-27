@@ -56,6 +56,7 @@ export default function AddPhotoModal({
   open,
   setOpen,
   data = null,
+  onCloseAnimationEnded = p => p,
   ...props
 }) {
   const classes = useStyles(props);
@@ -189,7 +190,7 @@ export default function AddPhotoModal({
         timeout: 500,
       }}
     >
-      <Fade in={open}>
+      <Fade in={open} onExited={onCloseAnimationEnded}>
         <ScrollBar className={classes.scrollBar}>
           <Paper className={classes.paper}>
             <form onSubmit={formik.handleSubmit}>
