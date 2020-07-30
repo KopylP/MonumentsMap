@@ -69,7 +69,7 @@ export default class MonumentService {
     return response.data;
   }
 
-  async getAllMonuments() {
+  getAllMonuments = async () => {
     return await this._getRequest("monument/");
   }
 

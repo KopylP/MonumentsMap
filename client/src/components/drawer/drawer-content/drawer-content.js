@@ -16,6 +16,7 @@ import AddIcon from "@material-ui/icons/Add";
 import SelectLanguage from "../../select-language/select-language";
 import AppContext from "../../../context/app-context";
 import { usePrevious } from "../../../hooks/hooks";
+import MonumentListAdminPanel from "../../admin-panels/monument-list-admin-panel/monument-list-admin-panel";
 
 const useStyles = makeStyles((theme) => ({
   colorWhite: {
@@ -136,6 +137,9 @@ export default function DrawerContent(props) {
   return (
     <div style={{ flexGrow: 1, padding: 15 }}>
       <Grid container vertical spacing={2}>
+        <Grid item xs="12">
+          <MonumentListAdminPanel />
+        </Grid>
         <SelectLanguage />
         <Grid item xs="12">
           <Autocomplete

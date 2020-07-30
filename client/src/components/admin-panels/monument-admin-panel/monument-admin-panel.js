@@ -11,8 +11,7 @@ import PhotoListModal from "./photo-list-modal/photo-list-modal";
  * 
  * @param {*} data - monumentId 
  */
-function MonumentAdminPanel({ data, ...props }) {
-    console.log(data);
+function MonumentAdminPanel({ data }) {
 
     const [openAddPhoto, setOpenAddPhoto] = useState(false);
     const [openPhotoList, setOpenPhotoList] = useState(false);
