@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { List } from "@material-ui/core";
+import { List, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import SearchField from "../../../../common/search-field/search-field";
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   paper: {
-    width: 360,
+    width: 400,
     maxHeight: "70%",
     outline: "none",
     display: "flex",
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   rootList: {
     width: "100%",
-    maxWidth: 360,
+    maxWidth: 400,
     backgroundColor: theme.palette.background.paper,
 
     overflow: "auto",
@@ -51,7 +51,9 @@ const useStyles = makeStyles((theme) => ({
 function MonumentList({ data }) {
   const classes = useStyles();
   const [monuments, setMonuments] = useState(data);
-  const { monumentService: { toogleMonumentAccepted } } = useContext(AppContext);
+  const {
+    monumentService: { toogleMonumentAccepted },
+  } = useContext(AppContext);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -64,28 +66,35 @@ function MonumentList({ data }) {
     modifyMonuments[index].accepted = !modifyMonuments[index].accepted;
     setMonuments(modifyMonuments);
     errorSnackbar(e.response && e.response.status);
-  }
-  
+  };
 
   const onAcceptedChange = (index, accepted) => {
     const modifyMonuments = [...monuments];
     modifyMonuments[index].accepted = accepted;
     setMonuments(modifyMonuments);
     toogleMonumentAccepted(monuments[index].id)
-        .then()
-        .catch(e => onMonumentToogleError(e, index))
-  }
-
-  
+      .then()
+      .catch((e) => onMonumentToogleError(e, index));
+  };
 
   return (
     <div className={classes.paper}>
-      <SearchField className={classes.search} placeholder="Пошук"/>
+      <SearchField className={classes.search} placeholder="Пошук" />
       <div className={classes.listContainer}>
         <ScrollBar>
           <List dense className={classes.rootList}>
             {monuments.map((monument, i) => (
-              <MonumentListItem key={i} index={i} monument={monument} onAcceptedChange={onAcceptedChange}/>
+              <React.Fragment>
+                <MonumentListItem
+                  key={i}
+                  index={i}
+                  monument={monument}
+                  onAcceptedChange={onAcceptedChange}
+                />
+                {monuments.length - 1 === i ? null : (
+                  <Divider variant="inset" />
+                )}
+              </React.Fragment>
             ))}
           </List>
         </ScrollBar>
