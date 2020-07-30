@@ -53,6 +53,8 @@ namespace MonumentsMap
             services.AddScoped<PhotoService>();
             services.AddScoped<MonumentPhotoRepository>();
             services.AddScoped<IMonumentPhotoService, MonumentPhotoService>();
+            services.AddScoped<MonumentRepository>();
+            services.AddScoped<IMonumentService, MonumentService>();
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
         }
 

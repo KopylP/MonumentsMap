@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MonumentsMap.Data.Repositories;
 using MonumentsMap.Models;
+using MonumentsMap.Services;
+using MonumentsMap.Services.Interfaces;
 using MonumentsMap.ViewModels.LocalizedModels;
 using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
@@ -13,11 +15,17 @@ namespace MonumentsMap.Controllers
     {
         #region private fields
         private readonly MonumentPhotoLocalizedRepository _monumentPhotoLocalizedRepository;
+        private readonly IMonumentService _monumentService;
         #endregion
         #region constructor
-        public MonumentController(MonumentLocalizedRepository localizedRepository, MonumentPhotoLocalizedRepository monumentPhotoLocalizedRepository) : base(localizedRepository)
+        public MonumentController(
+            MonumentLocalizedRepository localizedRepository,
+            MonumentPhotoLocalizedRepository monumentPhotoLocalizedRepository,
+            IMonumentService monumentService
+        ) : base(localizedRepository)
         {
             _monumentPhotoLocalizedRepository = monumentPhotoLocalizedRepository;
+            _monumentService = monumentService;
         }
         #endregion
 
@@ -38,6 +46,14 @@ namespace MonumentsMap.Controllers
                     && (conditions.Length == 0 || conditions.Contains(p.ConditionId))
                     && (cities.Length == 0 || cities.Contains(p.CityId)));
             return Ok(monuments);
+        }
+
+        [HttpPatch("{id:int}/toogle/accepted")]
+        public async Task<IActionResult> ToogleAccepted(int id)
+        {
+            var monument = await _monumentService.ToogleMajorPhotoAsync(id);
+            if(monument == null) return NotFound();//TODO handle error
+            return Ok(monument);
         }
 
         [HttpGet("{id:int}/monumentPhotos")]
