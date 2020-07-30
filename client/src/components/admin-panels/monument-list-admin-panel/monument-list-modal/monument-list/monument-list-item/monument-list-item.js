@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   ListItem,
   ListItemText,
@@ -9,7 +9,6 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import DeleteIcon from "@material-ui/icons/Delete";
-import AppContext from "../../../../../../context/app-context";
 
 const useStyles = makeStyles((theme) => ({
   listItemText: {
@@ -17,14 +16,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MonumentListItem({ monument }) {
+export default function MonumentListItem({ monument, onAcceptedChange = p => p, index }) {
   const classes = useStyles();
-  const { monumentService } = useContext(AppContext);
   return (
     <ListItem button>
       <ListItemText className={classes.listItemText}>{ monument.name }</ListItemText>
       <ListItemSecondaryAction>
-        <Switch checked={ monument.accepted } />
+        <Switch checked={ monument.accepted } onChange={(_, checked) => onAcceptedChange(index, checked)}/>
         <IconButton>
           <DeleteIcon />
         </IconButton>

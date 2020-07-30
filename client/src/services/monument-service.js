@@ -129,6 +129,10 @@ export default class MonumentService {
     return await this._patchRequest(`monumentphoto/${monumentPhotoId}/toogle/majorphoto`);
   }
 
+  toogleMonumentAccepted = async (monumentId) => {
+    return await this._patchRequest(`monument/${monumentId}/toogle/accepted`);
+  }
+
   getMonumentPhotos = async (monumentId) => {
     return await this._getRequest(`monument/${monumentId}/monumentPhotos`);
   }

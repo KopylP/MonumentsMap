@@ -22,6 +22,8 @@ function Map({ onMonumentSelected = (p) => p }) {
     mapRef.current.leafletElement.closePopup();
   };
 
+  const [center, setCenter] = useState(defaultCity);
+
   const update = () => {
     monumentService
       .getMonumentsByFilter(selectedCities.map(c => c.id), selectedStatuses, selectedConditions)
@@ -59,7 +61,8 @@ function Map({ onMonumentSelected = (p) => p }) {
 
   return (
     <LeafMap
-      center={defaultCity}
+      center={center}
+      animate
       zoom={defaultZoom}
       style={{ width: "100%", height: "100vh" }}
       ref={mapRef}
