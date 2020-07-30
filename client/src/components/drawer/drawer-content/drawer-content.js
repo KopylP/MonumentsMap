@@ -57,7 +57,7 @@ export default function DrawerContent(props) {
     selectedStatuses,
     setSelectedStatuses,
   } = useContext(AppContext);
-  
+
   const [cities, setCities] = useState([]);
   const [conditions, setConditions] = useState([]);
   const [statuses, setStatuses] = useState([]);
@@ -86,8 +86,9 @@ export default function DrawerContent(props) {
     if (
       prevSelectedLanguage == null ||
       selectedLanguage.code !== prevSelectedLanguage.code
-    )
+    ) {
       update();
+    }
   }, [selectedLanguage]);
 
   useEffect(() => {

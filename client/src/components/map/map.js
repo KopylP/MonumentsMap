@@ -4,6 +4,7 @@ import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
 import { defaultCity, defaultZoom, accessToken } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
+import { arraysEqual } from "../helpers/array-helpers";
 
 function Map({ onMonumentSelected = (p) => p }) {
   const {
@@ -22,11 +23,25 @@ function Map({ onMonumentSelected = (p) => p }) {
     mapRef.current.leafletElement.closePopup();
   };
 
+  const [cancelRequest, setCancelRequest] = useState(null);
+
+
+
   const [center, setCenter] = useState(defaultCity);
 
+  function executor(e) {
+    setCancelRequest({
+      cancel: e
+    });
+  }
+
   const update = () => {
+    if(cancelRequest) {
+      cancelRequest.cancel();
+    }
+
     monumentService
-      .getMonumentsByFilter(selectedCities.map(c => c.id), selectedStatuses, selectedConditions)
+      .getMonumentsByFilter(selectedCities.map(c => c.id), selectedStatuses, selectedConditions, executor)
       .then((monuments) => {
         setMonuments(monuments);
         setMarkers(monuments.map((monument, i) => {
@@ -37,11 +52,14 @@ function Map({ onMonumentSelected = (p) => p }) {
               key={i}
             />
           );
-        }));
+        }))
       });
   };
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
+  const prevSelectedConditions = usePrevious(selectedConditions);
+  const prevSelectedCities = usePrevious(selectedCities);
+  const prevSelectedStatuses = usePrevious(selectedStatuses);
 
   useEffect(() => {
     if (
@@ -52,8 +70,24 @@ function Map({ onMonumentSelected = (p) => p }) {
   }, [selectedLanguage]);
 
   useEffect(() => {
-    update();
-  }, [selectedConditions, selectedCities, selectedStatuses])
+    if(typeof prevSelectedConditions !== "undefined" && !arraysEqual(prevSelectedConditions, selectedConditions)){
+      update();
+    }
+  }, [selectedConditions])
+
+  useEffect(() => {
+    if(typeof prevSelectedCities !== "undefined" && !arraysEqual(prevSelectedCities, selectedCities)){
+      update();
+    }
+    
+  }, [selectedCities])
+
+  useEffect(() => {
+    if(typeof prevSelectedStatuses !== "undefined" && !arraysEqual(prevSelectedStatuses, selectedStatuses)){
+      update();
+    }
+  }, [selectedStatuses])
+
 
   useEffect(() => {
     if (detailDrawerOpen === false) closePopups();

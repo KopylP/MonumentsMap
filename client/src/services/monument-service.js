@@ -1,6 +1,6 @@
 import axios from "axios";
 import withMonumentService from "../components/hoc-helpers/with-monument-service";
-
+const CancelToken = axios.CancelToken;
 export default class MonumentService {
   constructor(host = "http://localhost:5000/", cultureCode = "uk-UA") {
     this._cultureCode = cultureCode;
@@ -14,18 +14,24 @@ export default class MonumentService {
     });
   }
 
-  async _getRequest(path, withCultureCode = true, params = {}) {
+  async _getRequest(
+    path,
+    withCultureCode = true,
+    params = {},
+    cancelCallback = (p) => p
+  ) {
     let _params = {
-      ...params
+      ...params,
     };
-    if(withCultureCode){
-      _params["cultureCode"] = this._cultureCode
+    if (withCultureCode) {
+      _params["cultureCode"] = this._cultureCode;
     }
-    const response = await this._axios.get(
-      path, {
-        params: _params
-      }
-    );
+    const response = await this._axios.get(path, {
+      params: _params,
+      cancelToken: new CancelToken(function executor(c) {
+        cancelCallback(c);
+      }),
+    });
     return response.data;
   }
 
@@ -51,17 +57,13 @@ export default class MonumentService {
 
   async _postFormRequest(path, file) {
     const data = new FormData();
-    data.append(
-      "file",
-      file
-    );
+    data.append("file", file);
 
     var config = {
       method: "post",
       url: `${this._baseURL}${path}`,
       headers: {
-        'Content-Type': 'multipart/form-data',
-
+        "Content-Type": "multipart/form-data",
       },
       data: data,
     };
@@ -71,18 +73,26 @@ export default class MonumentService {
 
   getAllMonuments = async () => {
     return await this._getRequest("monument/");
-  }
+  };
 
   /**
-   * 
+   *
    * @param {*} cities - array of selected cities ids
-   * @param {*} statuses - array of selected statuses ids 
+   * @param {*} statuses - array of selected statuses ids
    * @param {*} conditions - array of selected conditions ids
    */
-  async getMonumentsByFilter(cities, statuses, conditions) {
-    return await this._getRequest("monument/filter", true, {
-      cities, statuses, conditions
-    });
+  async getMonumentsByFilter(cities, statuses, conditions, cancelCallback) {
+    console.log("send");
+    return await this._getRequest(
+      "monument/filter",
+      true,
+      {
+        cities,
+        statuses,
+        conditions,
+      },
+      cancelCallback
+    );
   }
 
   async getMonumentById(id) {
@@ -94,6 +104,7 @@ export default class MonumentService {
   }
 
   async getAllConditions() {
+    console.log("All conditions");
     return await this._getRequest("condition/");
   }
 
@@ -107,7 +118,7 @@ export default class MonumentService {
 
   deleteMonumentPhoto = async (monumentPhotoId) => {
     return await this._deleteRequest(`monumentphoto/${monumentPhotoId}`);
-  }
+  };
 
   async savePhoto(photo) {
     return await this._postFormRequest("photo/", photo);
@@ -126,22 +137,27 @@ export default class MonumentService {
   }
 
   toogleMonumentMajorPhoto = async (monumentPhotoId) => {
-    return await this._patchRequest(`monumentphoto/${monumentPhotoId}/toogle/majorphoto`);
-  }
+    return await this._patchRequest(
+      `monumentphoto/${monumentPhotoId}/toogle/majorphoto`
+    );
+  };
 
   toogleMonumentAccepted = async (monumentId) => {
     return await this._patchRequest(`monument/${monumentId}/toogle/accepted`);
-  }
+  };
 
   getMonumentPhotos = async (monumentId) => {
     return await this._getRequest(`monument/${monumentId}/monumentPhotos`);
-  }
+  };
 
   getPhotoLink = (photoId) => {
     return `${this._baseURL}photo/${photoId}/image`;
-  }
+  };
 
   getMonumentMonumentPhotoEditable = async (monumentPhotoId) => {
-    return await this._getRequest(`monumentphoto/${monumentPhotoId}/editable`, false);
-  }
+    return await this._getRequest(
+      `monumentphoto/${monumentPhotoId}/editable`,
+      false
+    );
+  };
 }
