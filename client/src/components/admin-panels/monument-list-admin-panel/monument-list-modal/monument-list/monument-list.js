@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { List, Divider } from "@material-ui/core";
+import { Divider, List as MaterialList } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import SearchField from "../../../../common/search-field/search-field";
@@ -10,6 +10,12 @@ import withData from "../../../../hoc-helpers/with-data";
 import AppContext from "../../../../../context/app-context";
 import { useSnackbar } from "notistack";
 import errorNetworkSnackbar from "../../../../helpers/error-network-snackbar";
+import {
+  AutoSizer,
+  List,
+  CellMeasurer,
+  CellMeasurerCache,
+} from "react-virtualized";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -26,19 +32,16 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "sterch",
   },
-  listContainer: {
-    borderRadius: 5,
-    display: "block",
-    padding: 2,
-    backgroundColor: "white",
-  },
+
   rootList: {
     width: "100%",
     maxWidth: 400,
-    backgroundColor: theme.palette.background.paper,
-
+    height: 600,
+    backgroundColor: "white",
+    borderRadius: 5,
+    padding: 2,
     overflow: "auto",
-    maxHeight: 600,
+    boxSizing: "border-box",
   },
   listItemText: {
     maxWidth: 240,
@@ -77,28 +80,53 @@ function MonumentList({ data }) {
       .catch((e) => onMonumentToogleError(e, index));
   };
 
+  const cache = new CellMeasurerCache({
+    fixedWidth: true,
+    defaultHeight: 80,
+    minHeight: 57,
+  });
+
+  const rowRender = ({ key, index, style, parent }) => {
+    return (
+      <CellMeasurer
+        key={key}
+        cache={cache}
+        parent={parent}
+        columnIndex={0}
+        rowIndex={index}
+      >
+        <MonumentListItem
+          index={index}
+          style={style}
+          withDivider={index + 1 !== monuments.length}
+          monument={monuments[index]}
+          onAcceptedChange={onAcceptedChange}
+        />
+      </CellMeasurer>
+    );
+  };
+
   return (
     <div className={classes.paper}>
       <SearchField className={classes.search} placeholder="Пошук" />
-      <div className={classes.listContainer}>
-        <ScrollBar>
-          <List dense className={classes.rootList}>
-            {monuments.map((monument, i) => (
-              <React.Fragment>
-                <MonumentListItem
-                  key={i}
-                  index={i}
-                  monument={monument}
-                  onAcceptedChange={onAcceptedChange}
+      <MaterialList className={classes.rootList}>
+        <AutoSizer>
+          {({ width, height }) => {
+            return (
+              <ScrollBar>
+                <List
+                  height={height}
+                  rowCount={monuments.length}
+                  rowHeight={cache.rowHeight}
+                  width={width}
+                  overscanRowCount={3}
+                  rowRenderer={rowRender}
                 />
-                {monuments.length - 1 === i ? null : (
-                  <Divider variant="inset" />
-                )}
-              </React.Fragment>
-            ))}
-          </List>
-        </ScrollBar>
-      </div>
+              </ScrollBar>
+            );
+          }}
+        </AutoSizer>
+      </MaterialList>
     </div>
   );
 }
