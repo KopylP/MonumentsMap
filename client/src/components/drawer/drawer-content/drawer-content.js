@@ -137,11 +137,13 @@ export default function DrawerContent(props) {
 
   return (
     <div style={{ flexGrow: 1, padding: 15 }}>
-      <Grid container vertical spacing={2}>
+      <Grid container vertical spacing={1}>
         <Grid item xs="12">
           <MonumentListAdminPanel />
         </Grid>
-        <SelectLanguage />
+        <Grid item xs="12">
+          <SelectLanguage />
+        </Grid>
         <Grid item xs="12">
           <Autocomplete
             {...autoCompliteCitiesOptions}

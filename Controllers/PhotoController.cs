@@ -60,6 +60,20 @@ namespace MonumentsMap.Controllers
                 return StatusCode(500); //TODO handle error
             }
         }
+        [HttpGet("{id}/image/{size}")]
+        public async Task<IActionResult> GetImageAsync(int id, int size)
+        {
+            var photo = await _photoRepository.Get(id);
+            try
+            {
+                var (fileType, imageStream) = _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
+                return File(imageStream, fileType);
+            }
+            catch
+            {
+                return StatusCode(500); //TODO handle error
+            }
+        }
         #endregion
     }
 }

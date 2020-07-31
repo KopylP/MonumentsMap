@@ -28,6 +28,7 @@
     "react-scripts": "3.4.1",
     "react-thumbnail": "^1.0.0",
     "react-transition-group": "^4.4.1",
+    "react-virtualized": "^9.21.2",
     "yup": "^0.29.1"
   },
   "scripts": {

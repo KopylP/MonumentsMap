@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MonumentsMap.POCO;
+using MonumentsMap.Utilities;
+using SkiaSharp;
 
 namespace MonumentsMap.Services
 {
@@ -24,7 +26,8 @@ namespace MonumentsMap.Services
 
         private string GetDirPath(string subDir)
         {
-            string dirPath = _imageFilesParams.AbsolutePath switch {
+            string dirPath = _imageFilesParams.AbsolutePath switch
+            {
                 false => Path.Combine(_env.ContentRootPath, $"{_imageFilesParams.ImagesFolder}{Path.DirectorySeparatorChar}{subDir}"),
                 true => Path.Combine(_imageFilesParams.ImagesFolder, subDir)
             };
@@ -36,7 +39,7 @@ namespace MonumentsMap.Services
         {
             string dirPath = GetDirPath(subDir);
             DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
-            if(!dirInfo.Exists)
+            if (!dirInfo.Exists)
             {
                 dirInfo.Create();
             }
@@ -47,7 +50,7 @@ namespace MonumentsMap.Services
             }
         }
 
-        public (string fileType, FileStream image) FetchImage(string subDir, string fileName) 
+        public (string fileType, FileStream image) FetchImage(string subDir, string fileName)
         {
             string dirPath = GetDirPath(subDir);
             string path = Path.Combine(dirPath, fileName);
@@ -59,9 +62,18 @@ namespace MonumentsMap.Services
         {
             string dirPath = GetDirPath(subDir);
             DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
-            if(!dirInfo.Exists) return false;
+            if (!dirInfo.Exists) return false;
             dirInfo.Delete(true);
             return true;
+        }
+
+        public (string fileType, Stream image) GetImageThumbnail(string subDir, string fileName, int resizeWidth)
+        {
+            string dirPath = GetDirPath(subDir);
+            string path = Path.Combine(dirPath, fileName);
+            var stream = File.OpenRead(path);
+            var image = ImageUtility.GetIamgeThumbnail(stream, resizeWidth);
+            return ("image/jpeg", image);
         }
         #endregion
     }

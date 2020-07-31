@@ -26,7 +26,7 @@ export default function SelectLanguage(props) {
   ));
 
   return (
-    <div>
+    <React.Fragment>
       <Button
         color="secondary"
         aria-haspopup="true"
@@ -46,6 +46,6 @@ export default function SelectLanguage(props) {
       >
         {menuItems}
       </Menu>
-    </div>
+    </React.Fragment>
   );
 }
