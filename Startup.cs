@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MonumentsMap.Data;
 using MonumentsMap.Data.Repositories;
+using MonumentsMap.Filters;
 using MonumentsMap.Models;
 using MonumentsMap.POCO;
 using MonumentsMap.Services;
@@ -56,6 +57,7 @@ namespace MonumentsMap
             services.AddScoped<MonumentRepository>();
             services.AddScoped<IMonumentService, MonumentService>();
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
+            services.AddScoped<CultureCodeResourceFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

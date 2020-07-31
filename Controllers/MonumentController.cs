@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MonumentsMap.Data.Repositories;
+using MonumentsMap.Filters;
 using MonumentsMap.Models;
 using MonumentsMap.Services;
 using MonumentsMap.Services.Interfaces;
@@ -31,12 +32,13 @@ namespace MonumentsMap.Controllers
 
         #region metods
         [HttpGet("filter")]
+        [ServiceFilter(typeof(CultureCodeResourceFilter))]
         public async Task<IActionResult> Get
         (
             [FromQuery(Name = "statuses[]")] int[] statuses,
             [FromQuery(Name = "conditions[]")] int[] conditions,
             [FromQuery(Name = "cities[]")] int[] cities,
-            [FromQuery] string cultureCode = "uk-UA"
+            [FromQuery] string cultureCode
         )
         {
 

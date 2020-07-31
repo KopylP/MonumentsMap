@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MonumentsMap.Data;
 using MonumentsMap.Data.Repositories;
+using MonumentsMap.Filters;
 using MonumentsMap.Models;
 using MonumentsMap.ViewModels.LocalizedModels;
 using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
@@ -25,13 +26,15 @@ namespace MonumentsMap.Controllers
             this.localizedRepository = localizedRepository;
         }
         [HttpGet]
-        public async virtual Task<IActionResult> Get([FromQuery] string cultureCode = "uk-UA")
+        [ServiceFilter(typeof(CultureCodeResourceFilter))]
+        public async virtual Task<IActionResult> Get([FromQuery] string cultureCode)
         {
             var localizedEntities = await localizedRepository.GetAll(cultureCode);
             return Ok(localizedEntities);
         }
         [HttpGet("{id:int}")]
-        public async virtual Task<IActionResult> Get(int id, [FromQuery] string cultureCode = "uk-UA")
+        [ServiceFilter(typeof(CultureCodeResourceFilter))]
+        public async virtual Task<IActionResult> Get(int id, [FromQuery] string cultureCode)
         {
             var localizedEntity = await localizedRepository.Get(cultureCode, id);
             return Ok(localizedEntity);
