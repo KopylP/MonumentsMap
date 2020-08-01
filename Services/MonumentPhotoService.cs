@@ -37,7 +37,7 @@ namespace MonumentsMap.Services
             var monumentPhoto = await _monumentPhotoRepository.Get(monumentPhotoId);
             if (monumentPhoto == null) return null;
             var prevMonumentMajorPhoto = (await _monumentPhotoRepository
-                .Find(p => p.MajorPhoto && p.Id != monumentPhotoId))
+                .Find(p => p.MajorPhoto && p.Id != monumentPhotoId && p.MonumentId == monumentPhoto.MonumentId))
                 .FirstOrDefault();
             _monumentPhotoRepository.Commit = false;
             if (prevMonumentMajorPhoto != null)

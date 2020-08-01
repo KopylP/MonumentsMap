@@ -7,15 +7,7 @@ import { usePrevious } from "../../hooks/hooks";
 import { arraysEqual } from "../helpers/array-helpers";
 
 function Map({ onMonumentSelected = (p) => p }) {
-  const {
-    monumentService,
-    detailDrawerOpen,
-    selectedLanguage,
-    selectedConditions,
-    selectedCities,
-    selectedStatuses,
-  } = useContext(AppContext);
-  const [monuments, setMonuments] = useState([]);
+  const { detailDrawerOpen, monuments } = useContext(AppContext);
   const [markers, setMarkers] = useState([]);
   const mapRef = React.useRef(null);
 
@@ -23,28 +15,12 @@ function Map({ onMonumentSelected = (p) => p }) {
     mapRef.current.leafletElement.closePopup();
   };
 
-  const [cancelRequest, setCancelRequest] = useState(null);
-
-
-
   const [center, setCenter] = useState(defaultCity);
 
-  function executor(e) {
-    setCancelRequest({
-      cancel: e
-    });
-  }
-
-  const update = () => {
-    if(cancelRequest) {
-      cancelRequest.cancel();
-    }
-
-    monumentService
-      .getMonumentsByFilter(selectedCities.map(c => c.id), selectedStatuses, selectedConditions, executor)
-      .then((monuments) => {
-        setMonuments(monuments);
-        setMarkers(monuments.map((monument, i) => {
+  useEffect(() => {
+    if (typeof monuments !== "undefined") {
+      setMarkers(
+        monuments.map((monument, i) => {
           return (
             <MonumentMarker
               onClick={onMonumentSelected}
@@ -52,42 +28,10 @@ function Map({ onMonumentSelected = (p) => p }) {
               key={i}
             />
           );
-        }))
-      });
-  };
-
-  const prevSelectedLanguage = usePrevious(selectedLanguage);
-  const prevSelectedConditions = usePrevious(selectedConditions);
-  const prevSelectedCities = usePrevious(selectedCities);
-  const prevSelectedStatuses = usePrevious(selectedStatuses);
-
-  useEffect(() => {
-    if (
-      prevSelectedLanguage == null ||
-      selectedLanguage.code !== prevSelectedLanguage.code
-    )
-      update();
-  }, [selectedLanguage]);
-
-  useEffect(() => {
-    if(typeof prevSelectedConditions !== "undefined" && !arraysEqual(prevSelectedConditions, selectedConditions)){
-      update();
+        })
+      );
     }
-  }, [selectedConditions])
-
-  useEffect(() => {
-    if(typeof prevSelectedCities !== "undefined" && !arraysEqual(prevSelectedCities, selectedCities)){
-      update();
-    }
-    
-  }, [selectedCities])
-
-  useEffect(() => {
-    if(typeof prevSelectedStatuses !== "undefined" && !arraysEqual(prevSelectedStatuses, selectedStatuses)){
-      update();
-    }
-  }, [selectedStatuses])
-
+  }, [monuments]);
 
   useEffect(() => {
     if (detailDrawerOpen === false) closePopups();

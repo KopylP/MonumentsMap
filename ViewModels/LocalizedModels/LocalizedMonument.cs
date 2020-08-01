@@ -16,6 +16,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels
         public bool Accepted { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public int? MajorPhotoImageId { get; set; }
         public List<SourceViewModel> Sources { get; set; }
         public LocalizedCity City { get; set; }
         public LocalizedCondition Condition { get; set; }

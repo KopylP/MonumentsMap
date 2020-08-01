@@ -10,12 +10,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DetailYear({ year, period, ...props }) {
-  const styles = useStyles(props);
+export default function DetailYear({ year, period, textOnly = false }) {
+  const styles = useStyles();
   let dateText;
   switch (period) {
     case Period.StartOfCentury:
-      dateText = `Побудовано на початок ${year}-го століття`;
+      dateText = `Побудовано на початоку ${year}-го століття`;
       break;
     case Period.MiddleOfCentury:
       dateText = `Побудовано в середині ${year}-го століття`;
@@ -31,5 +31,5 @@ export default function DetailYear({ year, period, ...props }) {
       break;
   }
 
-  return <div className={styles.container}>{dateText}</div>;
+  return <div className={textOnly ? styles.container : ""}>{dateText}</div>;
 }

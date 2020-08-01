@@ -80,7 +80,8 @@ namespace MonumentsMap.Data.Repositories
                     ConditionId = p.ConditionId,
                     Accepted = p.Accepted,
                     Latitude = p.Latitude,
-                    Longitude = p.Longitude
+                    Longitude = p.Longitude,
+                    MajorPhotoImageId = p.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId
                 };
                 monument.Condition = conditionLocalizedRepository.Get(cultureCode, monument.ConditionId).Result;
                 if (!MinimizeResult)
@@ -99,13 +100,13 @@ namespace MonumentsMap.Data.Repositories
         {
             var result = source.Include(p => p.Name)
                 .ThenInclude(p => p.Localizations)
-                .Include(p => p.Status);
+                .Include(p => p.Status)
+                .Include(p => p.MonumentPhotos);
             if (!MinimizeResult)
             {
                 return result.Include(p => p.Description)
                     .ThenInclude(p => p.Localizations)
-                    .Include(p => p.Sources)
-                    .Include(p => p.MonumentPhotos);
+                    .Include(p => p.Sources);
             }
 
             return result;

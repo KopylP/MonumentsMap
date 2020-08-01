@@ -13,6 +13,8 @@ import { supportedCultures, serverHost } from "./config";
 import MonumentService from "./services/monument-service";
 import DetailDrawer from "./components/detail-drawer/detail-drawer";
 import GeocoderService from "./services/geocoder-service";
+import { usePrevious } from "./hooks/hooks";
+import { arraysEqual } from "./components/helpers/array-helpers";
 
 const theme = createMuiTheme({
   palette: {
@@ -55,6 +57,72 @@ function App(props) {
   const [selectedConditions, setSelectedConditions] = useState([]);
   const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [selectedCities, setSelectedCities] = useState([]);
+  const [monuments, setMonuments] = useState([]);
+
+  const prevSelectedLanguage = usePrevious(selectedLanguage);
+  const prevSelectedConditions = usePrevious(selectedConditions);
+  const prevSelectedCities = usePrevious(selectedCities);
+  const prevSelectedStatuses = usePrevious(selectedStatuses);
+
+  const [cancelRequest, setCancelRequest] = useState(null);
+
+  function executor(e) {
+    setCancelRequest({
+      cancel: e,
+    });
+  }
+
+  const update = () => {
+    if (cancelRequest) {
+      cancelRequest.cancel();
+    }
+
+    monumentService
+      .getMonumentsByFilter(
+        selectedCities.map((c) => c.id),
+        selectedStatuses,
+        selectedConditions,
+        executor
+      )
+      .then((monuments) => {
+        setMonuments(monuments);
+      });
+  };
+
+  useEffect(() => {
+    if (
+      prevSelectedLanguage == null ||
+      selectedLanguage.code !== prevSelectedLanguage.code
+    )
+      update();
+  }, [selectedLanguage]);
+
+  useEffect(() => {
+    if (
+      typeof prevSelectedConditions !== "undefined" &&
+      !arraysEqual(prevSelectedConditions, selectedConditions)
+    ) {
+      update();
+    }
+  }, [selectedConditions]);
+
+  useEffect(() => {
+    if (
+      typeof prevSelectedCities !== "undefined" &&
+      !arraysEqual(prevSelectedCities, selectedCities)
+    ) {
+      update();
+    }
+  }, [selectedCities]);
+
+  useEffect(() => {
+    if (
+      typeof prevSelectedStatuses !== "undefined" &&
+      !arraysEqual(prevSelectedStatuses, selectedStatuses)
+    ) {
+      update();
+    }
+  }, [selectedStatuses]);
 
   useEffect(() => {
     const userCultureIndex = supportedCultures.findIndex(
@@ -93,6 +161,7 @@ function App(props) {
     setSelectedCities,
     selectedStatuses,
     setSelectedStatuses,
+    monuments,
   };
 
   return (

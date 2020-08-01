@@ -17,6 +17,7 @@ import SelectLanguage from "../../select-language/select-language";
 import AppContext from "../../../context/app-context";
 import { usePrevious } from "../../../hooks/hooks";
 import MonumentListAdminPanel from "../../admin-panels/monument-list-admin-panel/monument-list-admin-panel";
+import MainMonumentList from "./main-monument-list/main-monument-list";
 
 const useStyles = makeStyles((theme) => ({
   colorWhite: {
@@ -56,6 +57,7 @@ export default function DrawerContent(props) {
     setSelectedCities,
     selectedStatuses,
     setSelectedStatuses,
+    monuments
   } = useContext(AppContext);
 
   const [cities, setCities] = useState([]);
@@ -136,8 +138,8 @@ export default function DrawerContent(props) {
   };
 
   return (
-    <div style={{ flexGrow: 1, padding: 15 }}>
-      <Grid container vertical spacing={1}>
+    <div style={{ flex: "1 1 auto", padding: 15, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+      <Grid container vertical justify="flex-start" spacing={1}>
         <Grid item xs="12">
           <MonumentListAdminPanel />
         </Grid>
@@ -153,7 +155,7 @@ export default function DrawerContent(props) {
             multiple
             onChange={onSelectedCitiesChange}
             renderInput={(params) => (
-              <TextField {...params} label="Місто" margin="normal" />
+              <TextField {...params} label="Місто" margin="normal" style={{margin: 0}}/>
             )}
           />
         </Grid>
@@ -210,6 +212,9 @@ export default function DrawerContent(props) {
           <AddIcon className={classes.colorWhite} />
         </Fab>
       </Grid>
+      <div style={{ width: "100%", flex: "1 1 auto", marginTop: 15 }}>
+        <MainMonumentList data={monuments}/>
+      </div>
     </div>
   );
 }
