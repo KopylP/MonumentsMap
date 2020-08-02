@@ -19,7 +19,7 @@ export default function MainMonumentListItem({ monument }) {
         <ListItemAvatar>
           {monument.majorPhotoImageId ? (
             <Avatar
-              src={monumentService.getPhotoLink(monument.majorPhotoImageId)}
+              src={monumentService.getPhotoLink(monument.majorPhotoImageId, 100)}
               alt={"photo"}
             />
           ) : null}

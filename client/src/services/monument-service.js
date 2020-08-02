@@ -150,8 +150,8 @@ export default class MonumentService {
     return await this._getRequest(`monument/${monumentId}/monumentPhotos`);
   };
 
-  getPhotoLink = (photoId) => {
-    return `${this._baseURL}photo/${photoId}/image`;
+  getPhotoLink = (photoId, size) => {
+    return `${this._baseURL}photo/${photoId}/image${ size ? "/" + size : "" }`;
   };
 
   getMonumentMonumentPhotoEditable = async (monumentPhotoId) => {
