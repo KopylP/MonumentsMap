@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,8 @@ namespace MonumentsMap.Models
         public bool Accepted { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         #endregion
         #region lazy props
         [ForeignKey("CityId")]

@@ -81,6 +81,8 @@ namespace MonumentsMap.Data.Repositories
                     Accepted = p.Accepted,
                     Latitude = p.Latitude,
                     Longitude = p.Longitude,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt,
                     MajorPhotoImageId = p.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId
                 };
                 monument.Condition = conditionLocalizedRepository.Get(cultureCode, monument.ConditionId).Result;

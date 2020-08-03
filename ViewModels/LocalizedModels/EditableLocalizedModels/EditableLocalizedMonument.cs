@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MonumentsMap.Models;
 
@@ -25,6 +26,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
                 monument.Description?.Localizations?.Clear();
                 monument.Name?.Localizations?.Clear();
                 monument.Sources?.Clear();
+                monument.UpdatedAt = DateTime.Now;
             }
             else
             {
@@ -38,7 +40,9 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
                     {
                         Localizations = new List<Localization>()
                     },
-                    Sources = new List<Source>()
+                    Sources = new List<Source>(),
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
                 };
             }
             monument.Year = this.Year;
