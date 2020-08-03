@@ -9,7 +9,7 @@ import MainDrawer from "./components/drawer/main-drawer";
 import AppContext from "./context/app-context";
 import MenuButton from "./components/common/menu-button/menu-button";
 import Map from "./components/map/map";
-import { supportedCultures, serverHost } from "./config";
+import { supportedCultures, serverHost, defaultCity } from "./config";
 import MonumentService from "./services/monument-service";
 import DetailDrawer from "./components/detail-drawer/detail-drawer";
 import GeocoderService from "./services/geocoder-service";
@@ -58,6 +58,7 @@ function App(props) {
   const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [selectedCities, setSelectedCities] = useState([]);
   const [monuments, setMonuments] = useState([]);
+  const [center, setCenter] = useState(defaultCity);
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
   const prevSelectedConditions = usePrevious(selectedConditions);
@@ -162,6 +163,8 @@ function App(props) {
     selectedStatuses,
     setSelectedStatuses,
     monuments,
+    center,
+    setCenter,
   };
 
   return (
@@ -172,7 +175,7 @@ function App(props) {
             <div className={classes.mapContainer}>
               <Map
                 onMonumentSelected={(monumentId) =>
-                  setSelectedMonument({ id: monumentId })
+                  setSelectedMonument({ id: monumentId })//TODO Move to map.js
                 }
               />
             </div>

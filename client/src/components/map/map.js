@@ -2,20 +2,22 @@ import React, { useState, useEffect, useContext } from "react";
 import { Map as LeafMap, TileLayer, Marker, Popup } from "react-leaflet";
 import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
-import { defaultCity, defaultZoom, accessToken } from "../../config";
+import { defaultZoom, accessToken } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
-import { arraysEqual } from "../helpers/array-helpers";
+import MapContext from "../../context/map-context";
 
 function Map({ onMonumentSelected = (p) => p }) {
-  const { detailDrawerOpen, monuments } = useContext(AppContext);
+  const { detailDrawerOpen, monuments, center, setCenter, selectedMonument } = useContext(AppContext);
   const [markers, setMarkers] = useState([]);
   const mapRef = React.useRef(null);
+  const prevCenter = usePrevious(center);
+  const [moveCenterAnimation, setMoveCenterAnimation] = useState(false);
+  const [mapSelectedMonumentId, setMapSelectedMonumentId] = useState(null);
 
   const closePopups = () => {
     mapRef.current.leafletElement.closePopup();
   };
 
-  const [center, setCenter] = useState(defaultCity);
 
   useEffect(() => {
     if (typeof monuments !== "undefined") {
@@ -25,6 +27,7 @@ function Map({ onMonumentSelected = (p) => p }) {
             <MonumentMarker
               onClick={onMonumentSelected}
               monument={monument}
+              selectedMonumentId={selectedMonument && selectedMonument.id}
               key={i}
             />
           );
@@ -37,10 +40,26 @@ function Map({ onMonumentSelected = (p) => p }) {
     if (detailDrawerOpen === false) closePopups();
   }, [detailDrawerOpen]);
 
+  useEffect(() => {
+    if(typeof prevCenter !== "undefined")
+    {
+      setMoveCenterAnimation(true);
+    }
+    console.log(center);
+  }, [center]);
+
+  const handleMoveEnd = (e) => {
+    if(moveCenterAnimation === true) {
+      setMoveCenterAnimation(false);
+      setMapSelectedMonumentId(selectedMonument.id);
+    }
+  }
+
   return (
     <LeafMap
       center={center}
       animate
+      onmoveend={handleMoveEnd}
       zoom={defaultZoom}
       style={{ width: "100%", height: "100vh" }}
       ref={mapRef}
@@ -49,7 +68,9 @@ function Map({ onMonumentSelected = (p) => p }) {
         attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
         url={`https://tile.jawg.io/13da1c9b-4dd5-4a96-84a0-d0464fc95920/{z}/{x}/{y}.png?access-token=${accessToken}`}
       />
-      {markers}
+      <MapContext.Provider value={{mapSelectedMonumentId}}>
+        {markers}
+      </MapContext.Provider>
     </LeafMap>
   );
 }

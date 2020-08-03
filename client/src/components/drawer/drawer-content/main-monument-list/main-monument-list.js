@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useContext } from "react";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
 import { List as MaterialList } from "@material-ui/core";
 import { List, AutoSizer } from "react-virtualized";
 import MainMonumentListItem from "./main-monument-list-item/main-monument-list-item";
 import ScrollBar from "../../../common/scroll-bar/scroll-bar";
+import AppContext from "../../../../context/app-context";
 
 function MainMonumentList({ data }) {
+
+  const { setCenter, setSelectedMonument } = useContext(AppContext);
+
+  const onMonumentItemClick = (monument) => {
+    setCenter({
+      lat: monument.latitude,
+      lng: monument.longitude,
+    });
+    setSelectedMonument({id: monument.id});
+  };
+
   const renderRow = ({ index, key, style }) => {
     return (
-      <MainMonumentListItem key={key} monument={data[index]} style={style} />
+      <MainMonumentListItem
+        key={key}
+        monument={data[index]}
+        style={style}
+        onClick={() => onMonumentItemClick(data[index])}
+      />
     );
   };
 
@@ -31,7 +48,7 @@ function MainMonumentList({ data }) {
                 rowRenderer={renderRow}
                 rowCount={data.length}
                 overscanRowCount={3}
-                style={{outline: "none"}}
+                style={{ outline: "none" }}
               />
             </ScrollBar>
           );
