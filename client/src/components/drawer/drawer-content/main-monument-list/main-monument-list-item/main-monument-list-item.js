@@ -10,11 +10,11 @@ import {
 import AppContext from "../../../../../context/app-context";
 import DetailYear from "../../../../detail-drawer/detail-year/detail-year";
 
-export default function MainMonumentListItem({ monument }) {
+export default function MainMonumentListItem({ monument, style }) {
   const { monumentService } = useContext(AppContext);
 
   return (
-    <div>
+    <div style={style}>
       <ListItem disableGutters button>
         <ListItemAvatar>
           {monument.majorPhotoImageId ? (
