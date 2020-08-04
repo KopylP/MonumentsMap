@@ -16,10 +16,8 @@ function Map({ onMonumentSelected = (p) => p }) {
   } = useContext(AppContext);
   const [markers, setMarkers] = useState([]);
   const mapRef = React.useRef(null);
-  const prevCenter = usePrevious(center);
-  const [moveCenterAnimation, setMoveCenterAnimation] = useState(false);
   const [mapSelectedMonumentId, setMapSelectedMonumentId] = useState(null);
-  const [mapBounds, setMapBounds] = useState(null);
+  const prevCenter = usePrevious(center);
 
   const closePopups = () => {
     mapRef.current.leafletElement.closePopup();
@@ -47,31 +45,29 @@ function Map({ onMonumentSelected = (p) => p }) {
   }, [detailDrawerOpen]);
 
   useEffect(() => {
-    if (typeof prevCenter !== "undefined") {
-      if (prevCenter.lat !== center.lat && prevCenter.lng !== center.lng)
-        setMoveCenterAnimation(true);
-      else
-        setCenter({
-          lat: center.lat + 0.000000001,
-          lng: center.lng + 0.000000001,
-        });
+    if(typeof prevCenter !== "undefined" && prevCenter.lat === center.lat && prevCenter.lng === center.lng) {
+      setCenter({
+        lat: center.lat + 0.0000001, //Костыль
+        lng: center.lng + 0.0000001 //Костыль
+      })
     }
-    console.log(center);
   }, [center]);
 
-  const handleMoveEnd = (e) => {
-    if (moveCenterAnimation === true) {
-      setMoveCenterAnimation(false);
-      setMapSelectedMonumentId(selectedMonument.id);
+  useEffect(() => {
+    if(selectedMonument.showPopup) {
+      setMapSelectedMonumentId({ id: selectedMonument.id });
     }
-  };
+  }, [selectedMonument]);
+
 
   return (
     <LeafMap
       center={center}
       animate
       duration={0.2}
-      onmoveend={handleMoveEnd}
+      onpopupclose={() => {
+        setMapSelectedMonumentId(null);
+      }}
       zoom={defaultZoom}
       style={{ width: "100%", height: "100vh" }}
       ref={mapRef}
@@ -80,7 +76,7 @@ function Map({ onMonumentSelected = (p) => p }) {
         attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
         url={`https://tile.jawg.io/13da1c9b-4dd5-4a96-84a0-d0464fc95920/{z}/{x}/{y}.png?access-token=${accessToken}`}
       />
-      <MapContext.Provider value={{ mapSelectedMonumentId, mapBounds }}>
+      <MapContext.Provider value={{ mapSelectedMonumentId }}>
         {markers}
       </MapContext.Provider>
     </LeafMap>

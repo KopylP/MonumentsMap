@@ -16,8 +16,8 @@ function MainMonumentList({ data }) {
       lng: monument.longitude,
     });
     setTimeout(() => {
-      setSelectedMonument({id: monument.id});
-    }, 220)//TODO detail drawer animation duration (make constant)
+      setSelectedMonument({id: monument.id, showPopup: true});
+    }, 250)//Wait, until map animation ends 
   };
 
   const renderRow = ({ index, key, style }) => {

@@ -8,12 +8,18 @@ import MapContext from "../../../context/map-context";
 
 export default function MonumentMarker({ monument, onClick = (p) => p }) {
   let markerColor;
-  const { mapSelectedMonumentId, mapBounds } = useContext(MapContext);
+  const { mapSelectedMonumentId } = useContext(MapContext);
+  const prevMapSelectedMonumentId = usePrevious(mapSelectedMonumentId);
 
   const markerRef = useRef(null);
 
   useEffect(() => {
-    if(mapSelectedMonumentId === monument.id ) {
+    console.log("mapSelectedMonumentId", mapSelectedMonumentId);
+    if (
+      mapSelectedMonumentId != null &&
+      mapSelectedMonumentId !== prevMapSelectedMonumentId &&
+      mapSelectedMonumentId.id === monument.id
+    ) {
       markerRef.current.leafletElement.openPopup();
     }
   }, [mapSelectedMonumentId]);
