@@ -8,6 +8,11 @@ import { usePrevious } from "../../hooks/hooks";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ScrollBar from "../common/scroll-bar/scroll-bar";
 import DetailDrawerContext from "./context/detail-drawer-context";
+import {
+  BrowserRouter as Router,
+  useHistory,
+  useParams,
+} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -27,64 +32,89 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DetailDrawer(props) {
   const classes = useStyles(props);
-  const { selectedMonument, monumentService, detailDrawerOpen, setDetailDrawerOpen } = useContext(AppContext);
+  const {
+    monumentService,
+    detailDrawerOpen,
+    setDetailDrawerOpen,
+    selectedMonument,
+    setSelectedMonument,
+    setCenter,
+  } = useContext(AppContext);
   const [monument, setMonument] = useState(null);
+  const { monumentId } = useParams();
+  const history = useHistory();
+
+  const onMonumentLoad = (monument) => {
+    ((monument) => {
+      centerMap(monument);
+      setTimeout(() => {
+        setMonument(monument);
+      }, 200);
+    })(monument);
+  };
+
+  //change selectedMonument to open popup on the map
+  const centerMap = (monument) => {
+    if (monument != null && selectedMonument.id !== monument.id) {
+      setSelectedMonument({ id: monument.id });
+      setCenter({
+        lat: monument.latitude,
+        lng: monument.longitude,
+      });
+    }
+  };
+  //---/end/----//
 
   const loadMonument = () => {
-    monumentService
-      .getMonumentById(selectedMonument.id)
-      .then((monument) => {
-        ((monument) => {
-          setTimeout(() => {
-            setMonument(monument);
-          }, 200);
-        })(monument);
-      })
-      .catch(); //TODO handle error
+    monumentService.getMonumentById(monumentId).then(onMonumentLoad).catch(); //TODO handle error
   };
 
   const onPhotoSave = (monumentPhoto) => {
     console.log(monumentPhoto);
   };
 
-  const prevSelectedMonument = usePrevious(selectedMonument);
+  const prevMonumentId = usePrevious(monumentId);
 
   useEffect(() => {
     if (
-      selectedMonument.id !== 0 &&
-      (prevSelectedMonument.id !== selectedMonument.id || detailDrawerOpen === false)
+      monumentId !== 0 &&
+      (prevMonumentId !== monumentId || detailDrawerOpen === false)
     ) {
       setMonument(null);
       setDetailDrawerOpen(true);
       loadMonument();
-    } else if (selectedMonument.id === 0) {
-      setMonument(null);
     }
-  }, [selectedMonument]);
+  }, [monumentId]);
 
   return (
-    <Drawer
-      className={classes.drawerClass}
-      variant="persistent"
-      anchor="left"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      open={detailDrawerOpen}
-    >
-      <DetailDrawerContext.Provider value={{ onPhotoSave }}>
-        <ScrollBar>
-          <DrawerContainer>
-            <DetailDrawerHeader
-              monument={monument}
-              onBack={() => {
-                setDetailDrawerOpen(false);
-              }}
-            />
-            <DetailDrawerContent monument={monument} />
-          </DrawerContainer>
-        </ScrollBar>
-      </DetailDrawerContext.Provider>
-    </Drawer>
+    <React.Fragment>
+      <Drawer
+        className={classes.drawerClass}
+        variant="persistent"
+        anchor="left"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+        transitionDuration={200}
+        open={detailDrawerOpen}
+      >
+        <DetailDrawerContext.Provider value={{ onPhotoSave }}>
+          <ScrollBar>
+            <DrawerContainer>
+              <DetailDrawerHeader
+                monument={monument}
+                onBack={() => {
+                  setDetailDrawerOpen(false);
+                  setTimeout(() => {
+                    history.replace("/");
+                  }, 200);
+                }}
+              />
+              <DetailDrawerContent monument={monument} />
+            </DrawerContainer>
+          </ScrollBar>
+        </DetailDrawerContext.Provider>
+      </Drawer>
+    </React.Fragment>
   );
 }

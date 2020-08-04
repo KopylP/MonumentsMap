@@ -8,7 +8,7 @@ import MapContext from "../../../context/map-context";
 
 export default function MonumentMarker({ monument, onClick = (p) => p }) {
   let markerColor;
-  const { mapSelectedMonumentId } = useContext(MapContext);
+  const { mapSelectedMonumentId, mapBounds } = useContext(MapContext);
 
   const markerRef = useRef(null);
 

@@ -12,7 +12,7 @@ const defaultCity = {
     lng: 34.5507948, //center point of default city
 }
 
-const defaultZoom = 14;
+const defaultZoom = 16;
 
 const accessToken = "6gbhT4C7Kpj0YRx9mqPWxoZA2IhKXCDTk2L0wFHSurl2EtAxvun10VOtpLfS9rTX";
 

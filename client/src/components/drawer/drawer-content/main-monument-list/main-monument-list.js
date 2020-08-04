@@ -15,7 +15,9 @@ function MainMonumentList({ data }) {
       lat: monument.latitude,
       lng: monument.longitude,
     });
-    setSelectedMonument({id: monument.id});
+    setTimeout(() => {
+      setSelectedMonument({id: monument.id});
+    }, 220)//TODO detail drawer animation duration (make constant)
   };
 
   const renderRow = ({ index, key, style }) => {
