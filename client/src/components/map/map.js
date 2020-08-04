@@ -64,7 +64,7 @@ function Map({ onMonumentSelected = (p) => p }) {
     <LeafMap
       center={center}
       animate
-      duration={0.2}
+      duration={0.1}
       onpopupclose={() => {
         setMapSelectedMonumentId(null);
       }}
