@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Fab from "@material-ui/core/Fab";
-import { makeStyles, Input } from "@material-ui/core";
+import { makeStyles, Input, Box } from "@material-ui/core";
 
 import {
   Grid,
@@ -212,9 +212,9 @@ export default function DrawerContent(props) {
           <AddIcon className={classes.colorWhite} />
         </Fab>
       </Grid>
-      <div style={{ width: "100%", flex: "1 1 auto", marginTop: 15 }}>
+      <Box component="div" display={{ xs: 'none', sm: 'block' }} style={{ width: "100%", flex: "1 1 auto", marginTop: 15 }}>
         <MainMonumentList data={monuments}/>
-      </div>
+      </Box>
     </div>
   );
 }

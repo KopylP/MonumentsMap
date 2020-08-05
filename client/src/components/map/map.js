@@ -5,6 +5,7 @@ import MonumentMarker from "./marker/monument-marker";
 import { defaultZoom, accessToken } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
+import { LatLng } from "leaflet";
 
 function Map({ onMonumentSelected = (p) => p }) {
   const {
@@ -17,26 +18,38 @@ function Map({ onMonumentSelected = (p) => p }) {
   const [markers, setMarkers] = useState([]);
   const mapRef = React.useRef(null);
   const [mapSelectedMonumentId, setMapSelectedMonumentId] = useState(null);
+  const [viewPortChange, setViewPortChange] = useState(false);
   const prevCenter = usePrevious(center);
+
+  const [monumentWithPopupId, setMonumentWithPopupId] = useState(null);
 
   const closePopups = () => {
     mapRef.current.leafletElement.closePopup();
+    setMonumentWithPopupId(null);
+  };
+
+  const getVisibleMonumentMarkers = () => {
+    return monuments
+      .filter((monument) => {
+        const latLng = new LatLng(monument.latitude, monument.longitude);
+        const markerOnMap = mapRef.current.leafletElement.getBounds().contains(latLng);
+        return markerOnMap;
+      })
+      .map((monument, i) => {
+        return (
+          <MonumentMarker
+            onClick={(e) => {setMonumentWithPopupId(e); onMonumentSelected(e)}}
+            monument={monument}
+            selectedMonumentId={selectedMonument && selectedMonument.id}
+            key={monument.id}
+          />
+        );
+      });
   };
 
   useEffect(() => {
     if (typeof monuments !== "undefined") {
-      setMarkers(
-        monuments.map((monument, i) => {
-          return (
-            <MonumentMarker
-              onClick={onMonumentSelected}
-              monument={monument}
-              selectedMonumentId={selectedMonument && selectedMonument.id}
-              key={i}
-            />
-          );
-        })
-      );
+      setMarkers(getVisibleMonumentMarkers());
     }
   }, [monuments]);
 
@@ -45,26 +58,41 @@ function Map({ onMonumentSelected = (p) => p }) {
   }, [detailDrawerOpen]);
 
   useEffect(() => {
-    if(typeof prevCenter !== "undefined" && prevCenter.lat === center.lat && prevCenter.lng === center.lng) {
+    if (
+      typeof prevCenter !== "undefined" &&
+      prevCenter.lat === center.lat &&
+      prevCenter.lng === center.lng
+    ) {
       setCenter({
         lat: center.lat + 0.0000001, //Костыль
-        lng: center.lng + 0.0000001 //Костыль
-      })
+        lng: center.lng + 0.0000001, //Костыль
+      });
     }
   }, [center]);
 
   useEffect(() => {
-    if(selectedMonument.showPopup) {
+    if (selectedMonument.showPopup) {
       setMapSelectedMonumentId({ id: selectedMonument.id });
     }
   }, [selectedMonument]);
 
+  const onViewPortChange = () => {
+    if(viewPortChange === false) {
+      setViewPortChange(true);
+      setMarkers(getVisibleMonumentMarkers());
+      setTimeout(() => {
+        setViewPortChange(false);
+      }, 100);
+    }
+  }
 
   return (
     <LeafMap
       center={center}
       animate
       duration={0.1}
+      onmove={onViewPortChange}
+      preferCanvas
       onpopupclose={() => {
         setMapSelectedMonumentId(null);
       }}
