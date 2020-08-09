@@ -76,13 +76,18 @@ function Map({ onMonumentSelected = (p) => p }) {
     }
   }, [selectedMonument]);
 
+
+  const updateMarkers = () => {
+    setMarkers(getVisibleMonumentMarkers());
+  }
+
   const onViewPortChange = () => {
     if(viewPortChange === false) {
       setViewPortChange(true);
-      setMarkers(getVisibleMonumentMarkers());
+      updateMarkers();
       setTimeout(() => {
         setViewPortChange(false);
-      }, 100);
+      }, 150);
     }
   }
 
@@ -91,7 +96,8 @@ function Map({ onMonumentSelected = (p) => p }) {
       center={center}
       animate
       duration={0.1}
-      onmove={onViewPortChange}
+      onViewportChange={onViewPortChange}
+      onmoveend={updateMarkers}
       preferCanvas
       onpopupclose={() => {
         setMapSelectedMonumentId(null);

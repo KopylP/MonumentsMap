@@ -13,6 +13,8 @@ import {
   useHistory,
   useParams,
 } from "react-router-dom";
+import PhotosDialog from "../photos-dialog/photos-dialog";
+import PhotoLightbox from "../photos-dialog/photo-lightbox/photo-lightbox";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -86,6 +88,14 @@ export default function DetailDrawer(props) {
     }
   }, [monumentId]);
 
+  const [photoDialogOpen, setPhotoDialogOpen] = useState(false);
+  const [selectedMonumentPhotoId, setSelectedMonumentPhotoId] = useState(null);
+
+  const onMonumentPhotoClicked = (monumentPhoto) => {
+    setSelectedMonumentPhotoId(monumentPhoto.id);
+    setPhotoDialogOpen(true);
+  };
+
   return (
     <React.Fragment>
       <Drawer
@@ -109,11 +119,23 @@ export default function DetailDrawer(props) {
                     history.replace("/");
                   }, 200);
                 }}
+                onMonumentPhotoClicked={onMonumentPhotoClicked}
               />
               <DetailDrawerContent monument={monument} />
             </DrawerContainer>
           </ScrollBar>
         </DetailDrawerContext.Provider>
+        {monument ? (
+          <React.Fragment>
+            {/* <PhotosDialog
+              open={photoDialogOpen}
+              firstMonumentPhotoId={selectedMonumentPhotoId}
+              setOpen={setPhotoDialogOpen}
+              monumentPhotos={monument.monumentPhotos}
+            /> */}
+            <PhotoLightbox open={photoDialogOpen} setOpen={setPhotoDialogOpen} monumentPhotos={monument.monumentPhotos}/>
+          </React.Fragment>
+        ) : null}
       </Drawer>
     </React.Fragment>
   );

@@ -15,12 +15,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DetailDrawerHeader({monument, onBack = p => p, ...props}) {
-  const classes = useStyles(props);
+export default function DetailDrawerHeader({monument, onBack = p => p, onMonumentPhotoClicked = p => p}) {
+  const classes = useStyles();
   return (
     <div className={classes.imagesContainer}>
       <DrawerBackButton onClick={onBack} />
-      <PhotoCarousel data={monument && monument.monumentPhotos}/>
+      <PhotoCarousel data={monument && monument.monumentPhotos} onMonumentPhotoClicked={onMonumentPhotoClicked}/>
     </div>
   );
 }

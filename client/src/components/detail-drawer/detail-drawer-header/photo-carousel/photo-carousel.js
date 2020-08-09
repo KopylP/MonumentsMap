@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PhotoCarousel({ data, ...props }) {
+function PhotoCarousel({ data, onMonumentPhotoClicked = p => p }) {
   const { monumentService } = useContext(AppContext);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const styles = useStyles(props);
+  const styles = useStyles();
   const theme = useTheme();
 
   const sortedPhotos = data.sort((a, b) => {
@@ -54,7 +54,7 @@ function PhotoCarousel({ data, ...props }) {
     >
       <Slider className={styles.slider}>
         {sortedPhotos.map((monumentPhoto, i) => (
-          <Slide index={i} onBlur={(e) => console.log(e)}>
+          <Slide index={i} onClick={_ => onMonumentPhotoClicked(monumentPhoto)}>
             <img
               className={styles.img}
               src={monumentService.getPhotoLink(monumentPhoto.photoId)}
