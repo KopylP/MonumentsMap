@@ -15,6 +15,8 @@ import {
 } from "react-router-dom";
 import PhotosDialog from "../photos-dialog/photos-dialog";
 import PhotoLightbox from "../photos-dialog/photo-lightbox/photo-lightbox";
+import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
+import zIndex from "@material-ui/core/styles/zIndex";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -89,10 +91,20 @@ export default function DetailDrawer(props) {
   }, [monumentId]);
 
   const [photoDialogOpen, setPhotoDialogOpen] = useState(false);
-  const [selectedMonumentPhotoId, setSelectedMonumentPhotoId] = useState(null);
+  const [selectedMonumentPhotoIndex, setSelectedMonumentPhotoIndex] = useState(
+    0
+  );
+  // const [monumentPhotos, setMonumentPhotos] = useState([]); //for image lightbox
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImageSlide, setCurrentImageSlide] = useState(0);
 
   const onMonumentPhotoClicked = (monumentPhoto) => {
-    setSelectedMonumentPhotoId(monumentPhoto.id);
+    let index = monument.monumentPhotos.findIndex(
+      (p) => p.id === monumentPhoto.id
+    );
+    index = index >= 0 ? index : 0;
+    setCurrentImageIndex(index);
+    setSelectedMonumentPhotoIndex(index);
     setPhotoDialogOpen(true);
   };
 
@@ -105,38 +117,38 @@ export default function DetailDrawer(props) {
         classes={{
           paper: classes.drawerPaper,
         }}
+        style={{zIndex: 1000}}
         transitionDuration={200}
         open={detailDrawerOpen}
       >
         <DetailDrawerContext.Provider value={{ onPhotoSave }}>
+          <DrawerBackButton
+            onClick={() => {
+              setDetailDrawerOpen(false);
+              setTimeout(() => {
+                history.replace("/");
+              }, 200);
+            }}
+          />
           <ScrollBar>
             <DrawerContainer>
               <DetailDrawerHeader
                 monument={monument}
-                onBack={() => {
-                  setDetailDrawerOpen(false);
-                  setTimeout(() => {
-                    history.replace("/");
-                  }, 200);
-                }}
                 onMonumentPhotoClicked={onMonumentPhotoClicked}
               />
               <DetailDrawerContent monument={monument} />
             </DrawerContainer>
           </ScrollBar>
         </DetailDrawerContext.Provider>
-        {monument ? (
-          <React.Fragment>
-            {/* <PhotosDialog
-              open={photoDialogOpen}
-              firstMonumentPhotoId={selectedMonumentPhotoId}
-              setOpen={setPhotoDialogOpen}
-              monumentPhotos={monument.monumentPhotos}
-            /> */}
-            <PhotoLightbox open={photoDialogOpen} setOpen={setPhotoDialogOpen} monumentPhotos={monument.monumentPhotos}/>
-          </React.Fragment>
-        ) : null}
       </Drawer>
+      {monument ? (
+        <PhotoLightbox
+          open={photoDialogOpen}
+          setOpen={setPhotoDialogOpen}
+          monumentPhotos={monument.monumentPhotos}
+          selectedIndex={selectedMonumentPhotoIndex}
+        />
+      ) : null}
     </React.Fragment>
   );
 }

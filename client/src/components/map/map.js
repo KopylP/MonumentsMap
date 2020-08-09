@@ -97,6 +97,7 @@ function Map({ onMonumentSelected = (p) => p }) {
       animate
       duration={0.1}
       onViewportChange={onViewPortChange}
+      onViewportChanged={updateMarkers}
       onmoveend={updateMarkers}
       preferCanvas
       onpopupclose={() => {

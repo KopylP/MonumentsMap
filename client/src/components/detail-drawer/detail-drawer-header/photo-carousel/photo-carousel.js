@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 
 function PhotoCarousel({ data, onMonumentPhotoClicked = p => p }) {
   const { monumentService } = useContext(AppContext);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const styles = useStyles();
   const theme = useTheme();
 

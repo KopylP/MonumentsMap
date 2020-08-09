@@ -1,9 +1,9 @@
 import React, { useContext, useRef, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import AppContext from "../../../context/app-context";
-import Lightbox from "react-spring-lightbox";
-import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
-import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
+import "./photo-lightbox.css";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,39 +22,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PhotoLightbox({ monumentPhotos, open, setOpen }) {
+export default function PhotoLightbox({
+  monumentPhotos,
+  open,
+  setOpen,
+  selectedIndex,
+  onChangePhoto,
+}) {
   const classes = useStyles();
   const { monumentService } = useContext(AppContext);
-  const images = monumentPhotos.map((monumentPhoto) => ({
-    src: monumentService.getPhotoLink(monumentPhoto.id),
-    alt: "photo",
-  }));
-  const [currentImageIndex, setCurrentIndex] = useState(0);
+  const images = monumentPhotos.map((monumentPhoto) => monumentService.getPhotoLink(monumentPhoto.id));
 
-  const gotoPrevious = () =>
-    currentImageIndex > 0 && setCurrentIndex(currentImageIndex - 1);
-
-  const gotoNext = () =>
-    currentImageIndex + 1 < monumentPhotos.length &&
-    setCurrentIndex(currentImageIndex + 1);
+  const [photoIndex, setPhotoIndex] = useState(0);
 
   return (
-    <Lightbox
-      renderHeader={() => (
-        <DrawerBackButton
-          attachTo="left"
-          onClick={() => {
-            setOpen(false);
-          }}
+    <React.Fragment>
+      {open ? (
+        <Lightbox
+          mainSrc={images[photoIndex]}
+          nextSrc={(photoIndex + 1) === images.length ? null : images[photoIndex + 1]}
+          prevSrc={photoIndex === 0 ? null : images[photoIndex -1]}
+          onCloseRequest={() => setOpen(false)}
+          onMovePrevRequest={() =>
+            setPhotoIndex((photoIndex + images.length - 1) % images.length)
+          }
+          onMoveNextRequest={() =>
+            setPhotoIndex((photoIndex + 1) % images.length)
+          }
         />
-      )}
-      isOpen={open}
-      onClose={() => setOpen(false)}
-      onPrev={gotoPrevious}
-      onNext={gotoNext}
-      images={images}
-      style={{ zIndex: 1300, backgroundColor: "black" }}
-      currentIndex={currentImageIndex}
-    />
+      ) : null}
+    </React.Fragment>
   );
 }
