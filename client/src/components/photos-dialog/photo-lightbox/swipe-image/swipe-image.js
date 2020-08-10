@@ -9,7 +9,6 @@ export default function SwipeImage({ src, onSizeChanged = (p) => p }) {
       <PinchZoomImageContainer>
         <PinchZoomImage
           onSizeChanged={onSizeChanged}
-          // src="http://picsum.photos/700/700"
           src={src}
         />
       </PinchZoomImageContainer>
