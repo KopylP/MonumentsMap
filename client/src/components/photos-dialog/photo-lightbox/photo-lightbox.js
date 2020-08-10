@@ -14,7 +14,7 @@ export default function PhotoLightbox({
 }) {
   const { monumentService } = useContext(AppContext);
   const images = monumentPhotos.map((monumentPhoto) =>
-    monumentService.getPhotoLink(monumentPhoto.id, 800)
+    monumentService.getPhotoLink(monumentPhoto.id, 700)
   );
 
   const Transition = React.forwardRef(function Transition(props, ref) {

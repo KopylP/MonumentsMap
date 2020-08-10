@@ -50,11 +50,13 @@ export default function SwipeImageCarousel({ images, initIndex }) {
         enableMouseEvents
         disabled={!swipeEnabled}
         index={viewIndex}
+        hysteresis={0.4}
         onChangeIndex={handleChangeIndex}
         slideCount={images.length}
         cols={1}
+        threshold={10}
         containerStyle={{
-          minHeight: isMobile ? "-webkit-fill-available": "100vh"
+          height: isMobile ? "-webkit-fill-available": "100vh"
         }}
         slideRenderer={slideRenderer}
       />

@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MonumentsMap.Data.Repositories;
 using MonumentsMap.Models;
 using MonumentsMap.Services;
@@ -14,13 +16,15 @@ namespace MonumentsMap.Controllers
         #region private fields
         private PhotoRepository _photoRepository;
         private PhotoService _photoService;
+        private ILogger<Startup> _logger;
         #endregion
 
         #region constructor
-        public PhotoController(PhotoRepository photoRepository, PhotoService photoService)
+        public PhotoController(PhotoRepository photoRepository, PhotoService photoService, ILogger<Startup> logger)
         {
             _photoRepository = photoRepository;
             _photoService = photoService;
+            _logger = logger;
         }
         #endregion
 
@@ -69,8 +73,9 @@ namespace MonumentsMap.Controllers
                 var (fileType, imageStream) = _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
                 return File(imageStream, fileType);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogCritical(ex.Message);
                 return StatusCode(500); //TODO handle error
             }
         }

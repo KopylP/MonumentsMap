@@ -46,7 +46,7 @@ export default function MonumentPhotoListItem({
         component="img"
         alt="Contemplative Reptile"
         height="240"
-        image={getPhotoLink(monumentPhoto.photoId)}
+        image={getPhotoLink(monumentPhoto.photoId, 500)}
         title="Contemplative Reptile"
       />
       <List style={{ width: "100%" }}>

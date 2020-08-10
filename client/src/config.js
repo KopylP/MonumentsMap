@@ -5,7 +5,7 @@ const supportedCultures = [
     {code: "ru-RU", name: "Русский"},
 ];
 
-const serverHost = "https://monumentsmap20200810132446.azurewebsites.net/";
+const serverHost = "https://monumentsmap.herokuapp.com/";
 
 const defaultCity = {
     lat: 49.5897423, //center point of default city

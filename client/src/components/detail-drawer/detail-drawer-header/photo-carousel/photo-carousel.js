@@ -61,7 +61,7 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
           >
             <img
               className={styles.img}
-              src={monumentService.getPhotoLink(monumentPhoto.photoId)}
+              src={monumentService.getPhotoLink(monumentPhoto.photoId, 500)}
             />
           </Slide>
         ))}
