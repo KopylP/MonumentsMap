@@ -10,6 +10,8 @@ const useStyles = makeStyles((theme) => ({
       bottom: 0,
       pointerEvents: "none",
       position: "absolute",
+      backgroundColor: "transparent",
+      zIndex: 999
     },
     rightAttach: {
       display: "flex",
@@ -19,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
       bottom: 0,
       pointerEvents: "none",
       position: "absolute",
+      backgroundColor: "transparent",
+      zIndex: 999
     },
   }));
   

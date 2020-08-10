@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import PhotosDialog from "../photos-dialog/photos-dialog";
 import PhotoLightbox from "../photos-dialog/photo-lightbox/photo-lightbox";
+import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -89,11 +90,33 @@ export default function DetailDrawer(props) {
   }, [monumentId]);
 
   const [photoDialogOpen, setPhotoDialogOpen] = useState(false);
-  const [selectedMonumentPhotoId, setSelectedMonumentPhotoId] = useState(null);
+  const prevPhotoDialogOpen = usePrevious(photoDialogOpen);
+  const [photoDialogShow, setPhotoDialogShow] = useState(false);
+  const [selectedMonumentPhotoIndex, setSelectedMonumentPhotoIndex] = useState(
+    0
+  );
 
   const onMonumentPhotoClicked = (monumentPhoto) => {
-    setSelectedMonumentPhotoId(monumentPhoto.id);
+    const findIndex = monument.monumentPhotos.findIndex(
+      (p) => p.id === monumentPhoto.id
+    );
+    setSelectedMonumentPhotoIndex(findIndex);
+    setPhotoDialogShow(true);
     setPhotoDialogOpen(true);
+  };
+
+  useEffect(() => {
+    if (prevPhotoDialogOpen === true && photoDialogOpen === false)
+      setTimeout(() => {
+        setPhotoDialogShow(false);
+      }, 250);
+  }, [photoDialogOpen]);
+
+  const onBack = () => {
+    setDetailDrawerOpen(false);
+    setTimeout(() => {
+      history.replace("/");
+    }, 200);
   };
 
   return (
@@ -108,17 +131,12 @@ export default function DetailDrawer(props) {
         transitionDuration={200}
         open={detailDrawerOpen}
       >
+        <DrawerBackButton onClick={onBack} />
         <DetailDrawerContext.Provider value={{ onPhotoSave }}>
           <ScrollBar>
             <DrawerContainer>
               <DetailDrawerHeader
                 monument={monument}
-                onBack={() => {
-                  setDetailDrawerOpen(false);
-                  setTimeout(() => {
-                    history.replace("/");
-                  }, 200);
-                }}
                 onMonumentPhotoClicked={onMonumentPhotoClicked}
               />
               <DetailDrawerContent monument={monument} />
@@ -127,13 +145,14 @@ export default function DetailDrawer(props) {
         </DetailDrawerContext.Provider>
         {monument ? (
           <React.Fragment>
-            {/* <PhotosDialog
-              open={photoDialogOpen}
-              firstMonumentPhotoId={selectedMonumentPhotoId}
-              setOpen={setPhotoDialogOpen}
-              monumentPhotos={monument.monumentPhotos}
-            /> */}
-            <PhotoLightbox open={photoDialogOpen} setOpen={setPhotoDialogOpen} monumentPhotos={monument.monumentPhotos}/>
+            {photoDialogShow ? (
+              <PhotoLightbox
+                open={photoDialogOpen}
+                setOpen={setPhotoDialogOpen}
+                monumentPhotos={monument.monumentPhotos}
+                initIndex={selectedMonumentPhotoIndex}
+              />
+            ) : null}
           </React.Fragment>
         ) : null}
       </Drawer>

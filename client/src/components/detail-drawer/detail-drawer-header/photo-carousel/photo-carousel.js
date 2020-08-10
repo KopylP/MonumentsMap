@@ -16,6 +16,7 @@ import "./photo-carousel.css";
 import CarouselButtonContainer from "./carousel-button-container/carousel-button-container";
 import StrokeIcon from "../../../common/stroke-icon/stroke-icon";
 import ContentLoader from "react-content-loader";
+import { isIOS } from "react-device-detect";
 
 const useStyles = makeStyles((theme) => ({
   img: {
@@ -28,21 +29,21 @@ const useStyles = makeStyles((theme) => ({
   },
   arrowIcon: {
     color: "white",
+    zIndex: 999,
   },
 }));
 
-function PhotoCarousel({ data, onMonumentPhotoClicked = p => p }) {
+function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
   const { monumentService } = useContext(AppContext);
   const [currentSlide, setCurrentSlide] = useState(0);
   const styles = useStyles();
   const theme = useTheme();
 
   const sortedPhotos = data.sort((a, b) => {
-    if(a.majorPhoto === true) return -1;
-    if(b.majorPhoto === true) return 1;
+    if (a.majorPhoto === true) return -1;
+    if (b.majorPhoto === true) return 1;
     else return 0;
-  })
-
+  });
 
   return (
     <CarouselProvider
@@ -54,7 +55,10 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = p => p }) {
     >
       <Slider className={styles.slider}>
         {sortedPhotos.map((monumentPhoto, i) => (
-          <Slide index={i} onClick={_ => onMonumentPhotoClicked(monumentPhoto)}>
+          <Slide
+            index={i}
+            onClick={(_) => onMonumentPhotoClicked(monumentPhoto)}
+          >
             <img
               className={styles.img}
               src={monumentService.getPhotoLink(monumentPhoto.photoId)}
@@ -62,20 +66,24 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = p => p }) {
           </Slide>
         ))}
       </Slider>
-      <CarouselButtonContainer>
-        <ButtonBack className="move-button">
-          <StrokeIcon>
-            <ArrowBackIosIcon className={styles.arrowIcon} />
-          </StrokeIcon>
-        </ButtonBack>
-      </CarouselButtonContainer>
-      <CarouselButtonContainer attachTo="right">
-        <ButtonNext className="move-button">
-          <StrokeIcon>
-            <ArrowForwardIosIcon className={styles.arrowIcon} />
-          </StrokeIcon>
-        </ButtonNext>
-      </CarouselButtonContainer>
+      {isIOS ? null : (
+        <React.Fragment>
+          <CarouselButtonContainer>
+            <ButtonBack className="move-button">
+              <StrokeIcon>
+                <ArrowBackIosIcon className={styles.arrowIcon} />
+              </StrokeIcon>
+            </ButtonBack>
+          </CarouselButtonContainer>
+          <CarouselButtonContainer attachTo="right">
+            <ButtonNext className="move-button">
+              <StrokeIcon>
+                <ArrowForwardIosIcon className={styles.arrowIcon} />
+              </StrokeIcon>
+            </ButtonNext>
+          </CarouselButtonContainer>
+        </React.Fragment>
+      )}
     </CarouselProvider>
   );
 }

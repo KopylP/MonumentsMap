@@ -6,6 +6,7 @@ import { defaultZoom, accessToken } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
+import { isMobile } from "react-device-detect";
 
 function Map({ onMonumentSelected = (p) => p }) {
   const {
@@ -32,13 +33,18 @@ function Map({ onMonumentSelected = (p) => p }) {
     return monuments
       .filter((monument) => {
         const latLng = new LatLng(monument.latitude, monument.longitude);
-        const markerOnMap = mapRef.current.leafletElement.getBounds().contains(latLng);
+        const markerOnMap = mapRef.current.leafletElement
+          .getBounds()
+          .contains(latLng);
         return markerOnMap;
       })
       .map((monument, i) => {
         return (
           <MonumentMarker
-            onClick={(e) => {setMonumentWithPopupId(e); onMonumentSelected(e)}}
+            onClick={(e) => {
+              setMonumentWithPopupId(e);
+              onMonumentSelected(e);
+            }}
             monument={monument}
             selectedMonumentId={selectedMonument && selectedMonument.id}
             key={monument.id}
@@ -76,20 +82,19 @@ function Map({ onMonumentSelected = (p) => p }) {
     }
   }, [selectedMonument]);
 
-
   const updateMarkers = () => {
     setMarkers(getVisibleMonumentMarkers());
-  }
+  };
 
   const onViewPortChange = () => {
-    if(viewPortChange === false) {
+    if (viewPortChange === false) {
       setViewPortChange(true);
       updateMarkers();
       setTimeout(() => {
         setViewPortChange(false);
       }, 150);
     }
-  }
+  };
 
   return (
     <LeafMap
@@ -103,7 +108,10 @@ function Map({ onMonumentSelected = (p) => p }) {
         setMapSelectedMonumentId(null);
       }}
       zoom={defaultZoom}
-      style={{ width: "100%", height: "100vh" }}
+      style={{
+        width: "100%",
+        height: isMobile ? "-webkit-fill-available" : "100vh",
+      }}
       ref={mapRef}
     >
       <TileLayer
