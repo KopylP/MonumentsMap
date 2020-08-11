@@ -8,9 +8,6 @@ const useStyles = makeStyles((theme) => ({
   imagesContainer: {
     width: "100%",
     height: theme.detailDrawerHeaderHeight,
-    backgroundSize: "cover",
-    position: "relative",
-    backgroundPosition: "center",
     flexShrink: 0
   },
 }));

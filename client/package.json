@@ -30,6 +30,7 @@
     "react-dom": "^16.13.1",
     "react-elastic-carousel": "^0.6.7",
     "react-leaflet": "^2.7.0",
+    "react-motion": "^0.5.2",
     "react-mutation-observer": "^1.1.0",
     "react-perfect-scrollbar": "^1.5.8",
     "react-resize-observer": "^1.1.1",
@@ -46,6 +47,7 @@
     "react-zoom-pan-pinch": "^1.6.1",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.1.1",
+    "typescript": "^3.9.7",
     "use-resize-observer": "^6.1.0",
     "yup": "^0.29.1"
   },

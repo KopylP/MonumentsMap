@@ -46,20 +46,24 @@ export default function SwipeImageCarousel({ images, initIndex }) {
 
   return (
     <div className={classes.container}>
-      <VirtualizeSwipeableViews
+      <SwipeableViews
         enableMouseEvents
         disabled={!swipeEnabled}
         index={viewIndex}
         hysteresis={0.4}
         onChangeIndex={handleChangeIndex}
         slideCount={images.length}
-        cols={1}
-        threshold={10}
+        threshold={1}
         containerStyle={{
-          height: isMobile ? "-webkit-fill-available": "100vh"
+          height: isMobile ? "-webkit-fill-available": "100vh",
+          width: "100%",
         }}
-        slideRenderer={slideRenderer}
-      />
+        // slideRenderer={slideRenderer}
+      >
+        {images.map((image) => (
+          <SwipeImage src={image} key={image} onSizeChanged={onSizeChanged} />
+        ))}
+      </SwipeableViews>
     </div>
   );
 }
