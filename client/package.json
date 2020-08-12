@@ -45,7 +45,6 @@
     "react-thumbnail": "^1.0.0",
     "react-transition-group": "^4.4.1",
     "react-virtualized": "^9.21.2",
-    "react-zoom-pan-pinch": "^1.6.1",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.1.1",
     "typescript": "^3.9.7",

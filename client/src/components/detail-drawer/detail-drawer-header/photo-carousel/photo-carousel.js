@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import AppContext from "../../../../context/app-context";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     display: "inline-block",
     height: theme.detailDrawerHeaderHeight,
+    overflow: "hidden",
   },
   img: {
     width: theme.detailDrawerWidth,
@@ -40,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
 
 function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
   const { monumentService } = useContext(AppContext);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const styles = useStyles();
   const theme = useTheme();
 
@@ -50,9 +50,10 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
     else return 0;
   });
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(-1);
 
   const onChangeIndexHandle = (index) => {
+    console.log(index);
     setCurrentIndex(index);
   };
 
@@ -64,11 +65,19 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
     setCurrentIndex(currentIndex - 1);
   };
 
+  const [animateTransitions, setAnimateTransitions] = useState(false);
+
+  useEffect(() => { //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
+    setCurrentIndex(0);//FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
+    setAnimateTransitions(true); //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
+  }, []); //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
+
   return (
     <div className={styles.container}>
       <SwipeableViews
-        disableLazyLoading
+        disableLazyLoading={false}
         index={currentIndex}
+        animateTransitions={animateTransitions}
         onChangeIndex={onChangeIndexHandle}
       >
         {sortedPhotos.map((monumentPhoto, i) => (
@@ -76,6 +85,7 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
             className={styles.img}
             onClick={() => onMonumentPhotoClicked(monumentPhoto)}
             src={monumentService.getPhotoLink(monumentPhoto.photoId, 500)}
+            key={i}
           />
         ))}
       </SwipeableViews>
