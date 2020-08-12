@@ -111,6 +111,7 @@ function Map({ onMonumentSelected = (p) => p }) {
       style={{
         width: "100%",
         height: isMobile ? "-webkit-fill-available" : "100vh",
+        overflow: "hidden"
       }}
       ref={mapRef}
     >

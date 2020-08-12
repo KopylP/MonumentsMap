@@ -22,8 +22,9 @@ import {
   Link,
   useRouteMatch,
   useParams,
-  useHistory
+  useHistory,
 } from "react-router-dom";
+import { isMobile } from "react-device-detect";
 
 const theme = createMuiTheme({
   palette: {
@@ -49,9 +50,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   mapContainer: {
-    height: "100vh",
     width: "100%",
     position: "relative",
+    height: isMobile ? "-webkit-fill-available" : "100vh",
+    overflow: "hidden",
   },
 }));
 
@@ -77,7 +79,6 @@ function MapScreen(props) {
   const [cancelRequest, setCancelRequest] = useState(null);
   const history = useHistory();
   let match = useRouteMatch();
-
 
   function executor(e) {
     setCancelRequest({
@@ -112,8 +113,8 @@ function MapScreen(props) {
 
   useEffect(() => {
     //TODO check same
-    if(selectedMonument.id !== 0) {
-        history.push(`${match.path}monument/${selectedMonument.id}`);
+    if (selectedMonument.id !== 0) {
+      history.push(`${match.path}monument/${selectedMonument.id}`);
     }
   }, [selectedMonument]);
 
@@ -193,8 +194,8 @@ function MapScreen(props) {
           <div className={classes.app}>
             <div className={classes.mapContainer}>
               <Map
-                onMonumentSelected={(monumentId) =>
-                  setSelectedMonument({ id: monumentId })//TODO Move to map.js
+                onMonumentSelected={
+                  (monumentId) => setSelectedMonument({ id: monumentId }) //TODO Move to map.js
                 }
               />
             </div>
@@ -205,9 +206,9 @@ function MapScreen(props) {
           </div>
           <MainDrawer className={classes.menuButton} />
           <Switch>
-              <Route path={`${match.path}monument/:monumentId`}>
-                <DetailDrawer />
-              </Route>
+            <Route path={`${match.path}monument/:monumentId`}>
+              <DetailDrawer />
+            </Route>
           </Switch>
         </SnackbarProvider>
       </MuiThemeProvider>
