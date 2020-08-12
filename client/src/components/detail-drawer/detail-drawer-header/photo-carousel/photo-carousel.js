@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     position: "relative",
     display: "inline-block",
-    padding: 1,
     height: theme.detailDrawerHeaderHeight,
   },
   img: {

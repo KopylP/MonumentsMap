@@ -36,6 +36,7 @@
     "react-resize-observer": "^1.1.1",
     "react-responsive-carousel": "^3.2.9",
     "react-responsive-pinch-zoom-pan": "^0.3.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-slick": "^0.27.4",
     "react-spring-lightbox": "^1.4.11",

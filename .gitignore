@@ -40,3 +40,4 @@ monuments.db
 client/src/config.js
 client/server/server.js
 Properties/PublishProfiles/MonumentsMap20200810132446 - Web Deploy.pubxml
+client/Dockerfile

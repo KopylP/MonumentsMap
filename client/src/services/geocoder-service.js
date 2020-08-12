@@ -5,7 +5,9 @@ export default class GeocoderService {
         this._acceptLanguage = acceptLanguage;
     }
 
-    _geocoder = new Nominatim();
+    _geocoder = new Nominatim({
+        secure: true
+    });
 
     
     getLatLngFromAddress = async (address) => {

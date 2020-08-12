@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SwipeImageCarousel({ images, initIndex }) {
+export default function SwipeImageCarousel({ images, imageIndex, onChangeImageIndex }) {
 
   const classes = useStyles();
   const [swipeEnabled, setSwipeEnabled] = useState(true);
@@ -31,27 +31,21 @@ export default function SwipeImageCarousel({ images, initIndex }) {
     }
   };
 
-  const [viewIndex, setViewIndex] = useState(initIndex);
-
-  const handleChangeIndex = (index) => {
-    setViewIndex(index);
-  };
-
-  const slideRenderer = (params) => {
-    const { key, index } = params;
-    return (
-      <SwipeImage src={images[index]} key={key} onSizeChanged={onSizeChanged} />
-    );
-  };
+  // const slideRenderer = (params) => {
+  //   const { key, index } = params;
+  //   return (
+  //     <SwipeImage src={images[index]} key={key} onSizeChanged={onSizeChanged} />
+  //   );
+  // };
 
   return (
     <div className={classes.container}>
       <SwipeableViews
         enableMouseEvents
         disabled={!swipeEnabled}
-        index={viewIndex}
+        index={imageIndex}
         hysteresis={0.4}
-        onChangeIndex={handleChangeIndex}
+        onChangeIndex={onChangeImageIndex}
         slideCount={images.length}
         threshold={1}
         containerStyle={{
