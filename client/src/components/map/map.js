@@ -110,7 +110,7 @@ function Map({ onMonumentSelected = (p) => p }) {
       zoom={defaultZoom}
       style={{
         width: "100%",
-        height: isMobile ? "-webkit-fill-available" : "100vh",
+        height: "100%",
         overflow: "hidden"
       }}
       ref={mapRef}

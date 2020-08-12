@@ -25,6 +25,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import { isMobile } from "react-device-detect";
+import FullWindowHeightContainer from "../components/common/full-window-height-container/full-window-height-container";
 
 const theme = createMuiTheme({
   palette: {
@@ -52,8 +53,7 @@ const useStyles = makeStyles((theme) => ({
   mapContainer: {
     width: "100%",
     position: "relative",
-    height: isMobile ? "-webkit-fill-available" : "100vh",
-    overflow: "hidden",
+    height: "100%",
   },
 }));
 
@@ -192,13 +192,15 @@ function MapScreen(props) {
       <MuiThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={5}>
           <div className={classes.app}>
-            <div className={classes.mapContainer}>
-              <Map
-                onMonumentSelected={
-                  (monumentId) => setSelectedMonument({ id: monumentId }) //TODO Move to map.js
-                }
-              />
-            </div>
+            <FullWindowHeightContainer style={{width: "100%"}}>
+              <div className={classes.mapContainer}>
+                <Map
+                  onMonumentSelected={
+                    (monumentId) => setSelectedMonument({ id: monumentId }) //TODO Move to map.js
+                  }
+                />
+              </div>
+            </FullWindowHeightContainer>
             <MenuButton
               className={classes.menuButton}
               onClick={() => setMainDrawerOpen(true)}

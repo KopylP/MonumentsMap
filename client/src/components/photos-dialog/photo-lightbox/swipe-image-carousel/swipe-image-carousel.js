@@ -31,12 +31,17 @@ export default function SwipeImageCarousel({ images, imageIndex, onChangeImageIn
     }
   };
 
-  // const slideRenderer = (params) => {
-  //   const { key, index } = params;
-  //   return (
-  //     <SwipeImage src={images[index]} key={key} onSizeChanged={onSizeChanged} />
-  //   );
-  // };
+  const [height, setHeight] = useState(window.innerHeight);
+  const handleResize = () => {
+    setHeight(window.innerHeight);
+  }
+
+  useState(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize")
+    }
+  }, []);
 
   return (
     <div className={classes.container}>
@@ -49,7 +54,7 @@ export default function SwipeImageCarousel({ images, imageIndex, onChangeImageIn
         slideCount={images.length}
         threshold={1}
         containerStyle={{
-          height: isMobile ? "-webkit-fill-available": "100vh",
+          height: height,
           width: "100%",
         }}
         // slideRenderer={slideRenderer}
