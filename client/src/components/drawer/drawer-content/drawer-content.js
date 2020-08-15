@@ -139,7 +139,7 @@ export default function DrawerContent(props) {
 
   return (
     <div style={{ flex: "1 1 auto", padding: 15, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
-      <Grid container vertical justify="flex-start" spacing={1}>
+      <Grid container vertical justify="flex-start" spacing={2}>
         <Grid item xs="12">
           <MonumentListAdminPanel />
         </Grid>

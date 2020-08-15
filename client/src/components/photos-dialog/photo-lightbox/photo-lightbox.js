@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import AppContext from "../../../context/app-context";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
@@ -6,6 +6,8 @@ import SwipeImageCarousel from "./swipe-image-carousel/swipe-image-carousel";
 import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
 import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
 import MobilePhotoDescriptionBottomSheet from "../mobile-photo-description-botton-sheet/mobile-photo-description-bottom-sheet";
+import useMutationObserver from "@rooks/use-mutation-observer";
+import useOrientationChange from "use-orientation-change";
 
 export default function PhotoLightbox({
   monumentPhotos,
@@ -21,14 +23,23 @@ export default function PhotoLightbox({
     setOpen(false);
   };
 
+  const onSizeChange = () => {
+    console.log("on size change");
+  };
+
+  const dialogRef = useRef();
+
+  useMutationObserver(dialogRef, onSizeChange);
+
   return (
     <Dialog
       fullScreen
       open={open}
+      ref={dialogRef}
       onClose={handleClose}
       TransitionComponent={Transition}
       style={{
-        boxSizing: "border-box"
+        boxSizing: "border-box",
       }}
     >
       <DrawerBackButton attachTo="left" onClick={handleClose} />
@@ -47,6 +58,8 @@ const LightboxWithBottomSheet = ({ monumentPhotos, initIndex }) => {
     monumentService.getPhotoLink(monumentPhoto.id, 700)
   );
 
+  const orientation = useOrientationChange();
+
   return (
     <React.Fragment>
       <SwipeImageCarousel
@@ -54,9 +67,11 @@ const LightboxWithBottomSheet = ({ monumentPhotos, initIndex }) => {
         imageIndex={imageIndex}
         onChangeImageIndex={setImageIndex}
       />
-      <MobilePhotoDescriptionBottomSheet
-        monumentPhoto={monumentPhotos[imageIndex]}
-      />
+      {orientation.includes("portrait") ? (
+        <MobilePhotoDescriptionBottomSheet
+          monumentPhoto={monumentPhotos[imageIndex]}
+        />
+      ) : null}
     </React.Fragment>
   );
 };

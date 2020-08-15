@@ -5,7 +5,7 @@ import PhotosContainer from "./photos-container/photos-container";
 export default function PhotosDialog({
   open,
   setOpen,
-  firstMonumentPhotoId,
+  initIndex,
   monumentPhotos,
 }) {
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -27,7 +27,7 @@ export default function PhotosDialog({
     >
       <PhotosContainer
         onBack={handleClose}
-        firstMonumentPhotoId={firstMonumentPhotoId}
+        initIndex={initIndex}
         monumentPhotos={monumentPhotos}
       />
     </Dialog>

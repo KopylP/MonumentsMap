@@ -16,6 +16,7 @@ import {
 import PhotosDialog from "../photos-dialog/photos-dialog";
 import PhotoLightbox from "../photos-dialog/photo-lightbox/photo-lightbox";
 import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
+import { isMobileOnly } from "react-device-detect";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -146,12 +147,21 @@ export default function DetailDrawer(props) {
         {monument ? (
           <React.Fragment>
             {photoDialogShow ? (
-              <PhotoLightbox
-                open={photoDialogOpen}
-                setOpen={setPhotoDialogOpen}
-                monumentPhotos={monument.monumentPhotos}
-                initIndex={selectedMonumentPhotoIndex}
-              />
+              isMobileOnly ? (
+                <PhotoLightbox
+                  open={photoDialogOpen}
+                  setOpen={setPhotoDialogOpen}
+                  monumentPhotos={monument.monumentPhotos}
+                  initIndex={selectedMonumentPhotoIndex}
+                />
+              ) : (
+                <PhotosDialog
+                  open={photoDialogOpen}
+                  setOpen={setPhotoDialogOpen}
+                  monumentPhotos={monument.monumentPhotos}
+                  initIndex={selectedMonumentPhotoIndex}
+                />
+              )
             ) : null}
           </React.Fragment>
         ) : null}

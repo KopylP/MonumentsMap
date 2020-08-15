@@ -8,11 +8,12 @@ import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button
 const useStyles = makeStyles((theme) => ({
   backButtonContainer: {
     width: "100%",
-    height: 210,
+    height: 200,
     backgroundImage: `url(${DrawerImage})`,
     backgroundSize: "cover",
     position: "relative",
-    backgroundPosition: "center"
+    backgroundPosition: "center",
+    flexShrink: 0
   },
   fabBack: {
     position: "absolute",

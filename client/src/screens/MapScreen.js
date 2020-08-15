@@ -48,12 +48,23 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 999,
   },
   app: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     display: "flex",
+    zIndex: 1,
   },
   mapContainer: {
-    width: "100%",
-    position: "relative",
-    height: "100%",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: "hidden",
+    height: "100vh",
+    width: "100vw"
   },
 }));
 
@@ -102,6 +113,7 @@ function MapScreen(props) {
         setMonuments(monuments);
       });
   };
+
 
   useEffect(() => {
     if (
@@ -192,7 +204,7 @@ function MapScreen(props) {
       <MuiThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={5}>
           <div className={classes.app}>
-            <FullWindowHeightContainer style={{width: "100%"}}>
+            <FullWindowHeightContainer style={{ width: "100%" }}>
               <div className={classes.mapContainer}>
                 <Map
                   onMonumentSelected={

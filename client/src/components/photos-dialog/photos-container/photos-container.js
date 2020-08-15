@@ -1,15 +1,19 @@
-import React, { useState } from "react";
-import { Dialog, Fade, Grid, Box, makeStyles } from "@material-ui/core";
-import PhotosList from "../photos-list/photos-list";
+import React, { useState, useEffect } from "react";
+import clsx from 'clsx';
+import {
+  Dialog,
+  Fade,
+  Grid,
+  Box,
+  makeStyles,
+  Hidden,
+  Drawer,
+} from "@material-ui/core";
 import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    width: "100%",
-    height: "100%",
     display: "flex",
-    flexDirection: "row",
-    alignItems: "sterch",
   },
   photoListBox: {
     width: theme.detailDrawerWidth,
@@ -19,40 +23,72 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
   },
+  drawer: {
+    width: theme.detailDrawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: theme.detailDrawerWidth,
+  },
+  photoContainer: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+
+    border: "1px solid red",
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -theme.detailDrawerWidth,
+    border: "1px solid red"
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
 }));
 
-export default function PhotosContainer({
-  firstMonumentPhotoId,
-  monumentPhotos,
-  onBack,
-}) {
+export default function PhotosContainer({ monumentPhotos, onBack }) {
   const classes = useStyles();
-  const [selectedMonumentPhotoIndex, setSelectedMonumentPhotoIndex] = useState(
-    0
-  );
+  const [open, setOpen] = useState(true);
 
-  const sortedMonumentPhotos = monumentPhotos.sort((a, b) => {
-    if (a.id === firstMonumentPhotoId) return -1;
-    if (b.id === firstMonumentPhotoId) return 1;
-    else return 0;
-  });
+  useEffect(() => {
+    setTimeout(() => {
+      setOpen(false);
+    }, 2000);
+  }, []);
 
+  const container =
+    window !== undefined ? () => window.document.body : undefined;
   return (
     <div className={classes.container}>
-      <DrawerBackButton attachTo="left" onClick={onBack}/>
-      <Box
-        component="div"
-        display={{ xs: "none", md: "block" }}
-        className={classes.photoListBox}
+          <Drawer
+            className={classes.drawer}
+            container={container}
+            variant="persistent"
+            anchor="left"
+            open={open}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div>Hello drawer</div>
+          </Drawer>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
+        style={{ backgroundColor: "white" }}
       >
-        <PhotosList
-          selectedMonumentPhotoIndex={selectedMonumentPhotoIndex}
-          setSelectedMonumentPhotoIndex={setSelectedMonumentPhotoIndex}
-          monumentPhotos={sortedMonumentPhotos}
-        />
-      </Box>
-      <Box component="div" className={classes.photoBox}>
-      </Box>
+        Hello world
+      </main>
     </div>
   );
 }

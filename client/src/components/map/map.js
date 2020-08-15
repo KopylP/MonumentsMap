@@ -7,6 +7,7 @@ import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
 import { isMobile } from "react-device-detect";
+import FullWindowHeightContainer from "../common/full-window-height-container/full-window-height-container";
 
 function Map({ onMonumentSelected = (p) => p }) {
   const {
@@ -97,32 +98,31 @@ function Map({ onMonumentSelected = (p) => p }) {
   };
 
   return (
-    <LeafMap
-      center={center}
-      animate
-      duration={0.1}
-      onViewportChange={onViewPortChange}
-      onmoveend={updateMarkers}
-      preferCanvas
-      onpopupclose={() => {
-        setMapSelectedMonumentId(null);
-      }}
-      zoom={defaultZoom}
-      style={{
-        width: "100%",
-        height: "100%",
-        overflow: "hidden"
-      }}
-      ref={mapRef}
-    >
-      <TileLayer
-        attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
-        url={`https://tile.jawg.io/13da1c9b-4dd5-4a96-84a0-d0464fc95920/{z}/{x}/{y}.png?access-token=${accessToken}`}
-      />
-      <MapContext.Provider value={{ mapSelectedMonumentId }}>
-        {markers}
-      </MapContext.Provider>
-    </LeafMap>
+      <LeafMap
+        center={center}
+        animate
+        duration={0.1}
+        onViewportChange={onViewPortChange}
+        onmoveend={updateMarkers}
+        preferCanvas
+        onpopupclose={() => {
+          setMapSelectedMonumentId(null);
+        }}
+        zoom={defaultZoom}
+        style={{
+          width: "100%",
+          height: "100%"
+        }}
+        ref={mapRef}
+      >
+        <TileLayer
+          attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
+          url={`https://tile.jawg.io/13da1c9b-4dd5-4a96-84a0-d0464fc95920/{z}/{x}/{y}.png?access-token=${accessToken}`}
+        />
+        <MapContext.Provider value={{ mapSelectedMonumentId }}>
+          {markers}
+        </MapContext.Provider>
+      </LeafMap>
   );
 }
 
