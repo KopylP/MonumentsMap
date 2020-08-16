@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Divider, List as MaterialList } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import SearchField from "../../../../common/search-field/search-field";
 import ScrollBar from "../../../../common/scroll-bar/scroll-bar";
 import MonumentListItem from "./monument-list-item/monument-list-item";

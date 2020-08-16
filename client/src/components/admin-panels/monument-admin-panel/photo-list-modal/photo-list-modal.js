@@ -3,10 +3,6 @@ import Modal from "@material-ui/core/Modal";
 import { Paper, Fade, Backdrop, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AppContext from "../../../../context/app-context";
-import ScrollBar from "../../../common/scroll-bar/scroll-bar";
-import MonumentPhotoListItem from "./photo-list-item/monument-photo-list-item";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
 import PhotoList from "./photo-list/photo-list";
 
 const useStyles = makeStyles((theme) => ({

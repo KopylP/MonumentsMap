@@ -5,7 +5,6 @@ import DetailDrawerHeader from "./detail-drawer-header/detail-drawer-header";
 import DetailDrawerContent from "./detail-drawer-content/detail-drawer-content";
 import AppContext from "../../context/app-context";
 import { usePrevious } from "../../hooks/hooks";
-import PerfectScrollbar from "react-perfect-scrollbar";
 import ScrollBar from "../common/scroll-bar/scroll-bar";
 import DetailDrawerContext from "./context/detail-drawer-context";
 import {

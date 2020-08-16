@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import "pure-react-carousel/dist/react-carousel.es.css";
 import AppContext from "../../../../context/app-context";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
 import { IconButton, makeStyles, useTheme } from "@material-ui/core";
@@ -18,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
     height: theme.detailDrawerHeaderHeight,
     overflow: "hidden",
+    backgroundColor: "transparent"
   },
   img: {
     width: theme.detailDrawerWidth,
@@ -53,7 +53,6 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
   const [currentIndex, setCurrentIndex] = useState(-1);
 
   const onChangeIndexHandle = (index) => {
-    console.log(index);
     setCurrentIndex(index);
   };
 
@@ -67,8 +66,9 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
 
   const [animateTransitions, setAnimateTransitions] = useState(false);
 
-  useEffect(() => { //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
-    setCurrentIndex(0);//FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
+  useEffect(() => {
+    //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
+    setCurrentIndex(0); //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
     setAnimateTransitions(true); //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
   }, []); //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
 

@@ -31,7 +31,7 @@
     "react-mutation-observer": "^1.1.0",
     "react-responsive-pinch-zoom-pan": "^0.3.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "react-slick": "^0.27.4",
     "react-swipeable-bottom-sheet": "^1.1.1",
     "react-swipeable-views": "^0.13.9",

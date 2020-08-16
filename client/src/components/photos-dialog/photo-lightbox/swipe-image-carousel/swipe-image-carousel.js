@@ -71,13 +71,9 @@ export default function SwipeImageCarousel({
       }
     >
       <SwipeableViews
-        enableMouseEvents
         disabled={!swipeEnabled}
         index={imageIndex}
-        hysteresis={0.4}
         onChangeIndex={onChangeImageIndex}
-        slideCount={images.length}
-        threshold={1}
         containerStyle={
           isIOS && isChrome
             ? {
@@ -92,8 +88,8 @@ export default function SwipeImageCarousel({
         }
         // slideRenderer={slideRenderer}
       >
-        {images.map((image) => (
-          <SwipeImage src={image} key={image} onSizeChanged={onSizeChanged} />
+        {images.map((image, i) => (
+          <SwipeImage src={image} key={i} onSizeChanged={onSizeChanged} />
         ))}
       </SwipeableViews>
     </div>
