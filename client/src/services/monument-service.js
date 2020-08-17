@@ -2,7 +2,7 @@ import axios from "axios";
 import withMonumentService from "../components/hoc-helpers/with-monument-service";
 const CancelToken = axios.CancelToken;
 export default class MonumentService {
-  constructor(host = "http://localhost:5000/", cultureCode = "uk-UA") {
+  constructor(host, cultureCode = "uk-UA") {
     this._cultureCode = cultureCode;
     this._host = host;
     this._baseURL = `${this._host}api/`;

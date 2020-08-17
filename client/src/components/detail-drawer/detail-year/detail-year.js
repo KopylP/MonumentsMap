@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
-import WithLoadingData from "../../hoc-helpers/with-loading-data";
 import Period from "../../../models/period";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,5 +30,5 @@ export default function DetailYear({ year, period, textOnly = false }) {
       break;
   }
 
-  return <div className={textOnly ? styles.container : ""}>{dateText}</div>;
+  return <div className={!textOnly ? styles.container : ""}>{dateText}</div>;
 }

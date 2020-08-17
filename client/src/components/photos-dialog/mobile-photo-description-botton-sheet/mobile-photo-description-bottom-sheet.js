@@ -8,7 +8,6 @@ export default function MobilePhotoDescriptionBottomSheet({ monumentPhoto }) {
   const { monumentService } = useContext(AppContext);
 
   const onMonumentPhotoLoad = (monumentPhoto) => {
-    console.log(monumentPhoto);
     setMonumentPhotoDetail(monumentPhoto);
   };
 

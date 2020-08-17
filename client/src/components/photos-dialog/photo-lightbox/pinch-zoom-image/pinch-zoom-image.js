@@ -8,6 +8,7 @@ export default function PinchZoomImage({
   alt = "",
   onSizeChanged = (p) => p,
   onImageLoad = (p) => p,
+  maxScale = 2,
 }) {
   const [originalSize, setOriginalSize] = useState(true);
   const [portrait, setPortrait] = useState(true);
@@ -32,21 +33,33 @@ export default function PinchZoomImage({
       onSizeChanged(isOriginalSize);
     }
   };
+
+  const handleImageLoad = (e) => {
+    onImageLoad(e);
+  };
+
   useMutationObserver(imgRef, onSizeChange);
 
   useEffect(() => {
     setPortrait(window.innerHeight > window.innerWidth);
-  }, []);
+    setKey(Math.random());
+  }, [src]);
 
   return (
     <PinchZoomPan
-      maxScale={2}
+      maxScale={maxScale}
       position="center"
       ref={pinchZoomPanRef}
       key={key}
       zoomButtons={false}
     >
-      <img alt={alt} src={src} ref={imgRef} onLoad={onImageLoad} />
+      <img
+        alt={alt}
+        src={src}
+        ref={imgRef}
+        onLoad={handleImageLoad}
+        style={{ maxWidth: "100%" }}
+      />
     </PinchZoomPan>
   );
 }

@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from "react";
-import clsx from 'clsx';
-import {
-  Dialog,
-  Fade,
-  Grid,
-  Box,
-  makeStyles,
-  Hidden,
-  Drawer,
-} from "@material-ui/core";
-import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
+import React, { useState, useEffect, useContext } from "react";
+import clsx from "clsx";
+import { makeStyles, Drawer, Slide } from "@material-ui/core";
+import PhotoDrawerContent from "../photo-drawer-content/photo-drawer-content";
+import PhotoViewer from "../photo-viewer/photo-viewer";
+import AppContext from "../../../context/app-context";
+import PhotosList from "../photos-list/photos-list";
+import PhotosContainerButtons from "./photos-container-buttons";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -33,21 +29,22 @@ const useStyles = makeStyles((theme) => ({
   photoContainer: {
     flexGrow: 1,
     padding: theme.spacing(3),
-
-    border: "1px solid red",
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -theme.detailDrawerWidth,
-    border: "1px solid red"
+    backgroundColor: "black",
+    height: "100vh",
+    overflow: "hidden",
+    width: "100%",
+    position: "relative",
   },
   contentShift: {
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -55,39 +52,94 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PhotosContainer({ monumentPhotos, onBack }) {
+const PhotoViewerContainer = ({}) => {
+  
+}
+
+export default function PhotosContainer({
+  monumentPhotos,
+  onBack = (p) => p,
+  initIndex,
+}) {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
+  const { monumentService } = useContext(AppContext);
+  const [originalSize, setOriginalSize] = useState(true);
+  const [selectedMonumentPhotoIndex, setSelectedMonumentPhotoIndex] = useState(
+    initIndex
+  );
+  const handleSizeChange = (isOriginalSize) => {
+    setOriginalSize(isOriginalSize);
+  };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setOpen(false);
-    }, 2000);
-  }, []);
+  const handleMonumentPhotoClick = (monumentPhotoIndex) => {
+    setSelectedMonumentPhotoIndex(monumentPhotoIndex);
+  };
+
+  const handleLeftButtonClick = () => {
+    setSelectedMonumentPhotoIndex(selectedMonumentPhotoIndex - 1);
+  };
+
+  const handleRightButtonClick = () => {
+    setSelectedMonumentPhotoIndex(selectedMonumentPhotoIndex + 1);
+  };
 
   const container =
     window !== undefined ? () => window.document.body : undefined;
   return (
     <div className={classes.container}>
-          <Drawer
-            className={classes.drawer}
-            container={container}
-            variant="persistent"
-            anchor="left"
-            open={open}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            <div>Hello drawer</div>
-          </Drawer>
+      <Drawer
+        className={classes.drawer}
+        container={container}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <PhotoDrawerContent
+          monumentPhoto={monumentPhotos[selectedMonumentPhotoIndex]}
+          onBack={onBack}
+        />
+      </Drawer>
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
-        style={{ backgroundColor: "white" }}
       >
-        Hello world
+        <PhotoViewer
+          imgUrl={monumentService.getPhotoLink(
+            monumentPhotos[selectedMonumentPhotoIndex].photoId
+          )}
+          onSizeChanged={handleSizeChange}
+        />
+        <Slide
+          direction="up"
+          in={originalSize}
+          style={{ position: "absolute", bottom: 40, left: 0, right: 0 }}
+        >
+          <div
+            style={{
+              backgroundColor: "transparent",
+            }}
+          >
+            <PhotosList
+              monumentPhotos={monumentPhotos}
+              selectedMonumentPhotoIndex={selectedMonumentPhotoIndex}
+              onMonumentPhotoClick={handleMonumentPhotoClick}
+            />
+          </div>
+        </Slide>
+        <PhotosContainerButtons
+          hideLeftButton={selectedMonumentPhotoIndex === 0 || !originalSize}
+          hideRightButton={
+            selectedMonumentPhotoIndex === monumentPhotos.length - 1 ||
+            !originalSize
+          }
+          onLeftClick={handleLeftButtonClick}
+          onRightClick={handleRightButtonClick}
+        />
       </main>
     </div>
   );

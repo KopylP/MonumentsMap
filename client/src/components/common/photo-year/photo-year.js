@@ -1,7 +1,7 @@
 import React from "react";
 import Period from "../../../models/period";
 
-export default function PhotoYear({ year, period, ...props }) {
+export default function PhotoYear({ year, period }) {
   let dateText;
   switch (period) {
     case Period.StartOfCentury:
