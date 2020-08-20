@@ -27,19 +27,6 @@ import {
 import { isMobile } from "react-device-detect";
 import FullWindowHeightContainer from "../components/common/full-window-height-container/full-window-height-container";
 
-const theme = createMuiTheme({
-  palette: {
-    primary: { main: "#57CC99" },
-    secondary: { main: "#624CAB" },
-    success: { main: "#38A3A5" },
-    warning: { main: "#FFC857" },
-    error: { main: "#DB5461" },
-  },
-  drawerWidth: 350,
-  detailDrawerWidth: 360,
-  detailDrawerHeaderHeight: 250,
-});
-
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     position: "fixed",
@@ -64,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     overflow: "hidden",
     height: "100vh",
-    width: "100vw"
+    width: "100vw",
   },
 }));
 
-function MapScreen(props) {
+function MapPage(props) {
   const classes = useStyles(props);
   const [mainDrawerOpen, setMainDrawerOpen] = useState(true);
   const [detailDrawerOpen, setDetailDrawerOpen] = useState(false);
@@ -113,7 +100,6 @@ function MapScreen(props) {
         setMonuments(monuments);
       });
   };
-
 
   useEffect(() => {
     if (
@@ -201,33 +187,31 @@ function MapScreen(props) {
 
   return (
     <AppContext.Provider value={contextValues}>
-      <MuiThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={5}>
-          <div className={classes.app}>
-            <FullWindowHeightContainer style={{ width: "100%" }}>
-              <div className={classes.mapContainer}>
-                <Map
-                  onMonumentSelected={
-                    (monumentId) => setSelectedMonument({ id: monumentId }) //TODO Move to map.js
-                  }
-                />
-              </div>
-            </FullWindowHeightContainer>
-            <MenuButton
-              className={classes.menuButton}
-              onClick={() => setMainDrawerOpen(true)}
-            />
-          </div>
-          <MainDrawer className={classes.menuButton} />
-          <Switch>
-            <Route path={`${match.path}monument/:monumentId`}>
-              <DetailDrawer />
-            </Route>
-          </Switch>
-        </SnackbarProvider>
-      </MuiThemeProvider>
+      <SnackbarProvider maxSnack={5}>
+        <div className={classes.app}>
+          <FullWindowHeightContainer style={{ width: "100%" }}>
+            <div className={classes.mapContainer}>
+              <Map
+                onMonumentSelected={
+                  (monumentId) => setSelectedMonument({ id: monumentId }) //TODO Move to map.js
+                }
+              />
+            </div>
+          </FullWindowHeightContainer>
+          <MenuButton
+            className={classes.menuButton}
+            onClick={() => setMainDrawerOpen(true)}
+          />
+        </div>
+        <MainDrawer className={classes.menuButton} />
+        <Switch>
+          <Route path={`${match.path}monument/:monumentId`}>
+            <DetailDrawer />
+          </Route>
+        </Switch>
+      </SnackbarProvider>
     </AppContext.Provider>
   );
 }
 
-export default MapScreen;
+export default MapPage;
