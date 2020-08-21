@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,17 +24,19 @@ namespace MonumentsMap
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-        }
+            this.Configuration = configuration;
 
+        }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(o => o.AddPolicy("WebClientPolicy", builder => {
+            services.AddCors(o => o.AddPolicy("WebClientPolicy", builder =>
+            {
                 builder.AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowAnyOrigin();
@@ -58,6 +61,15 @@ namespace MonumentsMap
             services.AddScoped<IMonumentService, MonumentService>();
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
             services.AddScoped<CultureCodeResourceFilter>();
+            //idenditiy
+            services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
+            {
+                opts.Password.RequireDigit = true;
+                opts.Password.RequireLowercase = true;
+                opts.Password.RequireUppercase = true;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequiredLength = 7;
+            }).AddEntityFrameworkStores<ApplicationContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,9 +99,11 @@ namespace MonumentsMap
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationContext>();
+                var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                 context.Database.Migrate();
                 var cultures = Configuration.GetSection("SupportedCultures").Get<List<Culture>>();
-                DbSeed.Seed(context, cultures);
+                DbSeed.Seed(context, roleManager, userManager, cultures);
             }
         }
     }

@@ -1,12 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using MonumentsMap.Models;
 
 namespace MonumentsMap.Data
 {
     public static class DbSeed
     {
-        public static void Seed(ApplicationContext applicationContext, List<Culture> cultures)
+        public static void Seed(ApplicationContext applicationContext,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager,
+            List<Culture> cultures)
         {
             CultureSeed(applicationContext, cultures);
             ConditionSeed(applicationContext);
@@ -491,6 +497,42 @@ namespace MonumentsMap.Data
                  );
                 applicationContext.Cities.AddRange(poltava);
                 applicationContext.SaveChanges();
+            }
+        }
+
+        private static async Task RolesFeed(RoleManager<IdentityRole> roleManager)
+        {
+            string role_Admin = "Admin";
+            string role_Editor = "Editor";
+            if (!await roleManager.RoleExistsAsync(role_Admin))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role_Admin));
+            }
+            if (!await roleManager.RoleExistsAsync(role_Editor))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role_Editor));
+            }
+        }
+
+        private static async Task UsersSeed(UserManager<ApplicationUser> userManager)
+        {
+            var user_Admin = new ApplicationUser()
+            {
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = "Admin",
+                Email = "admin@monumentsmap.com",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                DisplayName = "Admin"
+            };
+            
+            if (await userManager.FindByNameAsync(user_Admin.UserName) == null)
+            {
+                await userManager.CreateAsync(user_Admin, "Pass4Admin");
+                await userManager.AddToRoleAsync(user_Admin, "Admin");
+                await userManager.AddToRoleAsync(user_Admin, "Editor");
+                user_Admin.EmailConfirmed = true;
+                user_Admin.LockoutEnabled = false;
             }
         }
     }
