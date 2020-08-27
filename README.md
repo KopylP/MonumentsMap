@@ -34,3 +34,9 @@ React, Asp.net core, Entity Framework
 
 ![image_2020-08-03_21-09-30](https://user-images.githubusercontent.com/37479968/89218116-c2b6e700-d5cd-11ea-97b1-9fe410ed301f.png)
 Віконце для додавання нової фотографії пам'ятки архітектури
+
+![image](https://user-images.githubusercontent.com/37479968/91191202-c6cdb480-e6f4-11ea-81d9-72d9de6bf0db.png)
+Деталі фотографії (Великий екран)
+
+![image](https://user-images.githubusercontent.com/37479968/91191322-ecf35480-e6f4-11ea-8d2c-1a4ca39b784a.png)
+Деталі фотографії (Мобільні пристрої)
