@@ -148,6 +148,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
       conditionId: "",
       address: "",
       cityName: "",
+      protectionNumber: "",
     },
     validationSchema: Yup.object({
       year: Yup.number().required("Це поле є обов'язковим"),
@@ -156,6 +157,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
       statusId: Yup.number().required("Це поле є обов'язковим"),
       conditionId: Yup.number().required("Це поле є обов'язковим"),
       address: Yup.string().required("Це поле є обов'язковим"),
+      protectionNumber: Yup.string()
     }),
     onSubmit: onFormSubmit,
   });
@@ -405,7 +407,7 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
                       </FormHelperText>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <FormControl style={{ width: "100%" }}>
                       <TextField
                         required
@@ -420,6 +422,24 @@ export default function AddModal({ openAddModal, setOpenAddModal }) {
                           formik.touched.address &&
                           formik.errors.address &&
                           formik.errors.address
+                        }
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl style={{ width: "100%" }}>
+                      <TextField
+                        id="standard-basic"
+                        name="protectionNumber"
+                        label="Захисний номер"
+                        value={formik.values.protectionNumber}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        error={formik.touched.protectionNumber && formik.errors.protectionNumber}
+                        helperText={
+                          formik.touched.protectionNumber &&
+                          formik.errors.protectionNumber &&
+                          formik.errors.protectionNumber
                         }
                       />
                     </FormControl>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -84,7 +85,7 @@ namespace MonumentsMap
                 cfg.SaveToken = true;
                 cfg.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidIssuer = Configuration["Auth:Jwt:Issurer"],
+                    ValidIssuer = Configuration["Auth:Jwt:Issuer"],
                     ValidAudience = Configuration["Auth:Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"])
@@ -96,6 +97,13 @@ namespace MonumentsMap
                     ValidateAudience = true
                 };
             });
+
+            // services.AddAuthorization(options => {
+            //     var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
+
+            //     defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+            //     options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

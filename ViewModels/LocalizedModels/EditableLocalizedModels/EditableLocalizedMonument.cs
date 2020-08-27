@@ -16,6 +16,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
         public bool Accepted { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string ProtectionNumber { get; set; }
         public List<Source> Sources { get; set; }
         public override Monument CreateEntity(Monument entity = null)
         {
@@ -53,6 +54,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
             monument.Accepted = this.Accepted;
             monument.Latitude = this.Latitude;
             monument.Longitude = this.Longitude;
+            monument.ProtectionNumber = this.ProtectionNumber;
             monument.Sources.AddRange(Sources);
             foreach (var cultureValuePair in Name)
             {

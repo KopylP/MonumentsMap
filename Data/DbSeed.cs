@@ -18,6 +18,8 @@ namespace MonumentsMap.Data
             ConditionSeed(applicationContext);
             StatusSeed(applicationContext);
             CitySeed(applicationContext);
+            RolesFeed(roleManager).Wait();
+            UsersSeed(userManager).Wait();
         }
         private static void CultureSeed(ApplicationContext application, List<Culture> cultures)
         {

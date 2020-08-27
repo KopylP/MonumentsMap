@@ -19,6 +19,7 @@ namespace MonumentsMap.Models
         public double Longitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public string ProtectionNumber { get; set; }
         #endregion
         #region lazy props
         [ForeignKey("CityId")]

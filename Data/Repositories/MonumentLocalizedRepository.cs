@@ -37,6 +37,7 @@ namespace MonumentsMap.Data.Repositories
             Accepted = entity.Accepted,
             Latitude = entity.Latitude,
             Longitude = entity.Longitude,
+            ProtectionNumber = entity.ProtectionNumber,
             Sources = entity.Sources.Select(p =>
             {
                 p.Monument = null;
@@ -83,6 +84,7 @@ namespace MonumentsMap.Data.Repositories
                     Longitude = p.Longitude,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt,
+                    ProtectionNumber = p.ProtectionNumber,
                     MajorPhotoImageId = p.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId
                 };
                 monument.Condition = conditionLocalizedRepository.Get(cultureCode, monument.ConditionId).Result;
