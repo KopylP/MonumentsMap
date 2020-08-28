@@ -23,11 +23,11 @@ namespace MonumentsMap.Controllers
 
         #region methods
         [HttpPost("Auth")]
-        public async Task<IActionResult> Auth([FromBody]TokenRequestViewModel model) 
+        public async Task<IActionResult> Auth([FromBody] TokenRequestViewModel model)
         {
             if (model == null) return new StatusCodeResult(500);
             TokenResponseViewModel tokenResponse = null;
-            switch(model.grant_type)
+            switch (model.grant_type)
             {
                 case "password":
                     tokenResponse = await _tokenServise.GetTokenAsync(model);
@@ -38,7 +38,7 @@ namespace MonumentsMap.Controllers
                 default:
                     return new UnauthorizedResult(); //TODO handle error
             }
-            if(tokenResponse == null) return new UnauthorizedResult(); //TODO handle error
+            if (tokenResponse == null) return new UnauthorizedResult(); //TODO handle error
             return Ok(tokenResponse);
         }
         #endregion
