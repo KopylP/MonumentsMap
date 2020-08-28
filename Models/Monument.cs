@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
@@ -7,17 +8,29 @@ namespace MonumentsMap.Models
     public class Monument : Entity
     {
         #region props
+        [Required]
         public int Year { get; set; }
+        [Required]
         public Period Period { get; set; }
+        [Required]
         public int NameId { get; set; }
+        [Required]
         public int DescriptionId { get; set; }
+        [Required]
         public int CityId { get; set; }
+        [Required]
         public int StatusId { get; set; }
+        [Required]
         public int ConditionId { get; set; }
+        [Required]
         public bool Accepted { get; set; }
+        [Required]
         public double Latitude { get; set; }
+        [Required]
         public double Longitude { get; set; }
+        [Required]
         public DateTime CreatedAt { get; set; }
+        [Required]
         public DateTime UpdatedAt { get; set; }
         public string ProtectionNumber { get; set; }
         #endregion

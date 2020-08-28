@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
@@ -6,8 +7,10 @@ namespace MonumentsMap.Models
     public class Condition : Entity
     {
         #region props
+        [Required]
         public int NameId { get; set; }
         public int? DescriptionId { get; set; }
+        [Required]
         public string Abbreviation { get; set; }
         #endregion
         #region  lazy props

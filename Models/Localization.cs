@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
@@ -5,8 +6,11 @@ namespace MonumentsMap.Models
     public class Localization : Entity
     {
         #region props
+        [Required]
         public int LocalizationSetId { get; set; }
+        [Required]
         public string CultureCode { get; set; }
+        [Required]
         public string Value { get; set; }
         #endregion
         #region  lazy props

@@ -9,8 +9,8 @@ using MonumentsMap.Data;
 namespace MonumentsMap.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200821180316_Identity")]
-    partial class Identity
+    [Migration("20200828171628_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -162,6 +162,7 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -203,6 +204,9 @@ namespace MonumentsMap.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
@@ -216,6 +220,8 @@ namespace MonumentsMap.Data.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("AspNetUsers");
                 });
 
@@ -228,9 +234,14 @@ namespace MonumentsMap.Data.Migrations
                     b.Property<int>("NameId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NameId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Cities");
                 });
@@ -242,6 +253,7 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Abbreviation")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("DescriptionId")
@@ -265,6 +277,7 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Code");
@@ -279,12 +292,14 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CultureCode")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("LocalizationSetId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -340,6 +355,9 @@ namespace MonumentsMap.Data.Migrations
                     b.Property<int>("Period")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ProtectionNumber")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("StatusId")
                         .HasColumnType("INTEGER");
 
@@ -371,6 +389,7 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("DescriptionId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("MajorPhoto")
@@ -406,6 +425,7 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FileName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -429,6 +449,7 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -447,6 +468,7 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Abbreviation")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("DescriptionId")
@@ -462,6 +484,38 @@ namespace MonumentsMap.Data.Migrations
                     b.HasIndex("NameId");
 
                     b.ToTable("Statuses");
+                });
+
+            modelBuilder.Entity("MonumentsMap.Models.Token", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -515,6 +569,13 @@ namespace MonumentsMap.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MonumentsMap.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("MonumentsMap.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("MonumentsMap.Models.City", b =>
                 {
                     b.HasOne("MonumentsMap.Models.LocalizationSet", "Name")
@@ -522,6 +583,10 @@ namespace MonumentsMap.Data.Migrations
                         .HasForeignKey("NameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MonumentsMap.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("MonumentsMap.Models.Condition", b =>
@@ -541,7 +606,9 @@ namespace MonumentsMap.Data.Migrations
                 {
                     b.HasOne("MonumentsMap.Models.Culture", "Culture")
                         .WithMany()
-                        .HasForeignKey("CultureCode");
+                        .HasForeignKey("CultureCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MonumentsMap.Models.LocalizationSet", "LocalizationSet")
                         .WithMany("Localizations")
@@ -587,7 +654,9 @@ namespace MonumentsMap.Data.Migrations
                 {
                     b.HasOne("MonumentsMap.Models.LocalizationSet", "Description")
                         .WithMany()
-                        .HasForeignKey("DescriptionId");
+                        .HasForeignKey("DescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MonumentsMap.Models.Monument", null)
                         .WithMany("MonumentPhotos")

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Models
@@ -8,9 +9,13 @@ namespace MonumentsMap.Models
         #region props
         public int? Year { get; set; }
         public Period? Period { get; set; }
+        [Required]
         public int MonumentId { get; set; }
+        [Required]
         public int? DescriptionId { get; set; }
+        [Required]
         public int PhotoId { get; set; }
+        [Required]
         public bool MajorPhoto { get; set; }
         #endregion
         #region  lazy props
