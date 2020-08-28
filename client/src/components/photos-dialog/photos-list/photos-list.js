@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 5,
     marginRight: 5,
     boxSizing: "border-box",
+    maxHeight: 70,
+    objectFit: "scale-down"
   },
   imgBorder: {
     borderStyle: "solid",

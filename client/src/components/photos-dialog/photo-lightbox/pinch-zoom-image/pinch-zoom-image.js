@@ -19,10 +19,8 @@ export default function PinchZoomImage({
     const isPortrait = window.innerHeight > window.innerWidth;
     if (portrait !== isPortrait) {
       setPortrait(isPortrait);
-      if (isPortrait === true) {
-        setKey(Math.random());
-        return;
-      }
+      setKey(Math.random());
+      return;
     }
     const { state, props } = pinchZoomPanRef.current;
     const { scale } = state;
