@@ -47,6 +47,7 @@ namespace MonumentsMap.Models
         public virtual LocalizationSet Description { get; set; }
         public virtual List<Source> Sources { get; set; }
         public virtual List<MonumentPhoto> MonumentPhotos { get; set; }
+        public virtual List<ParticipantMonument> ParticipantMonuments { get; set; }
         #endregion
     }
 }

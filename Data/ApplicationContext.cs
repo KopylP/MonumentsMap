@@ -21,6 +21,8 @@ namespace MonumentsMap.Data
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Source> Sources { get; set; }
         public DbSet<Token> Tokens { get; set; }
+        public DbSet<Participant> Participants { get; set; }
+        public DbSet<ParticipantMonument> ParticipantMonuments { get; set; }
 
         #endregion
         #region override methods

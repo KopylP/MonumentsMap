@@ -18,6 +18,8 @@ namespace MonumentsMap.Data
             ConditionSeed(applicationContext);
             StatusSeed(applicationContext);
             CitySeed(applicationContext);
+            //TODO only for tests
+            ParticipantSeed(applicationContext);
             RolesFeed(roleManager).Wait();
             UsersSeed(userManager).Wait();
         }
@@ -502,6 +504,52 @@ namespace MonumentsMap.Data
             }
         }
 
+        //Only for tests
+        public static void ParticipantSeed(ApplicationContext applicationContext)
+        {
+            if (!applicationContext.Participants.Any())
+            {
+                var participant = new Participant
+                {
+                    Name = new LocalizationSet
+                    {
+                        Localizations = new List<Localization>()
+                    },
+                    DefaultName = "unknown"
+                };
+                participant.Name.Localizations.Add(
+                    new Localization
+                    {
+                        CultureCode = "uk-UA",
+                        Value = "Невідомий"
+                    }
+                );
+                participant.Name.Localizations.Add(
+                    new Localization
+                    {
+                        CultureCode = "en-GB",
+                        Value = "Unknown",
+                    }
+                 );
+                participant.Name.Localizations.Add(
+                     new Localization
+                     {
+                         CultureCode = "pl-PL",
+                         Value = "Niewiadomy",
+                     }
+                 );
+                participant.Name.Localizations.Add(
+                     new Localization
+                     {
+                         CultureCode = "ru-RU",
+                         Value = "Неизвестный",
+                     }
+                 );
+                applicationContext.Participants.AddRange(participant);
+                applicationContext.SaveChanges();
+            }
+        }
+
         private static async Task RolesFeed(RoleManager<IdentityRole> roleManager)
         {
             string role_Admin = "Admin";
@@ -527,7 +575,7 @@ namespace MonumentsMap.Data
                 UpdatedAt = DateTime.Now,
                 DisplayName = "Admin"
             };
-            
+
             if (await userManager.FindByNameAsync(user_Admin.UserName) == null)
             {
                 await userManager.CreateAsync(user_Admin, "Pass4Admin");

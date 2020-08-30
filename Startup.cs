@@ -66,6 +66,7 @@ namespace MonumentsMap
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
             services.AddScoped<CultureCodeResourceFilter>();
             services.AddScoped<TokenRepository>();
+            services.AddScoped<ParticipantLocalizedRepository>();
             services.AddScoped<ITokenService, TokenService>();
             //idenditiy
             services.AddIdentity<ApplicationUser, IdentityRole>(opts =>

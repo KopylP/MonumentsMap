@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MonumentsMap.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -298,6 +298,27 @@ namespace MonumentsMap.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Participants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DefaultName = table.Column<string>(nullable: false),
+                    NameId = table.Column<int>(nullable: true),
+                    ParticipantRole = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Participants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Participants_LocalizationSets_NameId",
+                        column: x => x.NameId,
+                        principalTable: "LocalizationSets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Statuses",
                 columns: table => new
                 {
@@ -411,6 +432,32 @@ namespace MonumentsMap.Data.Migrations
                         name: "FK_MonumentPhotos_Photos_PhotoId",
                         column: x => x.PhotoId,
                         principalTable: "Photos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ParticipantMonuments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ParticipantId = table.Column<int>(nullable: false),
+                    MonumentId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParticipantMonuments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ParticipantMonuments_Monuments_MonumentId",
+                        column: x => x.MonumentId,
+                        principalTable: "Monuments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParticipantMonuments_Participants_ParticipantId",
+                        column: x => x.ParticipantId,
+                        principalTable: "Participants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -556,6 +603,21 @@ namespace MonumentsMap.Data.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ParticipantMonuments_MonumentId",
+                table: "ParticipantMonuments",
+                column: "MonumentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParticipantMonuments_ParticipantId",
+                table: "ParticipantMonuments",
+                column: "ParticipantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participants_NameId",
+                table: "Participants",
+                column: "NameId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sources_MonumentId",
                 table: "Sources",
                 column: "MonumentId");
@@ -597,6 +659,9 @@ namespace MonumentsMap.Data.Migrations
                 name: "Localizations");
 
             migrationBuilder.DropTable(
+                name: "ParticipantMonuments");
+
+            migrationBuilder.DropTable(
                 name: "Sources");
 
             migrationBuilder.DropTable(
@@ -607,6 +672,9 @@ namespace MonumentsMap.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cultures");
+
+            migrationBuilder.DropTable(
+                name: "Participants");
 
             migrationBuilder.DropTable(
                 name: "MonumentPhotos");

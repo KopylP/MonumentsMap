@@ -9,8 +9,8 @@ using MonumentsMap.Data;
 namespace MonumentsMap.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200828171628_Initial")]
-    partial class Initial
+    [Migration("20200830162123_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -418,6 +418,50 @@ namespace MonumentsMap.Data.Migrations
                     b.ToTable("MonumentPhotos");
                 });
 
+            modelBuilder.Entity("MonumentsMap.Models.Participant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DefaultName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("NameId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ParticipantRole")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NameId");
+
+                    b.ToTable("Participants");
+                });
+
+            modelBuilder.Entity("MonumentsMap.Models.ParticipantMonument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MonumentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MonumentId");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.ToTable("ParticipantMonuments");
+                });
+
             modelBuilder.Entity("MonumentsMap.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -667,6 +711,28 @@ namespace MonumentsMap.Data.Migrations
                     b.HasOne("MonumentsMap.Models.Photo", "Photo")
                         .WithMany()
                         .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MonumentsMap.Models.Participant", b =>
+                {
+                    b.HasOne("MonumentsMap.Models.LocalizationSet", "Name")
+                        .WithMany()
+                        .HasForeignKey("NameId");
+                });
+
+            modelBuilder.Entity("MonumentsMap.Models.ParticipantMonument", b =>
+                {
+                    b.HasOne("MonumentsMap.Models.Monument", "Monument")
+                        .WithMany("ParticipantMonuments")
+                        .HasForeignKey("MonumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MonumentsMap.Models.Participant", "Participant")
+                        .WithMany("ParticipantMonuments")
+                        .HasForeignKey("ParticipantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
