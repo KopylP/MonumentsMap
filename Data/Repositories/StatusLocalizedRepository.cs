@@ -19,7 +19,7 @@ namespace MonumentsMap.Data.Repositories
             Id = entity.Id,
             Abbreviation = entity.Abbreviation,
             Name = entity.Name.GetCultureValuePairs(),
-            Description = entity.Description.GetCultureValuePairs()
+            Description = entity.Description?.GetCultureValuePairs()
         };
 
         protected override Func<Status, LocalizedStatus> GetSelectHandler(string cultureCode)

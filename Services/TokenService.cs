@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -41,7 +42,7 @@ namespace MonumentsMap.Services
                 }
                 var rt = CreateRefreshToken(model.client_id, user.Id);
                 await _tokenRepository.Add(rt);
-                var t = CreateAccessToken(user.Id, rt.Value);
+                var t = await CreateAccessTokenAsync(user, rt.Value);
                 return t;
             }
             catch
@@ -65,7 +66,7 @@ namespace MonumentsMap.Services
                 var rtNew = CreateRefreshToken(rt.ClientId, rt.UserId);
                 await _tokenRepository.Delete(rt.Id);
                 await _tokenRepository.Add(rtNew);
-                return CreateAccessToken(rtNew.UserId, rtNew.Value);
+                return await CreateAccessTokenAsync(user, rtNew.Value);
             }
             catch
             {
@@ -85,15 +86,20 @@ namespace MonumentsMap.Services
                 CreatedAt = DateTime.UtcNow
             };
         }
-        private TokenResponseViewModel CreateAccessToken(string userId, string refreshToken)
+        private async Task<TokenResponseViewModel> CreateAccessTokenAsync(ApplicationUser user, string refreshToken)
         {
             DateTime now = DateTime.UtcNow;
 
-            var claims = new[] {
-                    new Claim(JwtRegisteredClaimNames.Sub, userId),
+            var claims = new List<Claim> {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUnixTimeSeconds().ToString())
                 };
+            var userRoles = await _userManager.GetRolesAsync(user);
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var tokenExpirationMins = _configuration.GetValue<int>("Auth:Jwt:TokenExpirationInMinutes");
             var issurerSigningKey = new SymmetricSecurityKey(
