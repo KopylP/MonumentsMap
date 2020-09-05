@@ -1,8 +1,11 @@
-export default function errorNetworkSnackbar(enqueueSnackbar, statusCode) {
+export default function errorNetworkSnackbar(enqueueSnackbar, statusCode, login = false) {
   let errorMessage;
   switch (statusCode) {
+    case 0:
+      errorMessage = "Немає підключення до інтернету";
+      break;
     case 401:
-      errorMessage = "Авторизуйтеся";
+      errorMessage = login ? "Неправльні пошта або пароль": "Не авторизовано";
       break;
     default:
       errorMessage = "Не вдалося зберегти зміни";

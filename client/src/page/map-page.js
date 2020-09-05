@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { SnackbarProvider } from "notistack";
 import {
   createMuiTheme,
   MuiThemeProvider,
@@ -24,7 +23,6 @@ import {
   useParams,
   useHistory,
 } from "react-router-dom";
-import { isMobile } from "react-device-detect";
 import FullWindowHeightContainer from "../components/common/full-window-height-container/full-window-height-container";
 
 const useStyles = makeStyles((theme) => ({
@@ -187,7 +185,6 @@ function MapPage(props) {
 
   return (
     <AppContext.Provider value={contextValues}>
-      <SnackbarProvider maxSnack={5}>
         <div className={classes.app}>
           <FullWindowHeightContainer style={{ width: "100%" }}>
             <div className={classes.mapContainer}>
@@ -209,7 +206,6 @@ function MapPage(props) {
             <DetailDrawer />
           </Route>
         </Switch>
-      </SnackbarProvider>
     </AppContext.Provider>
   );
 }

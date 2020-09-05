@@ -14,6 +14,8 @@ const defaultCity = {
 
 const defaultZoom = 17;
 
+const clientId = "monumentsmap";
+
 const accessToken = "6gbhT4C7Kpj0YRx9mqPWxoZA2IhKXCDTk2L0wFHSurl2EtAxvun10VOtpLfS9rTX";
 
 export {
@@ -22,4 +24,5 @@ export {
     defaultCity,
     defaultZoom,
     accessToken,
+    clientId
 }

@@ -1,6 +1,16 @@
 import axios from "axios";
-import withMonumentService from "../components/hoc-helpers/with-monument-service";
+import LocalStorageService from "./local-storage-service";
+import {
+  authRequestInterceptor,
+  authErrorRequestInterceptor,
+  authResponseInterceptror,
+  authErrorResponseInterceptor,
+} from "./interceptors/auth-interceptors";
+
 const CancelToken = axios.CancelToken;
+
+const localStorageService = LocalStorageService.getService();
+
 export default class MonumentService {
   constructor(host, cultureCode = "uk-UA") {
     this._cultureCode = cultureCode;
@@ -12,6 +22,15 @@ export default class MonumentService {
         Accept: "*",
       },
     });
+
+    this._axios.interceptors.request.use(
+      authRequestInterceptor,
+      authErrorRequestInterceptor
+    );
+    this._axios.interceptors.response.use(
+      authResponseInterceptror,
+      authErrorResponseInterceptor
+    );
   }
 
   async _getRequest(
@@ -155,7 +174,7 @@ export default class MonumentService {
   };
 
   getPhotoLink = (photoId, size) => {
-    return `${this._baseURL}photo/${photoId}/image${ size ? "/" + size : "" }`;
+    return `${this._baseURL}photo/${photoId}/image${size ? "/" + size : ""}`;
   };
 
   getMonumentMonumentPhotoEditable = async (monumentPhotoId) => {
@@ -163,5 +182,9 @@ export default class MonumentService {
       `monumentphoto/${monumentPhotoId}/editable`,
       false
     );
+  };
+
+  getMe = async () => {
+    return await this._getRequest(`token/me`, false);
   };
 }

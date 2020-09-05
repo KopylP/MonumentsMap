@@ -10,6 +10,8 @@ import {
 import MapPage from "./page/map-page";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import LoginPage from "./page/login-page";
+import AdminPage from "./admin/admin-page";
+import { SnackbarProvider } from "notistack";
 
 const theme = createMuiTheme({
   palette: {
@@ -22,21 +24,34 @@ const theme = createMuiTheme({
   drawerWidth: 350,
   detailDrawerWidth: 360,
   detailDrawerHeaderHeight: 250,
+  adminDrawerWidth: 240,
 });
 
 function App(props) {
   return (
     <Router>
       <Switch>
-        <Route path="/login">
-          <MuiThemeProvider theme={theme}>
-            <LoginPage />
-          </MuiThemeProvider>
+        <Route path="/admin/login">
+          <SnackbarProvider maxSnack={5}>
+            <MuiThemeProvider theme={theme}>
+              <LoginPage />
+            </MuiThemeProvider>
+          </SnackbarProvider>
         </Route>
+        <Route path="/admin">
+          <SnackbarProvider maxSnack={5}>
+            <MuiThemeProvider theme={theme}>
+              <AdminPage />
+            </MuiThemeProvider>
+          </SnackbarProvider>
+        </Route>
+
         <Route path="/">
-          <MuiThemeProvider theme={theme}>
-            <MapPage />
-          </MuiThemeProvider>
+          <SnackbarProvider maxSnack={5}>
+            <MuiThemeProvider theme={theme}>
+              <MapPage />
+            </MuiThemeProvider>
+          </SnackbarProvider>
         </Route>
       </Switch>
     </Router>

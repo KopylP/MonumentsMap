@@ -1,9 +1,14 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Extensions;
+using MonumentsMap.Models;
 using MonumentsMap.Services.Interfaces;
 using MonumentsMap.ViewModels;
 
@@ -14,11 +19,16 @@ namespace MonumentsMap.Controllers
     public class TokenController : ControllerBase
     {
         #region private fields
-        private ITokenService _tokenServise;
+        private readonly ITokenService _tokenServise;
+        private readonly UserManager<ApplicationUser> _userManager;
         #endregion
 
         #region constructor
-        public TokenController(ITokenService tokenService) => _tokenServise = tokenService;
+        public TokenController(ITokenService tokenService, UserManager<ApplicationUser> userManager)
+        {
+            _tokenServise = tokenService;
+            _userManager = userManager;
+        }
         #endregion
 
         #region methods
@@ -40,6 +50,15 @@ namespace MonumentsMap.Controllers
             }
             if (tokenResponse == null) return new UnauthorizedResult(); //TODO handle error
             return Ok(tokenResponse);
+        }
+
+        [HttpGet("Me")]
+        [Authorize]
+        public async Task<IActionResult> GetMe()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized(); //TODO handle error
+            return Ok(await user.AdaptUserToModelAsync(_userManager));
         }
         #endregion
     }
