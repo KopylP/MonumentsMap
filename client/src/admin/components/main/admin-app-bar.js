@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
 function AdminAppBar({ drawerOpen, onMenuClick, title }) {
   const classes = useStyles();
   const history = useHistory();
-  const { rightHeader } = useContext(AdminContext);
 
   const handleSignOut = () => {
     const lss = LocalStorageService.getService();
@@ -68,7 +67,6 @@ function AdminAppBar({ drawerOpen, onMenuClick, title }) {
         <Typography variant="h6" noWrap style={{ flexGrow: 1 }}>
           {title}
         </Typography>
-        {rightHeader}
         <Button color="inherit" onClick={handleSignOut}>
           Sign out
         </Button>

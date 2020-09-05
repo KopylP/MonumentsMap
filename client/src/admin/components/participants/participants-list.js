@@ -1,17 +1,29 @@
-import React, { useContext, useEffect } from "react";
-import AdminContext from "../../context/admin-context";
-import { usePrevious } from "../../../hooks/hooks";
+import React from "react";
+import MaterialTable from "material-table";
+import withData from "../../../components/hoc-helpers/with-data";
+import withMonumentService from "../../../components/hoc-helpers/with-monument-service";
+import ParticipantRoleComponent from "../../../components/common/participant-role-component/participant-role-component";
+import SimpleList from "../common/simple-list";
 
-export default function ParticipantsList() {
-//   const { setRightHeader } = useContext(AdminContext);
-
-//   useEffect(() => {
-//       console.log("LOOOOOOOOOOOOOOOOOOOOOOOOOL");
-//       setRightHeader({
-//           componentName: "ParticipantsList",
-//           component: <div>afadsfasdfasdf</div>
-//       });
-//   }, []);
-
-  return <div>Participants List</div>;
+function ParticipantsList({ data }) {
+  const [columns, setColumns] = React.useState([
+    { title: "Дефолтне ім'я", field: "defaultName" },
+    { title: "Локалізоване ім'я", field: "name" },
+    {
+      title: "Роль",
+      field: "participantRole",
+      render: (rowData) => (
+        <ParticipantRoleComponent participantRole={rowData.participantRole} />
+      ),
+    },
+  ]);
+  return (
+    <SimpleList title="Учасники будівництва" columns={columns} data={data} />
+  );
 }
+
+export default withMonumentService(withData(ParticipantsList))(
+  (monumentService) => ({
+    getData: monumentService.getParticipants,
+  })
+);

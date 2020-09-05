@@ -184,6 +184,10 @@ export default class MonumentService {
     );
   };
 
+  getParticipants = async () => {
+    return await this._getRequest(`participant`);
+  };
+
   getMe = async () => {
     return await this._getRequest(`token/me`, false);
   };

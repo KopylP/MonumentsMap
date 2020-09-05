@@ -30,7 +30,8 @@ namespace MonumentsMap.Data.Repositories
                 {
                     Id = p.Id,
                     DefaultName = p.DefaultName,
-                    Name = Name
+                    Name = Name,
+                    ParticipantRole = p.ParticipantRole
                 };
             };
         }

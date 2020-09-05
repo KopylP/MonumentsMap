@@ -60,17 +60,7 @@ function AdminPanel({ data }) {
 
   const [title, setTitle] = useState("Admin panel");
   const { path } = useRouteMatch();
-  const [rightHeader, setRightHeader] = useState(null);
-  const [rightHeaderComponentName, setRightHeaderComponentName] = useState(null);
-  const contextValues = {
-    rightHeader,
-    setRightHeader: (newRightHeader) => {
-        if(rightHeaderComponentName !== newRightHeader.componentName) {
-            setRightHeaderComponentName(newRightHeader.componentName);
-            setRightHeader(newRightHeader.component);
-        }
-    }
-  };
+  const contextValues = null;
   return (
     <AdminContext.Provider value={contextValues}>
       <div className={classes.root}>
