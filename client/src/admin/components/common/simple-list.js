@@ -1,8 +1,5 @@
 import React from "react";
 import MaterialTable from "material-table";
-import withData from "../../../components/hoc-helpers/with-data";
-import withMonumentService from "../../../components/hoc-helpers/with-monument-service";
-import ParticipantRoleComponent from "../../../components/common/participant-role-component/participant-role-component";
 
 export default function SimpleList({ data, columns, title, onEdit = p => p, onDelete = p => p, extraActions = [] }) {
   return (
