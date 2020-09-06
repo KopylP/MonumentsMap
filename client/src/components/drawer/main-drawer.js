@@ -6,7 +6,6 @@ import DrawerContent from "./drawer-content/drawer-content";
 import AppContext from "../../context/app-context";
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { makeStyles } from "@material-ui/core";
-import AddModal from "../add-modal/add-modal";
 
 // width: 350px;
 // flex-shrink: 0;
@@ -50,7 +49,6 @@ export default function MainDrawer(props) {
         <DrawerHeader onBack={() => setMainDrawerOpen(false)}/>
         <DrawerContent onAdd={addMonument}/>
       </DrawerContainer>
-      <AddModal openAddModal={openAddModel} setOpenAddModal={setOpenAddModel}/>
     </Drawer>
   );
 }

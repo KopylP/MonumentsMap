@@ -6,7 +6,7 @@ import DetailCondition from "../detail-condition/detail-condition";
 import DetailStatus from "../detail-status/detail-status";
 import DetailTitle from "../detail-title/detail-title";
 import DetailDescription from "../detail-description/detail-description";
-import MonumentAdminPanel from "../../admin-panels/monument-admin-panel/monument-admin-panel";
+// import MonumentAdminPanel from "../../admin-panels/monument-admin-panel/monument-admin-panel";
 import DetailProtectionNumber from "../detail-protection-number/detail-protection-number";
 
 const useStyles = makeStyles((theme) => ({}));
@@ -17,9 +17,9 @@ export default function DetailDrawerContent({ monument, ...props }) {
   return (
     <div style={{ padding: 15 }}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <MonumentAdminPanel data={monument && monument.id} />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <DrawerAddress
             data={

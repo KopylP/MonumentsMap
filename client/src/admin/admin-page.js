@@ -11,6 +11,8 @@ import ParticipantsResource from "./components/participants/participants-resourc
 import AdminContext from "./context/admin-context";
 import MonumentService from "../services/monument-service";
 import { serverHost } from "../config";
+import MonumentsResource from "./components/monuments/monuments-resource";
+import GeocoderService from "../services/geocoder-service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +52,12 @@ function AdminPanel({ data }) {
       roles: ["Editor"],
       Page: () => <ParticipantsResource />,
     },
+    {
+      name: "Пам'ятки архітектури",
+      path: "monuments",
+      roles: ["Editor"],
+      Page: () => <MonumentsResource />
+    },
     { separator: true },
   ];
 
@@ -63,7 +71,8 @@ function AdminPanel({ data }) {
   const [title, setTitle] = useState("Admin panel");
   const { path } = useRouteMatch();
   const monumentService = new MonumentService(serverHost, "uk-UA");
-  const contextValues = {monumentService};
+  const geocoderService = new GeocoderService('uk');
+  const contextValues = {monumentService, geocoderService};
   return (
     <AdminContext.Provider value={contextValues}>
       <div className={classes.root}>

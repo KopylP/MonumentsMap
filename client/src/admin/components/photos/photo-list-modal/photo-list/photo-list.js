@@ -1,14 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
-import withMonumentService from "../../../../hoc-helpers/with-monument-service";
-import withData from "../../../../hoc-helpers/with-data";
-import MonumentPhotoListItem from "../photo-list-item/monument-photo-list-item";
-import AppContext from "../../../../../context/app-context";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { Button } from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
-import errorNetworkSnackbar from "../../../../helpers/error-network-snackbar";
+import { usePrevious } from "../../../../../hooks/hooks";
 import EditPhotoModal from "../../add-photo-modal/edit-photo-modal";
-import { usePrevios, usePrevious } from "../../../../../hooks/hooks";
+import errorNetworkSnackbar from "../../../../../components/helpers/error-network-snackbar";
+import AdminContext from "../../../../context/admin-context";
+import MonumentPhotoListItem from "../photo-list-item/monument-photo-list-item";
+import withMonumentService from "../../../../../components/hoc-helpers/with-monument-service";
+import withData from "../../../../../components/hoc-helpers/with-data";
 /**
  *
  * @param {*} data - monuments
@@ -16,7 +16,7 @@ import { usePrevios, usePrevious } from "../../../../../hooks/hooks";
 function PhotoList({ data, onUpdate = p => p }) {
   const {
     monumentService: { toogleMonumentMajorPhoto, deleteMonumentPhoto },
-  } = useContext(AppContext);
+  } = useContext(AdminContext);
 
   const [monumentPhotos, setMonumentPhotos] = useState(
     data.map((obj) => ({ deleted: false, ...obj })) //TODO delete deleted

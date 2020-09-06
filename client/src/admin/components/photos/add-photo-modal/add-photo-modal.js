@@ -15,15 +15,14 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { DropzoneArea } from "material-ui-dropzone";
-import { supportedCultures } from "../../../../config";
-import Source from "../../../add-modal/source/source";
-import ScrollBar from "../../../common/scroll-bar/scroll-bar";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import AppContext from "../../../../context/app-context";
-import DetailDrawerContext from "../../../detail-drawer/context/detail-drawer-context";
 import * as cx from "classnames";
+import AdminContext from "../../../context/admin-context";
 import Period from "../../../../models/period";
+import ScrollBar from "../../../../components/common/scroll-bar/scroll-bar";
+import { supportedCultures } from "../../../../config";
+import Source from "../../common/source";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -60,13 +59,10 @@ export default function AddPhotoModal({
   ...props
 }) {
   const classes = useStyles(props);
-  const { monumentService } = useContext(AppContext);
-  const { onPhotoSave } = useContext(DetailDrawerContext);
-
+  const { monumentService } = useContext(AdminContext);
   const handleClose = () => {
     setOpen(false);
   };
-
   const defaultSources = [
     {
       title: "",
@@ -100,14 +96,12 @@ export default function AddPhotoModal({
   };
 
   const onCreateMonumentPhoto = (mp, resetForm) => {
-    onPhotoSave(mp);
     setSources(defaultSources);
     resetForm({ values: "" });
     setOpen(false);
   };
 
   const onEditMonumentPhoto = (mp) => {
-    console.log(mp);
     setOpen(false);
   };
 

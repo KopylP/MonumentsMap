@@ -1,6 +1,6 @@
-import withData from "../../../hoc-helpers/with-data";
-import withMonumentService from "../../../hoc-helpers/with-monument-service";
 import AddPhotoModal from "./add-photo-modal";
+import withMonumentService from "../../../../components/hoc-helpers/with-monument-service";
+import withData from "../../../../components/hoc-helpers/with-data";
 
 const EditPhotoModal = withMonumentService(withData(AddPhotoModal))(
   (monumentService) => ({

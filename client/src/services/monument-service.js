@@ -135,6 +135,10 @@ export default class MonumentService {
     return await this._postRequest("monument/", monument);
   }
 
+  deleteMonument = async (monumentId) => {
+    return await this._deleteRequest(`monument/${monumentId}`);
+  }
+
   deleteMonumentPhoto = async (monumentPhotoId) => {
     return await this._deleteRequest(`monumentphoto/${monumentPhotoId}`);
   };

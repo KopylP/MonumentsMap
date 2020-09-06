@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import { Grid, TextField, AppBar, Tabs, Tab } from "@material-ui/core";
-import { supportedCultures } from "../../../config";
+import { supportedCultures } from "../../../../../config";
 
 export default function TitleDescription({
   initName,

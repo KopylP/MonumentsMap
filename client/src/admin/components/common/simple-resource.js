@@ -8,7 +8,11 @@ import {
 } from "react-router-dom";
 import { Grid, Button } from "@material-ui/core";
 
-export default function SimpleResource({ ItemList, CreateItem, UpdateItem }) {
+export default function SimpleResource({
+  ItemList,
+  CreateItem = null,
+  UpdateItem = null,
+}) {
   const { path, url } = useRouteMatch();
   const { pathname } = useLocation();
 
@@ -33,12 +37,16 @@ export default function SimpleResource({ ItemList, CreateItem, UpdateItem }) {
         <Route exact path={path}>
           <ItemList />
         </Route>
-        <Route path={`${path}/create`}>
-          <CreateItem />
-        </Route>
-        <Route path={`${path}/:itemId`}>
-          <UpdateItem />
-        </Route>
+        {CreateItem ? (
+          <Route path={`${path}/create`}>
+            <CreateItem />
+          </Route>
+        ) : null}
+        {UpdateItem ? (
+          <Route path={`${path}/:itemId`}>
+            <UpdateItem />
+          </Route>
+        ) : null}
       </Switch>
     </Grid>
   );
