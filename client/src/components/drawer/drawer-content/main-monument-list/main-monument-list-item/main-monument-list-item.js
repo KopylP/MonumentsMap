@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import AppContext from "../../../../../context/app-context";
-import DetailYear from "../../../../detail-drawer/detail-year/detail-year";
+import SimpleDetailYear from "../../../../detail-drawer/detail-year/simple-detail-year";
 
 export default function MainMonumentListItem({ monument, style, onClick = p => p }) {
   const { monumentService } = useContext(AppContext);
@@ -26,7 +26,7 @@ export default function MainMonumentListItem({ monument, style, onClick = p => p
         </ListItemAvatar>
         <ListItemText
           primary={<Typography noWrap>{monument.name}</Typography>}
-          secondary={<DetailYear year={monument.year} period={monument.period} textOnly/>}
+          secondary={<SimpleDetailYear year={monument.year} period={monument.period}/>}
         />
       </ListItem>
       <Divider />
