@@ -1,4 +1,5 @@
 export default function errorNetworkSnackbar(enqueueSnackbar, statusCode, login = false) {
+  statusCode = statusCode == null ? 0 : statusCode;
   let errorMessage;
   switch (statusCode) {
     case 0:

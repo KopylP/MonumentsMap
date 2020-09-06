@@ -9,6 +9,8 @@ import AdminAppBar from "./components/main/admin-app-bar";
 import { useRouteMatch, Route, Switch } from "react-router-dom";
 import ParticipantsResource from "./components/participants/participants-resource";
 import AdminContext from "./context/admin-context";
+import MonumentService from "../services/monument-service";
+import { serverHost } from "../config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +62,8 @@ function AdminPanel({ data }) {
 
   const [title, setTitle] = useState("Admin panel");
   const { path } = useRouteMatch();
-  const contextValues = null;
+  const monumentService = new MonumentService(serverHost, "uk-UA");
+  const contextValues = {monumentService};
   return (
     <AdminContext.Provider value={contextValues}>
       <div className={classes.root}>

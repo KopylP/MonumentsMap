@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 
-export default function withData(Wrapper) {
+export default function withData(Wrapper, paramsFromRoute = []) {
   return function (props) {
-    const { getData, params, onError = (p) => p } = props;
+    const { getData, onError = (p) => p } = props;
+    const routeParams = useParams();
+    let { params } = props;
     const [data, setData] = useState(null);
     const [unauthorized, setUnauthorized] = useState(false);
-    console.log("withData", props);
     const updateData = () => {
       setData(null);
       update();
     };
+
+    if (paramsFromRoute.length > 0) {
+      params = paramsFromRoute.map(
+        (paramFromRoute) => routeParams[paramFromRoute]
+      );
+    }
 
     const update = () => {
       getData(...params)
@@ -47,7 +54,9 @@ export default function withData(Wrapper) {
           </div>
         ) : null}
         {unauthorized ? <Redirect to="/admin/login" /> : null}
-        { data && !unauthorized ? <Wrapper data={data} onUpdate={updateData} {...props}/>: null }
+        {data && !unauthorized ? (
+          <Wrapper data={data} onUpdate={updateData} {...props} />
+        ) : null}
       </React.Fragment>
     );
   };

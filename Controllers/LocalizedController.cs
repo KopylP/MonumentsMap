@@ -41,18 +41,21 @@ namespace MonumentsMap.Controllers
             return Ok(localizedEntity);
         }
         [HttpPost]
+        [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Post([FromBody] TEditableLocalizedEntity editableLocalizedEntity)
         {
             var entities = await localizedRepository.Create(editableLocalizedEntity);
             return Ok(entities);
         }
         [HttpPut]
+        [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Put([FromBody] TEditableLocalizedEntity editableLocalizedCity)
         {
             var entities = await localizedRepository.Update(editableLocalizedCity);
             return Ok(entities);
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Delete(int id)
         {
             var entity = await localizedRepository.Remove(id);
@@ -60,6 +63,7 @@ namespace MonumentsMap.Controllers
             return Ok(entity);
         }
         [HttpGet("{id:int}/editable")]
+        [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Editable(int id)
         {
             var editableEntity = await localizedRepository.GetEditableLocalizedEntity(id);

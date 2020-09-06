@@ -17,7 +17,8 @@ namespace MonumentsMap.Data.Repositories
         {
             Id = entity.Id,
             DefaultName = entity.DefaultName,
-            Name = entity.Name.GetCultureValuePairs()
+            Name = entity.Name.GetCultureValuePairs(),
+            ParticipantRole = entity.ParticipantRole
         };
 
         protected override System.Func<Participant, LocalizedParticipant> GetSelectHandler(string cultureCode)

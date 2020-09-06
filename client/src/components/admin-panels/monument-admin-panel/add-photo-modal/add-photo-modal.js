@@ -227,8 +227,6 @@ export default function AddPhotoModal({
                       label="Рік фотографії"
                       type="number"
                       name="year"
-                      type="number"
-                      name="year"
                       required
                       value={formik.values.year}
                       onBlur={formik.handleBlur}

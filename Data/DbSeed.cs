@@ -18,8 +18,6 @@ namespace MonumentsMap.Data
             ConditionSeed(applicationContext);
             StatusSeed(applicationContext);
             CitySeed(applicationContext);
-            //TODO only for tests
-            ParticipantSeed(applicationContext);
             RolesFeed(roleManager).Wait();
             UsersSeed(userManager).Wait();
         }
@@ -500,52 +498,6 @@ namespace MonumentsMap.Data
                      }
                  );
                 applicationContext.Cities.AddRange(poltava);
-                applicationContext.SaveChanges();
-            }
-        }
-
-        //Only for tests
-        public static void ParticipantSeed(ApplicationContext applicationContext)
-        {
-            if (!applicationContext.Participants.Any())
-            {
-                var participant = new Participant
-                {
-                    Name = new LocalizationSet
-                    {
-                        Localizations = new List<Localization>()
-                    },
-                    DefaultName = "unknown"
-                };
-                participant.Name.Localizations.Add(
-                    new Localization
-                    {
-                        CultureCode = "uk-UA",
-                        Value = "Невідомий"
-                    }
-                );
-                participant.Name.Localizations.Add(
-                    new Localization
-                    {
-                        CultureCode = "en-GB",
-                        Value = "Unknown",
-                    }
-                 );
-                participant.Name.Localizations.Add(
-                     new Localization
-                     {
-                         CultureCode = "pl-PL",
-                         Value = "Niewiadomy",
-                     }
-                 );
-                participant.Name.Localizations.Add(
-                     new Localization
-                     {
-                         CultureCode = "ru-RU",
-                         Value = "Неизвестный",
-                     }
-                 );
-                applicationContext.Participants.AddRange(participant);
                 applicationContext.SaveChanges();
             }
         }

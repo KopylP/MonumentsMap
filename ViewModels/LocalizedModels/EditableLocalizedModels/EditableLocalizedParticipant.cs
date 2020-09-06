@@ -7,6 +7,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
     {
         public string DefaultName { get; set; }
         public List<CultureValuePair> Name { get; set; }
+        public ParticipantRole? ParticipantRole { get; set; }
 
         public override Participant CreateEntity(Participant entity = null)
         {
@@ -28,6 +29,7 @@ namespace MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels
             }
             participant.Id = Id;
             participant.DefaultName = DefaultName;
+            participant.ParticipantRole = ParticipantRole;
             foreach(var cultureValue in Name)
             {
                 participant.Name.Localizations.Add(new Localization

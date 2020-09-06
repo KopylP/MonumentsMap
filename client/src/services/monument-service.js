@@ -188,6 +188,22 @@ export default class MonumentService {
     return await this._getRequest(`participant`);
   };
 
+  getEditableParticipant = async (participantId) => {
+    return await this._getRequest(`participant/${participantId}/editable`);
+  };
+
+  deleteParticipant = async (participantId) => {
+    return await this._deleteRequest(`participant/${participantId}`);
+  };
+
+  editParticipant = async (participant) => {
+    return await this._putRequest(`participant`, participant);
+  }
+
+  createParticipant = async (participant) => {
+    return await this._postRequest(`participant`, participant);
+  }
+
   getMe = async () => {
     return await this._getRequest(`token/me`, false);
   };
