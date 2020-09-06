@@ -27,6 +27,7 @@ import { supportedCultures } from "../../../../config";
 import AdminContext from "../../../context/admin-context";
 import SimpleSubmitForm from "../../common/simple-submit-form";
 import { useHistory } from "react-router-dom";
+import { mergeTwoArraysByKey } from "../../../../components/helpers/array-helpers";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -73,30 +74,72 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-export default function CreateEditMonument() {
+const AutocompleteComponent = ({ citiesAutocompleteProps, formik }) => (
+  <Autocomplete
+    {...citiesAutocompleteProps}
+    id="clear-on-escape"
+    clearOnEscape
+    name="city"
+    value={formik.values.city}
+    onBlur={formik.handleBlur}
+    onChange={(_, newValue) => formik.setFieldValue("city", newValue)}
+    style={{
+      marginTop: -16,
+    }}
+    renderInput={(params) => (
+      <TextField
+        required
+        {...params}
+        label="Місто"
+        margin="normal"
+        onBlur={formik.handleBlur}
+        onChange={formik.handleChange}
+        name="cityName"
+        error={formik.touched.cityName && formik.errors.city}
+        helperText={
+          formik.touched.cityName && formik.errors.city && formik.errors.city
+        }
+      />
+    )}
+  />
+);
+
+export default function CreateEditMonument({ data }) {
   const [value, setValue] = React.useState(0);
-  const { monumentService, geocoderService } = useContext(AdminContext);
+  const {
+    monumentService,
+  } = useContext(AdminContext);
   const { goBack } = useHistory();
 
-  const defaultDescription = [
-    ...supportedCultures.map(({ code }) => ({
-      culture: code,
-      value: "",
-    })),
-  ];
-  const defaultSources = [
-    {
-      title: "",
-      sourceLink: "",
-    },
-  ];
+  const defaultDescription = supportedCultures.map(({ code }) => ({
+    culture: code,
+    value: "",
+  }));
 
-  const defaultName = [
-    ...supportedCultures.map(({ code }) => ({
-      culture: code,
-      value: "",
-    })),
-  ];
+  const defaultSources = data
+    ? data.sources
+    : [
+        {
+          title: "",
+          sourceLink: "",
+        },
+      ];
+
+  const defaultName = supportedCultures.map(({ code }) => ({
+    culture: code,
+    value: "",
+  }));
+
+  if (data) {
+    data.description.map(({ culture, value }) => {
+      const index = defaultDescription.findIndex((p) => p.culture === culture);
+      if (index > -1) defaultDescription[index].value = value;
+    });
+    data.name.map(({ culture, value }) => {
+      const index = defaultName.findIndex((p) => p.culture === culture);
+      if (index > -1) defaultName[index].value = value;
+    });
+  }
 
   const [name, setName] = useState(defaultName);
 
@@ -105,6 +148,7 @@ export default function CreateEditMonument() {
   const [conditions, setConditions] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [sources, setSources] = useState(defaultSources);
+  const [defaultCity, setDefaultCity] = useState("");
 
   const onFormSubmit = (values, { resetForm }) => {
     const monument = JSON.parse(JSON.stringify(values));
@@ -112,35 +156,32 @@ export default function CreateEditMonument() {
     monument.name = name;
     monument.description = description;
     monument.sources = sources;
-    const { getLatLngFromAddress } = geocoderService;
-    getLatLngFromAddress(`${monument.city.name}, ${monument.address}`)
-      .then(({ lat, lon }) => {
-        //TODO if address does`t found
-        delete monument.address;
-        delete monument.cityName;
-        monument.cityId = monument.city.id;
-        delete monument.city;
-        monument.latitude = lat;
-        monument.longitude = lon;
-        monumentService
-          .createMonument(monument)
-          .then((e) => {
-            goBack();
-          })
-          .catch(); //TODO handle error
+    delete monument.cityName;
+    monument.cityId = monument.city.id;
+    delete monument.city;
+    let saveMethod = monumentService.createMonument;
+    if (data) {
+      saveMethod = monumentService.editMonument;
+      monument.id = data.id;
+    }
+    saveMethod(monument)
+      .then((e) => {
+        goBack();
       })
       .catch(); //TODO handle error
   };
 
   const formik = useFormik({
     initialValues: {
-      year: "",
-      period: "",
-      statusId: "",
-      conditionId: "",
-      address: "",
+      year: data ? data.year : "",
+      period: data ? data.period : "",
+      statusId: data ? data.statusId : "",
+      conditionId: data ? data.conditionId : "",
+      latitude: data ? data.latitude : "",
+      longitude: data ? data.longitude : "",
       cityName: "",
-      protectionNumber: "",
+      protectionNumber: data ? data.protectionNumber : "",
+      city: defaultCity,
     },
     validationSchema: Yup.object({
       year: Yup.number().required("Це поле є обов'язковим"),
@@ -148,11 +189,21 @@ export default function CreateEditMonument() {
       city: Yup.mixed().required("Це поле є обов'язковим"),
       statusId: Yup.number().required("Це поле є обов'язковим"),
       conditionId: Yup.number().required("Це поле є обов'язковим"),
-      address: Yup.string().required("Це поле є обов'язковим"),
+      latitude: Yup.number().required("Це поле є обов'язковим"),
+      longitude: Yup.number().required("Це поле є обов'язковим"),
       protectionNumber: Yup.string(),
     }),
     onSubmit: onFormSubmit,
   });
+
+  useEffect(() => {
+    if (data && cities.length > 0) {
+      const selectedCityIndex = cities.findIndex(
+        (city) => city.id === data.cityId
+      );
+      formik.setFieldValue("city", cities[selectedCityIndex]);
+    }
+  }, [cities]);
 
   const onCitiesLoad = (cities) => {
     setCities(cities);
@@ -308,36 +359,9 @@ export default function CreateEditMonument() {
                 </FormControl>
               </Grid>
               <Grid item xs={6}>
-                <Autocomplete
-                  {...citiesAutocompleteProps}
-                  id="clear-on-escape"
-                  clearOnEscape
-                  name="city"
-                  value={formik.values.city}
-                  onBlur={formik.handleBlur}
-                  onChange={(_, newValue) =>
-                    formik.setFieldValue("city", newValue)
-                  }
-                  style={{
-                    marginTop: -16,
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      required
-                      {...params}
-                      label="Місто"
-                      margin="normal"
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      name="cityName"
-                      error={formik.touched.cityName && formik.errors.city}
-                      helperText={
-                        formik.touched.cityName &&
-                        formik.errors.city &&
-                        formik.errors.city
-                      }
-                    />
-                  )}
+                <AutocompleteComponent
+                  citiesAutocompleteProps={citiesAutocompleteProps}
+                  formik={formik}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -388,21 +412,42 @@ export default function CreateEditMonument() {
                   </FormHelperText>
                 </FormControl>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={3}>
                 <FormControl style={{ width: "100%" }}>
                   <TextField
                     required
                     id="standard-basic"
-                    name="address"
-                    label="Адреса пам'ятки"
-                    value={formik.values.address}
+                    name="latitude"
+                    label="Широта"
+                    type="number"
+                    value={formik.values.latitude}
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    error={formik.touched.address && formik.errors.address}
+                    error={formik.touched.latitude && formik.errors.latitude}
                     helperText={
-                      formik.touched.address &&
-                      formik.errors.address &&
-                      formik.errors.address
+                      formik.touched.latitude &&
+                      formik.errors.latitude &&
+                      formik.errors.latitude
+                    }
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={3}>
+                <FormControl style={{ width: "100%" }}>
+                  <TextField
+                    required
+                    id="standard-basic"
+                    name="longitude"
+                    label="Довгота"
+                    type="number"
+                    value={formik.values.longitude}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    error={formik.touched.longitude && formik.errors.longitude}
+                    helperText={
+                      formik.touched.longitude &&
+                      formik.errors.longitude &&
+                      formik.errors.longitude
                     }
                   />
                 </FormControl>
@@ -432,7 +477,6 @@ export default function CreateEditMonument() {
                 <Grid style={{ backgroundColor: "rgba(240, 240, 240, 0.4)" }}>
                   <AppBar position="relative">
                     <Tabs
-                      // style={{backgroundColor: "#efefef"}}
                       value={value}
                       onChange={handleChange}
                       aria-label="simple tabs example"
@@ -446,7 +490,7 @@ export default function CreateEditMonument() {
               <Grid item xs={12}>
                 <Source setSources={setSources} sources={sources} />
               </Grid>
-              <SimpleSubmitForm disableSubmit={!Object.keys(formik.touched).length}/>
+              <SimpleSubmitForm disableSubmit={false} />
             </Grid>
           </form>
         </div>

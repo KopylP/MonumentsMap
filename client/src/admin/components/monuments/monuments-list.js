@@ -45,7 +45,6 @@ function MonumentsList({ data }) {
             icon: () => <PhotoLibraryIcon />,
             tooltip: "Всі фото",
             onClick: (e, rowData) => {
-              console.log(rowData);
               setSelectedMonumentId(rowData.id);
               setOpenPhotoDialog(true);
             },

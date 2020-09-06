@@ -36,6 +36,7 @@ namespace MonumentsMap.Data.Repositories
             ConditionId = entity.ConditionId,
             Accepted = entity.Accepted,
             Latitude = entity.Latitude,
+            Year = entity.Year,
             Longitude = entity.Longitude,
             ProtectionNumber = entity.ProtectionNumber,
             Sources = entity.Sources.Select(p =>
@@ -110,7 +111,8 @@ namespace MonumentsMap.Data.Repositories
             {
                 return result.Include(p => p.Description)
                     .ThenInclude(p => p.Localizations)
-                    .Include(p => p.Sources);
+                    .Include(p => p.Sources)
+                    .Include(p => p.City);
             }
 
             return result;

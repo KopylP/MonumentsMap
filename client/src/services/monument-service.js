@@ -131,8 +131,16 @@ export default class MonumentService {
     return await this._getRequest("city/");
   }
 
-  async createMonument(monument) {
+  createMonument = async (monument) => {
     return await this._postRequest("monument/", monument);
+  }
+
+  editMonument = async (monument) => {
+    return await this._putRequest("monument/", monument);
+  }
+
+  getEditableMonument = async (monumentId) => {
+    return await this._getRequest(`monument/${monumentId}/editable`);
   }
 
   deleteMonument = async (monumentId) => {
