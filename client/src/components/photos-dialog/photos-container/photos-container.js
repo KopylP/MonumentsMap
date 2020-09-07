@@ -8,7 +8,7 @@ import PhotosList from "../photos-list/photos-list";
 import PhotosContainerButtons from "./photos-container-buttons";
 import useMutationObserver from "@rooks/use-mutation-observer";
 import MenuButton from "./menu-button";
-
+import CloseButton from "./close-button";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -122,6 +122,7 @@ export default function PhotosContainer({
         ref={containerRef}
       >
         <MenuButton onClick={e => setOpen(!open)}/>
+        <CloseButton onClick={onBack}/>
         <PhotoViewer
           imgUrl={monumentService.getPhotoLink(
             monumentPhotos[selectedMonumentPhotoIndex].photoId
