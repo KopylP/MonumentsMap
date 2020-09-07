@@ -2,6 +2,7 @@ import React from "react";
 import { Dialog, Fade } from "@material-ui/core";
 import PhotosContainer from "./photos-container/photos-container";
 
+
 export default function PhotosDialog({
   open,
   setOpen,

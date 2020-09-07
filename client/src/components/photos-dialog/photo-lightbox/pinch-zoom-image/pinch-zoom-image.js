@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 import PinchZoomPan from "react-responsive-pinch-zoom-pan";
 import useMutationObserver from "@rooks/use-mutation-observer";
 import { getMinScale } from "react-responsive-pinch-zoom-pan/dist/Utils";
+import { usePrevious } from "../../../../hooks/hooks";
 
 export default function PinchZoomImage({
   src,
@@ -42,6 +43,7 @@ export default function PinchZoomImage({
     setPortrait(window.innerHeight > window.innerWidth);
     setKey(Math.random());
   }, [src]);
+
 
   return (
     <PinchZoomPan

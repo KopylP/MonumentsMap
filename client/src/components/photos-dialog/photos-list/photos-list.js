@@ -4,24 +4,21 @@ import { GridList } from "@material-ui/core";
 import AppContext from "../../../context/app-context";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  list: {
     display: "flex",
     justifyContent: "center",
-    overflow: "hidden",
-  },
-  gridList: {
-    flexWrap: "nowrap",
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: "translateZ(0)",
+    flexWrap: "wrap"
   },
   img: {
     maxWidth: 100,
     height: "auto",
     marginLeft: 5,
     marginRight: 5,
+    marginBottom: 5,
     boxSizing: "border-box",
     maxHeight: 70,
-    objectFit: "scale-down"
+    objectFit: "scale-down",
+    flexGrow: 1,
   },
   imgBorder: {
     borderStyle: "solid",
@@ -38,7 +35,7 @@ export default function PhotosList({
   const classes = useStyles();
   const { monumentService } = useContext(AppContext);
   return (
-    <div className={classes.root}>
+    <div className={classes.list}>
       {monumentPhotos.map((monumentPhoto, i) => {
         return (
           <img

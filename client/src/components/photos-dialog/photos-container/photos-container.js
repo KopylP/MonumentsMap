@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import clsx from "clsx";
 import { makeStyles, Drawer, Slide } from "@material-ui/core";
 import PhotoDrawerContent from "../photo-drawer-content/photo-drawer-content";
@@ -6,6 +6,9 @@ import PhotoViewer from "../photo-viewer/photo-viewer";
 import AppContext from "../../../context/app-context";
 import PhotosList from "../photos-list/photos-list";
 import PhotosContainerButtons from "./photos-container-buttons";
+import useMutationObserver from "@rooks/use-mutation-observer";
+import MenuButton from "./menu-button";
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -52,10 +55,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PhotoViewerContainer = ({}) => {
-  
-}
-
 export default function PhotosContainer({
   monumentPhotos,
   onBack = (p) => p,
@@ -68,6 +67,8 @@ export default function PhotosContainer({
   const [selectedMonumentPhotoIndex, setSelectedMonumentPhotoIndex] = useState(
     initIndex
   );
+  const [imageContainerWidth, setImageContainerWidth] = useState(0);
+  // const prevImageContainerWidth = usePrevious(imageContainerWidth);
   const handleSizeChange = (isOriginalSize) => {
     setOriginalSize(isOriginalSize);
   };
@@ -83,6 +84,17 @@ export default function PhotosContainer({
   const handleRightButtonClick = () => {
     setSelectedMonumentPhotoIndex(selectedMonumentPhotoIndex + 1);
   };
+  /*(1) This is feature:) I add this few lines of code, to force update layout position of image viewer component */
+  const containerRef = useRef();
+  const onSizeChange = (e) => {
+    const width = containerRef.current.offsetWidth;
+    if(width !== imageContainerWidth) {
+      setImageContainerWidth(width);
+    }
+    
+  }
+  useMutationObserver(containerRef, onSizeChange);
+  /* end (1) */
 
   const container =
     window !== undefined ? () => window.document.body : undefined;
@@ -107,7 +119,9 @@ export default function PhotosContainer({
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
+        ref={containerRef}
       >
+        <MenuButton onClick={e => setOpen(!open)}/>
         <PhotoViewer
           imgUrl={monumentService.getPhotoLink(
             monumentPhotos[selectedMonumentPhotoIndex].photoId

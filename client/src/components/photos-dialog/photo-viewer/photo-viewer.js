@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 export default function PhotoViewer({ imgUrl, onSizeChanged = (p) => p }) {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     setLoading(true);
   }, [imgUrl]);
