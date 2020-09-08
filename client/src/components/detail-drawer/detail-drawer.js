@@ -127,15 +127,15 @@ export default function DetailDrawer(props) {
         open={detailDrawerOpen}
       >
         <DrawerBackButton onClick={onBack} />
-          <ScrollBar>
-            <DrawerContainer>
-              <DetailDrawerHeader
-                monument={monument}
-                onMonumentPhotoClicked={onMonumentPhotoClicked}
-              />
-              <DetailDrawerContent monument={monument} />
-            </DrawerContainer>
-          </ScrollBar>
+        <ScrollBar>
+          <DrawerContainer>
+            <DetailDrawerHeader
+              monument={monument}
+              onMonumentPhotoClicked={onMonumentPhotoClicked}
+            />
+            <DetailDrawerContent monument={monument} />
+          </DrawerContainer>
+        </ScrollBar>
         {monument ? (
           <React.Fragment>
             {photoDialogShow ? (

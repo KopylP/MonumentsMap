@@ -2,12 +2,10 @@ import React from "react";
 import { IconButton } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 
-const CloseButton = ({onClick = (p) => p}) => (
+const CloseButton = ({onClick = (p) => p, style = {}}) => (
   <IconButton
     style={{
-      position: "absolute",
-      right: 10,
-      top: 10,
+      ...style,
       color: "white",
       zIndex: 999
     }}

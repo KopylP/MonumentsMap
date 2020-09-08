@@ -7,8 +7,9 @@ import AppContext from "../../../context/app-context";
 import PhotosList from "../photos-list/photos-list";
 import PhotosContainerButtons from "./photos-container-buttons";
 import useMutationObserver from "@rooks/use-mutation-observer";
+import PhotosActionButtons from "./photo-action-buttons/photos-action-buttons";
 import MenuButton from "./menu-button";
-import CloseButton from "./close-button";
+import savePhoto from "../../helpers/save-photo";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -84,15 +85,30 @@ export default function PhotosContainer({
   const handleRightButtonClick = () => {
     setSelectedMonumentPhotoIndex(selectedMonumentPhotoIndex + 1);
   };
+
+  const handleActionButtonsClick = (action) => {
+    switch (action) {
+      case "close":
+        onBack();
+        break;
+      case "save":
+        savePhoto(
+          monumentService.getPhotoLink(
+            monumentPhotos[selectedMonumentPhotoIndex].photoId
+          )
+        );
+        break;
+    }
+  };
+
   /*(1) This is feature:) I add this few lines of code, to force update layout position of image viewer component */
   const containerRef = useRef();
   const onSizeChange = (e) => {
     const width = containerRef.current.offsetWidth;
-    if(width !== imageContainerWidth) {
+    if (width !== imageContainerWidth) {
       setImageContainerWidth(width);
     }
-    
-  }
+  };
   useMutationObserver(containerRef, onSizeChange);
   /* end (1) */
 
@@ -121,8 +137,8 @@ export default function PhotosContainer({
         })}
         ref={containerRef}
       >
-        <MenuButton onClick={e => setOpen(!open)}/>
-        <CloseButton onClick={onBack}/>
+        <MenuButton onClick={(e) => setOpen(!open)} />
+        <PhotosActionButtons onClick={handleActionButtonsClick} />
         <PhotoViewer
           imgUrl={monumentService.getPhotoLink(
             monumentPhotos[selectedMonumentPhotoIndex].photoId

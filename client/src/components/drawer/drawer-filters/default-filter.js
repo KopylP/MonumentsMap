@@ -14,7 +14,7 @@ export default function DefaultFilter({
   setSelectedValues,
   multiple = false,
   getDataMethod,
-  title
+  title,
 }) {
   const { selectedLanguage } = useContext(AppContext);
   const prevSelectedLanguage = usePrevious(selectedLanguage);
@@ -50,8 +50,8 @@ export default function DefaultFilter({
 
   return (
     <Grid item xs="12">
-      <FormControl style={{width: "100%"}}>
-  <InputLabel>{title}</InputLabel>
+      <FormControl style={{ width: "100%" }}>
+        <InputLabel>{title}</InputLabel>
         <Select
           multiple={multiple}
           value={selectedValues}
