@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import SearchIcon from "@material-ui/icons/Search";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import Fab from "@material-ui/core/Fab";
-import { makeStyles, Input, Box } from "@material-ui/core";
+import { makeStyles, Input, Box, useTheme } from "@material-ui/core";
 
 import {
   Grid,
@@ -12,11 +10,11 @@ import {
   Select,
   MenuItem,
 } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
 import SelectLanguage from "../../select-language/select-language";
 import AppContext from "../../../context/app-context";
 import { usePrevious } from "../../../hooks/hooks";
 import MainMonumentList from "./main-monument-list/main-monument-list";
+import SearchableMainMonumentList from "./main-monument-list/searchable-main-monument-list";
 
 const useStyles = makeStyles((theme) => ({
   colorWhite: {
@@ -24,16 +22,6 @@ const useStyles = makeStyles((theme) => ({
   },
   width100per: {
     width: "100%",
-  },
-  fabAdd: {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    zIndex: 999,
-    visibility: "hidden",
-    [theme.breakpoints.up("sm")]: {
-      visibility: "visible",
-    },
   },
   searchField: {
     marginBottom: 20,
@@ -56,7 +44,7 @@ export default function DrawerContent(props) {
     setSelectedCities,
     selectedStatuses,
     setSelectedStatuses,
-    monuments
+    monuments,
   } = useContext(AppContext);
 
   const [cities, setCities] = useState([]);
@@ -136,8 +124,18 @@ export default function DrawerContent(props) {
     setSelectedCities(newValue);
   };
 
+  const theme = useTheme();
+
   return (
-    <div style={{ flex: "1 1 auto", padding: 15, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+    <div
+      style={{
+        flex: "1 1 auto",
+        padding: 15,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+      }}
+    >
       <Grid container vertical justify="flex-start" spacing={2}>
         <Grid item xs="12">
           <SelectLanguage />
@@ -151,7 +149,12 @@ export default function DrawerContent(props) {
             multiple
             onChange={onSelectedCitiesChange}
             renderInput={(params) => (
-              <TextField {...params} label="Місто" margin="normal" style={{margin: 0}}/>
+              <TextField
+                {...params}
+                label="Місто"
+                margin="normal"
+                style={{ margin: 0 }}
+              />
             )}
           />
         </Grid>
@@ -179,38 +182,9 @@ export default function DrawerContent(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs="12">
-          <Grid
-            container
-            spacing={1}
-            alignItems="flex-end"
-            justify="space-between"
-            className={classes.searchField}
-          >
-            <Grid item xs="1">
-              <SearchIcon />
-            </Grid>
-            <Grid item xs="11">
-              <TextField
-                className={classes.width100per}
-                id="input-with-icon-grid"
-                label="Пошук за адресою"
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Fab
-          color="primary"
-          aria-label="add"
-          className={classes.fabAdd}
-          onClick={onAdd}
-        >
-          <AddIcon className={classes.colorWhite} />
-        </Fab>
       </Grid>
-      <Box component="div" display={{ xs: 'none', sm: 'block' }} style={{ width: "100%", flex: "1 1 auto", marginTop: 15 }}>
-        <MainMonumentList data={monuments}/>
-      </Box>
+      {/* search */}
+      <SearchableMainMonumentList monuments={monuments}/>
     </div>
   );
 }
