@@ -24,6 +24,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import FullWindowHeightContainer from "../components/common/full-window-height-container/full-window-height-container";
+import useCancelablePromise from "@rodw95/use-cancelable-promise";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -75,6 +76,7 @@ function MapPage(props) {
   const [cancelRequest, setCancelRequest] = useState(null);
   const history = useHistory();
   let match = useRouteMatch();
+  const makeCancelable = useCancelablePromise();
 
   function executor(e) {
     setCancelRequest({
@@ -87,16 +89,17 @@ function MapPage(props) {
       cancelRequest.cancel();
     }
 
-    monumentService
-      .getMonumentsByFilter(
+    makeCancelable(
+      monumentService.getMonumentsByFilter(
         selectedCities.map((c) => c.id),
         selectedStatuses,
         selectedConditions,
         executor
       )
-      .then((monuments) => {
-        setMonuments(monuments);
-      });
+    ).then((monuments) => {
+      setMonuments(monuments);
+    })
+    .catch();//TODO handle error
   };
 
   useEffect(() => {
@@ -185,27 +188,27 @@ function MapPage(props) {
 
   return (
     <AppContext.Provider value={contextValues}>
-        <div className={classes.app}>
-          <FullWindowHeightContainer style={{ width: "100%" }}>
-            <div className={classes.mapContainer}>
-              <Map
-                onMonumentSelected={
-                  (monumentId) => setSelectedMonument({ id: monumentId }) //TODO Move to map.js
-                }
-              />
-            </div>
-          </FullWindowHeightContainer>
-          <MenuButton
-            className={classes.menuButton}
-            onClick={() => setMainDrawerOpen(true)}
-          />
-        </div>
-        <MainDrawer className={classes.menuButton} />
-        <Switch>
-          <Route path={`${match.path}monument/:monumentId`}>
-            <DetailDrawer />
-          </Route>
-        </Switch>
+      <div className={classes.app}>
+        <FullWindowHeightContainer style={{ width: "100%" }}>
+          <div className={classes.mapContainer}>
+            <Map
+              onMonumentSelected={
+                (monumentId) => setSelectedMonument({ id: monumentId }) //TODO Move to map.js
+              }
+            />
+          </div>
+        </FullWindowHeightContainer>
+        <MenuButton
+          className={classes.menuButton}
+          onClick={() => setMainDrawerOpen(true)}
+        />
+      </div>
+      <MainDrawer />
+      <Switch>
+        <Route path={`${match.path}monument/:monumentId`}>
+          <DetailDrawer />
+        </Route>
+      </Switch>
     </AppContext.Provider>
   );
 }

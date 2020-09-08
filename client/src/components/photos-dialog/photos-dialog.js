@@ -14,7 +14,6 @@ export default function PhotosDialog({
   });
 
   const handleClose = () => {
-    console.log("back");
     setOpen(false);
   };
 

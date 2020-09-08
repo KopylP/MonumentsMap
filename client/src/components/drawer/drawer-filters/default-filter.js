@@ -8,6 +8,7 @@ import {
   Select,
   MenuItem,
 } from "@material-ui/core";
+import useCancelablePromise from '@rodw95/use-cancelable-promise';
 
 export default function DefaultFilter({
   selectedValues,
@@ -19,9 +20,10 @@ export default function DefaultFilter({
   const { selectedLanguage } = useContext(AppContext);
   const prevSelectedLanguage = usePrevious(selectedLanguage);
   const [data, setData] = useState([]);
+  const makeCancelable = useCancelablePromise();
 
   const update = () => {
-    getDataMethod().then(onDataLoad);
+    makeCancelable(getDataMethod()).then(onDataLoad);
   };
   const onDataLoad = (data) => {
     setData(data);
@@ -49,7 +51,7 @@ export default function DefaultFilter({
   }, [selectedLanguage]);
 
   return (
-    <Grid item xs="12">
+    <Grid item xs={12}>
       <FormControl style={{ width: "100%" }}>
         <InputLabel>{title}</InputLabel>
         <Select

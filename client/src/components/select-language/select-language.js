@@ -30,7 +30,6 @@ export default function SelectLanguage(props) {
       <Button
         color="secondary"
         aria-haspopup="true"
-        keepMounted
         startIcon={<TranslateIcon />}
         aria-controls="language-menu"
         onClick={handleMenuClick}

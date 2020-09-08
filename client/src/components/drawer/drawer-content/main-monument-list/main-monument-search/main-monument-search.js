@@ -20,17 +20,17 @@ export default function MainMonumentSearch() {
 
   return (
     <Grid container className={classes.root}>
-      <Grid item xs="12">
+      <Grid item xs={12}>
         <Grid
           container
           spacing={1}
           alignItems="flex-end"
           justify="space-between"
         >
-          <Grid item xs="1">
+          <Grid item xs={1}>
             <SearchIcon />
           </Grid>
-          <Grid item xs="11">
+          <Grid item xs={11}>
             <TextField
               className={classes.width100per}
               id="input-with-icon-grid"

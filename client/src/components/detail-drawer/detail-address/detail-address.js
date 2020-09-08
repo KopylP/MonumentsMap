@@ -4,6 +4,7 @@ import RoomIcon from "@material-ui/icons/Room";
 import ContentLoader from "react-content-loader";
 import AppContext from "../../../context/app-context";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
+import useCancelablePromise from "@rodw95/use-cancelable-promise";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,10 +28,11 @@ function DetailAddress({ data, ...props }) {
   const {
     geocoderService: { getAddressInformationFromLatLng },
   } = useContext(AppContext);
+  const makeCancelable = useCancelablePromise();
 
   useEffect(() => {
     if (data != null) {
-      getAddressInformationFromLatLng(data.lat, data.lng).then(
+      makeCancelable(getAddressInformationFromLatLng(data.lat, data.lng)).then(
         ({ address }) => {
           setAddress(address);
         }
@@ -43,7 +45,7 @@ function DetailAddress({ data, ...props }) {
   return (
     <React.Fragment>
       {address != null ? (
-        <Grid item justify="space-between">
+        <Grid item>
           <div className={styles.container}>
             <RoomIcon className={styles.locationIcon} />
             <div className={styles.address}>

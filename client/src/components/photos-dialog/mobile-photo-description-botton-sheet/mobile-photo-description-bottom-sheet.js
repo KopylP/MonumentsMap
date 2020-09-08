@@ -2,10 +2,13 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
 import PhotoYear from "../../common/photo-year/photo-year";
 import AppContext from "../../../context/app-context";
+import useCancelablePromise from "@rodw95/use-cancelable-promise";
+
 export default function MobilePhotoDescriptionBottomSheet({ monumentPhoto }) {
   const [monumentPhotoDetail, setMonumentPhotoDetail] = useState(null);
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const { monumentService } = useContext(AppContext);
+  const makeCancelable = useCancelablePromise();
 
   const onMonumentPhotoLoad = (monumentPhoto) => {
     setMonumentPhotoDetail(monumentPhoto);
@@ -16,8 +19,7 @@ export default function MobilePhotoDescriptionBottomSheet({ monumentPhoto }) {
   };
 
   const update = () => {
-    monumentService
-      .getMonumentPhoto(monumentPhoto.id)
+    makeCancelable(monumentService.getMonumentPhoto(monumentPhoto.id))
       .then(onMonumentPhotoLoad)
       .catch(onMonumentPhotoError);
   };
@@ -38,7 +40,6 @@ export default function MobilePhotoDescriptionBottomSheet({ monumentPhoto }) {
   const [disabled, setDisabled] = useState(false);
   const handleScroll = (e) => {
     const scrollTop = e.nativeEvent.srcElement.scrollTop;
-    console.log(scrollTop);
     if (scrollTop <= 1 && disabled) {
       setDisabled(false);
     }
@@ -68,7 +69,7 @@ export default function MobilePhotoDescriptionBottomSheet({ monumentPhoto }) {
           backgroundColor: "rgba(0, 0, 0, 0.7)",
           color: "#ddd",
           padding: 20,
-          fontSize: 14
+          fontSize: 14,
         }}
       >
         {monumentPhotoDetail ? (

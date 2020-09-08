@@ -30,8 +30,8 @@ export default function DrawerContent(props) {
         justifyContent: "flex-start",
       }}
     >
-      <Grid container vertical justify="flex-start" spacing={2}>
-        <Grid item xs="12">
+      <Grid container justify="flex-start" spacing={2}>
+        <Grid item xs={12}>
           <SelectLanguage />
         </Grid>
         <CityFilter />

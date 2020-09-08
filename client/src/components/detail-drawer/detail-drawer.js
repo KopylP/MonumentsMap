@@ -15,6 +15,7 @@ import PhotosDialog from "../photos-dialog/photos-dialog";
 import PhotoLightbox from "../photos-dialog/photo-lightbox/photo-lightbox";
 import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
 import { isMobileOnly } from "react-device-detect";
+import useCancelablePromise from "@rodw95/use-cancelable-promise";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -45,6 +46,7 @@ export default function DetailDrawer(props) {
   const [monument, setMonument] = useState(null);
   const { monumentId } = useParams();
   const history = useHistory();
+  const makeCancelable = useCancelablePromise();
 
   const onMonumentLoad = (monument) => {
     ((monument) => {
@@ -68,7 +70,9 @@ export default function DetailDrawer(props) {
   //---/end/----//
 
   const loadMonument = () => {
-    monumentService.getMonumentById(monumentId).then(onMonumentLoad).catch(); //TODO handle error
+    makeCancelable(monumentService.getMonumentById(monumentId))
+      .then(onMonumentLoad)
+      .catch(); //TODO handle error
   };
 
   const prevMonumentId = usePrevious(monumentId);

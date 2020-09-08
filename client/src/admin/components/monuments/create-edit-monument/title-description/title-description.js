@@ -94,7 +94,7 @@ export default function TitleDescription({
     return (
       <TabPanel key={i} value={value} index={i}>
         <Grid container spacing={3}>
-          <Grid item xs="12">
+          <Grid item xs={12}>
             <TextField
               style={{ width: "100%" }}
               label={`Назва (${culture.name})`}
@@ -104,7 +104,7 @@ export default function TitleDescription({
               onChange={(e) => onNameChange(e.target.value, culture.code)}
             />
           </Grid>
-          <Grid item xs="12">
+          <Grid item xs={12}>
             <TextField
               style={{ width: "100%" }}
               multiline

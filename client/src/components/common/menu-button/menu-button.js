@@ -1,6 +1,6 @@
 import React from "react";
 import MenuIcon from "@material-ui/icons/Menu";
-
+import clsx from 'clsx';
 import { Paper, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ export default function MenuButton(props) {
   const classes = useStyles(props);
   const { onClick, className } = props;
   return (
-    <Paper className={[classes.paper, className]} onClick={onClick}>
+    <Paper className={clsx(classes.paper, className)} onClick={onClick}>
       <MenuIcon />
     </Paper>
   );

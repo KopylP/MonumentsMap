@@ -21,5 +21,5 @@ export default function SimpleDetailYear({ year, period }) {
       break;
   }
 
-  return <div>{dateText}</div>;
+  return <span>{dateText}</span>;
 }

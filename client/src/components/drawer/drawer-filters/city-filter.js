@@ -2,11 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import AppContext from "../../../context/app-context";
 import { usePrevious } from "../../../hooks/hooks";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {
-    Grid,
-    TextField,
-  
-  } from "@material-ui/core";
+import { Grid, TextField } from "@material-ui/core";
+import useCancelablePromise from "@rodw95/use-cancelable-promise";
 
 export default function CityFilter() {
   const {
@@ -15,6 +12,7 @@ export default function CityFilter() {
     selectedCities,
     setSelectedCities,
   } = useContext(AppContext);
+  const makeCancelable = useCancelablePromise();
 
   const [cities, setCities] = useState([]);
 
@@ -23,7 +21,7 @@ export default function CityFilter() {
   };
 
   const update = () => {
-    monumentService.getAllCities().then(onCitiesLoad);
+    makeCancelable(monumentService.getAllCities()).then(onCitiesLoad);
   };
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
@@ -58,7 +56,7 @@ export default function CityFilter() {
   };
 
   return (
-    <Grid item xs="12">
+    <Grid item xs={12}>
       <Autocomplete
         {...autoCompliteCitiesOptions}
         id="clear-on-escape"
