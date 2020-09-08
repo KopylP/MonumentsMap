@@ -114,20 +114,20 @@ export default class MonumentService {
     );
   }
 
-  async getMonumentById(id) {
+  getMonumentById = async (id) => {
     return await this._getRequest(`monument/${id}`);
   }
 
-  async getAllStatuses() {
+  getAllStatuses = async () => {
     return await this._getRequest("status/");
   }
 
-  async getAllConditions() {
+  getAllConditions = async () => {
     console.log("All conditions");
     return await this._getRequest("condition/");
   }
 
-  async getAllCities() {
+  getAllCities = async () => {
     return await this._getRequest("city/");
   }
 

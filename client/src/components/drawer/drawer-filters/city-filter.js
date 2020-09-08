@@ -14,7 +14,6 @@ export default function CityFilter() {
     selectedLanguage,
     selectedCities,
     setSelectedCities,
-    monuments,
   } = useContext(AppContext);
 
   const [cities, setCities] = useState([]);
