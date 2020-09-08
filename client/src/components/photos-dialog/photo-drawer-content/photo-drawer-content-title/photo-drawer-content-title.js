@@ -27,7 +27,7 @@ export default function PhotoDrawerContentTitle({ monumentPhoto, onBack = p => p
         <IconButton edge="start" className={classes.backButton} color="inherit" onClick={onBack}>
           <ArrowBackIcon style={{ color: "white" }} />
         </IconButton>
-        <Typography variant="h7" className={classes.title}>
+        <Typography variant="subtitle1" className={classes.title}>
           {monumentPhoto ? (
             <PhotoYear
               year={monumentPhoto && monumentPhoto.year}
