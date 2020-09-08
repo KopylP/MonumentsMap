@@ -4,12 +4,12 @@ import { makeStyles, Drawer, Slide } from "@material-ui/core";
 import PhotoDrawerContent from "../photo-drawer-content/photo-drawer-content";
 import PhotoViewer from "../photo-viewer/photo-viewer";
 import AppContext from "../../../context/app-context";
-import PhotosList from "../photos-list/photos-list";
 import PhotosContainerButtons from "./photos-container-buttons";
 import useMutationObserver from "@rooks/use-mutation-observer";
 import PhotosActionButtons from "./photo-action-buttons/photos-action-buttons";
 import MenuButton from "./menu-button";
 import savePhoto from "../../helpers/save-photo";
+import PhotoListSlider from "../photo-list-slider/photo-list-slider";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -145,23 +145,12 @@ export default function PhotosContainer({
           )}
           onSizeChanged={handleSizeChange}
         />
-        <Slide
-          direction="up"
-          in={originalSize}
-          style={{ position: "absolute", bottom: 40, left: 0, right: 0 }}
-        >
-          <div
-            style={{
-              backgroundColor: "transparent",
-            }}
-          >
-            <PhotosList
-              monumentPhotos={monumentPhotos}
-              selectedMonumentPhotoIndex={selectedMonumentPhotoIndex}
-              onMonumentPhotoClick={handleMonumentPhotoClick}
-            />
-          </div>
-        </Slide>
+        <PhotoListSlider
+          originalSize={originalSize}
+          monumentPhotos={monumentPhotos}
+          selectedMonumentPhotoIndex={selectedMonumentPhotoIndex}
+          onMonumentPhotoClick={handleMonumentPhotoClick}
+        />
         <PhotosContainerButtons
           hideLeftButton={selectedMonumentPhotoIndex === 0 || !originalSize}
           hideRightButton={
