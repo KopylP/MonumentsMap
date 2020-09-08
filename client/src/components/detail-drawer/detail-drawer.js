@@ -6,7 +6,6 @@ import DetailDrawerContent from "./detail-drawer-content/detail-drawer-content";
 import AppContext from "../../context/app-context";
 import { usePrevious } from "../../hooks/hooks";
 import ScrollBar from "../common/scroll-bar/scroll-bar";
-import DetailDrawerContext from "./context/detail-drawer-context";
 import {
   BrowserRouter as Router,
   useHistory,
@@ -72,10 +71,6 @@ export default function DetailDrawer(props) {
     monumentService.getMonumentById(monumentId).then(onMonumentLoad).catch(); //TODO handle error
   };
 
-  const onPhotoSave = (monumentPhoto) => {
-    console.log(monumentPhoto);
-  };
-
   const prevMonumentId = usePrevious(monumentId);
 
   useEffect(() => {
@@ -132,7 +127,6 @@ export default function DetailDrawer(props) {
         open={detailDrawerOpen}
       >
         <DrawerBackButton onClick={onBack} />
-        <DetailDrawerContext.Provider value={{ onPhotoSave }}>
           <ScrollBar>
             <DrawerContainer>
               <DetailDrawerHeader
@@ -142,7 +136,6 @@ export default function DetailDrawer(props) {
               <DetailDrawerContent monument={monument} />
             </DrawerContainer>
           </ScrollBar>
-        </DetailDrawerContext.Provider>
         {monument ? (
           <React.Fragment>
             {photoDialogShow ? (

@@ -26,7 +26,7 @@ export const authResponseInterceptror = (response) => {
 
 export const authErrorResponseInterceptor = function (error) {
   const originalRequest = error.config;
-  if(error == null || error.status == null) return Error();
+  if(error == null || error.status == null) return Promise.reject(error);
   if (
     (error.response.status === 401 &&
       originalRequest.url === `${serverHost}api/token/auth`)
