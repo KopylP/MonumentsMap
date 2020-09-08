@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, useParams } from "react-router-dom";
+import { usePromise } from "../../hooks/hooks";
 
 export default function withData(Wrapper, paramsFromRoute = []) {
   return function (props) {
     const { getData, onError = (p) => p } = props;
     const routeParams = useParams();
     let { params } = props;
-    const [data, setData] = useState(null);
+    // const [data, setData] = useState(null);
     const [unauthorized, setUnauthorized] = useState(false);
     const updateData = () => {
-      setData(null);
-      update();
+      //TODO remove this method
     };
 
     if (paramsFromRoute.length > 0) {
@@ -19,23 +19,13 @@ export default function withData(Wrapper, paramsFromRoute = []) {
       );
     }
 
-    const update = () => {
-      getData(...params)
-        .then((data) => {
-          setData(data);
-          console.log(data);
-        })
-        .catch((e) => {
-          onError(e);
-          if (e.response && e.response.status === 401) {
-            setUnauthorized(true);
-          }
-        });
-    };
+    const [data, error, pending] = usePromise(getData, null, params);
 
     useEffect(() => {
-      update();
-    }, []);
+      if (error && error.response && error.response.status === 401) {
+        setUnauthorized(true);
+      }
+    }, [error]);
 
     return (
       <React.Fragment>

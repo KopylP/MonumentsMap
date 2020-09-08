@@ -16,39 +16,22 @@ export function usePrevious(value) {
   return ref.current;
 }
 
-export function useOrientation() {
-  const [orientation, setOrientation] = useState(window.screen.orientation);
+export function usePromise(promiseOrFunction, defaultValue, params = []) {
+  const [state, setState] = useState({ value: defaultValue, error: null, isPending: true })
 
   useEffect(() => {
-    function handlorientation() {
-      setOrientation(window.screen.orientation);
-    }
+    const promise = (typeof promiseOrFunction === 'function')
+      ? promiseOrFunction(...params)
+      : promiseOrFunction
 
-    window.addEventListener('orientation', handlorientation);
-    return () => window.removeEventListener('resize', handlorientation);
-  }, []);
-  return orientation;
-}
+    let isSubscribed = true
+    promise
+      .then(value => isSubscribed ? setState({ value, error: null, isPending: false }) : null)
+      .catch(error => isSubscribed ? setState({ value: defaultValue, error: error, isPending: false }) : null)
 
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height
-  };
-}
+    return () => (isSubscribed = false)
+  }, [promiseOrFunction, defaultValue])
 
-export default function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowDimensions;
+  const { value, error, isPending } = state
+  return [value, error, isPending]
 }
