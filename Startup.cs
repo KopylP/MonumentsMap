@@ -68,6 +68,7 @@ namespace MonumentsMap
             services.AddScoped<TokenRepository>();
             services.AddScoped<ParticipantLocalizedRepository>();
             services.AddScoped<ITokenService, TokenService>();
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             //idenditiy
             services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
             {
