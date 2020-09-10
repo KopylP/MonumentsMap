@@ -5,6 +5,9 @@ const supportedCultures = [
     {code: "ru-RU", name: "Русский"},
 ];
 
+const defaultCulture = "uk-UA";
+const defaultClientCulture = "en-GB";
+
 const serverHost = "http://localhost:5000/";
 
 const defaultCity = {
@@ -24,5 +27,7 @@ export {
     defaultCity,
     defaultZoom,
     accessToken,
-    clientId
+    clientId,
+    defaultCulture,
+    defaultClientCulture
 }

@@ -58,7 +58,7 @@ namespace MonumentsMap.Controllers
         }
         #endregion
         #region public methods
-        [HttpPost("invite")]
+        [HttpPost("Invite")]
         public async Task<IActionResult> Invite(InvitationRequestViewModel invitationRequestViewModel)
         {
             var inviteResponseModel = await _invitationService.CreateInviteAsync(invitationRequestViewModel.Email);

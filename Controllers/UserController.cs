@@ -35,7 +35,7 @@ namespace MonumentsMap.Controllers
             if (user == null) return Unauthorized(); //TODO handle error
             return Ok(await user.AdaptUserToModelAsync(_userManager));
         }
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             var user = await _userManager.FindByIdAsync(id);

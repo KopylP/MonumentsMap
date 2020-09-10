@@ -1,5 +1,7 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import AppContext from "../context/app-context";
+import { useSnackbar } from "notistack";
+import errorNetworkSnackbar from "../components/helpers/error-network-snackbar";
 
 // Hook
 export function usePrevious(value) {

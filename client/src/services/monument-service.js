@@ -219,4 +219,20 @@ export default class MonumentService {
   getMe = async () => {
     return await this._getRequest(`token/me`, false);
   };
+
+  getUsers = async () => {
+    return await this._getRequest(`user`, false);
+  }
+
+  deleteUser = async (userId) => {
+    return await this._deleteRequest(`user/${userId}`);
+  }
+
+  getUserRoles = async (userId) => {
+    return await this._getRequest(`user/${userId}/roles`);
+  }
+
+  inviteUser = async (email) => {
+    return this._postRequest('registration/invite', { email });
+  }
 }

@@ -10,9 +10,11 @@ import { useRouteMatch, Route, Switch } from "react-router-dom";
 import ParticipantsResource from "./components/participants/participants-resource";
 import AdminContext from "./context/admin-context";
 import MonumentService from "../services/monument-service";
-import { serverHost } from "../config";
+import { serverHost, defaultCulture } from "../config";
 import MonumentsResource from "./components/monuments/monuments-resource";
 import GeocoderService from "../services/geocoder-service";
+import UsersResource from "./components/users/users-resource";
+import UserRole from "../models/user-role";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,15 +49,22 @@ const useStyles = makeStyles((theme) => ({
 function AdminPanel({ data }) {
   const routes = [
     {
+      name: "Користувачі",
+      path: "users",
+      roles: [UserRole.Admin],
+      Page: () => <UsersResource />
+    },
+    { separator: true },
+    {
       name: "Учасники будівництва",
       path: "participants",
-      roles: ["Editor"],
+      roles: [UserRole.Editor],
       Page: () => <ParticipantsResource />,
     },
     {
       name: "Пам'ятки архітектури",
       path: "monuments",
-      roles: ["Editor"],
+      roles: [UserRole.Editor],
       Page: () => <MonumentsResource />
     },
     { separator: true },
@@ -70,8 +79,8 @@ function AdminPanel({ data }) {
 
   const [title, setTitle] = useState("Admin panel");
   const { path } = useRouteMatch();
-  const monumentService = new MonumentService(serverHost, "uk-UA");
-  const geocoderService = new GeocoderService('uk');
+  const monumentService = new MonumentService(serverHost, defaultCulture);
+  const geocoderService = new GeocoderService(defaultCulture.split('-')[0]);
   const contextValues = {monumentService, geocoderService};
   return (
     <AdminContext.Provider value={contextValues}>

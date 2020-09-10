@@ -8,7 +8,12 @@ import MainDrawer from "../components/drawer/main-drawer";
 import AppContext from "../context/app-context";
 import MenuButton from "../components/common/menu-button/menu-button";
 import Map from "../components/map/map";
-import { supportedCultures, serverHost, defaultCity } from "../config";
+import {
+  supportedCultures,
+  serverHost,
+  defaultCity,
+  defaultClientCulture,
+} from "../config";
 import MonumentService from "../services/monument-service";
 import DetailDrawer from "../components/detail-drawer/detail-drawer";
 import GeocoderService from "../services/geocoder-service";
@@ -25,6 +30,13 @@ import {
 } from "react-router-dom";
 import FullWindowHeightContainer from "../components/common/full-window-height-container/full-window-height-container";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
+import {
+  doIfNotTheSame,
+  doIfNotZero,
+  doIfArraysNotEqual,
+} from "../components/helpers/conditions";
+import detectBrowserLanguage from "detect-browser-language";
+import { defineClientCulture } from "../components/helpers/lang";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -96,64 +108,48 @@ function MapPage(props) {
         selectedConditions,
         executor
       )
-    ).then((monuments) => {
-      setMonuments(monuments);
-    })
-    .catch();//TODO handle error
+    )
+      .then((monuments) => {
+        setMonuments(monuments);
+      })
+      .catch(); //TODO handle error
   };
 
-  useEffect(() => {
-    if (
-      prevSelectedLanguage == null ||
-      selectedLanguage.code !== prevSelectedLanguage.code
-    )
-      update();
-  }, [selectedLanguage]);
+  useEffect(
+    () =>
+      doIfNotTheSame(
+        selectedLanguage,
+        prevSelectedLanguage,
+        (p) => p.code
+      )(update),
+    [selectedLanguage]
+  );
 
   useEffect(() => {
-    //TODO check same
-    if (selectedMonument.id !== 0) {
-      history.push(`${match.path}monument/${selectedMonument.id}`);
-    }
+    doIfNotZero(selectedMonument.id)(() =>
+      history.push(`${match.path}monument/${selectedMonument.id}`)
+    );
   }, [selectedMonument]);
 
   useEffect(() => {
-    if (
-      typeof prevSelectedConditions !== "undefined" &&
-      !arraysEqual(prevSelectedConditions, selectedConditions)
-    ) {
-      update();
-    }
+    doIfArraysNotEqual(prevSelectedConditions, selectedConditions)(update);
   }, [selectedConditions]);
 
   useEffect(() => {
-    if (
-      typeof prevSelectedCities !== "undefined" &&
-      !arraysEqual(prevSelectedCities, selectedCities)
-    ) {
-      update();
-    }
+    doIfArraysNotEqual(prevSelectedCities, selectedCities)(update);
   }, [selectedCities]);
 
   useEffect(() => {
-    if (
-      typeof prevSelectedStatuses !== "undefined" &&
-      !arraysEqual(prevSelectedStatuses, selectedStatuses)
-    ) {
-      update();
-    }
+    doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
   }, [selectedStatuses]);
 
-  useEffect(() => {
-    const userCultureIndex = supportedCultures.findIndex(
-      (p) => p.code.split("-")[0] === navigator.language.split("-")[0]
-    );
-    const culture =
-      userCultureIndex > -1
-        ? supportedCultures[userCultureIndex]
-        : supportedCultures[1]; //en-GB
-    setSelectedLanguage(culture);
-  }, []);
+  useEffect(
+    () =>
+      setSelectedLanguage(
+        defineClientCulture(supportedCultures, defaultClientCulture)
+      ),
+    []
+  );
 
   const monumentService = new MonumentService(
     serverHost,
