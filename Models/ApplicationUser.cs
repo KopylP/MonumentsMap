@@ -15,10 +15,5 @@ namespace MonumentsMap.Models
         [Required]
         public DateTime UpdatedAt { get; set; }
         #endregion
-
-        #region lazy props
-        [ForeignKey("UserId")]
-        public virtual ApplicationUser User { get; set; }
-        #endregion
     }
 }
