@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Extensions;
 using MonumentsMap.Models;
 using MonumentsMap.Services.enums;
 using MonumentsMap.Services.Interfaces;
@@ -53,7 +54,7 @@ namespace MonumentsMap.Controllers
             var registerResult = await _userManager.CreateAsync(user, registrationUserViewModel.Password);
             if(!registerResult.Succeeded)
                 return StatusCode(500); //TODO handle errors
-            return Ok(user);
+            return Ok(user.AdaptUserToModel());
         }
         #endregion
         #region public methods
