@@ -5,6 +5,9 @@ const supportedCultures = [
     {code: "ru-RU", name: "Русский"},
 ];
 
+const defaultCulture = "uk-UA";
+const defaultClientCulture = "en-GB";
+
 const serverHost = "http://localhost:5000/";
 
 const defaultCity = {
@@ -12,7 +15,9 @@ const defaultCity = {
     lng: 34.5507948, //center point of default city
 }
 
-const defaultZoom = 14;
+const defaultZoom = 17;
+
+const clientId = "monumentsmap";
 
 const accessToken = "<Your access Jawg map token here>";
 
@@ -22,4 +27,7 @@ const accessToken = "<Your access Jawg map token here>";
 //     defaultCity,
 //     defaultZoom,
 //     accessToken,
+//     clientId,
+//     defaultCulture,
+//     defaultClientCulture
 // }
