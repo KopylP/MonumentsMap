@@ -115,16 +115,6 @@ function MapPage(props) {
       .catch(); //TODO handle error
   };
 
-  useEffect(
-    () =>
-      doIfNotTheSame(
-        selectedLanguage,
-        prevSelectedLanguage,
-        (p) => p.code
-      )(update),
-    [selectedLanguage]
-  );
-
   useEffect(() => {
     doIfNotZero(selectedMonument.id)(() =>
       history.push(`${match.path}monument/${selectedMonument.id}`)
@@ -133,15 +123,10 @@ function MapPage(props) {
 
   useEffect(() => {
     doIfArraysNotEqual(prevSelectedConditions, selectedConditions)(update);
-  }, [selectedConditions]);
-
-  useEffect(() => {
-    doIfArraysNotEqual(prevSelectedCities, selectedCities)(update);
-  }, [selectedCities]);
-
-  useEffect(() => {
     doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
-  }, [selectedStatuses]);
+    doIfArraysNotEqual(prevSelectedCities, selectedCities)(update);
+    doIfNotTheSame(selectedLanguage, prevSelectedLanguage, (p) => p.code)(update);
+  }, [selectedConditions, selectedCities, selectedStatuses, selectedLanguage]);
 
   useEffect(
     () =>
