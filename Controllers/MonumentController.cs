@@ -34,20 +34,23 @@ namespace MonumentsMap.Controllers
         #region metods
         [HttpGet("filter")]
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
-        public async Task<IActionResult> Get
-        (
+        public async Task<IActionResult> Get(
             [FromQuery(Name = "statuses[]")] int[] statuses,
             [FromQuery(Name = "conditions[]")] int[] conditions,
             [FromQuery(Name = "cities[]")] int[] cities,
+            [FromQuery] int? startYear,
+            [FromQuery] int? endYear,
             [FromQuery] string cultureCode
         )
         {
-
-            var monuments = await localizedRepository
-                .Find(cultureCode,
-                    p => (statuses.Length == 0 || statuses.Contains(p.StatusId))
-                    && (conditions.Length == 0 || conditions.Contains(p.ConditionId))
-                    && (cities.Length == 0 || cities.Contains(p.CityId)));
+            var monuments = await localizedRepository.GetFilteredLocalizedMonumentsAsync(
+                statuses, 
+                conditions, 
+                cities, 
+                startYear, 
+                endYear, 
+                cultureCode
+            );
             return Ok(monuments);
         }
 
@@ -55,7 +58,7 @@ namespace MonumentsMap.Controllers
         public async Task<IActionResult> ToogleAccepted(int id)
         {
             var monument = await _monumentService.ToogleMajorPhotoAsync(id);
-            if(monument == null) return NotFound();//TODO handle error
+            if (monument == null) return NotFound();//TODO handle error
             return Ok(monument);
         }
 

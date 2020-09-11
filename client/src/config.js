@@ -21,6 +21,8 @@ const clientId = "monumentsmap";
 
 const accessToken = "6gbhT4C7Kpj0YRx9mqPWxoZA2IhKXCDTk2L0wFHSurl2EtAxvun10VOtpLfS9rTX";
 
+const yearsRange = [1500, new Date().getFullYear()];
+
 export {
     supportedCultures,
     serverHost,
@@ -29,5 +31,6 @@ export {
     accessToken,
     clientId,
     defaultCulture,
-    defaultClientCulture
+    defaultClientCulture,
+    yearsRange
 }

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useTheme } from "@material-ui/core";
+import React, { useContext } from "react";
+import { useTheme, Divider } from "@material-ui/core";
 
 import { Grid } from "@material-ui/core";
 import SelectLanguage from "../../select-language/select-language";
@@ -8,15 +8,11 @@ import SearchableMainMonumentList from "./main-monument-list/searchable-main-mon
 import StatusFilter from "../drawer-filters/status-filter";
 import ConditionFilter from "../drawer-filters/condition-filter";
 import CityFilter from "../drawer-filters/city-filter";
+import YearFilter from "../drawer-filters/year-filter/year-filter";
+import MonumentIcons from "../monument-icons/monument-icons";
 
 export default function DrawerContent(props) {
-  const {
-    monumentService,
-    selectedLanguage,
-    selectedCities,
-    setSelectedCities,
-    monuments,
-  } = useContext(AppContext);
+  const { monuments } = useContext(AppContext);
 
   const theme = useTheme();
 
@@ -34,6 +30,8 @@ export default function DrawerContent(props) {
         <Grid item xs={12}>
           <SelectLanguage />
         </Grid>
+        {/* <MonumentIcons /> */}
+        <YearFilter />
         <CityFilter />
         <StatusFilter />
         <ConditionFilter />

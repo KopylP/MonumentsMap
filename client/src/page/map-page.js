@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  createMuiTheme,
-  MuiThemeProvider,
-  makeStyles,
-} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import MainDrawer from "../components/drawer/main-drawer";
 import AppContext from "../context/app-context";
 import MenuButton from "../components/common/menu-button/menu-button";
@@ -13,12 +9,12 @@ import {
   serverHost,
   defaultCity,
   defaultClientCulture,
+  yearsRange,
 } from "../config";
 import MonumentService from "../services/monument-service";
 import DetailDrawer from "../components/detail-drawer/detail-drawer";
 import GeocoderService from "../services/geocoder-service";
 import { usePrevious } from "../hooks/hooks";
-import { arraysEqual } from "../components/helpers/array-helpers";
 import {
   BrowserRouter as Router,
   Switch,
@@ -35,7 +31,6 @@ import {
   doIfNotZero,
   doIfArraysNotEqual,
 } from "../components/helpers/conditions";
-import detectBrowserLanguage from "detect-browser-language";
 import { defineClientCulture } from "../components/helpers/lang";
 
 const useStyles = makeStyles((theme) => ({
@@ -77,6 +72,7 @@ function MapPage(props) {
   const [selectedConditions, setSelectedConditions] = useState([]);
   const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [selectedCities, setSelectedCities] = useState([]);
+  const [selectedYearRange, setSelectedYearRange] = useState(yearsRange);
   const [monuments, setMonuments] = useState([]);
   const [center, setCenter] = useState(defaultCity);
 
@@ -84,6 +80,7 @@ function MapPage(props) {
   const prevSelectedConditions = usePrevious(selectedConditions);
   const prevSelectedCities = usePrevious(selectedCities);
   const prevSelectedStatuses = usePrevious(selectedStatuses);
+  const prevSelectedYearRange = usePrevious(selectedYearRange);
 
   const [cancelRequest, setCancelRequest] = useState(null);
   const history = useHistory();
@@ -106,13 +103,14 @@ function MapPage(props) {
         selectedCities.map((c) => c.id),
         selectedStatuses,
         selectedConditions,
+        selectedYearRange,
         executor
       )
     )
       .then((monuments) => {
         setMonuments(monuments);
       })
-      .catch(); //TODO handle error
+      .catch(e => e); //TODO handle error
   };
 
   useEffect(() => {
@@ -126,7 +124,8 @@ function MapPage(props) {
     doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
     doIfArraysNotEqual(prevSelectedCities, selectedCities)(update);
     doIfNotTheSame(selectedLanguage, prevSelectedLanguage, (p) => p.code)(update);
-  }, [selectedConditions, selectedCities, selectedStatuses, selectedLanguage]);
+    doIfArraysNotEqual(prevSelectedYearRange, selectedYearRange)(update);
+  }, [selectedConditions, selectedCities, selectedStatuses, selectedLanguage, selectedYearRange]);
 
   useEffect(
     () =>
@@ -165,6 +164,8 @@ function MapPage(props) {
     monuments,
     center,
     setCenter,
+    selectedYearRange,
+    setSelectedYearRange
   };
 
   return (

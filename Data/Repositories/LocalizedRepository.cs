@@ -16,7 +16,7 @@ namespace MonumentsMap.Data.Repositories
     where TEditableLocalizedEntity : EditableLocalizedEntity<TEntity>
     where TContext : DbContext
     {
-        private readonly TContext context;
+        protected readonly TContext context;
         protected bool MinimizeResult { get; set; } = false;
         public LocalizedRepository(TContext context)
         {

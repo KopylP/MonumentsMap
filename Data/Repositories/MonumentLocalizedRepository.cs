@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using MonumentsMap.Extensions;
@@ -101,12 +103,17 @@ namespace MonumentsMap.Data.Repositories
             };
         }
 
-        protected override IQueryable<Monument> IncludeNecessaryProps(IQueryable<Monument> source)
+        private IQueryable<Monument> IncludeMinimizeNecessaryProps(IQueryable<Monument> source)
         {
-            var result = source.Include(p => p.Name)
+            return source.Include(p => p.Name)
                 .ThenInclude(p => p.Localizations)
                 .Include(p => p.Status)
                 .Include(p => p.MonumentPhotos);
+        }
+
+        protected override IQueryable<Monument> IncludeNecessaryProps(IQueryable<Monument> source)
+        {
+            var result = IncludeMinimizeNecessaryProps(source);
             if (!MinimizeResult)
             {
                 return result.Include(p => p.Description)
@@ -116,6 +123,44 @@ namespace MonumentsMap.Data.Repositories
             }
 
             return result;
+        }
+
+        private bool IfRangeInEndYear(int endYear, (int startYear, int endYear) range) => endYear >= range.startYear;
+        private bool IfRangeInStartYear(int startYear, (int startYear, int endYear) range) => startYear <= range.endYear;
+
+        private (int, int) RangeByPeriod(int year, Period period)
+        {
+            return period switch
+            {
+                Period.Year => (year, year),
+                Period.StartOfCentury => ((year - 1) * 100, ((year - 1) * 100 + 30)), //[00, 30]
+                Period.MiddleOfCentury => ((year - 1) * 100 + 31, (year - 1) * 100 + 70),//[41, 70]
+                Period.EndOfCentury => ((year - 1) * 100 + 71, year * 100 -1),//[71, 99]
+                Period.Decades => (year, year + 9)
+            };
+        }
+
+        public async Task<List<LocalizedMonument>> GetFilteredLocalizedMonumentsAsync(
+            int[] statuses,
+            int[] conditions,
+            int[] cities,
+            int? startYear,
+            int? endYear,
+            string cultureCode)
+        {
+            MinimizeResult = true;
+            var monuments = context.Monuments
+                .Where(p => statuses.Length == 0 || statuses.Contains(p.StatusId))
+                .Where(p => conditions.Length == 0 || conditions.Contains(p.ConditionId))
+                .Where(p => cities.Length == 0 || cities.Contains(p.CityId));
+
+            var monumentsWithProps = await IncludeMinimizeNecessaryProps(monuments).ToListAsync();
+            var selectedByYearMonuments = monumentsWithProps
+                .Where(p => startYear == null || IfRangeInStartYear(startYear.GetValueOrDefault(), RangeByPeriod(p.Year, p.Period)))
+                .Where(p => endYear == null || IfRangeInEndYear(endYear.GetValueOrDefault(), RangeByPeriod(p.Year, p.Period)));
+
+            var localizedMonuments = selectedByYearMonuments.Select(GetSelectHandler(cultureCode)).ToList();
+            return localizedMonuments;
         }
     }
 }

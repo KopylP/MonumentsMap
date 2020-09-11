@@ -100,8 +100,8 @@ export default class MonumentService {
    * @param {*} statuses - array of selected statuses ids
    * @param {*} conditions - array of selected conditions ids
    */
-  async getMonumentsByFilter(cities, statuses, conditions, cancelCallback) {
-    console.log("send");
+  async getMonumentsByFilter(cities, statuses, conditions, yearsRange, cancelCallback) {
+    console.log("yearRange", yearsRange);
     return await this._getRequest(
       "monument/filter",
       true,
@@ -109,6 +109,8 @@ export default class MonumentService {
         cities,
         statuses,
         conditions,
+        startYear: yearsRange[0],
+        endYear: yearsRange[1]
       },
       cancelCallback
     );

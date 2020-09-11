@@ -27,14 +27,11 @@ export default function MainMonumentSearch() {
           alignItems="flex-end"
           justify="space-between"
         >
-          <Grid item xs={1}>
-            <SearchIcon />
-          </Grid>
-          <Grid item xs={11}>
+          <Grid item xs={12}>
             <TextField
               className={classes.width100per}
               id="input-with-icon-grid"
-              label="Пошук за адресою"
+              label="Пошук за назвою"
             />
           </Grid>
         </Grid>
