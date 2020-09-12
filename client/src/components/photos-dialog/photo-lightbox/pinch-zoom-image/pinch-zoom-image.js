@@ -10,12 +10,12 @@ export default function PinchZoomImage({
   alt = "",
   onSizeChanged = (p) => p,
   onImageLoad = (p) => p,
-  // maxScale = 2,
+  maxScale = 2,
 }) {
   const [originalSize, setOriginalSize] = useState(true);
   const [portrait, setPortrait] = useState(true);
   const [key, setKey] = useState(Math.random());
-  const [maxScale, setMaxScale] = useState(2);
+  const [imageMaxScale, setImageMaxScale] = useState(maxScale);
   const imgRef = useRef();
   const pinchZoomPanRef = useRef();
   const { switching = null } = useContext(PhotoLightboxContext);
@@ -60,9 +60,9 @@ export default function PinchZoomImage({
     if (switching !== null) {
       if (switching) {
         const { state, props } = pinchZoomPanRef.current;
-        setMaxScale(getMinScale(state, props));
+        setImageMaxScale(getMinScale(state, props));
       } else {
-        setMaxScale(2);
+        setImageMaxScale(maxScale);
       }
     }
   }, [switching]);
@@ -70,7 +70,7 @@ export default function PinchZoomImage({
 
   return (
     <PinchZoomPan
-      maxScale={maxScale}
+      maxScale={imageMaxScale}
       position="center"
       ref={pinchZoomPanRef}
       key={key}

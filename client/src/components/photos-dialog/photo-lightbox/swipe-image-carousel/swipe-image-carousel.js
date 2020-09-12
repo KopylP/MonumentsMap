@@ -1,14 +1,13 @@
 import React, { useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core";
 import SwipeableViews from "react-swipeable-views";
-import { virtualize } from "react-swipeable-views-utils";
+// import { virtualize } from "react-swipeable-views-utils";
 import SwipeImage from "../swipe-image/swipe-image";
-import useMutationObserver from "@rooks/use-mutation-observer";
 import { isIOS, isChrome } from "react-device-detect";
 import PhotoLightboxContext from "../context/photo-lightbox-context";
-var iOSInnerHeight = require("ios-inner-height");
+// var iOSInnerHeight = require("ios-inner-height");
 
-const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+// const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 const useStyles = makeStyles((theme) => ({
   container: {
