@@ -26,7 +26,7 @@ export default function PinchZoomImage({
     const { state, props } = pinchZoomPanRef.current;
     const { scale } = state;
     const minScale = getMinScale(state, props);
-    const isOriginalSize = scale >= minScale - 0.03 && scale <= minScale + 0.03;
+    const isOriginalSize = scale >= minScale && scale <= minScale + 0.03;
     if (isOriginalSize !== originalSize) {
       setOriginalSize(isOriginalSize);
       onSizeChanged(isOriginalSize);

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import {
-  Slide,
   Dialog,
   Toolbar,
   Typography,
