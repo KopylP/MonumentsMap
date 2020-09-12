@@ -12,7 +12,7 @@ export default function PhotoListSlider({
     <Slide
       direction="up"
       in={originalSize}
-      style={{ position: "absolute", bottom: 40, left: 0, right: 0 }}
+      style={{ position: "absolute", bottom: 40, left: 0, right: 0, zIndex: 2 }}
     >
       <div
         style={{
