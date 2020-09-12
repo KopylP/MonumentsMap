@@ -38,11 +38,6 @@ export default function PhotoMobileList({ open, setOpen, monumentPhotos }) {
   };
 
   const { monumentService: { getPhotoLink }, selectedMonument: { name } } = useContext(AppContext);
-
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedMonumentPhotoIndex, setSelectedMonumentPhotoIndex] = useState(false);
 
@@ -56,7 +51,6 @@ export default function PhotoMobileList({ open, setOpen, monumentPhotos }) {
       fullScreen
       open={open}
       onClose={handleClose}
-      TransitionComponent={Transition}
       style={{
         boxSizing: "border-box",
       }}

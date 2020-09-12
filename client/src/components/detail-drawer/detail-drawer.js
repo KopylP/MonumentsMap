@@ -61,7 +61,7 @@ export default function DetailDrawer(props) {
   //change selectedMonument to open popup on the map
   const centerMap = (monument) => {
     if (monument != null && selectedMonument.id !== monument.id) {
-      setSelectedMonument({...monument});
+      setSelectedMonument({ ...monument });
       setCenter({
         lat: monument.latitude,
         lng: monument.longitude,
@@ -91,7 +91,6 @@ export default function DetailDrawer(props) {
 
   const [photoDialogOpen, setPhotoDialogOpen] = useState(false);
   const prevPhotoDialogOpen = usePrevious(photoDialogOpen);
-  const [photoDialogShow, setPhotoDialogShow] = useState(false);
   const [selectedMonumentPhotoIndex, setSelectedMonumentPhotoIndex] = useState(
     0
   );
@@ -101,16 +100,8 @@ export default function DetailDrawer(props) {
       (p) => p.id === monumentPhoto.id
     );
     setSelectedMonumentPhotoIndex(findIndex);
-    setPhotoDialogShow(true);
     setPhotoDialogOpen(true);
   };
-
-  useEffect(() => {
-    if (prevPhotoDialogOpen === true && photoDialogOpen === false)
-      setTimeout(() => {
-        setPhotoDialogShow(false);
-      }, 250);
-  }, [photoDialogOpen]);
 
   const onBack = () => {
     setDetailDrawerOpen(false);
@@ -143,21 +134,20 @@ export default function DetailDrawer(props) {
         </ScrollBar>
         {monument ? (
           <React.Fragment>
-            {photoDialogShow ? (
-              isMobileOnly ? (
-                <PhotoMobileList monumentPhotos={monument.monumentPhotos}
+            {isMobileOnly ? (
+              <PhotoMobileList
+                monumentPhotos={monument.monumentPhotos}
                 open={photoDialogOpen}
                 setOpen={setPhotoDialogOpen}
-                />
-              ) : (
-                <PhotosDialog
-                  open={photoDialogOpen}
-                  setOpen={setPhotoDialogOpen}
-                  monumentPhotos={monument.monumentPhotos}
-                  initIndex={selectedMonumentPhotoIndex}
-                />
-              )
-            ) : null}
+              />
+            ) : (
+              <PhotosDialog
+                open={photoDialogOpen}
+                setOpen={setPhotoDialogOpen}
+                monumentPhotos={monument.monumentPhotos}
+                initIndex={selectedMonumentPhotoIndex}
+              />
+            )}
           </React.Fragment>
         ) : null}
       </Drawer>

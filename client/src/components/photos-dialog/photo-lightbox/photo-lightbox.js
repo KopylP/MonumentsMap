@@ -37,7 +37,7 @@ export default function PhotoLightbox({
       open={open}
       ref={dialogRef}
       onClose={handleClose}
-      TransitionComponent={Transition}
+      // TransitionComponent={Transition}
       style={{
         boxSizing: "border-box",
       }}
