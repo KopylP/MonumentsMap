@@ -5,6 +5,7 @@ import { virtualize } from "react-swipeable-views-utils";
 import SwipeImage from "../swipe-image/swipe-image";
 import useMutationObserver from "@rooks/use-mutation-observer";
 import { isIOS, isChrome } from "react-device-detect";
+import PhotoLightboxContext from "../context/photo-lightbox-context";
 var iOSInnerHeight = require("ios-inner-height");
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews);
@@ -26,14 +27,14 @@ export default function SwipeImageCarousel({
   const [swipeEnabled, setSwipeEnabled] = useState(true);
   const [portrait, setPortrait] = useState(true);
 
-  const onSizeChanged = (isOriginalSize) => {
+  const onSizeChanged = (isOriginalSize, touched) => {
     const isPortrait = window.innerHeight > window.innerWidth;
     if (portrait !== isPortrait) {
       setPortrait(isPortrait);
       onOrientationChange(portrait);
     }
 
-    if (isOriginalSize && !swipeEnabled) {
+    if (isOriginalSize && !touched && !swipeEnabled) {
       setSwipeEnabled(true);
       return;
     }
@@ -55,6 +56,8 @@ export default function SwipeImageCarousel({
     };
   }, []);
 
+  const [switching, setSwitching] = useState(false);
+
   return (
     <div
       className={classes.container}
@@ -63,35 +66,47 @@ export default function SwipeImageCarousel({
           ? {
               height: "100vh",
               width: "100vw",
-              overflow: "hidden"
+              overflow: "hidden",
             }
           : {
               height: height,
             }
       }
     >
-      <SwipeableViews
-        disabled={!swipeEnabled}
-        index={imageIndex}
-        onChangeIndex={onChangeImageIndex}
-        containerStyle={
-          isIOS && isChrome
-            ? {
-                height: "100vh",
-                width: "100vw",
-                // overflowY: "hidden"
-              }
-            : {
-                height: height,
-                width: "100vw",
-              }
-        }
-        // slideRenderer={slideRenderer}
-      >
-        {images.map((image, i) => (
-          <SwipeImage src={image} key={i} onSizeChanged={onSizeChanged} />
-        ))}
-      </SwipeableViews>
+      <PhotoLightboxContext.Provider value={{switching}}>
+        <SwipeableViews
+          disabled={!swipeEnabled}
+          index={imageIndex}
+          onChangeIndex={(index) => {
+            onChangeImageIndex(index);
+          }}
+          onSwitching={(e) => {
+            if (switching === false && !Number.isInteger(e)) setSwitching(true);
+            if (switching === true && Number.isInteger(e)) setSwitching(false);
+          }}
+          containerStyle={
+            isIOS && isChrome
+              ? {
+                  height: "100vh",
+                  width: "100vw",
+                  // overflowY: "hidden"
+                }
+              : {
+                  height: height,
+                  width: "100vw",
+                }
+          }
+          // slideRenderer={slideRenderer}
+        >
+          {images.map((image, i) => (
+            <SwipeImage
+              src={image}
+              key={i}
+              onSizeChanged={onSizeChanged}
+            />
+          ))}
+        </SwipeableViews>
+      </PhotoLightboxContext.Provider>
     </div>
   );
 }

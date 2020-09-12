@@ -3,19 +3,24 @@ import PinchZoomPan from "react-responsive-pinch-zoom-pan";
 import useMutationObserver from "@rooks/use-mutation-observer";
 import { getMinScale } from "react-responsive-pinch-zoom-pan/dist/Utils";
 import { usePrevious } from "../../../../hooks/hooks";
+import PhotoLightboxContext from "../context/photo-lightbox-context";
 
 export default function PinchZoomImage({
   src,
   alt = "",
   onSizeChanged = (p) => p,
   onImageLoad = (p) => p,
-  maxScale = 2,
+  // maxScale = 2,
 }) {
   const [originalSize, setOriginalSize] = useState(true);
   const [portrait, setPortrait] = useState(true);
   const [key, setKey] = useState(Math.random());
+  const [maxScale, setMaxScale] = useState(2);
   const imgRef = useRef();
   const pinchZoomPanRef = useRef();
+  const { switching = null } = useContext(PhotoLightboxContext);
+  const [touch, setTouch] = useState(false);
+
   const onSizeChange = () => {
     const isPortrait = window.innerHeight > window.innerWidth;
     if (portrait !== isPortrait) {
@@ -26,15 +31,22 @@ export default function PinchZoomImage({
     const { state, props } = pinchZoomPanRef.current;
     const { scale } = state;
     const minScale = getMinScale(state, props);
-    const isOriginalSize = scale >= minScale && scale <= minScale + 0.03;
+    const isOriginalSize = scale <= minScale;
     if (isOriginalSize !== originalSize) {
       setOriginalSize(isOriginalSize);
-      onSizeChanged(isOriginalSize);
+      onSizeChanged(isOriginalSize, touch);
     }
   };
 
   const handleImageLoad = (e) => {
     onImageLoad(e);
+  };
+
+  const handleTouchEnd = () => {
+    if (touch !== false) {
+      setTouch(false);
+      onSizeChanged(originalSize, false);
+    }
   };
 
   useMutationObserver(imgRef, onSizeChange);
@@ -44,6 +56,17 @@ export default function PinchZoomImage({
     setKey(Math.random());
   }, [src]);
 
+  useEffect(() => {
+    if (switching !== null) {
+      if (switching) {
+        const { state, props } = pinchZoomPanRef.current;
+        setMaxScale(getMinScale(state, props));
+      } else {
+        setMaxScale(2);
+      }
+    }
+  }, [switching]);
+  // alert("end");
 
   return (
     <PinchZoomPan
@@ -57,6 +80,8 @@ export default function PinchZoomImage({
         alt={alt}
         src={src}
         ref={imgRef}
+        onTouchStartCapture={() => setTouch(true)}
+        onTouchEndCapture={handleTouchEnd}
         onLoad={handleImageLoad}
         style={{ maxWidth: "100%" }}
       />
