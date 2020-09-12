@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     color: "white",
-    backgroundColor: "#624CAB",
+    backgroundColor: theme.palette.secondary.main,
   },
   titleContainer: {
     display: "flex",

@@ -1,13 +1,9 @@
-import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-} from "@material-ui/core";
+import React, { useContext } from "react";
+import { AppBar, Toolbar, IconButton, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import PhotoYear from "../../../common/photo-year/photo-year";
+import AppContext from "../../../../context/app-context";
 
 const useStyles = makeStyles((theme) => ({
   backButton: {
@@ -19,24 +15,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PhotoDrawerContentTitle({ monumentPhoto, onBack = p => p }) {
+export default function PhotoDrawerContentTitle({
+  monumentPhoto,
+  onBack = (p) => p,
+}) {
   const classes = useStyles();
+  const { selectedMonument : { name } } = useContext(AppContext);
   return (
     <AppBar position="static" color="secondary">
       <Toolbar>
-        <IconButton edge="start" className={classes.backButton} color="inherit" onClick={onBack}>
+        <IconButton
+          edge="start"
+          className={classes.backButton}
+          color="inherit"
+          onClick={onBack}
+        >
           <ArrowBackIcon style={{ color: "white" }} />
         </IconButton>
-        <Typography variant="subtitle1" className={classes.title}>
-          {monumentPhoto ? (
-            <PhotoYear
-              year={monumentPhoto && monumentPhoto.year}
-              period={monumentPhoto && monumentPhoto.period}
-            />
-          ) : (
-            "..."
-          )}
-        </Typography>
+        <div style={{width: "85%"}}>
+          <Typography variant="subtitle2" style={{
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            width: "100%",
+            display: "block"
+          }}>
+            { name } 
+          </Typography>
+          <Typography variant="subtitle2" className={classes.title} style={{textOverflow: "ellipsis"}}>
+            {monumentPhoto ? (
+              <PhotoYear
+                year={monumentPhoto && monumentPhoto.year}
+                period={monumentPhoto && monumentPhoto.period}
+              />
+            ) : (
+              "..."
+            )}
+          </Typography>
+        </div>
       </Toolbar>
     </AppBar>
   );

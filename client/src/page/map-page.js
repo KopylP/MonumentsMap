@@ -110,7 +110,7 @@ function MapPage(props) {
       .then((monuments) => {
         setMonuments(monuments);
       })
-      .catch(e => e); //TODO handle error
+      .catch((e) => e); //TODO handle error
   };
 
   useEffect(() => {
@@ -123,9 +123,16 @@ function MapPage(props) {
     doIfArraysNotEqual(prevSelectedConditions, selectedConditions)(update);
     doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
     doIfArraysNotEqual(prevSelectedCities, selectedCities)(update);
-    doIfNotTheSame(selectedLanguage, prevSelectedLanguage, (p) => p.code)(update);
+    doIfNotTheSame(
+      selectedLanguage,
+      prevSelectedLanguage,
+      (p) => p.code
+    )(update);
+  }, [selectedConditions, selectedCities, selectedStatuses, selectedLanguage]);
+
+  useEffect(() => {
     doIfArraysNotEqual(prevSelectedYearRange, selectedYearRange)(update);
-  }, [selectedConditions, selectedCities, selectedStatuses, selectedLanguage, selectedYearRange]);
+  }, [selectedYearRange]);
 
   useEffect(
     () =>
@@ -165,7 +172,7 @@ function MapPage(props) {
     center,
     setCenter,
     selectedYearRange,
-    setSelectedYearRange
+    setSelectedYearRange,
   };
 
   return (
@@ -174,8 +181,8 @@ function MapPage(props) {
         <FullWindowHeightContainer style={{ width: "100%" }}>
           <div className={classes.mapContainer}>
             <Map
-              onMonumentSelected={
-                (monumentId) => setSelectedMonument({ id: monumentId }) //TODO Move to map.js
+              onMonumentSelected={(monumentId) =>
+                setSelectedMonument(monuments.find((p) => p.id === monumentId))
               }
             />
           </div>

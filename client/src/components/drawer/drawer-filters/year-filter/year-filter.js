@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 
 export default function YearFilter() {
   const classes = useStyles();
-  const { setSelectedYearRange } = useContext(AppContext);
+  const { setSelectedYearRange, selectedYearRange } = useContext(AppContext);
   const [value, setValue] = useState(yearsRange);
   const [valueCanChanged, setValueCanChanged] = useState(true);
 
@@ -32,8 +32,9 @@ export default function YearFilter() {
   const handleChangeCommitted = (_, newValue) => {
     if(valueCanChanged) {
       setValueCanChanged(false);
+      setValue(newValue);
       setSelectedYearRange(newValue);
-      setTimeout(() => setValueCanChanged(true), 10);
+      setTimeout(() => setValueCanChanged(true), 50);
     }
   }
 
@@ -53,8 +54,8 @@ export default function YearFilter() {
           />
         </div>
         <div className={classes.yearContainer}>
-          <YearLabel year={yearsRange[0]} />
-          <YearLabel year={yearsRange[1]} />
+          <YearLabel year={selectedYearRange[0]} />
+          <YearLabel year={selectedYearRange[1]} />
         </div>
       </div>
     </Grid>

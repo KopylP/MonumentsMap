@@ -50,7 +50,7 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
     else return 0;
   });
 
-  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const onChangeIndexHandle = (index) => {
     setCurrentIndex(index);

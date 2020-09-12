@@ -16,7 +16,7 @@ function MainMonumentList({ data }) {
       lng: monument.longitude,
     });
     setTimeout(() => {
-      setSelectedMonument({id: monument.id, showPopup: true});
+      setSelectedMonument({...monument, showPopup: true});
     }, 150)//Wait, until map animation ends 
   };
 

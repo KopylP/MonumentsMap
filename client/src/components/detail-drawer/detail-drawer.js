@@ -60,7 +60,7 @@ export default function DetailDrawer(props) {
   //change selectedMonument to open popup on the map
   const centerMap = (monument) => {
     if (monument != null && selectedMonument.id !== monument.id) {
-      setSelectedMonument({ id: monument.id });
+      setSelectedMonument(monument);
       setCenter({
         lat: monument.latitude,
         lng: monument.longitude,

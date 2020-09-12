@@ -3,6 +3,7 @@ import MainMonumentSearch from "./main-monument-search/main-monument-search";
 import { Box } from "@material-ui/core";
 import MainMonumentList from "./main-monument-list";
 export default function SearchableMainMonumentList({ monuments = [] }) {
+
   return (
     <React.Fragment>
       <MainMonumentSearch />
