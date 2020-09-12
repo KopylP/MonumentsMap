@@ -182,7 +182,7 @@ function MapPage(props) {
           <div className={classes.mapContainer}>
             <Map
               onMonumentSelected={(monumentId) =>
-                setSelectedMonument(monuments.find((p) => p.id === monumentId))
+                setSelectedMonument({...monuments.find((p) => p.id === monumentId)})
               }
             />
           </div>

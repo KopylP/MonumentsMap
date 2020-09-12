@@ -8,7 +8,7 @@ const supportedCultures = [
 const defaultCulture = "uk-UA";
 const defaultClientCulture = "en-GB";
 
-const serverHost = "http://localhost:5000/";
+const serverHost = "https://monumentsmap.herokuapp.com/";
 
 const defaultCity = {
     lat: 49.5897423, //center point of default city
@@ -19,7 +19,7 @@ const defaultZoom = 17;
 
 const clientId = "monumentsmap";
 
-const accessToken = "";
+const accessToken = "6gbhT4C7Kpj0YRx9mqPWxoZA2IhKXCDTk2L0wFHSurl2EtAxvun10VOtpLfS9rTX";
 
 const yearsRange = [1700, new Date().getFullYear()];
 

@@ -13,6 +13,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     color: "white",
   },
+  monumentsName: {
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    width: "100%",
+    display: "block"
+  }
 }));
 
 export default function PhotoDrawerContentTitle({
@@ -33,13 +40,7 @@ export default function PhotoDrawerContentTitle({
           <ArrowBackIcon style={{ color: "white" }} />
         </IconButton>
         <div style={{width: "85%"}}>
-          <Typography variant="subtitle2" style={{
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-            width: "100%",
-            display: "block"
-          }}>
+          <Typography variant="subtitle2" className={classes.monumentsName}>
             { name } 
           </Typography>
           <Typography variant="subtitle2" className={classes.title} style={{textOverflow: "ellipsis"}}>

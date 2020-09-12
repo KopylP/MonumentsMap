@@ -16,6 +16,7 @@ import PhotoLightbox from "../photos-dialog/photo-lightbox/photo-lightbox";
 import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
 import { isMobileOnly } from "react-device-detect";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
+import PhotoMobileList from "../photos-dialog/photo-mobile-list/photo-mobile-list";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -60,7 +61,7 @@ export default function DetailDrawer(props) {
   //change selectedMonument to open popup on the map
   const centerMap = (monument) => {
     if (monument != null && selectedMonument.id !== monument.id) {
-      setSelectedMonument(monument);
+      setSelectedMonument({...monument});
       setCenter({
         lat: monument.latitude,
         lng: monument.longitude,
@@ -144,11 +145,9 @@ export default function DetailDrawer(props) {
           <React.Fragment>
             {photoDialogShow ? (
               isMobileOnly ? (
-                <PhotoLightbox
-                  open={photoDialogOpen}
-                  setOpen={setPhotoDialogOpen}
-                  monumentPhotos={monument.monumentPhotos}
-                  initIndex={selectedMonumentPhotoIndex}
+                <PhotoMobileList monumentPhotos={monument.monumentPhotos}
+                open={photoDialogOpen}
+                setOpen={setPhotoDialogOpen}
                 />
               ) : (
                 <PhotosDialog
