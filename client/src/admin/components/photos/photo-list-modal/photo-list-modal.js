@@ -7,7 +7,7 @@ import PhotoList from "./photo-list/photo-list";
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "center",
     padding: 20,
   },
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     // backgroundColor: "white",
     justifyContent: "flex-start",
-    alignContent: "center",
+    alignContent: "flex-start",
     overflow: "auto",
     outline: "none",
     "&::-webkit-scrollbar": {
