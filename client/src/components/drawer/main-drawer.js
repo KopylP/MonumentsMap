@@ -1,16 +1,16 @@
 import React, { useContext, useState } from "react";
-import Drawer from "@material-ui/core/Drawer";
 import DrawerContainer from "../common/drawer-container/drawer-container";
 import DrawerHeader from "./drawer-header/drawer-header";
 import DrawerContent from "./drawer-content/drawer-content";
 import AppContext from "../../context/app-context";
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { makeStyles } from "@material-ui/core";
+import { isMobileOnly } from "react-device-detect";
 
 // width: 350px;
 // flex-shrink: 0;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   drawerClass: {
     width: theme.drawerWidth,
     [theme.breakpoints.down(theme.drawerWidth)]: {
@@ -23,22 +23,22 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down(theme.drawerWidth)]: {
       width: "100%",
     },
-  }
+  },
 }));
 
 export default function MainDrawer(props) {
   const { mainDrawerOpen, setMainDrawerOpen } = useContext(AppContext);
-  const [openAddModel, setOpenAddModel] = useState(false);
   const classes = useStyles(props);
 
-  const addMonument = () => {
-    setOpenAddModel(true);
+  const handleClose = () => {
+    setMainDrawerOpen(false);
   }
 
   return (
-    <Drawer
+    <SwipeableDrawer
       className={classes.drawerClass}
-      variant="persistent"
+      variant={isMobileOnly ? "temporary" : "persistent"}
+      onClose={handleClose}
       anchor="left"
       classes={{
         paper: classes.drawerPaper,
@@ -46,9 +46,9 @@ export default function MainDrawer(props) {
       open={mainDrawerOpen}
     >
       <DrawerContainer>
-        <DrawerHeader onBack={() => setMainDrawerOpen(false)}/>
-        <DrawerContent onAdd={addMonument}/>
+        <DrawerHeader onBack={handleClose} />
+        <DrawerContent />
       </DrawerContainer>
-    </Drawer>
+    </SwipeableDrawer>
   );
 }

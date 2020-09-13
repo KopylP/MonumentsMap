@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { makeStyles, Drawer } from "@material-ui/core";
+import { makeStyles, Drawer, SwipeableDrawer } from "@material-ui/core";
 import DrawerContainer from "../common/drawer-container/drawer-container";
 import DetailDrawerHeader from "./detail-drawer-header/detail-drawer-header";
 import DetailDrawerContent from "./detail-drawer-content/detail-drawer-content";
@@ -103,7 +103,7 @@ export default function DetailDrawer(props) {
     setPhotoDialogOpen(true);
   };
 
-  const onBack = () => {
+  const handleClose = () => {
     setDetailDrawerOpen(false);
     setTimeout(() => {
       history.replace("/");
@@ -112,9 +112,10 @@ export default function DetailDrawer(props) {
 
   return (
     <React.Fragment>
-      <Drawer
+      <SwipeableDrawer
         className={classes.drawerClass}
-        variant="persistent"
+        variant={isMobileOnly ? "temporary" : "persistent"}
+        onClose={handleClose}
         anchor="left"
         classes={{
           paper: classes.drawerPaper,
@@ -122,7 +123,7 @@ export default function DetailDrawer(props) {
         transitionDuration={200}
         open={detailDrawerOpen}
       >
-        <DrawerBackButton onClick={onBack} />
+        <DrawerBackButton onClick={handleClose} />
         <ScrollBar>
           <DrawerContainer>
             <DetailDrawerHeader
@@ -150,7 +151,7 @@ export default function DetailDrawer(props) {
             )}
           </React.Fragment>
         ) : null}
-      </Drawer>
+      </SwipeableDrawer>
     </React.Fragment>
   );
 }

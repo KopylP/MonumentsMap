@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 export default function YearFilter() {
   const classes = useStyles();
   const { setSelectedYearRange, selectedYearRange } = useContext(AppContext);
-  const [value, setValue] = useState(yearsRange);
+  const [value, setValue] = useState(selectedYearRange);
   const [valueCanChanged, setValueCanChanged] = useState(true);
 
   const handleChange = (_, newValue) => {

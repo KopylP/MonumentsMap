@@ -13,6 +13,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import AppContext from "../../../context/app-context";
 import PhotoLightbox from "../photo-lightbox/photo-lightbox";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
+import sortMonumentPhotos from "../../helpers/sort-monument-photos";
 
 const useStyles = makeStyles((theme) => ({
   backButton: {
@@ -51,7 +52,7 @@ export default function PhotoMobileList({ open, setOpen, monumentPhotoId }) {
   useEffect(() => {
     if (open && monumentPhotoId != null) {
       makeCancelable(getMonumentPhotos(monumentPhotoId))
-        .then((monumentPhotos) => setMonumentPhotos(monumentPhotos))
+        .then((monumentPhotos) => setMonumentPhotos(monumentPhotos.sort(sortMonumentPhotos)))
         .catch(); //TODO handle error
     }
   }, [open]);

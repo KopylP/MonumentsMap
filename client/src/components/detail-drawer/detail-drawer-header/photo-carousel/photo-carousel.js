@@ -9,6 +9,8 @@ import CarouselButtonContainer from "./carousel-button-container/carousel-button
 import StrokeIcon from "../../../common/stroke-icon/stroke-icon";
 import ContentLoader from "react-content-loader";
 import SwipeableViews from "react-swipeable-views";
+import { isMobileOnly } from "react-device-detect";
+import sortMonumentPhotos from "../../../helpers/sort-monument-photos";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -44,11 +46,7 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
   const styles = useStyles();
   const theme = useTheme();
 
-  const sortedPhotos = data.sort((a, b) => {
-    if (a.majorPhoto === true) return -1;
-    if (b.majorPhoto === true) return 1;
-    else return 0;
-  });
+  const sortedPhotos = data.sort(sortMonumentPhotos);
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -79,6 +77,7 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
         index={currentIndex}
         animateTransitions={animateTransitions}
         onChangeIndex={onChangeIndexHandle}
+        disabled={isMobileOnly}
       >
         {sortedPhotos.map((monumentPhoto, i) => (
           <img
@@ -89,14 +88,14 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
           />
         ))}
       </SwipeableViews>
-      {currentIndex !== 0 ? (
+      {!isMobileOnly && currentIndex !== 0 ? (
         <CarouselButtonContainer attachTo="left">
           <IconButton onClick={onLeftButtonClick}>
             <ArrowBackIosIcon className={styles.arrowIcon} />
           </IconButton>
         </CarouselButtonContainer>
       ) : null}
-      {currentIndex < sortedPhotos.length - 1 ? (
+      {!isMobileOnly && currentIndex < sortedPhotos.length - 1 ? (
         <CarouselButtonContainer attachTo="right">
           <IconButton onClick={onRightButtonClick}>
             <ArrowForwardIosIcon className={styles.arrowIcon} />

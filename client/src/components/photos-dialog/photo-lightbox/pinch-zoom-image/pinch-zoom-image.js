@@ -16,11 +16,8 @@ export default memo(function PinchZoomImage({
   const [originalSize, setOriginalSize] = useState(true);
   const [portrait, setPortrait] = useState(true);
   const [key, setKey] = useState(Math.random());
-  const [imageMaxScale, setImageMaxScale] = useState(maxScale);
   const imgRef = useRef();
   const pinchZoomPanRef = useRef();
-  const { switching = null } = useContext(PhotoLightboxContext);
-  const [touch, setTouch] = useState(false);
 
   const onSizeChange = () => {
     const isPortrait = window.innerHeight > window.innerWidth;
@@ -35,19 +32,12 @@ export default memo(function PinchZoomImage({
     const isOriginalSize = scale <= minScale;
     if (isOriginalSize !== originalSize) {
       setOriginalSize(isOriginalSize);
-      onSizeChanged(isOriginalSize, touch);
+      onSizeChanged(isOriginalSize);
     }
   };
 
   const handleImageLoad = (e) => {
     onImageLoad(e);
-  };
-
-  const handleTouchEnd = () => {
-    if (touch !== false) {
-      setTouch(false);
-      onSizeChanged(originalSize, false);
-    }
   };
 
   useMutationObserver(imgRef, onSizeChange);
@@ -57,22 +47,10 @@ export default memo(function PinchZoomImage({
     setKey(Math.random());
   }, [src]);
 
-  useEffect(() => {
-    if (switching !== null) {
-      if (switching) {
-        const { state, props } = pinchZoomPanRef.current;
-        setImageMaxScale(getMinScale(state, props));
-      } else {
-        setImageMaxScale(maxScale);
-      }
-    }
-  }, [switching]);
-
-
   return (
     <React.Fragment>
       <PinchZoomPan
-        maxScale={imageMaxScale}
+        maxScale={maxScale}
         position="center"
         ref={pinchZoomPanRef}
         key={key}
@@ -82,8 +60,6 @@ export default memo(function PinchZoomImage({
           alt={alt}
           src={src}
           ref={imgRef}
-          onTouchStartCapture={() => setTouch(true)}
-          onTouchEndCapture={handleTouchEnd}
           onLoad={handleImageLoad}
           style={{ maxWidth: "100%" }}
         />
