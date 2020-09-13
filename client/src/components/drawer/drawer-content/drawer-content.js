@@ -10,6 +10,7 @@ import ConditionFilter from "../drawer-filters/condition-filter";
 import CityFilter from "../drawer-filters/city-filter";
 import YearFilter from "../drawer-filters/year-filter/year-filter";
 import MonumentIcons from "../monument-icons/monument-icons";
+import { isMobileOnly } from "react-device-detect";
 
 export default function DrawerContent(props) {
   const { monuments } = useContext(AppContext);
@@ -36,7 +37,7 @@ export default function DrawerContent(props) {
         <StatusFilter />
         <ConditionFilter />
       </Grid>
-      <SearchableMainMonumentList monuments={monuments} />
+      { !isMobileOnly && <SearchableMainMonumentList monuments={monuments} />}
     </div>
   );
 }
