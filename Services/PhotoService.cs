@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -35,7 +36,7 @@ namespace MonumentsMap.Services
         }
 
         #region public methods
-        public async System.Threading.Tasks.Task SavePhotoAsync(IFormFile file, string subDir)
+        public async Task<double> SavePhotoAsync(IFormFile file, string subDir)
         {
             string dirPath = GetDirPath(subDir);
             DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
@@ -47,6 +48,10 @@ namespace MonumentsMap.Services
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(fileStream);
+            }
+            using(var fileStream = File.OpenRead(filePath))
+            {
+                return ImageUtility.GetImageScale(fileStream);
             }
         }
 

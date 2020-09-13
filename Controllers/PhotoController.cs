@@ -39,7 +39,8 @@ namespace MonumentsMap.Controllers
             await _photoRepository.Add(photo);
             try
             {
-                await _photoService.SavePhotoAsync(file, photo.Id.ToString());
+                photo.ImageScale = await _photoService.SavePhotoAsync(file, photo.Id.ToString());
+                await _photoRepository.Update(photo);
             }
             catch
             {

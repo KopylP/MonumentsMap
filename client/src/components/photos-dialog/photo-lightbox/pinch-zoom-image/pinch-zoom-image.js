@@ -1,11 +1,12 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import React, { useRef, useState, useEffect, useContext, memo } from "react";
 import PinchZoomPan from "react-responsive-pinch-zoom-pan";
 import useMutationObserver from "@rooks/use-mutation-observer";
 import { getMinScale } from "react-responsive-pinch-zoom-pan/dist/Utils";
-import { usePrevious } from "../../../../hooks/hooks";
 import PhotoLightboxContext from "../context/photo-lightbox-context";
+import useCancelablePromise from "@rodw95/use-cancelable-promise";
+import Axios from "axios";
 
-export default function PinchZoomImage({
+export default memo(function PinchZoomImage({
   src,
   alt = "",
   onSizeChanged = (p) => p,
@@ -66,25 +67,27 @@ export default function PinchZoomImage({
       }
     }
   }, [switching]);
-  // alert("end");
+
 
   return (
-    <PinchZoomPan
-      maxScale={imageMaxScale}
-      position="center"
-      ref={pinchZoomPanRef}
-      key={key}
-      zoomButtons={false}
-    >
-      <img
-        alt={alt}
-        src={src}
-        ref={imgRef}
-        onTouchStartCapture={() => setTouch(true)}
-        onTouchEndCapture={handleTouchEnd}
-        onLoad={handleImageLoad}
-        style={{ maxWidth: "100%" }}
-      />
-    </PinchZoomPan>
+    <React.Fragment>
+      <PinchZoomPan
+        maxScale={imageMaxScale}
+        position="center"
+        ref={pinchZoomPanRef}
+        key={key}
+        zoomButtons={false}
+      >
+        <img
+          alt={alt}
+          src={src}
+          ref={imgRef}
+          onTouchStartCapture={() => setTouch(true)}
+          onTouchEndCapture={handleTouchEnd}
+          onLoad={handleImageLoad}
+          style={{ maxWidth: "100%" }}
+        />
+      </PinchZoomPan>
+    </React.Fragment>
   );
-}
+});

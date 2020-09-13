@@ -7,7 +7,7 @@ import PhotoList from "./photo-list/photo-list";
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
     padding: 20,
   },

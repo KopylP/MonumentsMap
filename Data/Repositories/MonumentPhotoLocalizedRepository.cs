@@ -49,21 +49,16 @@ namespace MonumentsMap.Data.Repositories
                 var localizationDescription = p.Description?.Localizations?.FirstOrDefault(p => p.CultureCode == cultureCode);
                 var description = localizationDescription?.Value ?? "";
                 lmp.Description = description;
-                if (!MinimizeResult)
-                {
-                    lmp.Sources = p.Sources.Adapt<SourceViewModel[]>().ToList();
-                    lmp.Photo = p.Photo;
-                }
+                lmp.Sources = p.Sources.Adapt<SourceViewModel[]>().ToList();
+                lmp.Photo = p.Photo;
                 return lmp;
             };
         }
 
         protected override IQueryable<MonumentPhoto> IncludeNecessaryProps(IQueryable<MonumentPhoto> source)
         {
-            source = source.Include(p => p.Description)
-                .ThenInclude(p => p.Localizations);
-            if (MinimizeResult) return source;
-            return source
+            return source.Include(p => p.Description)
+                .ThenInclude(p => p.Localizations)
                 .Include(p => p.Photo)
                 .Include(p => p.Sources);
         }

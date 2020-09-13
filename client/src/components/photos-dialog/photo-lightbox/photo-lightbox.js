@@ -1,77 +1,91 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
+import React, { useContext, useState, memo } from "react";
 import AppContext from "../../../context/app-context";
-import Dialog from "@material-ui/core/Dialog";
-import Slide from "@material-ui/core/Slide";
-import SwipeImageCarousel from "./swipe-image-carousel/swipe-image-carousel";
-import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
-import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
 import MobilePhotoDescriptionBottomSheet from "../mobile-photo-description-botton-sheet/mobile-photo-description-bottom-sheet";
-import useMutationObserver from "@rooks/use-mutation-observer";
-import useOrientationChange from "use-orientation-change";
+import { PhotoSwipe } from "react-photoswipe-2";
+import "react-photoswipe-2/lib/photoswipe.css";
+import "./photo-lightbox.css";
 
 export default function PhotoLightbox({
   monumentPhotos,
   open,
   setOpen,
-  initIndex,
+  initIndex = 0,
 }) {
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const {
+    monumentService: { getPhotoLink },
+  } = useContext(AppContext);
 
-  const onSizeChange = () => {
-    console.log("on size change");
-  };
-
-  const dialogRef = useRef();
-
-  useMutationObserver(dialogRef, onSizeChange);
+  const images = monumentPhotos.map((monumentPhoto, i) => ({
+    index: i,
+    src: getPhotoLink(monumentPhoto.photoId, 900),
+    w: 900,
+    h: 900 / monumentPhoto.photo.imageScale,
+    id: monumentPhoto.id,
+    description: monumentPhoto.description,
+    year: monumentPhoto.year,
+    period: monumentPhoto.period,
+    sources: monumentPhoto.sources,
+  }));
 
   return (
-    <Dialog
-      fullScreen
+    <LightboxWithBottomSheet
+      images={images}
       open={open}
-      ref={dialogRef}
-      onClose={handleClose}
-      // TransitionComponent={Transition}
-      style={{
-        boxSizing: "border-box",
-      }}
-    >
-      <DrawerBackButton attachTo="left" onClick={handleClose} />
-      <LightboxWithBottomSheet
-        monumentPhotos={monumentPhotos}
-        initIndex={initIndex}
-      />
-    </Dialog>
+      setOpen={setOpen}
+      initIndex={initIndex}
+    />
   );
 }
 
-const LightboxWithBottomSheet = ({ monumentPhotos, initIndex }) => {
-  const [imageIndex, setImageIndex] = useState(initIndex);
-  const { monumentService } = useContext(AppContext);
-  const images = monumentPhotos.map((monumentPhoto) =>
-    monumentService.getPhotoLink(monumentPhoto.id, 700)
-  );
-
-  const orientation = useOrientationChange();
-
+const LightboxWithBottomSheet = memo(function ({
+  images,
+  open,
+  setOpen,
+  initIndex,
+}) {
+  const [currentIndex, setCurrentIndex] = useState(0);
   return (
     <React.Fragment>
-      <SwipeImageCarousel
+      <MonumentPhotoLightbox
         images={images}
-        imageIndex={imageIndex}
-        onChangeImageIndex={setImageIndex}
+        open={open}
+        setOpen={setOpen}
+        initIndex={initIndex}
+        onCurrentIndexChange={setCurrentIndex}
       />
-      {orientation.includes("portrait") ? (
         <MobilePhotoDescriptionBottomSheet
-          monumentPhoto={monumentPhotos[imageIndex]}
+          monumentPhoto={images[currentIndex]}
+          visibility={open}
         />
-      ) : null}
     </React.Fragment>
   );
-};
+});
+
+const MonumentPhotoLightbox = memo(function ({
+  images,
+  open,
+  setOpen,
+  initIndex = 0,
+  onCurrentIndexChange = (p) => p,
+}) {
+  return (
+    <PhotoSwipe
+      isOpen={open}
+      items={images}
+      close={() => setOpen(false)}
+      afterChange={(data) => onCurrentIndexChange(data.currItem.index)}
+      options={{
+        index: initIndex,
+        shareEl: false,
+        captionEl: false,
+        closeEl: false,
+        counterEl: false,
+        fullscreenEl: false,
+        barsSize: { top: 0, bottom: 0 },
+        loop: false,
+        pinchToClose: false
+      }}
+    />
+  );
+});

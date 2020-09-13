@@ -1,13 +1,13 @@
 import React, { useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core";
 import SwipeableViews from "react-swipeable-views";
-// import { virtualize } from "react-swipeable-views-utils";
+import { virtualize } from "react-swipeable-views-utils";
 import SwipeImage from "../swipe-image/swipe-image";
 import { isIOS, isChrome } from "react-device-detect";
 import PhotoLightboxContext from "../context/photo-lightbox-context";
 // var iOSInnerHeight = require("ios-inner-height");
 
-// const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -57,6 +57,10 @@ export default function SwipeImageCarousel({
 
   const [switching, setSwitching] = useState(false);
 
+  const slideRenderer = ({ key, index }) => (
+    <SwipeImage src={images[index]} key={key} onSizeChanged={onSizeChanged} />
+  );
+
   return (
     <div
       className={classes.container}
@@ -72,10 +76,13 @@ export default function SwipeImageCarousel({
             }
       }
     >
-      <PhotoLightboxContext.Provider value={{switching}}>
-        <SwipeableViews
+      <PhotoLightboxContext.Provider value={{ switching }}>
+        <VirtualizeSwipeableViews
           disabled={!swipeEnabled}
           index={imageIndex}
+          slideCount={images.length}
+          overscanSlideBefore={3}
+          overscanSlideAfter={3}
           onChangeIndex={(index) => {
             onChangeImageIndex(index);
           }}
@@ -95,16 +102,8 @@ export default function SwipeImageCarousel({
                   width: "100vw",
                 }
           }
-          // slideRenderer={slideRenderer}
-        >
-          {images.map((image, i) => (
-            <SwipeImage
-              src={image}
-              key={i}
-              onSizeChanged={onSizeChanged}
-            />
-          ))}
-        </SwipeableViews>
+          slideRenderer={slideRenderer}
+        />
       </PhotoLightboxContext.Provider>
     </div>
   );

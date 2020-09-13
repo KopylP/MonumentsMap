@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using SkiaSharp;
 
@@ -32,6 +33,17 @@ namespace MonumentsMap.Utilities
                             return image.Encode(SKEncodedImageFormat.Jpeg, 60).AsStream();
                         }
                     }
+                }
+            }
+        }
+
+        public static double GetImageScale(FileStream stream)
+        {
+            using (var imageStream = new SKManagedStream(stream))
+            {
+                using (var original = SKBitmap.Decode(imageStream))
+                {
+                    return original.Width / Convert.ToDouble(original.Height);
                 }
             }
         }

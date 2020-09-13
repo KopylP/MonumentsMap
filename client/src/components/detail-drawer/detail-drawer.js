@@ -136,7 +136,7 @@ export default function DetailDrawer(props) {
           <React.Fragment>
             {isMobileOnly ? (
               <PhotoMobileList
-                monumentPhotos={monument.monumentPhotos}
+                monumentPhotoId={monument.id}
                 open={photoDialogOpen}
                 setOpen={setPhotoDialogOpen}
               />
