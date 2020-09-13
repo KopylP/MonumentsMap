@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MonumentsMap.Data.Repositories;
 using MonumentsMap.Models;
@@ -17,14 +18,16 @@ namespace MonumentsMap.Controllers
         private PhotoRepository _photoRepository;
         private PhotoService _photoService;
         private ILogger<Startup> _logger;
+        private IMemoryCache _cache;
         #endregion
 
         #region constructor
-        public PhotoController(PhotoRepository photoRepository, PhotoService photoService, ILogger<Startup> logger)
+        public PhotoController(PhotoRepository photoRepository, PhotoService photoService, ILogger<Startup> logger, IMemoryCache cache)
         {
             _photoRepository = photoRepository;
             _photoService = photoService;
             _logger = logger;
+            _cache = cache;
         }
         #endregion
 
@@ -68,17 +71,24 @@ namespace MonumentsMap.Controllers
         [HttpGet("{id}/image/{size}")]
         public async Task<IActionResult> GetImageAsync(int id, int size)
         {
-            var photo = await _photoRepository.Get(id);
-            try
+            byte[] image;
+            var cacheKey = $"{id}{size}";
+            if (!_cache.TryGetValue(cacheKey, out image))
             {
-                var (fileType, imageStream) = _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
-                return File(imageStream, fileType);
+                var photo = await _photoRepository.Get(id);
+                try
+                {
+                    var (fileType, imageStream) = _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
+                    image = new byte[imageStream.Length];
+                    await imageStream.ReadAsync(image, 0, (int)imageStream.Length);
+                    _cache.Set(cacheKey, image, TimeSpan.FromMinutes(10));
+                }
+                catch
+                {
+                    return StatusCode(500); //TODO handle error
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(ex.Message);
-                return StatusCode(500); //TODO handle error
-            }
+            return File(image, "image/jpeg");
         }
         #endregion
     }

@@ -52,6 +52,7 @@ namespace MonumentsMap
             {
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddMemoryCache();
             services.AddScoped<CityLocalizedRepository>();
             services.AddScoped<StatusLocalizedRepository>();
             services.AddScoped<ConditionLocalizedRepository>();

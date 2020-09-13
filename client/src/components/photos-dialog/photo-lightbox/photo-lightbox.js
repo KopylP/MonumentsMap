@@ -18,9 +18,9 @@ export default function PhotoLightbox({
 
   const images = monumentPhotos.map((monumentPhoto, i) => ({
     index: i,
-    src: getPhotoLink(monumentPhoto.photoId, 900),
-    w: 900,
-    h: 900 / monumentPhoto.photo.imageScale,
+    src: getPhotoLink(monumentPhoto.photoId, 800),
+    w: 800,
+    h: 800 / monumentPhoto.photo.imageScale,
     id: monumentPhoto.id,
     description: monumentPhoto.description,
     year: monumentPhoto.year,
@@ -82,9 +82,9 @@ const MonumentPhotoLightbox = memo(function ({
         closeEl: false,
         counterEl: false,
         fullscreenEl: false,
-        barsSize: { top: 0, bottom: 0 },
         loop: false,
-        pinchToClose: false
+        pinchToClose: false,
+        // preload: [0, 0]
       }}
     />
   );

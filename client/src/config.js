@@ -8,8 +8,8 @@ const supportedCultures = [
 const defaultCulture = "uk-UA";
 const defaultClientCulture = "en-GB";
 
-const serverHost = "https://monumentsmap.herokuapp.com/";
-// const serverHost = "http://localhost:5000/";
+// const serverHost = "https://monumentsmap.herokuapp.com/";
+const serverHost = "http://localhost:5000/";
 
 const defaultCity = {
     lat: 49.5897423, //center point of default city
