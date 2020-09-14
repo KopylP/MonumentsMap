@@ -91,7 +91,6 @@ export default function PhotoMobileList({ open, setOpen, monumentPhotoId }) {
       </AppBar>
       <GridList
         cellHeight={160}
-        style={{flexGrow: 1 }}
         cols={2}
       >
         {monumentPhotos.map((monumentPhoto, i) => (

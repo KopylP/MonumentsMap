@@ -72,21 +72,16 @@ namespace MonumentsMap.Controllers
         public async Task<IActionResult> GetImageAsync(int id, int size)
         {
             byte[] image;
-            var cacheKey = $"{id}{size}";
-            if (!_cache.TryGetValue(cacheKey, out image))
+
+            var photo = await _photoRepository.Get(id);
+            if(photo == null) return NotFound();//TODO handle error
+            try
             {
-                var photo = await _photoRepository.Get(id);
-                try
-                {
-                    var (fileType, imageStream) = _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
-                    image = new byte[imageStream.Length];
-                    await imageStream.ReadAsync(image, 0, (int)imageStream.Length);
-                    _cache.Set(cacheKey, image, TimeSpan.FromMinutes(10));
-                }
-                catch
-                {
-                    return StatusCode(500); //TODO handle error
-                }
+                image = await  _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
+            }
+            catch
+            {
+                return StatusCode(500); //TODO handle error
             }
             return File(image, "image/jpeg");
         }

@@ -23,7 +23,11 @@ export default function DetailDrawerHeader({
     <div className={classes.imagesContainer}>
       {isMobileOnly ? (
         <MonumentDetailImage
-          data={monument && monument.monumentPhotos.find((p) => p.majorPhoto)}
+          data={
+            monument &&
+            (monument.monumentPhotos.find((p) => p.majorPhoto) ||
+              monument.monumentPhotos[0])
+          }
           onMonumentPhotoClicked={onMonumentPhotoClicked}
         />
       ) : (

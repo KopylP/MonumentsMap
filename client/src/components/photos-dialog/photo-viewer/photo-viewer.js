@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PhotoViewer({ imgUrl, onSizeChanged = (p) => p }) {
+export default function PhotoViewer({ imgUrl, onSizeChanged = (p) => p, onImageLoad = p => p }) {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
 
@@ -34,6 +34,7 @@ export default function PhotoViewer({ imgUrl, onSizeChanged = (p) => p }) {
   const handleLoadImage = () => {
     setTimeout(() => {
       setLoading(false);
+      onImageLoad();
     }, 50);
   };
 

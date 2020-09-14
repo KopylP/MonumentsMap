@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect } from "react";
+import React, { useState, memo, useEffect, useLayoutEffect } from "react";
 import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
 import { usePrevious } from "../../../hooks/hooks";
 import PhotoYear from "../../common/photo-year/photo-year";
@@ -19,7 +19,7 @@ export default memo(function MobilePhotoDescriptionBottomSheet({
 }) {
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const prevMonumentPhoto = usePrevious(monumentPhoto);
-
+  const [details, setDetails] = useState(null);
   const handeOpenBottomSheet = (isOpen) => {
     if (isOpen && !openBottomSheet) {
       setOpenBottomSheet(isOpen);
@@ -28,11 +28,27 @@ export default memo(function MobilePhotoDescriptionBottomSheet({
     }
   };
 
-  useEffect(() => {
+  const setDataWithDelay = (monumentPhoto) => {
+    if (openBottomSheet) {
+      setTimeout(() => {
+        setDetails(monumentPhoto);
+      }, 100);
+    } else {
+      setDetails(monumentPhoto);
+    }
+  };
+
+  useLayoutEffect(() => {
     doIfNotTheSame(
       prevMonumentPhoto,
       monumentPhoto
-    )(() => setOpenBottomSheet(false));
+    )(() => {
+      setOpenBottomSheet(false);
+      doIfNotTheSame(
+        details,
+        monumentPhoto
+      )(() => setDataWithDelay(monumentPhoto));
+    });
   }, [monumentPhoto]);
 
   const [disabled, setDisabled] = useState(false);
@@ -75,28 +91,32 @@ export default memo(function MobilePhotoDescriptionBottomSheet({
           fontSize: 14,
         }}
       >
-        <PhotoYear year={monumentPhoto.year} period={monumentPhoto.period} />
-        <div style={{ clear: "both", marginBottom: 2 }} />
-        <span>{monumentPhoto.description}</span>
-        <br />
-        <br />
-        <span>Джерела:</span>
-        <div style={{ clear: "both", marginBottom: 2 }} />
-        {monumentPhoto.sources &&
-          monumentPhoto.sources.map((source, i) => {
-            return (
-              <React.Fragment key={i}>
-                {source.sourceLink !== "" ? (
-                  <a href={source.sourceLink} target="_blank">
-                    {source.title}
-                  </a>
-                ) : (
-                  <span>{source.title}</span>
-                )}
-                <br />
-              </React.Fragment>
-            );
-          })}
+        {details && (
+          <React.Fragment>
+            <PhotoYear year={details.year} period={details.period} />
+            <div style={{ clear: "both", marginBottom: 2 }} />
+            <span>{details.description}</span>
+            <br />
+            <br />
+            <span>Джерела:</span>
+            <div style={{ clear: "both", marginBottom: 2 }} />
+            {details.sources &&
+              details.sources.map((source, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    {source.sourceLink !== "" ? (
+                      <a href={source.sourceLink} target="_blank">
+                        {source.title}
+                      </a>
+                    ) : (
+                      <span>{source.title}</span>
+                    )}
+                    <br />
+                  </React.Fragment>
+                );
+              })}
+          </React.Fragment>
+        )}
       </div>
     </SwipeableBottomSheet>
   );

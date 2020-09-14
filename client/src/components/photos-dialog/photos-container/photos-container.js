@@ -69,22 +69,32 @@ export default function PhotosContainer({
     initIndex
   );
   const [imageContainerWidth, setImageContainerWidth] = useState(0);
+  const [imageLoading, setImageLoading] = useState(true);
   // const prevImageContainerWidth = usePrevious(imageContainerWidth);
   const handleSizeChange = (isOriginalSize) => {
     setOriginalSize(isOriginalSize);
   };
 
+  const setImageIndex = (index) => {
+    setSelectedMonumentPhotoIndex(index);
+    setImageLoading(true);
+  }
+
   const handleMonumentPhotoClick = (monumentPhotoIndex) => {
-    setSelectedMonumentPhotoIndex(monumentPhotoIndex);
+    setImageIndex(monumentPhotoIndex);
   };
 
   const handleLeftButtonClick = () => {
-    setSelectedMonumentPhotoIndex(selectedMonumentPhotoIndex - 1);
+    setImageIndex(selectedMonumentPhotoIndex - 1);
   };
 
   const handleRightButtonClick = () => {
-    setSelectedMonumentPhotoIndex(selectedMonumentPhotoIndex + 1);
+    setImageIndex(selectedMonumentPhotoIndex + 1);
   };
+
+  const handleImageLoading = () => {
+    setImageLoading(false);
+  }
 
   const handleActionButtonsClick = (action) => {
     switch (action) {
@@ -144,9 +154,10 @@ export default function PhotosContainer({
             monumentPhotos[selectedMonumentPhotoIndex].photoId
           )}
           onSizeChanged={handleSizeChange}
+          onImageLoad={handleImageLoading}
         />
         <PhotoListSlider
-          originalSize={originalSize}
+          show={originalSize || imageLoading}
           monumentPhotos={monumentPhotos}
           selectedMonumentPhotoIndex={selectedMonumentPhotoIndex}
           onMonumentPhotoClick={handleMonumentPhotoClick}

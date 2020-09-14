@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   useRouteMatch,
   Route,
@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { Grid, Button } from "@material-ui/core";
 
-export default function SimpleResource({
+export default memo(function SimpleResource({
   ItemList,
   CreateItem = null,
   UpdateItem = null,
@@ -50,4 +50,4 @@ export default function SimpleResource({
       </Switch>
     </Grid>
   );
-}
+});

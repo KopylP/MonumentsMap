@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import withData from "../components/hoc-helpers/with-data";
 import withAuthService from "../components/hoc-helpers/with-auth-service";
 import clsx from "clsx";
@@ -102,24 +102,30 @@ function AdminPanel({ data }) {
             [classes.contentShift]: open,
           })}
         >
-          <div className={classes.drawerHeader} />
-          <Switch>
-            <Route exact path={`${path}`}>
-              <div>Виберіть опцію</div>
-            </Route>
-            {routes
-              .filter((route) => !route.separator)
-              .map((route) => (
-                <Route path={`${path}/${route.path}`}>
-                  <route.Page />
-                </Route>
-              ))}
-          </Switch>
+        <div className={classes.drawerHeader} />
+        <RightPanel routes={routes} path={path}/>
         </main>
       </div>
     </AdminContext.Provider>
   );
 }
+
+const RightPanel = memo(({ routes, path }) => {
+  return (
+    <Switch>
+      <Route exact path={path}>
+        <div>Виберіть опцію</div>
+      </Route>
+      {routes
+        .filter((route) => !route.separator)
+        .map((route) => (
+          <Route path={`${path}/${route.path}`}>
+            <route.Page />
+          </Route>
+        ))}
+    </Switch>
+  )
+});
 
 export default withAuthService(withData(AdminPanel))((authService) => ({
   getData: authService.getMe,

@@ -16,13 +16,15 @@ namespace MonumentsMap.Services
         #region private fields
         private ImageFilesParams _imageFilesParams;
         private IHostEnvironment _env;
+        private IMemoryCache _cache;
         #endregion
 
         #region constructor
-        public PhotoService(ImageFilesParams imageFilesParams, IHostEnvironment env)
+        public PhotoService(ImageFilesParams imageFilesParams, IHostEnvironment env, IMemoryCache cache)
         {
             _env = env;
             _imageFilesParams = imageFilesParams;
+            _cache = cache;
         }
         #endregion
 
@@ -50,7 +52,7 @@ namespace MonumentsMap.Services
             {
                 await file.CopyToAsync(fileStream);
             }
-            using(var fileStream = File.OpenRead(filePath))
+            using (var fileStream = File.OpenRead(filePath))
             {
                 return ImageUtility.GetImageScale(fileStream);
             }
@@ -73,13 +75,24 @@ namespace MonumentsMap.Services
             return true;
         }
 
-        public (string fileType, Stream image) GetImageThumbnail(string subDir, string fileName, int resizeWidth)
+        public async Task<byte[]> GetImageThumbnail(string subDir, string fileName, int resizeWidth)
         {
             string dirPath = GetDirPath(subDir);
             string path = Path.Combine(dirPath, fileName);
-            var stream = File.OpenRead(path);
-            var image = ImageUtility.GetIamgeThumbnail(stream, resizeWidth);
-            return ("image/jpeg", image);
+            byte[] image;
+            string cacheKey = $"{path}{resizeWidth}";
+            if (!_cache.TryGetValue(cacheKey, out image))
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    using (var imageStream = ImageUtility.GetIamgeThumbnail(stream, resizeWidth))
+                    {
+                        image = new byte[imageStream.Length];
+                        await imageStream.ReadAsync(image, 0, (int)imageStream.Length);
+                    }
+                }
+            }
+            return image;
         }
         #endregion
     }

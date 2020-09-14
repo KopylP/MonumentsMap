@@ -21,7 +21,7 @@ const theme = createMuiTheme({
     warning: { main: "#FFC857" },
     error: { main: "#DB5461" },
   },
-  drawerWidth: 350,
+  drawerWidth: 360,
   detailDrawerWidth: 360,
   detailDrawerHeaderHeight: 250,
   adminDrawerWidth: 240,

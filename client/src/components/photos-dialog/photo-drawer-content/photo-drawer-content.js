@@ -30,6 +30,7 @@ export default function PhotoDrawerContent({
   };
 
   const update = () => {
+    setMonumentPhotoDetail(null);
     makeCancelable(monumentService.getMonumentPhoto(monumentPhoto.id))
       .then(onMonumentPhotoLoad)
       .catch(onMonumentPhotoError);

@@ -6,12 +6,12 @@ export default function PhotoListSlider({
   monumentPhotos,
   selectedMonumentPhotoIndex,
   onMonumentPhotoClick,
-  originalSize,
+  show,
 }) {
   return (
     <Slide
       direction="up"
-      in={originalSize}
+      in={show}
       style={{ position: "absolute", bottom: 40, left: 0, right: 0, zIndex: 2 }}
     >
       <div
