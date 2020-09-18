@@ -6,6 +6,8 @@ import { Paper, makeStyles, IconButton } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   paper: {
     background: "white",
+    borderRadius: 5,
+    padding: 5,
     '&:hover': {
         background: "#eee"
     }

@@ -4,6 +4,7 @@ import Fab from "@material-ui/core/Fab";
 import DrawerImage from "./drawer-image.jpg";
 import { makeStyles } from "@material-ui/core";
 import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
+import { isMobile } from "react-device-detect";
 
 const useStyles = makeStyles((theme) => ({
   backButtonContainer: {
@@ -28,7 +29,7 @@ function DrawerHeader(props) {
   const { onBack } = props;
   return (
       <div className={classes.backButtonContainer}>
-        <DrawerBackButton onClick={onBack}/>
+        { isMobile && <DrawerBackButton onClick={onBack}/> }
       </div>
   );
 }
