@@ -32,7 +32,7 @@ export default function withData(Wrapper, paramsFromRoute = []) {
         {data == null && !unauthorized ? (
           <div
             style={{
-              position: "fixed",
+              position: "absulute",
               top: 0,
               bottom: 0,
               left: 0,

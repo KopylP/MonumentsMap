@@ -90,7 +90,6 @@ export default function DetailDrawer(props) {
   }, [monumentId]);
 
   const [photoDialogOpen, setPhotoDialogOpen] = useState(false);
-  const prevPhotoDialogOpen = usePrevious(photoDialogOpen);
   const [selectedMonumentPhotoIndex, setSelectedMonumentPhotoIndex] = useState(
     0
   );

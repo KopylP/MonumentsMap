@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -theme.adminDrawerWidth,
+    position: "releative"
   },
   contentShift: {
     transition: theme.transitions.create("margin", {
@@ -52,7 +53,7 @@ function AdminPanel({ data }) {
       name: "Користувачі",
       path: "users",
       roles: [UserRole.Admin],
-      Page: () => <UsersResource />
+      Page: () => <UsersResource />,
     },
     { separator: true },
     {
@@ -65,7 +66,7 @@ function AdminPanel({ data }) {
       name: "Пам'ятки архітектури",
       path: "monuments",
       roles: [UserRole.Editor],
-      Page: () => <MonumentsResource />
+      Page: () => <MonumentsResource />,
     },
     { separator: true },
   ];
@@ -80,8 +81,8 @@ function AdminPanel({ data }) {
   const [title, setTitle] = useState("Admin panel");
   const { path } = useRouteMatch();
   const monumentService = new MonumentService(serverHost, defaultCulture);
-  const geocoderService = new GeocoderService(defaultCulture.split('-')[0]);
-  const contextValues = {monumentService, geocoderService};
+  const geocoderService = new GeocoderService(defaultCulture.split("-")[0]);
+  const contextValues = { monumentService, geocoderService };
   return (
     <AdminContext.Provider value={contextValues}>
       <div className={classes.root}>
@@ -102,8 +103,8 @@ function AdminPanel({ data }) {
             [classes.contentShift]: open,
           })}
         >
-        <div className={classes.drawerHeader} />
-        <RightPanel routes={routes} path={path}/>
+          <div className={classes.drawerHeader} />
+          <RightPanel routes={routes} path={path} />
         </main>
       </div>
     </AdminContext.Provider>
@@ -124,7 +125,7 @@ const RightPanel = memo(({ routes, path }) => {
           </Route>
         ))}
     </Switch>
-  )
+  );
 });
 
 export default withAuthService(withData(AdminPanel))((authService) => ({
