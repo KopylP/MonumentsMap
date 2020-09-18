@@ -16,13 +16,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Contracts.Services;
 using MonumentsMap.Data;
 using MonumentsMap.Data.Repositories;
+using MonumentsMap.Data.Services;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.Settings;
 using MonumentsMap.Filters;
-using MonumentsMap.Models;
-using MonumentsMap.POCO;
-using MonumentsMap.Services;
-using MonumentsMap.Services.Interfaces;
 
 namespace MonumentsMap
 {
@@ -53,24 +54,24 @@ namespace MonumentsMap
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddMemoryCache();
-            services.AddScoped<CityLocalizedRepository>();
-            services.AddScoped<StatusLocalizedRepository>();
-            services.AddScoped<ConditionLocalizedRepository>();
-            services.AddScoped<MonumentPhotoLocalizedRepository>();
-            services.AddScoped<MonumentLocalizedRepository>();
-            services.AddScoped<PhotoRepository>();
+            services.AddScoped<ICityLocalizedRepository, CityLocalizedRepository>();
+            services.AddScoped<IStatusLocalizedRepository, StatusLocalizedRepository>();
+            services.AddScoped<IConditionLocalizedRepository, ConditionLocalizedRepository>();
+            services.AddScoped<IMonumentPhotoLocalizedRepository, MonumentPhotoLocalizedRepository>();
+            services.AddScoped<IMonumentLocalizedRepository, MonumentLocalizedRepository>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<PhotoService>();
-            services.AddScoped<MonumentPhotoRepository>();
+            services.AddScoped<IMonumentPhotoRepository, MonumentPhotoRepository>();
             services.AddScoped<IMonumentPhotoService, MonumentPhotoService>();
-            services.AddScoped<MonumentRepository>();
+            services.AddScoped<IMonumentRepository, MonumentRepository>();
             services.AddScoped<IMonumentService, MonumentService>();
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
             services.AddScoped<CultureCodeResourceFilter>();
-            services.AddScoped<TokenRepository>();
-            services.AddScoped<ParticipantLocalizedRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>();
+            services.AddScoped<IParticipantLocalizedRepository, ParticipantLocalizedRepository>();
             services.AddScoped<ITokenService, TokenService>();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-            services.AddScoped<InvitationRepository>();
+            services.AddScoped<IInvitationRepository, InvitationRepository>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IInvitationService, InvitationService>();
             //idenditiy

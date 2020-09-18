@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using MonumentsMap.Entities.Models;
+
 namespace MonumentsMap.Data
 {
     public class ApplicationContext : IdentityDbContext<ApplicationUser>

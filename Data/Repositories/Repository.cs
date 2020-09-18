@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Models;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Entities.Models;
 
 namespace MonumentsMap.Data.Repositories
 {

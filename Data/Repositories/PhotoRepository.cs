@@ -1,8 +1,9 @@
-using MonumentsMap.Models;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Entities.Models;
 
 namespace MonumentsMap.Data.Repositories
 {
-    public class PhotoRepository : Repository<Photo, ApplicationContext>
+    public class PhotoRepository : Repository<Photo, ApplicationContext>, IPhotoRepository
     {
         #region constructor
         public PhotoRepository(ApplicationContext context) : base(context)

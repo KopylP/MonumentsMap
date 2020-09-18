@@ -1,14 +1,15 @@
+using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Data.Repositories;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Controllers
 {
-    public class ParticipantController : LocalizedController<ParticipantLocalizedRepository, LocalizedParticipant, EditableLocalizedParticipant, Participant>
+    public class ParticipantController : LocalizedController<IParticipantLocalizedRepository, LocalizedParticipant, EditableLocalizedParticipant, Participant>
     {
         #region constructor
-        public ParticipantController(ParticipantLocalizedRepository localizedRepository) : base(localizedRepository)
+        public ParticipantController(IParticipantLocalizedRepository localizedRepository) : base(localizedRepository)
         {
         }
         #endregion

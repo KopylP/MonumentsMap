@@ -1,22 +1,22 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using MonumentsMap.Data.Repositories;
-using MonumentsMap.Models;
-using MonumentsMap.Services.Interfaces;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
-using static MonumentsMap.Services.MonumentPhotoService;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Contracts.Services;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
+using static MonumentsMap.Data.Services.MonumentPhotoService;
 
 namespace MonumentsMap.Controllers
 {
-    public class MonumentPhotoController : LocalizedController<MonumentPhotoLocalizedRepository, LocalizedMonumentPhoto, EditableLocalizedMonumentPhoto, MonumentPhoto>
+    public class MonumentPhotoController : LocalizedController<IMonumentPhotoLocalizedRepository, LocalizedMonumentPhoto, EditableLocalizedMonumentPhoto, MonumentPhoto>
     {
         #region private fields
         private IMonumentPhotoService _monumentPhotoService;
         #endregion
         #region  constructor
         public MonumentPhotoController(
-            MonumentPhotoLocalizedRepository localizedRepository,
+            IMonumentPhotoLocalizedRepository localizedRepository,
             IMonumentPhotoService monumentPhotoService
         ) : base(localizedRepository)
         {

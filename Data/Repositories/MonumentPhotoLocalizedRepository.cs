@@ -4,15 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 using MonumentsMap.Extensions;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Data.Repositories
 {
-    public class MonumentPhotoLocalizedRepository : LocalizedRepository<LocalizedMonumentPhoto, EditableLocalizedMonumentPhoto, MonumentPhoto, ApplicationContext>
+    public class MonumentPhotoLocalizedRepository 
+        : LocalizedRepository<LocalizedMonumentPhoto, EditableLocalizedMonumentPhoto, MonumentPhoto, ApplicationContext>,
+        IMonumentPhotoLocalizedRepository
     {
         public MonumentPhotoLocalizedRepository(ApplicationContext context) : base(context)
         {

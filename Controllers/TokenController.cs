@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Contracts.Services;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels;
 using MonumentsMap.Extensions;
-using MonumentsMap.Models;
-using MonumentsMap.Services.Interfaces;
-using MonumentsMap.ViewModels;
 
 namespace MonumentsMap.Controllers
 {

@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Data.Repositories;
-using MonumentsMap.Models;
-using MonumentsMap.Services;
+using MonumentsMap.Data.Services;
+using MonumentsMap.Entities.Models;
 
 namespace MonumentsMap.Controllers
 {
@@ -15,14 +16,14 @@ namespace MonumentsMap.Controllers
     public class PhotoController : ControllerBase
     {
         #region private fields
-        private PhotoRepository _photoRepository;
+        private IPhotoRepository _photoRepository;
         private PhotoService _photoService;
         private ILogger<Startup> _logger;
         private IMemoryCache _cache;
         #endregion
 
         #region constructor
-        public PhotoController(PhotoRepository photoRepository, PhotoService photoService, ILogger<Startup> logger, IMemoryCache cache)
+        public PhotoController(IPhotoRepository photoRepository, PhotoService photoService, ILogger<Startup> logger, IMemoryCache cache)
         {
             _photoRepository = photoRepository;
             _photoService = photoService;

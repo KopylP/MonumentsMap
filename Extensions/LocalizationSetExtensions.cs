@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Extensions
 {

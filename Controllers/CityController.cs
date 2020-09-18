@@ -1,13 +1,14 @@
-﻿using MonumentsMap.Data.Repositories;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
+﻿using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Data.Repositories;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Controllers
 {
-    public class CityController : LocalizedController<CityLocalizedRepository, LocalizedCity, EditableLocalizedCity, City>
+    public class CityController : LocalizedController<ICityLocalizedRepository, LocalizedCity, EditableLocalizedCity, City>
     {
-        public CityController(CityLocalizedRepository localizedRepository) : base(localizedRepository)
+        public CityController(ICityLocalizedRepository localizedRepository) : base(localizedRepository)
         {
         }
     }

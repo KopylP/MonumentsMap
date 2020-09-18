@@ -2,19 +2,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Data;
 using MonumentsMap.Data.Repositories;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 using MonumentsMap.Filters;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class LocalizedController<TLocalizedRepository, TLocalizedEntity, TEditableLocalizedEntity, TEntity> : ControllerBase
-    where TLocalizedRepository : LocalizedRepository<TLocalizedEntity, TEditableLocalizedEntity, TEntity, ApplicationContext>
+    where TLocalizedRepository : ILocalizedRepository<TLocalizedEntity, TEditableLocalizedEntity, TEntity>
     where TLocalizedEntity : LocalizedEntity
     where TEntity : Entity
     where TEditableLocalizedEntity : EditableLocalizedEntity<TEntity>

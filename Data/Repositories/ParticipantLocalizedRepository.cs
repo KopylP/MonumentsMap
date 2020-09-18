@@ -1,13 +1,16 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 using MonumentsMap.Extensions;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Data.Repositories
 {
-    public class ParticipantLocalizedRepository : LocalizedRepository<LocalizedParticipant, EditableLocalizedParticipant, Participant, ApplicationContext>
+    public class ParticipantLocalizedRepository 
+        : LocalizedRepository<LocalizedParticipant, EditableLocalizedParticipant, Participant, ApplicationContext>,
+        IParticipantLocalizedRepository
     {
         public ParticipantLocalizedRepository(ApplicationContext context) : base(context)
         {

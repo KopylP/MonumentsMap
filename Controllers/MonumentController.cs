@@ -3,26 +3,27 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Contracts.Services;
 using MonumentsMap.Data.Repositories;
+using MonumentsMap.Entities.FilterParameters;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 using MonumentsMap.Filters;
-using MonumentsMap.Models;
-using MonumentsMap.Services;
-using MonumentsMap.Services.Interfaces;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Controllers
 {
-    public class MonumentController : LocalizedController<MonumentLocalizedRepository, LocalizedMonument, EditableLocalizedMonument, Monument>
+    public class MonumentController : LocalizedController<IMonumentLocalizedRepository, LocalizedMonument, EditableLocalizedMonument, Monument>
     {
         #region private fields
-        private readonly MonumentPhotoLocalizedRepository _monumentPhotoLocalizedRepository;
+        private readonly IMonumentPhotoLocalizedRepository _monumentPhotoLocalizedRepository;
         private readonly IMonumentService _monumentService;
         #endregion
         #region constructor
         public MonumentController(
-            MonumentLocalizedRepository localizedRepository,
-            MonumentPhotoLocalizedRepository monumentPhotoLocalizedRepository,
+            IMonumentLocalizedRepository localizedRepository,
+            IMonumentPhotoLocalizedRepository monumentPhotoLocalizedRepository,
             IMonumentService monumentService
         ) : base(localizedRepository)
         {
@@ -43,14 +44,16 @@ namespace MonumentsMap.Controllers
             [FromQuery] string cultureCode
         )
         {
-            var monuments = await localizedRepository.GetFilteredLocalizedMonumentsAsync(
-                statuses, 
-                conditions, 
-                cities, 
-                startYear, 
-                endYear, 
-                cultureCode
-            );
+            var monumentFilterParams = new MonumentFilterParameters
+            {
+                Statuses = statuses,
+                Conditions = conditions,
+                Cities = cities,
+                StartYear = startYear,
+                EndYear = endYear,
+                CultureCode = cultureCode
+            };
+            var monuments = await localizedRepository.GetByFilterAsync(monumentFilterParams);
             return Ok(monuments);
         }
 

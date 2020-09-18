@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels;
 
 namespace MonumentsMap.Extensions
 {

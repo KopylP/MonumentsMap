@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Data.Repositories
 {
@@ -43,7 +44,10 @@ namespace MonumentsMap.Data.Repositories
             MinimizeResult = true;
             var entities = IncludeNecessaryProps(context.Set<TEntity>().AsQueryable());
             var filteredEntities = entities.Where(predicate);
-            return filteredEntities.Select(GetSelectHandler(cultureCode)).ToList();
+            var resultEntities = await Task.Run(() => filteredEntities
+                .Select(GetSelectHandler(cultureCode))
+                .ToList());
+            return resultEntities;
         }
 
         public async Task<TLocalizedEntity> Get(string cultureCode, int id)
@@ -51,7 +55,8 @@ namespace MonumentsMap.Data.Repositories
             MinimizeResult = false;
             var query = context.Set<TEntity>()
                 .Where(p => p.Id == id);
-            return IncludeNecessaryProps(query)
+            return (await IncludeNecessaryProps(query)
+            .ToListAsync())
             .Select(GetSelectHandler(cultureCode))
             .FirstOrDefault();
         }
@@ -63,7 +68,7 @@ namespace MonumentsMap.Data.Repositories
                 .Where(p => p.Id == id);
             var entity = await IncludeNecessaryProps(query)
                 .FirstOrDefaultAsync();
-            if(entity == null) return null;
+            if (entity == null) return null;
             return GetEditableLocalizedEntity(entity);
         }
 
@@ -71,7 +76,9 @@ namespace MonumentsMap.Data.Repositories
         {
             MinimizeResult = true;
             var entities = context.Set<TEntity>().AsQueryable();
-            return IncludeNecessaryProps(entities).Select(GetSelectHandler(cultureCode)).ToList();
+            return (await IncludeNecessaryProps(entities).ToListAsync())
+                .Select(GetSelectHandler(cultureCode))
+                .ToList();
         }
 
         public async Task<TEntity> Update(TEditableLocalizedEntity editableLocalizedEntity)

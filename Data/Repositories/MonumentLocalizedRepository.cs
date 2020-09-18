@@ -4,24 +4,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Contracts.Repository;
+using MonumentsMap.Entities.Enumerations;
+using MonumentsMap.Entities.FilterParameters;
+using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 using MonumentsMap.Extensions;
-using MonumentsMap.Models;
-using MonumentsMap.ViewModels;
-using MonumentsMap.ViewModels.LocalizedModels;
-using MonumentsMap.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Data.Repositories
 {
-    public class MonumentLocalizedRepository : LocalizedRepository<LocalizedMonument, EditableLocalizedMonument, Monument, ApplicationContext>
+    public class MonumentLocalizedRepository
+        : LocalizedRepository<LocalizedMonument, EditableLocalizedMonument, Monument, ApplicationContext>,
+        IMonumentLocalizedRepository
     {
-        private readonly StatusLocalizedRepository statusLocalizedRepository;
-        private readonly CityLocalizedRepository cityLocalizedRepository;
-        private readonly ConditionLocalizedRepository conditionLocalizedRepository;
+        private readonly IStatusLocalizedRepository statusLocalizedRepository;
+        private readonly ICityLocalizedRepository cityLocalizedRepository;
+        private readonly IConditionLocalizedRepository conditionLocalizedRepository;
         public MonumentLocalizedRepository(
             ApplicationContext context,
-            CityLocalizedRepository cityLocalizedRepository,
-            ConditionLocalizedRepository conditionLocalizedRepository,
-            StatusLocalizedRepository statusLocalizedRepository
+            ICityLocalizedRepository cityLocalizedRepository,
+            IConditionLocalizedRepository conditionLocalizedRepository,
+            IStatusLocalizedRepository statusLocalizedRepository
         ) : base(context)
         {
             this.statusLocalizedRepository = statusLocalizedRepository;
@@ -135,32 +140,53 @@ namespace MonumentsMap.Data.Repositories
                 Period.Year => (year, year),
                 Period.StartOfCentury => ((year - 1) * 100, ((year - 1) * 100 + 30)), //[00, 30]
                 Period.MiddleOfCentury => ((year - 1) * 100 + 31, (year - 1) * 100 + 70),//[41, 70]
-                Period.EndOfCentury => ((year - 1) * 100 + 71, year * 100 -1),//[71, 99]
-                Period.Decades => (year, year + 9)
+                Period.EndOfCentury => ((year - 1) * 100 + 71, year * 100 - 1),//[71, 99]
+                Period.Decades => (year, year + 9),
+                _ => (year, year)
             };
         }
 
-        public async Task<List<LocalizedMonument>> GetFilteredLocalizedMonumentsAsync(
-            int[] statuses,
-            int[] conditions,
-            int[] cities,
-            int? startYear,
-            int? endYear,
-            string cultureCode)
+        public async Task<IEnumerable<LocalizedMonument>> GetByFilterAsync(MonumentFilterParameters parameters)
         {
             MinimizeResult = true;
-            var monuments = context.Monuments
-                .Where(p => statuses.Length == 0 || statuses.Contains(p.StatusId))
-                .Where(p => conditions.Length == 0 || conditions.Contains(p.ConditionId))
-                .Where(p => cities.Length == 0 || cities.Contains(p.CityId));
-
-            var monumentsWithProps = await IncludeMinimizeNecessaryProps(monuments).ToListAsync();
-            var selectedByYearMonuments = monumentsWithProps
-                .Where(p => startYear == null || IfRangeInStartYear(startYear.GetValueOrDefault(), RangeByPeriod(p.Year, p.Period)))
-                .Where(p => endYear == null || IfRangeInEndYear(endYear.GetValueOrDefault(), RangeByPeriod(p.Year, p.Period)));
-
-            var localizedMonuments = selectedByYearMonuments.Select(GetSelectHandler(cultureCode)).ToList();
-            return localizedMonuments;
+            IQueryable<Monument> monuments = context.Monuments;
+            if (parameters.Statuses.Any())
+            {
+                monuments =
+                    from monument in monuments
+                    where parameters.Statuses.Contains(monument.StatusId)
+                    select monument;
+            }
+            if (parameters.Conditions.Any())
+            {
+                monuments =
+                    from monument in monuments
+                    where parameters.Conditions.Contains(monument.ConditionId)
+                    select monument;
+            }
+            if (parameters.Cities.Any())
+            {
+                monuments =
+                    from monument in monuments
+                    where parameters.Cities.Contains(monument.CityId)
+                    select monument;
+            }
+            monuments = (await IncludeMinimizeNecessaryProps(monuments).ToListAsync()).AsQueryable();
+            if(parameters.StartYear != null)
+            {
+                monuments = 
+                    from monument in monuments
+                    where IfRangeInStartYear(parameters.StartYear.GetValueOrDefault(), RangeByPeriod(monument.Year, monument.Period))
+                    select monument;
+            }
+            if(parameters.EndYear != null)
+            {
+                monuments = 
+                    from monument in monuments
+                    where IfRangeInEndYear(parameters.EndYear.GetValueOrDefault(), RangeByPeriod(monument.Year, monument.Period))
+                    select monument;
+            }
+            return monuments.Select(GetSelectHandler(parameters.CultureCode));
         }
     }
 }
