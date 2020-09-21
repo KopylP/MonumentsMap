@@ -11,7 +11,7 @@ function ParticipantsList({ data }) {
     monumentService: { deleteParticipant },
   } = useContext(AdminContext);
 
-  const [columns, setColumns] = React.useState([
+  const [columns] = React.useState([
     { title: "Дефолтне ім'я", field: "defaultName" },
     { title: "Локалізоване ім'я", field: "name" },
     {

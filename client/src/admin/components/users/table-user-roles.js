@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import AdminContext from "../../context/admin-context";
 import { usePromise } from "../../../hooks/hooks";
 import { Paper, Chip, makeStyles } from "@material-ui/core";
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-export default function TableUserRoles({user}) {
+export default memo(function TableUserRoles({user}) {
   const classes = useStyles();
   const {
     monumentService: { getUserRoles },
@@ -45,4 +45,4 @@ export default function TableUserRoles({user}) {
       { pending && <div>Loading...</div> }
     </React.Fragment>
   );
-}
+}, (prevProps, newProps) => prevProps.user.id === newProps.user.id);

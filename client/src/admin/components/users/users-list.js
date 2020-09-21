@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import MaterialTable from "material-table";
 import withData from "../../../components/hoc-helpers/with-data";
 import withMonumentService from "../../../components/hoc-helpers/with-monument-service";
@@ -32,8 +32,8 @@ function UsersList({ data }) {
   );
 }
 
-export default withMonumentService(withData(UsersList))(
+export default memo(withMonumentService(withData(UsersList))(
   (monumentService) => ({
     getData: monumentService.getUsers,
   })
-);
+));

@@ -2,7 +2,7 @@ import React, { memo, useState } from "react";
 import withData from "../../components/hoc-helpers/with-data";
 import withAuthService from "../../components/hoc-helpers/with-auth-service";
 import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AdminDrawer from "../components/main/admin-drawer";
 import AdminAppBar from "../components/main/admin-app-bar";
@@ -128,6 +128,6 @@ const RightPanel = memo(({ routes, path }) => {
   );
 });
 
-export default withAuthService(withData(AdminPanel))((authService) => ({
+export default memo(withAuthService(withData(AdminPanel))((authService) => ({
   getData: authService.getMe,
-}));
+})));
