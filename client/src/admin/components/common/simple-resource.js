@@ -34,9 +34,6 @@ export default memo(function SimpleResource({
       ) : null}
 
       <Switch>
-        <Route exact path={path}>
-          <ItemList />
-        </Route>
         {CreateItem ? (
           <Route path={`${path}/create`}>
             <CreateItem />
@@ -47,6 +44,9 @@ export default memo(function SimpleResource({
             <UpdateItem />
           </Route>
         ) : null}
+        <Route exact path={path}>
+          <ItemList />
+        </Route>
       </Switch>
     </Grid>
   );

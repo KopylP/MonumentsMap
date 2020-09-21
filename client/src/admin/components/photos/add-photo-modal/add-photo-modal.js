@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, memo } from "react";
 import Modal from "@material-ui/core/Modal";
 import {
   Paper,
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function AddPhotoModal({
+export default memo(function AddPhotoModal({
   monumentId,
   open,
   setOpen,
@@ -296,4 +296,4 @@ export default function AddPhotoModal({
       </Fade>
     </Modal>
   );
-}
+});

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, memo } from "react";
 import Modal from "@material-ui/core/Modal";
 import { Paper, Fade, Backdrop, List } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "98%",
     display: "flex",
     flexWrap: "wrap",
-    // backgroundColor: "white",
     justifyContent: "flex-start",
     alignContent: "flex-start",
     overflow: "auto",
@@ -29,18 +28,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PhotoListModal({
+export default memo(function PhotoListModal({
   monumentId,
   open,
   setOpen,
-  ...props
 }) {
-  const classes = useStyles(props);
+  const classes = useStyles();
   const handleClose = () => {
     setOpen(false);
   };
-
-  console.log(monumentId);
 
   return (
     <React.Fragment>
@@ -64,4 +60,4 @@ export default function PhotoListModal({
       ) : null}
     </React.Fragment>
   );
-}
+});

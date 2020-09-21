@@ -1,20 +1,20 @@
 import React, { memo, useState } from "react";
-import withData from "../components/hoc-helpers/with-data";
-import withAuthService from "../components/hoc-helpers/with-auth-service";
+import withData from "../../components/hoc-helpers/with-data";
+import withAuthService from "../../components/hoc-helpers/with-auth-service";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import AdminDrawer from "./components/main/admin-drawer";
-import AdminAppBar from "./components/main/admin-app-bar";
+import AdminDrawer from "../components/main/admin-drawer";
+import AdminAppBar from "../components/main/admin-app-bar";
 import { useRouteMatch, Route, Switch } from "react-router-dom";
-import ParticipantsResource from "./components/participants/participants-resource";
-import AdminContext from "./context/admin-context";
-import MonumentService from "../services/monument-service";
-import { serverHost, defaultCulture } from "../config";
-import MonumentsResource from "./components/monuments/monuments-resource";
-import GeocoderService from "../services/geocoder-service";
-import UsersResource from "./components/users/users-resource";
-import UserRole from "../models/user-role";
+import ParticipantsResource from "../components/participants/participants-resource";
+import AdminContext from "../context/admin-context";
+import MonumentService from "../../services/monument-service";
+import { serverHost, defaultCulture } from "../../config";
+import MonumentsResource from "../components/monuments/monuments-resource";
+import GeocoderService from "../../services/geocoder-service";
+import UsersResource from "../components/users/users-resource";
+import UserRole from "../../models/user-role";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -theme.adminDrawerWidth,
-    position: "releative"
+    position: "releative",
   },
   contentShift: {
     transition: theme.transitions.create("margin", {
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AdminPanel({ data }) {
-  const routes = [
+  const [routes] = useState([
     {
       name: "Користувачі",
       path: "users",
@@ -69,7 +69,7 @@ function AdminPanel({ data }) {
       Page: () => <MonumentsResource />,
     },
     { separator: true },
-  ];
+  ]);
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -114,9 +114,6 @@ function AdminPanel({ data }) {
 const RightPanel = memo(({ routes, path }) => {
   return (
     <Switch>
-      <Route exact path={path}>
-        <div>Виберіть опцію</div>
-      </Route>
       {routes
         .filter((route) => !route.separator)
         .map((route) => (
@@ -124,6 +121,9 @@ const RightPanel = memo(({ routes, path }) => {
             <route.Page />
           </Route>
         ))}
+      <Route exact path={path}>
+        <div>Виберіть опцію</div>
+      </Route>
     </Switch>
   );
 });

@@ -3,10 +3,10 @@ import { makeStyles, Paper, Grid, TextField, Button } from "@material-ui/core";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import withAuthService from "../components/hoc-helpers/with-auth-service";
-import LocalStorageService from "../services/local-storage-service";
+import withAuthService from "../../components/hoc-helpers/with-auth-service";
+import LocalStorageService from "../../services/local-storage-service";
 import { useSnackbar } from "notistack";
-import errorNetworkSnackbar from "../components/helpers/error-network-snackbar";
+import errorNetworkSnackbar from "../../components/helpers/error-network-snackbar";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
