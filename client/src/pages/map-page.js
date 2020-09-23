@@ -32,6 +32,7 @@ import {
   doIfArraysNotEqual,
 } from "../components/helpers/conditions";
 import { defineClientCulture } from "../components/helpers/lang";
+import withStore from "../store/with-store";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -61,20 +62,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MapPage(props) {
-  const classes = useStyles(props);
-  const [mainDrawerOpen, setMainDrawerOpen] = useState(true);
-  const [detailDrawerOpen, setDetailDrawerOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState(
-    supportedCultures[0]
-  );
-  const [selectedMonument, setSelectedMonument] = useState({ id: 0 });
-  const [selectedConditions, setSelectedConditions] = useState([]);
-  const [selectedStatuses, setSelectedStatuses] = useState([]);
-  const [selectedCities, setSelectedCities] = useState([]);
-  const [selectedYearRange, setSelectedYearRange] = useState(yearsRange);
-  const [monuments, setMonuments] = useState([]);
-  const [center, setCenter] = useState(defaultCity);
+function MapPage({ store }) {
+  const classes = useStyles();
+  const {
+    selectedLanguage, 
+    setSelectedLanguage,
+    selectedConditions, 
+    selectedCities, 
+    selectedStatuses, 
+    selectedYearRange,
+    selectedMonument,
+    setMainDrawerOpen,
+    monuments,
+    setMonuments,
+    setSelectedMonument,
+    loadingMonuments,
+    setLoadingMonuments,
+  } = store;
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
   const prevSelectedConditions = usePrevious(selectedConditions);
@@ -98,6 +102,10 @@ function MapPage(props) {
       cancelRequest.cancel();
     }
 
+    if (!loadingMonuments) {
+      setLoadingMonuments(true);
+    }
+
     makeCancelable(
       monumentService.getMonumentsByFilter(
         selectedCities.map((c) => c.id),
@@ -109,8 +117,12 @@ function MapPage(props) {
     )
       .then((monuments) => {
         setMonuments(monuments);
+        setLoadingMonuments(false);
       })
-      .catch((e) => e); //TODO handle error
+      .catch((e) => {
+        setLoadingMonuments(false);
+        //TODO show snackbar
+      });
   };
 
   useEffect(() => {
@@ -152,27 +164,9 @@ function MapPage(props) {
   );
 
   const contextValues = {
-    mainDrawerOpen,
-    setMainDrawerOpen,
-    selectedLanguage,
-    setSelectedLanguage,
+    ...store,
     monumentService,
-    selectedMonument,
-    setSelectedMonument,
-    detailDrawerOpen,
-    setDetailDrawerOpen,
     geocoderService,
-    selectedConditions,
-    setSelectedConditions,
-    selectedCities,
-    setSelectedCities,
-    selectedStatuses,
-    setSelectedStatuses,
-    monuments,
-    center,
-    setCenter,
-    selectedYearRange,
-    setSelectedYearRange,
   };
 
   return (
@@ -182,7 +176,9 @@ function MapPage(props) {
           <div className={classes.mapContainer}>
             <Map
               onMonumentSelected={(monumentId) =>
-                setSelectedMonument({...monuments.find((p) => p.id === monumentId)})
+                setSelectedMonument({
+                  ...monuments.find((p) => p.id === monumentId),
+                })
               }
             />
           </div>
@@ -202,4 +198,4 @@ function MapPage(props) {
   );
 }
 
-export default MapPage;
+export default withStore(MapPage); 
