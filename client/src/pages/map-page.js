@@ -94,7 +94,7 @@ function MapPage({ store }) {
   const closeMonumentsLoading = () => {
     setTimeout(() => {
       setLoadingMonuments(false);
-    }, 200);
+    }, 300);
   }
 
   function executor(e) {
