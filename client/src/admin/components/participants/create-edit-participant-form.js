@@ -20,6 +20,7 @@ export default function CreateEditParticipantForm({
   initialValues,
   validationSchemaFileds,
   edit = false,
+  loading
 }) {
   const formik = useFormik({
     initialValues,
@@ -93,6 +94,7 @@ export default function CreateEditParticipantForm({
       </Grid>
       <SimpleSubmitForm
         disableSubmit={!Object.keys(formik.touched).length > 0}
+        loading={loading}
       />
     </form>
   );

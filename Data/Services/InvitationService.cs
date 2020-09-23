@@ -42,6 +42,8 @@ namespace MonumentsMap.Data.Services
         #region interface methods
         public async Task<InvitationResponseViewModel> CreateInviteAsync(string email)
         {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user != null) return null;
             var now = DateTime.Now;
 
             var invitations = await _invitationRepository

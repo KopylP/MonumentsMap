@@ -61,6 +61,7 @@ namespace MonumentsMap.Controllers
         public async Task<IActionResult> Invite(InvitationRequestViewModel invitationRequestViewModel)
         {
             var inviteResponseModel = await _invitationService.CreateInviteAsync(invitationRequestViewModel.Email);
+            if(inviteResponseModel == null) return Conflict();//TODO error
             await _invitationService.InvitePersonAsync(inviteResponseModel);
             return Ok(inviteResponseModel);
         }

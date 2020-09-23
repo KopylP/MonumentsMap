@@ -106,6 +106,7 @@ const AutocompleteComponent = ({ citiesAutocompleteProps, formik }) => (
 
 export default function CreateEditMonument({ data }) {
   const [value, setValue] = React.useState(0);
+  const [loading, setLoading] = useState(false); 
   const {
     monumentService,
   } = useContext(AdminContext);
@@ -164,11 +165,13 @@ export default function CreateEditMonument({ data }) {
       saveMethod = monumentService.editMonument;
       monument.id = data.id;
     }
+    setLoading(true);
     saveMethod(monument)
       .then((e) => {
         goBack();
+        setLoading(false);
       })
-      .catch(); //TODO handle error
+      .catch((e) => setLoading(false)); //TODO handle error
   };
 
   const formik = useFormik({
@@ -490,7 +493,7 @@ export default function CreateEditMonument({ data }) {
               <Grid item xs={12}>
                 <Source setSources={setSources} sources={sources} />
               </Grid>
-              <SimpleSubmitForm disableSubmit={false} />
+              <SimpleSubmitForm disableSubmit={false} loading={loading}/>
             </Grid>
           </form>
         </div>

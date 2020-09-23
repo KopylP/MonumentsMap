@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AdminContext from "../../context/admin-context";
 import { useSnackbar } from "notistack";
 import { Grid, TextField } from "@material-ui/core";
@@ -16,6 +16,7 @@ export default function AddUser() {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const makeCancelable = useCancelablePromise();
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     email: "",
@@ -28,14 +29,19 @@ export default function AddUser() {
   };
 
   const submitForm = (values) => {
+    setLoading(true);
     makeCancelable(inviteUser(values.email))
       .then(() => {
-        enqueueSnackbar("Користувача запрошено до проєкту", { variant: "success" });
+        enqueueSnackbar("Користувача запрошено до проєкту", {
+          variant: "success",
+        });
+        setLoading(false);
         history.goBack();
       })
-      .catch((e) =>
-        errorNetworkSnackbar(enqueueSnackbar, e.response && e.response.status)
-      );
+      .catch((e) => {
+        errorNetworkSnackbar(enqueueSnackbar, e.response && e.response.status);
+        setLoading(false);
+      });
   };
 
   const formik = useFormik({
@@ -66,7 +72,7 @@ export default function AddUser() {
           />
         </Grid>
       </Grid>
-      <SimpleSubmitForm />
+      <SimpleSubmitForm loading={loading} />
     </form>
   );
 }

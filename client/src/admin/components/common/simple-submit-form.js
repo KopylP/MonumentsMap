@@ -1,9 +1,27 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Grid, Button } from "@material-ui/core";
+import { Grid, Button, makeStyles, CircularProgress } from "@material-ui/core";
+import { green } from "@material-ui/core/colors";
 
-export default function SimpleSubmitForm({ disableSubmit = false }) {
+const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    margin: theme.spacing(1),
+    position: "relative",
+    marginLeft: 15,
+  },
+  buttonProgress: {
+    color: green[500],
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
+}));
+
+export default function SimpleSubmitForm({ disableSubmit = false, loading = false }) {
   const history = useHistory();
+  const classes = useStyles();
   return (
     <Grid
       container
@@ -19,15 +37,17 @@ export default function SimpleSubmitForm({ disableSubmit = false }) {
       >
         Назад
       </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        type="submit"
-        disabled={disableSubmit}
-        style={{ marginLeft: 15 }}
-      >
-        Прийняти
-      </Button>
+      <div className={classes.wrapper}>
+        <Button
+          variant="contained"
+          color="secondary"
+          type="submit"
+          disabled={loading || disableSubmit}
+        >
+          Прийняти
+        </Button>
+        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+      </div>
     </Grid>
   );
 }

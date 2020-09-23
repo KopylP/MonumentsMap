@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { supportedCultures } from "../../../config";
 import { useHistory } from "react-router-dom";
 import withData from "../../../components/hoc-helpers/with-data";
@@ -11,6 +11,7 @@ import CreateEditParticipantForm from "./create-edit-participant-form";
 import * as Yup from "yup";
 
 export default function CreateEditParticipant({ data }) {
+  const [loading, setLoading] = useState(false);
   const {
     monumentService: { editParticipant, createParticipant },
   } = useContext(AdminContext);
@@ -23,7 +24,13 @@ export default function CreateEditParticipant({ data }) {
   };
 
   if (data) {
-    const name = mergeTwoArraysByKey(supportedCultures, data.name, "code", "culture", "code");
+    const name = mergeTwoArraysByKey(
+      supportedCultures,
+      data.name,
+      "code",
+      "culture",
+      "code"
+    );
     name.forEach((cultureValuePair) => {
       initialValues[cultureValuePair.code] = cultureValuePair.value;
     });
@@ -51,11 +58,16 @@ export default function CreateEditParticipant({ data }) {
       participant.id = data.id;
       requestMethod = editParticipant;
     }
+    setLoading(true);
     requestMethod(participant)
-      .then(() => history.goBack())
-      .catch((e) =>
-        errorNetworkSnackbar(enqueueSnackbar, e.response && e.response.status)
-      );
+      .then(() => {
+        setLoading(false);
+        history.goBack();
+      })
+      .catch((e) => {
+        setLoading(false);
+        errorNetworkSnackbar(enqueueSnackbar, e.response && e.response.status);
+      });
   };
 
   const history = useHistory();
@@ -65,7 +77,8 @@ export default function CreateEditParticipant({ data }) {
       submitForm={submitForm}
       initialValues={initialValues}
       validationSchemaFileds={validationSchemafileds}
-      edit={data ? true: false}
+      edit={data ? true : false}
+      loading={loading}
     />
   );
 }
