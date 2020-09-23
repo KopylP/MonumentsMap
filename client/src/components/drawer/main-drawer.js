@@ -7,9 +7,6 @@ import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { makeStyles } from "@material-ui/core";
 import { isMobileOnly } from "react-device-detect";
 
-// width: 350px;
-// flex-shrink: 0;
-
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
     width: theme.drawerWidth,

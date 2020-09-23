@@ -91,6 +91,12 @@ function MapPage({ store }) {
   let match = useRouteMatch();
   const makeCancelable = useCancelablePromise();
 
+  const closeMonumentsLoading = () => {
+    setTimeout(() => {
+      setLoadingMonuments(false);
+    }, 200);
+  }
+
   function executor(e) {
     setCancelRequest({
       cancel: e,
@@ -117,10 +123,10 @@ function MapPage({ store }) {
     )
       .then((monuments) => {
         setMonuments(monuments);
-        setLoadingMonuments(false);
+        closeMonumentsLoading();
       })
       .catch((e) => {
-        setLoadingMonuments(false);
+        closeMonumentsLoading();
         //TODO show snackbar
       });
   };
