@@ -37,12 +37,11 @@ namespace MonumentsMap.Controllers
                     return Forbid(); //TODO handle error
                 case InvitationResult.InvitationDoesNotExistOrExpired:
                     return NotFound();
+                case InvitationResult.UserAlreadyExists:
+                    return Conflict();
             }
 
-            var user = await _userManager.FindByEmailAsync(registrationUserViewModel.Email);
-            if(user != null) return Conflict();//TODO handle error user already exists
-
-            user = new ApplicationUser
+            var user = new ApplicationUser
             {
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,

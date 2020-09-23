@@ -237,4 +237,8 @@ export default class MonumentService {
   inviteUser = async (email) => {
     return this._postRequest('registration/invite', { email });
   }
+
+  registerUser = async (registerModel) => {
+    return this._postRequest('registration', registerModel);
+  }
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import AdminPage from "./admin-page";
 import LoginPage from "./login-page";
+import RegistrationPage from "./registration-page";
 
 export default function AdminRoutingPage() {
   let match = useRouteMatch();
@@ -10,6 +11,9 @@ export default function AdminRoutingPage() {
       <Switch>
         <Route path={`${match.path}/login`}>
           <LoginPage />
+        </Route>
+        <Route path={`${match.path}/invitation`}>
+          <RegistrationPage />
         </Route>
         <Route path={match.path}>
           <AdminPage />

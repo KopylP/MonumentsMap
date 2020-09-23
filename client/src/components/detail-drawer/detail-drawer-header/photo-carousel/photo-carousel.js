@@ -62,13 +62,7 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
     setCurrentIndex(currentIndex - 1);
   };
 
-  const [animateTransitions, setAnimateTransitions] = useState(false);
-
-  useEffect(() => {
-    //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
-    setCurrentIndex(0); //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
-    setAnimateTransitions(true); //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
-  }, []); //FIX "REACT SWIPEABLE VIEW 'FIRST INDEX ANIMATION BROKEN'"
+  const [animateTransitions] = useState(true);
 
   return (
     <div className={styles.container}>

@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef, useContext, useCallback } from "react";
-import AppContext from "../context/app-context";
-import { useSnackbar } from "notistack";
-import errorNetworkSnackbar from "../components/helpers/error-network-snackbar";
+import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 // Hook
 export function usePrevious(value) {
@@ -36,4 +34,10 @@ export function usePromise(promiseOrFunction, defaultValue, params = []) {
 
   const { value, error, isPending } = state
   return [value, error, isPending]
+}
+
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+export function useQuery() {
+  return new URLSearchParams(useLocation().search);
 }

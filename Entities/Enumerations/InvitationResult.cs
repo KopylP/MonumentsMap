@@ -4,6 +4,7 @@ namespace MonumentsMap.Entities.Enumerations
     {
         InvitationDoesNotExistOrExpired,
         InvalidInvitationCode,
-        Ok
+        Ok,
+        UserAlreadyExists
     }
 }

@@ -107,7 +107,7 @@ function LoginPage({ auth }) {
               />
             </Grid>
             <Grid item xs={12} style={{ textAlign: "center" }}>
-              <Button type={formik.handleSubmit}>SIGN IN</Button>
+              <Button type="submit">SIGN IN</Button>
             </Grid>
           </Grid>
         </form>

@@ -66,7 +66,10 @@ export default function AdminDrawer({ open, setOpen, routes, roles }) {
       </div>
       <Divider />
       <List>
-        {routes.map((route, index) => {
+        {routes.filter(route => {
+          if(route.separator) return true;
+          return roles.some(role => route.roles.indexOf(role) >= 0)
+        }).map((route, index) => {
           return route.separator ? (
             <Divider />
           ) : (

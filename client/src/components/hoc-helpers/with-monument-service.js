@@ -7,7 +7,6 @@ export default function withMonumentService(Wrapper) {
   return function (bindMethodsToProps) {
     return function (props) {
       const { params = [] } = props;
-      console.log("withMonumentService", props);
       const appContext = useContext(AppContext);
       let monumentService;
       if(appContext && appContext.monumentService) {
@@ -15,8 +14,7 @@ export default function withMonumentService(Wrapper) {
       } else {
         monumentService = new MonumentService(serverHost, "uk-UA");
       }
-      const { getData } = bindMethodsToProps(monumentService);
-      return <Wrapper getData={getData} params={params} {...props} />;
+      return <Wrapper {...bindMethodsToProps(monumentService)} params={params} {...props} />;
     };
   };
 }

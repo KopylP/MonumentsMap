@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Contracts.Services;
@@ -18,18 +19,24 @@ namespace MonumentsMap.Data.Services
         #region private fields
         private readonly IMailService _emailService;
         private readonly IInvitationRepository _invitationRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly string _invitationSecretKey;
         private readonly int _expirationInHours;
         private readonly string _invitationClientUrlPattern;
         #endregion
         #region constructor
-        public InvitationService(IMailService emailService, IInvitationRepository invitationRepository, IConfiguration configuration)
+        public InvitationService(
+            IMailService emailService,
+            IInvitationRepository invitationRepository,
+            IConfiguration configuration,
+            UserManager<ApplicationUser> userManager)
         {
             _emailService = emailService;
             _invitationRepository = invitationRepository;
             _invitationSecretKey = configuration["Invitation:Key"];
             _expirationInHours = configuration.GetValue<int>("Invitation:ExpirationInHours");
             _invitationClientUrlPattern = configuration["Invitation:InvitationClientUrl"];
+            _userManager = userManager;
         }
         #endregion
         #region interface methods
@@ -79,6 +86,8 @@ namespace MonumentsMap.Data.Services
 
         public async Task<InvitationResult> CheckInvitationCodeAsync(string email, string invitationCode)
         {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user != null) return InvitationResult.UserAlreadyExists;
             var now = DateTime.Now;
             var invitations = await _invitationRepository
                 .Find(p => p.Email == email && p.ExpireAt > now);
