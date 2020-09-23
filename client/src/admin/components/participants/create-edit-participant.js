@@ -24,15 +24,9 @@ export default function CreateEditParticipant({ data }) {
   };
 
   if (data) {
-    const name = mergeTwoArraysByKey(
-      supportedCultures,
-      data.name,
-      "code",
-      "culture",
-      "code"
-    );
-    name.forEach((cultureValuePair) => {
-      initialValues[cultureValuePair.code] = cultureValuePair.value;
+    supportedCultures.forEach((culture) => {
+      const cultureValuePair = data.name.find(p => p.code = culture.code);
+      initialValues[culture.code] = cultureValuePair ? cultureValuePair.value : "";
     });
   } else {
     supportedCultures.forEach((culture) => {
