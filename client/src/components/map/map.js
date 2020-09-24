@@ -24,17 +24,18 @@ function Map({ onMonumentSelected = (p) => p }) {
   const prevCenter = usePrevious(center);
   const [mapZoom, setMapZoom] = useState(loadMapZoom);
 
-  const [monumentWithPopupId, setMonumentWithPopupId] = useState(null); // TODO delete this
-
   const closePopups = () => {
     mapRef.current.leafletElement.closePopup();
-    setMonumentWithPopupId(null);
   };
 
   const changeMapZoomToDefault = () => {
     if(mapZoom == loadMapZoom) {
       setMapZoom(defaultZoom);
     }
+  }
+
+  const handleMonumentMarkerClick = (monument) => {
+    onMonumentSelected(monument);
   }
 
   const changeCenter = ({lat, lng}) => {
@@ -56,10 +57,7 @@ function Map({ onMonumentSelected = (p) => p }) {
       .map((monument, i) => {
         return (
           <MonumentMarker
-            onClick={(e) => {
-              setMonumentWithPopupId(e);
-              onMonumentSelected(e);
-            }}
+            onClick={handleMonumentMarkerClick}
             monument={monument}
             selectedMonumentId={selectedMonument && selectedMonument.id}
             key={monument.id}
