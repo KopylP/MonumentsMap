@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Entities.Models;
@@ -41,7 +39,7 @@ namespace MonumentsMap.Controllers
             {
                 user = await _userService.GetUserByIdAsync(id);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);//TODO handle error
             }
@@ -55,11 +53,11 @@ namespace MonumentsMap.Controllers
             {
                 user = await _userService.DeleteUserAsync(id);
             }
-            catch(ProhibitException ex)
+            catch (ProhibitException ex)
             {
                 return StatusCode(403, ex.Message); //TODO handle error
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(ex.Message); //TODO handle error
             }
@@ -76,49 +74,53 @@ namespace MonumentsMap.Controllers
             {
                 roles = await _userService.GetUserRolesAsync(id);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(ex.Message); //TODO handle error
             }
             return Ok(roles);
         }
 
-        [HttpPost("Role")]
-        public async Task<IActionResult> AddRole(UserRoleViewModel userRoleViewModel)
+        [HttpPost("{id}/roles")]
+        public async Task<IActionResult> AddRole([FromRoute] string id, [FromBody] UserRoleViewModel userRoleViewModel)
         {
             UserViewModel user;
             try
             {
-                user = await _userService.ChangeUserRolesAsync(userRoleViewModel);
+                user = await _userService.ChangeUserRolesAsync(id, userRoleViewModel);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(ex.Message); // TODO handle error
             }
-            catch(InternalServerErrorException ex)
+            catch (InternalServerErrorException ex)
             {
                 return StatusCode(500, ex.Message); // TODO handle error;
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(ex.Message); // TODO handle error
             }
             return Ok(user);
         }
 
-        [HttpDelete("Role")]
-        public async Task<IActionResult> DeleteRole(UserRoleViewModel userRoleViewModel)
+        [HttpDelete("{id}/roles")]
+        public async Task<IActionResult> DeleteRole([FromRoute] string id, [FromBody] UserRoleViewModel userRoleViewModel)
         {
             UserViewModel user;
             try
             {
-                user = await _userService.RemoveUserFromRolesAsync(userRoleViewModel);
+                user = await _userService.RemoveUserFromRolesAsync(id, userRoleViewModel);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(ex.Message); // TODO handle error
             }
-            catch(ProhibitException ex)
+            catch (ProhibitException ex)
             {
                 return StatusCode(403, ex.Message); // TODO handle error
             }
-            catch(InternalServerErrorException ex)
+            catch (InternalServerErrorException ex)
             {
                 return StatusCode(500, ex.Message); // TODO handle error
             }

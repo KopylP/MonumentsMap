@@ -21,13 +21,26 @@ namespace MonumentsMap.Data.Services
         #endregion
 
         #region  IUserService methods
-        public async Task<UserViewModel> ChangeUserRolesAsync(UserRoleViewModel userRoleViewModel)
+        public async Task<UserViewModel> ChangeUserRolesAsync(string userId, UserRoleViewModel userRoleViewModel)
         {
-            var user = await _userManager.FindByIdAsync(userRoleViewModel.UserId);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            if (!userRoles.Contains("Admin") && userRoleViewModel.RoleNames.Contains("Admin"))
+            {
+                throw new BadRequestException("System provides only one administrator");
+            }
+
+            if (userRoles.Contains("Admin") && !userRoleViewModel.RoleNames.Contains("Admin"))
+            {
+                throw new BadRequestException("It is impossible to take away administrator rights from the administrator");
+            }
+            
             var removeRolesResult = await _userManager
                 .RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
 
@@ -85,9 +98,9 @@ namespace MonumentsMap.Data.Services
             return await _userManager.Users.ToListAsync();
         }
 
-        public async Task<UserViewModel> RemoveUserFromRolesAsync(UserRoleViewModel userRoleViewModel)
+        public async Task<UserViewModel> RemoveUserFromRolesAsync(string userId, UserRoleViewModel userRoleViewModel)
         {
-            var user = await _userManager.FindByIdAsync(userRoleViewModel.UserId);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 throw new NotFoundException("User not found");

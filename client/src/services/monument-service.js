@@ -226,6 +226,10 @@ export default class MonumentService {
     return await this._getRequest(`user`, false);
   }
 
+  getUser = async (userId) => {
+    return await this._getRequest(`user/${userId}`, false);
+  }
+
   deleteUser = async (userId) => {
     return await this._deleteRequest(`user/${userId}`);
   }
@@ -240,5 +244,9 @@ export default class MonumentService {
 
   registerUser = async (registerModel) => {
     return this._postRequest('registration', registerModel);
+  }
+
+  changeUserRoles = async (userId, userRoleModel) => {
+    return this._postRequest(`user/${userId}/roles`, userRoleModel);
   }
 }

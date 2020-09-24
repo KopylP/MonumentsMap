@@ -1,3 +1,5 @@
+import UserRole from "./models/user-role";
+
 const supportedCultures = [
     {code: "uk-UA", name: "Українська"},
     {code: "en-GB", name: "English"},
@@ -24,6 +26,8 @@ const accessToken = "6gbhT4C7Kpj0YRx9mqPWxoZA2IhKXCDTk2L0wFHSurl2EtAxvun10VOtpLf
 
 const yearsRange = [1700, new Date().getFullYear()];
 
+const supportedRoles = [UserRole.Admin, UserRole.Editor];
+
 export {
     supportedCultures,
     serverHost,
@@ -33,5 +37,6 @@ export {
     clientId,
     defaultCulture,
     defaultClientCulture,
-    yearsRange
+    yearsRange,
+    supportedRoles
 }

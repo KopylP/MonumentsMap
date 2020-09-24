@@ -66,18 +66,20 @@ export default function AdminDrawer({ open, setOpen, routes, roles }) {
       </div>
       <Divider />
       <List>
-        {routes.filter(route => {
-          if(route.separator) return true;
-          return roles.some(role => route.roles.indexOf(role) >= 0)
-        }).map((route, index) => {
+        {routes.map((route, index) => {
           return route.separator ? (
             <Divider />
           ) : (
-            <ListItem button key={route.path} onClick={() => history.push(`${path}/${route.path}`)}>
+            <ListItem
+              disabled={!roles.some((role) => route.roles.indexOf(role) >= 0)}
+              button
+              key={route.path}
+              onClick={() => history.push(`${path}/${route.path}`)}
+            >
               {/* <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon> */}
-              <ListItemText primary={route.name}/>
+              <ListItemText primary={route.name} />
             </ListItem>
           );
         })}
