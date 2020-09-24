@@ -33,6 +33,7 @@ import {
 } from "../components/helpers/conditions";
 import { defineClientCulture } from "../components/helpers/lang";
 import withStore from "../store/with-store";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -64,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MapPage({ store }) {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const {
     selectedLanguage, 
     setSelectedLanguage,
@@ -103,6 +105,10 @@ function MapPage({ store }) {
     });
   }
 
+  const showSnackbar = (message) => {
+    enqueueSnackbar(message, { autoHideDuration: 1500 });
+  }
+
   const update = () => {
     if (cancelRequest) {
       cancelRequest.cancel();
@@ -124,6 +130,9 @@ function MapPage({ store }) {
       .then((monuments) => {
         setMonuments(monuments);
         closeMonumentsLoading();
+        if(monuments.length === 0) {
+          showSnackbar("За такими критеріями не знайдено жодної пам'ятки");
+        }
       })
       .catch((e) => {
         closeMonumentsLoading();
