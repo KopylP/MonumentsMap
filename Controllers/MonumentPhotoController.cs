@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Entities.Models;
@@ -28,14 +29,20 @@ namespace MonumentsMap.Controllers
         [HttpDelete("{id}")]
         public override async Task<IActionResult> Delete(int id)
         {
-            var (monumentPhoto, status) = await _monumentPhotoService.Remove(id);
-            return status switch
+            MonumentPhoto monumentPhoto;
+            try
             {
-                RemoveStatus.ModelNotFound => NotFound(),
-                RemoveStatus.FileDeleteFail => StatusCode(500),
-                RemoveStatus.Ok => Ok(monumentPhoto),
-                _ => NotFound()
-            };
+                monumentPhoto = await _monumentPhotoService.Remove(id);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message); //TODO handle error
+            }
+            catch(InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message); //TODO handle error
+            }
+            return Ok(monumentPhoto);
         }
         #endregion
 
@@ -44,7 +51,7 @@ namespace MonumentsMap.Controllers
         public async Task<IActionResult> ToogleMajorPhoto([FromRoute] int id)
         {
             var monumentPhoto = await _monumentPhotoService.ToogleMajorPhotoAsync(id);
-            if(monumentPhoto == null) return NotFound();//TODO handle error
+            if (monumentPhoto == null) return NotFound();//TODO handle error
             return Ok(monumentPhoto);
         }
         #endregion

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Data.Repositories;
@@ -10,16 +11,6 @@ namespace MonumentsMap.Data.Services
 {
     public class MonumentPhotoService : IMonumentPhotoService
     {
-
-        #region enums
-        public enum RemoveStatus
-        {
-            ModelNotFound,
-            FileDeleteFail,
-            Ok
-        }
-        #endregion
-
         #region private fields
         private readonly IMonumentPhotoRepository _monumentPhotoRepository;
         private readonly PhotoService _photoService;
@@ -52,19 +43,22 @@ namespace MonumentsMap.Data.Services
             _monumentPhotoRepository.Commit = true;
             return monumentPhoto;
         }
-        public async Task<(MonumentPhoto monumentPhoto, RemoveStatus removeStatus)> Remove(int monumentPhotoId)
+        public async Task<MonumentPhoto> Remove(int monumentPhotoId)
         {
             var monumentPhoto = await _monumentPhotoRepository.Delete(monumentPhotoId);
-            if (monumentPhoto == null) return (monumentPhoto, RemoveStatus.ModelNotFound);
+            if (monumentPhoto == null)
+            {
+                throw new NotFoundException("Monument photo not found");
+            }
             try
             {
                 _photoService.DeleteSubDir(monumentPhoto.PhotoId.ToString());
             }
-            catch (IOException)
+            catch (IOException ex)
             {
-                return (null, RemoveStatus.FileDeleteFail);
+                throw new InternalServerErrorException(ex.Message, ex);
             }
-            return (monumentPhoto, RemoveStatus.Ok);
+            return monumentPhoto;
         }
         #endregion
     }
