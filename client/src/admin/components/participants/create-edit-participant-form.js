@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import ParticipantRole from "../../../models/participant-role";
 import * as Yup from "yup";
+import SimpleTitle from "../common/ui/simple-title";
 
 export default function CreateEditParticipantForm({
   submitForm,
@@ -30,11 +31,7 @@ export default function CreateEditParticipantForm({
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <h2>
-            {edit ? "Редагувати" : "Створити нового"} учасника будівництва
-          </h2>
-        </Grid>
+        <SimpleTitle text={`${edit ? "Редагувати" : "Створити нового"} учасника будівництва`}/>
         <Grid item xs={6}>
           <FormControl style={{ width: "100%" }}>
             <TextField

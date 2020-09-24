@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import errorNetworkSnackbar from "../../../components/helpers/error-network-snackbar";
+import SimpleTitle from "../common/ui/simple-title";
 
 export default function AddUser() {
   const {
@@ -53,9 +54,7 @@ export default function AddUser() {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={3} alignItems="flex-end">
-        <Grid item xs={12}>
-          <h2>Запросити нового користувача</h2>
-        </Grid>
+        <SimpleTitle text="Запросити нового користувача"/>
         <Grid item xs={12}>
           <TextField
             style={{ width: "100%" }}
