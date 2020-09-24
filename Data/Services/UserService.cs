@@ -19,7 +19,6 @@ namespace MonumentsMap.Data.Services
         #region constructor
         public UserService(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         #endregion
-        #region rest methods
 
         #region  IUserService methods
         public async Task<UserViewModel> ChangeUserRolesAsync(UserRoleViewModel userRoleViewModel)
