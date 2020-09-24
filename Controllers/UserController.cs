@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Api.Exceptions;
+using MonumentsMap.Contracts.Services;
 using MonumentsMap.Entities.Models;
 using MonumentsMap.Entities.ViewModels;
 using MonumentsMap.Extensions;
@@ -16,36 +19,50 @@ namespace MonumentsMap.Controllers
     public class UserController : ControllerBase
     {
         #region private fields
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
         #endregion
+
         #region constructor
-        public UserController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
+        public UserController(IUserService userService) => _userService = userService;
         #endregion
+
         #region rest methods
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var users = await _userManager.Users.Select(user => user.AdaptUserToModel()).ToListAsync();
-            return Ok(users);
+            var users = await _userService.GetUsersAsync();
+            return Ok(users.Select(user => user.AdaptUserToModel()));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return Unauthorized(); //TODO handle error
-            return Ok(await user.AdaptUserToModelAsync(_userManager));
+            UserViewModel user;
+            try
+            {
+                user = await _userService.GetUserByIdAsync(id);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message);//TODO handle error
+            }
+            return Ok(user);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Contains("Admin"))
+            ApplicationUser user;
+            try
             {
-                return StatusCode(403); //TODO handle error
+                user = await _userService.DeleteUserAsync(id);
             }
-            if (user == null) return Unauthorized(); //TODO handle error
-            await _userManager.DeleteAsync(user);
+            catch(ProhibitException ex)
+            {
+                return StatusCode(403, ex.Message); //TODO handle error
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message); //TODO handle error
+            }
             return Ok(user);
         }
         #endregion
@@ -54,39 +71,58 @@ namespace MonumentsMap.Controllers
         [HttpGet("{id}/roles")]
         public async Task<IActionResult> GetRoles(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return Unauthorized(); //TODO handle error
-            return Ok((await _userManager.GetRolesAsync(user)).Select(p => new RoleViewModel { Name = p }));
+            IEnumerable<RoleViewModel> roles;
+            try
+            {
+                roles = await _userService.GetUserRolesAsync(id);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message); //TODO handle error
+            }
+            return Ok(roles);
         }
-        [HttpPatch("Role")]
+
+        [HttpPost("Role")]
         public async Task<IActionResult> AddRole(UserRoleViewModel userRoleViewModel)
         {
-            var user = await _userManager.FindByIdAsync(userRoleViewModel.UserId);
-            if (user == null) return Unauthorized(); //TODO handle error
-            var result = await _userManager.AddToRoleAsync(user, userRoleViewModel.RoleName);
-            if (!result.Succeeded)
+            UserViewModel user;
+            try
             {
-                return StatusCode(500); //TODO handle error
+                user = await _userService.ChangeUserRolesAsync(userRoleViewModel);
             }
-            return Ok(await user.AdaptUserToModelAsync(_userManager));
-
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message); // TODO handle error
+            }
+            catch(InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message); // TODO handle error;
+            }
+            return Ok(user);
         }
+
         [HttpDelete("Role")]
         public async Task<IActionResult> DeleteRole(UserRoleViewModel userRoleViewModel)
         {
-            var user = await _userManager.FindByIdAsync(userRoleViewModel.UserId);
-            if (user == null) return Unauthorized(); //TODO handle error
-            var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Contains("Admin"))
+            UserViewModel user;
+            try
             {
-                return StatusCode(403); //TODO handle error
+                user = await _userService.RemoveUserFromRolesAsync(userRoleViewModel);
             }
-            var result = await _userManager.RemoveFromRoleAsync(user, userRoleViewModel.RoleName);
-            if (!result.Succeeded)
+            catch(NotFoundException ex)
             {
-                return StatusCode(500); //TODO handle error
+                return NotFound(ex.Message); // TODO handle error
             }
-            return Ok(await user.AdaptUserToModelAsync(_userManager));
+            catch(ProhibitException ex)
+            {
+                return StatusCode(403, ex.Message); // TODO handle error
+            }
+            catch(InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message); // TODO handle error
+            }
+            return Ok(user);
         }
         #endregion
     }
