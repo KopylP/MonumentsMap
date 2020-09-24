@@ -18,7 +18,8 @@ const defaultCity = {
     lng: 34.5507948, //center point of default city
 }
 
-const defaultZoom = 17;
+const defaultZoom = 18;
+const loadMapZoom = 17;
 
 const clientId = "monumentsmap";
 
@@ -38,5 +39,6 @@ export {
     defaultCulture,
     defaultClientCulture,
     yearsRange,
-    supportedRoles
+    supportedRoles,
+    loadMapZoom
 }

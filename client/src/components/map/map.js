@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Map as LeafMap, TileLayer, Marker, Popup } from "react-leaflet";
 import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
-import { defaultZoom, accessToken } from "../../config";
+import { defaultZoom, accessToken, loadMapZoom } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
@@ -22,13 +22,27 @@ function Map({ onMonumentSelected = (p) => p }) {
   const [mapSelectedMonumentId, setMapSelectedMonumentId] = useState(null);
   const [viewPortChange, setViewPortChange] = useState(false);
   const prevCenter = usePrevious(center);
+  const [mapZoom, setMapZoom] = useState(loadMapZoom);
 
-  const [monumentWithPopupId, setMonumentWithPopupId] = useState(null);
+  const [monumentWithPopupId, setMonumentWithPopupId] = useState(null); // TODO delete this
 
   const closePopups = () => {
     mapRef.current.leafletElement.closePopup();
     setMonumentWithPopupId(null);
   };
+
+  const changeMapZoomToDefault = () => {
+    if(mapZoom == loadMapZoom) {
+      setMapZoom(defaultZoom);
+    }
+  }
+
+  const changeCenter = ({lat, lng}) => {
+    setCenter({
+      lat: lat + 0.0000001, //Костыль
+      lng: lng + 0.0000001, //Костыль
+    });
+  }
 
   const getVisibleMonumentMarkers = () => {
     return monuments
@@ -70,10 +84,8 @@ function Map({ onMonumentSelected = (p) => p }) {
       prevCenter.lat === center.lat &&
       prevCenter.lng === center.lng
     ) {
-      setCenter({
-        lat: center.lat + 0.0000001, //Костыль
-        lng: center.lng + 0.0000001, //Костыль
-      });
+      changeMapZoomToDefault();
+      changeCenter(center);
     }
   }, [center]);
 
@@ -108,7 +120,7 @@ function Map({ onMonumentSelected = (p) => p }) {
         onpopupclose={() => {
           setMapSelectedMonumentId(null);
         }}
-        zoom={defaultZoom}
+        zoom={mapZoom}
         style={{
           width: "100%",
           height: "100%"

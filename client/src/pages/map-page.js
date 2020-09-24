@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MapPage({ store }) {
   const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {
     selectedLanguage, 
     setSelectedLanguage,
@@ -106,7 +106,7 @@ function MapPage({ store }) {
   }
 
   const showSnackbar = (message) => {
-    enqueueSnackbar(message, { autoHideDuration: 1500 });
+    enqueueSnackbar(message, { variant: "info", anchorOrigin: { horizontal: "center", vertical: "bottom" } });
   }
 
   const update = () => {
@@ -132,6 +132,8 @@ function MapPage({ store }) {
         closeMonumentsLoading();
         if(monuments.length === 0) {
           showSnackbar("За такими критеріями не знайдено жодної пам'ятки");
+        } else {
+          closeSnackbar();
         }
       })
       .catch((e) => {
