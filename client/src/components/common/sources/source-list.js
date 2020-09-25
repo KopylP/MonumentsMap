@@ -6,17 +6,21 @@ import SourceItem from "./source-item";
 
 function SourceList({ data }) {
   return (
-    <Grid xs={12} item>
+    <div style={{width: "100%"}}>
       <Typography gutt variant="subtitle2" gutterBottom>
         Джерела
       </Typography>
-      <ul style={{marginTop: 0}}>
+      <ul style={{ marginTop: 0 }}>
         {data.map((source) => (
           <SourceItem {...source} key={source.id} />
         ))}
       </ul>
-    </Grid>
+    </div>
   );
 }
 
-export default WithLoadingData(SourceList)(() => <Grid xs={12} item><List /></Grid>);
+export default WithLoadingData(SourceList)(() => (
+  <Grid xs={12} item>
+    <List />
+  </Grid>
+));

@@ -53,8 +53,10 @@ export default function PhotoDrawerContent({
             <DetailDescription
               data={monumentPhotoDetail && monumentPhotoDetail.description}
             />
+            <SourceList
+              data={monumentPhotoDetail && monumentPhotoDetail.sources}
+            />
           </Grid>
-          <SourceList data={monumentPhotoDetail && monumentPhotoDetail.sources}/>
         </Grid>
       </div>
     </div>

@@ -47,8 +47,8 @@ export default function DetailDrawerContent({ monument, ...props }) {
             }
           />
           <DetailDescription data={monument && monument.description} />
+          <SourceList data={monument && monument.sources} />
         </Grid>
-        <SourceList data={monument && monument.sources}/>
       </Grid>
     </div>
   );
