@@ -107,19 +107,16 @@ namespace MonumentsMap
                     ValidateAudience = true
                 };
             });
-
-            // services.AddAuthorization(options => {
-            //     var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
-
-            //     defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
-            //     options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
-            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddFile("Logs/monumentsmap-{Date}.txt");
+
+            app.UseExceptionHandler("/errors/500");
+
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

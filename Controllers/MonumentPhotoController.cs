@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Api.Errors;
 using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Contracts.Services;
@@ -34,13 +35,13 @@ namespace MonumentsMap.Controllers
             {
                 monumentPhoto = await _monumentPhotoService.Remove(id);
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
-                return NotFound(ex.Message); //TODO handle error
+                return NotFound(new NotFoundError(ex.Message));
             }
-            catch(InternalServerErrorException ex)
+            catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, ex.Message); //TODO handle error
+                return StatusCode(500, new InternalServerError(ex.Message));
             }
             return Ok(monumentPhoto);
         }
@@ -51,7 +52,10 @@ namespace MonumentsMap.Controllers
         public async Task<IActionResult> ToogleMajorPhoto([FromRoute] int id)
         {
             var monumentPhoto = await _monumentPhotoService.ToogleMajorPhotoAsync(id);
-            if (monumentPhoto == null) return NotFound();//TODO handle error
+
+            if (monumentPhoto == null)
+                return NotFound(new NotFoundError("Monument photo not found"));
+                
             return Ok(monumentPhoto);
         }
         #endregion

@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Data.Repositories;
@@ -18,9 +20,19 @@ namespace MonumentsMap.Data.Services
         public async Task<Monument> ToogleMajorPhotoAsync(int monumentId)
         {
             var monument = await _monumentRepository.Get(monumentId);
-            if (monument == null) return monument;
+            if (monument == null)
+            {
+                throw new NotFoundException("Monument not found");
+            }
             monument.Accepted = !monument.Accepted;
-            await _monumentRepository.Update(monument);
+            try
+            {
+                await _monumentRepository.Update(monument);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InternalServerErrorException(ex.InnerException?.Message);
+            }
             return monument;
         }
         #endregion

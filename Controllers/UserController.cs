@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Api.Errors;
 using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Entities.Models;
@@ -41,7 +42,7 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);//TODO handle error
+                return NotFound(new NotFoundError(ex.Message));
             }
             return Ok(user);
         }
@@ -55,11 +56,11 @@ namespace MonumentsMap.Controllers
             }
             catch (ProhibitException ex)
             {
-                return StatusCode(403, ex.Message); //TODO handle error
+                return StatusCode(403, new ForbidError(ex.Message)); 
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message); //TODO handle error
+                return NotFound(new NotFoundError(ex.Message)); 
             }
             return Ok(user);
         }
@@ -76,7 +77,7 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message); //TODO handle error
+                return NotFound(new NotFoundError(ex.Message)); 
             }
             return Ok(roles);
         }
@@ -91,15 +92,15 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message); // TODO handle error
+                return NotFound(new NotFoundError(ex.Message)); 
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, ex.Message); // TODO handle error;
+                return StatusCode(500, new InternalServerError(ex.Message));
             }
             catch (BadRequestException ex)
             {
-                return BadRequest(ex.Message); // TODO handle error
+                return BadRequest(new BadRequestError(ex.Message)); 
             }
             return Ok(user);
         }
@@ -114,15 +115,15 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message); // TODO handle error
+                return NotFound(new NotFoundError(ex.Message)); 
             }
             catch (ProhibitException ex)
             {
-                return StatusCode(403, ex.Message); // TODO handle error
+                return StatusCode(403, new ForbidError(ex.Message));
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, ex.Message); // TODO handle error
+                return StatusCode(500, new InternalServerError(ex.Message));
             }
             return Ok(user);
         }

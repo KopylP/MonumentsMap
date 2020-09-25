@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Api.Errors;
+using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Data;
 using MonumentsMap.Data.Repositories;
@@ -38,38 +40,84 @@ namespace MonumentsMap.Controllers
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
         public async virtual Task<IActionResult> Get(int id, [FromQuery] string cultureCode)
         {
-            var localizedEntity = await localizedRepository.Get(cultureCode, id);
+            TLocalizedEntity localizedEntity = null;
+            try
+            {
+                localizedEntity = await localizedRepository.Get(cultureCode, id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
             return Ok(localizedEntity);
         }
         [HttpPost]
         [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Post([FromBody] TEditableLocalizedEntity editableLocalizedEntity)
         {
-            var entities = await localizedRepository.Create(editableLocalizedEntity);
-            return Ok(entities);
+            TEntity entity = null;
+            try
+            {
+                entity = await localizedRepository.Create(editableLocalizedEntity);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, new InternalServerError(ex.Message));
+            }
+            return Ok(entity);
         }
         [HttpPut]
         [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Put([FromBody] TEditableLocalizedEntity editableLocalizedCity)
         {
-            var entities = await localizedRepository.Update(editableLocalizedCity);
-            return Ok(entities);
+            TEntity entity = null;
+            try
+            {
+                entity = await localizedRepository.Update(editableLocalizedCity);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, new InternalServerError(ex.Message));
+            }
+            return Ok(entity);
         }
         [HttpDelete("{id}")]
         [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Delete(int id)
         {
-            var entity = await localizedRepository.Remove(id);
-            if(entity == null) return NotFound(); //TODO handle error
+            TEntity entity;
+            try
+            {
+                entity = await localizedRepository.Remove(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, new InternalServerError(ex.Message));
+            }
             return Ok(entity);
         }
         [HttpGet("{id:int}/editable")]
         [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Editable(int id)
         {
-            var editableEntity = await localizedRepository.GetEditableLocalizedEntity(id);
-            if(editableEntity == null) return NotFound(); //TODO handle error
-            return Ok(editableEntity); 
+            TEditableLocalizedEntity editableLocalizedEntity = null;
+            try
+            {
+                editableLocalizedEntity = await localizedRepository.GetEditableLocalizedEntity(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            return Ok(editableLocalizedEntity);
         }
 
     }

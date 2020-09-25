@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Api.Errors;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Entities.Enumerations;
 using MonumentsMap.Entities.Models;
@@ -34,11 +35,11 @@ namespace MonumentsMap.Controllers
             switch(result)
             {
                 case InvitationResult.InvalidInvitationCode:
-                    return Forbid(); //TODO handle error
+                    return StatusCode(403, new ForbidError("Invitation code is incorrect"));
                 case InvitationResult.InvitationDoesNotExistOrExpired:
-                    return NotFound();
+                    return NotFound(new NotFoundError("Invitation code doesn`t exist or already expired"));
                 case InvitationResult.UserAlreadyExists:
-                    return Conflict();
+                    return Conflict(new ConflictError("User already exists"));
             }
 
             var user = new ApplicationUser
@@ -52,7 +53,7 @@ namespace MonumentsMap.Controllers
 
             var registerResult = await _userManager.CreateAsync(user, registrationUserViewModel.Password);
             if(!registerResult.Succeeded)
-                return StatusCode(500); //TODO handle errors
+                return StatusCode(500, new InternalServerError());
             return Ok(user.AdaptUserToModel());
         }
         #endregion
@@ -60,8 +61,12 @@ namespace MonumentsMap.Controllers
         [HttpPost("Invite")]
         public async Task<IActionResult> Invite(InvitationRequestViewModel invitationRequestViewModel)
         {
-            var inviteResponseModel = await _invitationService.CreateInviteAsync(invitationRequestViewModel.Email);
-            if(inviteResponseModel == null) return Conflict();//TODO error
+            var inviteResponseModel = await _invitationService
+                .CreateInviteAsync(invitationRequestViewModel.Email);
+
+            if(inviteResponseModel == null) 
+                return Conflict(new ConflictError("User already exists"));
+
             await _invitationService.InvitePersonAsync(inviteResponseModel);
             return Ok(inviteResponseModel);
         }

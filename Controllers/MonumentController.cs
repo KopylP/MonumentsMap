@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MonumentsMap.Api.Errors;
+using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Data.Repositories;
@@ -38,10 +40,11 @@ namespace MonumentsMap.Controllers
         [Authorize(Roles = "Editor")]
         public async override Task<IActionResult> Get([FromQuery] string cultureCode)
         {
-            if(User.Identity.IsAuthenticated && HttpContext.Request.Query.ContainsKey("hidden"))
+            if (User.Identity.IsAuthenticated && HttpContext.Request.Query.ContainsKey("hidden"))
             {
                 var hidden = Convert.ToBoolean(HttpContext.Request.Query["hidden"].ToString());
-                if(hidden) {
+                if (hidden)
+                {
                     return Ok(await localizedRepository.GetAll(cultureCode));
                 }
             }
@@ -53,10 +56,18 @@ namespace MonumentsMap.Controllers
 
         public async override Task<IActionResult> Get(int id, [FromQuery] string cultureCode)
         {
-            var monument = await localizedRepository.Get(cultureCode, id);
-            if(!monument.Accepted && !User.Identity.IsAuthenticated)
+            LocalizedMonument monument = null;
+            try
             {
-                return Unauthorized(); //TODO hadle error;
+                monument = await localizedRepository.Get(cultureCode, id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            if (!monument.Accepted && !User.Identity.IsAuthenticated)
+            {
+                return Unauthorized(new UnauthorizedError());
             }
             return Ok(monument);
         }
@@ -88,10 +99,23 @@ namespace MonumentsMap.Controllers
         }
 
         [HttpPatch("{id:int}/toogle/accepted")]
+        [Authorize(Roles = "Editor")]
         public async Task<IActionResult> ToogleAccepted(int id)
         {
-            var monument = await _monumentService.ToogleMajorPhotoAsync(id);
-            if (monument == null) return NotFound();//TODO handle error
+            Monument monument = null;
+            try
+            {
+                monument = await _monumentService.ToogleMajorPhotoAsync(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, new InternalServerError(ex.Message));
+            }
+
             return Ok(monument);
         }
 

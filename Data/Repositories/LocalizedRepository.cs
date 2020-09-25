@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Api.Exceptions;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Entities.Models;
 using MonumentsMap.Entities.ViewModels.LocalizedModels;
@@ -29,7 +30,14 @@ namespace MonumentsMap.Data.Repositories
             MinimizeResult = false;
             var entity = editableLocalizedEntity.CreateEntity();
             context.Set<TEntity>().Add(entity);
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InternalServerErrorException(ex.InnerException?.Message);
+            }
             return entity;
         }
 
@@ -55,10 +63,18 @@ namespace MonumentsMap.Data.Repositories
             MinimizeResult = false;
             var query = context.Set<TEntity>()
                 .Where(p => p.Id == id);
-            return (await IncludeNecessaryProps(query)
+
+            var model = (await IncludeNecessaryProps(query)
             .ToListAsync())
             .Select(GetSelectHandler(cultureCode))
             .FirstOrDefault();
+
+            if (model == null)
+            {
+                throw new NotFoundException("Model not found");
+            }
+
+            return model;
         }
 
         public async Task<TEditableLocalizedEntity> GetEditableLocalizedEntity(int id)
@@ -68,7 +84,10 @@ namespace MonumentsMap.Data.Repositories
                 .Where(p => p.Id == id);
             var entity = await IncludeNecessaryProps(query)
                 .FirstOrDefaultAsync();
-            if (entity == null) return null;
+            if (entity == null)
+            {
+                throw new NotFoundException("Model not found");
+            }
             return GetEditableLocalizedEntity(entity);
         }
 
@@ -85,9 +104,20 @@ namespace MonumentsMap.Data.Repositories
         {
             MinimizeResult = false;
             var editEntity = IncludeNecessaryProps(context.Set<TEntity>().AsQueryable()).FirstOrDefault(p => p.Id == editableLocalizedEntity.Id);
+            if (editEntity == null)
+            {
+                throw new NotFoundException();
+            }
             var entity = editableLocalizedEntity.CreateEntity(editEntity);
             context.Set<TEntity>().Update(entity);
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InternalServerErrorException(ex.InnerException?.Message);
+            }
             return entity;
         }
 
@@ -96,11 +126,18 @@ namespace MonumentsMap.Data.Repositories
             var entity = await context.Set<TEntity>().FindAsync(id);
             if (entity == null)
             {
-                return entity;
+                throw new NotFoundException("Model not found");
             }
 
             context.Set<TEntity>().Remove(entity);
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InternalServerErrorException(ex.InnerException?.Message);
+            }
             return entity;
         }
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using MonumentsMap.Api.Errors;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Data.Repositories;
 using MonumentsMap.Data.Services;
@@ -48,7 +49,7 @@ namespace MonumentsMap.Controllers
             }
             catch
             {
-                return StatusCode(500); //TODO Handle error
+                return StatusCode(500, new InternalServerError());
             }
             return Ok(photo);
         }
@@ -66,7 +67,7 @@ namespace MonumentsMap.Controllers
             }
             catch
             {
-                return StatusCode(500); //TODO handle error
+                return StatusCode(500, new InternalServerError());
             }
         }
         [HttpGet("{id}/image/{size}")]
@@ -75,14 +76,15 @@ namespace MonumentsMap.Controllers
             byte[] image;
 
             var photo = await _photoRepository.Get(id);
-            if(photo == null) return NotFound();//TODO handle error
+            if(photo == null) 
+                return NotFound(new NotFoundError("Monument photo model not found"));
             try
             {
                 image = await  _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
             }
             catch
             {
-                return StatusCode(500); //TODO handle error
+                return StatusCode(500, new InternalServerError());
             }
             return File(image, "image/jpeg");
         }

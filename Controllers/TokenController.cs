@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Api.Errors;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Entities.Models;
 using MonumentsMap.Entities.ViewModels;
@@ -35,7 +36,9 @@ namespace MonumentsMap.Controllers
         [HttpPost("Auth")]
         public async Task<IActionResult> Auth([FromBody] TokenRequestViewModel model)
         {
-            if (model == null) return new StatusCodeResult(500);
+            if (model == null) 
+                return BadRequest(new BadRequestError("Model is incorrect"));
+
             TokenResponseViewModel tokenResponse = null;
             switch (model.grant_type)
             {
@@ -46,9 +49,12 @@ namespace MonumentsMap.Controllers
                     tokenResponse = await _tokenServise.RefreshTokenAsync(model);
                     break;
                 default:
-                    return new UnauthorizedResult(); //TODO handle error
+                    return Unauthorized(new UnauthorizedError());
             }
-            if (tokenResponse == null) return new UnauthorizedResult(); //TODO handle error
+
+            if (tokenResponse == null) 
+                return Unauthorized(new UnauthorizedError());
+
             return Ok(tokenResponse);
         }
 
@@ -57,7 +63,10 @@ namespace MonumentsMap.Controllers
         public async Task<IActionResult> GetMe()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null) return Unauthorized(); //TODO handle error
+            
+            if (user == null)
+             return Unauthorized(new UnauthorizedError());
+
             return Ok(await user.AdaptUserToModelAsync(_userManager));
         }
         #endregion
