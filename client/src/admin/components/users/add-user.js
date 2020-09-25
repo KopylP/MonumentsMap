@@ -1,23 +1,13 @@
-import React, { useContext, useState } from "react";
-import AdminContext from "../../context/admin-context";
-import { useSnackbar } from "notistack";
+import React from "react";
 import { Grid, TextField } from "@material-ui/core";
 import SimpleSubmitForm from "../common/simple-submit-form";
 import * as Yup from "yup";
-import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
-import useCancelablePromise from "@rodw95/use-cancelable-promise";
-import errorNetworkSnackbar from "../../../components/helpers/error-network-snackbar";
 import SimpleTitle from "../common/ui/simple-title";
+import withMonumentService from "../../../components/hoc-helpers/with-monument-service";
+import withSimpleAcceptForm from "../hoc-helpers/withSimpleAcceptForm";
 
-export default function AddUser() {
-  const {
-    monumentService: { inviteUser },
-  } = useContext(AdminContext);
-  const history = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
-  const makeCancelable = useCancelablePromise();
-  const [loading, setLoading] = useState(false);
+function AddUser({ acceptForm, loading }) {
 
   const initialValues = {
     email: "",
@@ -30,19 +20,7 @@ export default function AddUser() {
   };
 
   const submitForm = (values) => {
-    setLoading(true);
-    makeCancelable(inviteUser(values.email))
-      .then(() => {
-        enqueueSnackbar("Користувача запрошено до проєкту", {
-          variant: "success",
-        });
-        setLoading(false);
-        history.goBack();
-      })
-      .catch((e) => {
-        errorNetworkSnackbar(enqueueSnackbar, e.response && e.response.status);
-        setLoading(false);
-      });
+    acceptForm([values.email]);
   };
 
   const formik = useFormik({
@@ -75,3 +53,7 @@ export default function AddUser() {
     </form>
   );
 }
+
+export default withMonumentService(withSimpleAcceptForm(AddUser))(p => ({
+  acceptFormMethod: p.inviteUser
+}));

@@ -1,22 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { supportedCultures } from "../../../config";
-import { useHistory } from "react-router-dom";
 import withData from "../../../components/hoc-helpers/with-data";
 import withMonumentService from "../../../components/hoc-helpers/with-monument-service";
-import { useSnackbar } from "notistack";
-import AdminContext from "../../context/admin-context";
-import errorNetworkSnackbar from "../../../components/helpers/error-network-snackbar";
-import { mergeTwoArraysByKey } from "../../../components/helpers/array-helpers";
 import CreateEditParticipantForm from "./create-edit-participant-form";
 import * as Yup from "yup";
+import withSimpleAcceptForm from "../hoc-helpers/withSimpleAcceptForm";
 
-export default function CreateEditParticipant({ data }) {
-  const [loading, setLoading] = useState(false);
-  const {
-    monumentService: { editParticipant, createParticipant },
-  } = useContext(AdminContext);
-
-  const { enqueueSnackbar } = useSnackbar();
+function CreateEditParticipant({ data, acceptForm, loading }) {
 
   const initialValues = {
     defaultName: data ? data.defaultName : "",
@@ -25,8 +15,10 @@ export default function CreateEditParticipant({ data }) {
 
   if (data) {
     supportedCultures.forEach((culture) => {
-      const cultureValuePair = data.name.find(p => p.code = culture.code);
-      initialValues[culture.code] = cultureValuePair ? cultureValuePair.value : "";
+      const cultureValuePair = data.name.find((p) => (p.code = culture.code));
+      initialValues[culture.code] = cultureValuePair
+        ? cultureValuePair.value
+        : "";
     });
   } else {
     supportedCultures.forEach((culture) => {
@@ -47,24 +39,11 @@ export default function CreateEditParticipant({ data }) {
       culture: supportCulture.code,
       value: values[supportCulture.code],
     }));
-    let requestMethod = createParticipant;
     if (data) {
       participant.id = data.id;
-      requestMethod = editParticipant;
     }
-    setLoading(true);
-    requestMethod(participant)
-      .then(() => {
-        setLoading(false);
-        history.goBack();
-      })
-      .catch((e) => {
-        setLoading(false);
-        errorNetworkSnackbar(enqueueSnackbar, e.response && e.response.status);
-      });
+    acceptForm([participant]);
   };
-
-  const history = useHistory();
 
   return (
     <CreateEditParticipantForm
@@ -77,8 +56,15 @@ export default function CreateEditParticipant({ data }) {
   );
 }
 
+export default withMonumentService(withSimpleAcceptForm(CreateEditParticipant))(
+  (ms) => ({
+    acceptFormMethod: ms.createParticipant,
+  })
+);
+
 export const EditParticipant = withMonumentService(
-  withData(CreateEditParticipant, ["itemId"])
+  withData(withSimpleAcceptForm(CreateEditParticipant), ["itemId"])
 )((monumentService) => ({
   getData: monumentService.getEditableParticipant,
+  acceptFormMethod: monumentService.editParticipant,
 }));

@@ -3,11 +3,9 @@ import withData from "../../../../components/hoc-helpers/with-data";
 import CreateEditMonument from "./create-edit-monument";
 import withSimpleAcceptForm from "../../hoc-helpers/withSimpleAcceptForm";
 
-const EditMonument = withMonumentService(
-  withData(withSimpleAcceptForm(CreateEditMonument), ["itemId"])
+const CreateMonument = withMonumentService(
+  withSimpleAcceptForm(CreateEditMonument)
 )((monumentService) => ({
-  getData: monumentService.getEditableMonument,
-  acceptFormMethod: monumentService.editMonument,
+  acceptFormMethod: monumentService.createMonument,
 }));
-
-export default EditMonument;
+export default CreateMonument;

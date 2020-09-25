@@ -26,8 +26,6 @@ import Period from "../../../../models/period";
 import { supportedCultures } from "../../../../config";
 import AdminContext from "../../../context/admin-context";
 import SimpleSubmitForm from "../../common/simple-submit-form";
-import { useHistory } from "react-router-dom";
-import { mergeTwoArraysByKey } from "../../../../components/helpers/array-helpers";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -104,13 +102,11 @@ const AutocompleteComponent = ({ citiesAutocompleteProps, formik }) => (
   />
 );
 
-export default function CreateEditMonument({ data }) {
+export default function CreateEditMonument({ data, acceptForm, loading }) {
   const [value, setValue] = React.useState(0);
-  const [loading, setLoading] = useState(false); 
   const {
     monumentService,
   } = useContext(AdminContext);
-  const { goBack } = useHistory();
 
   const defaultDescription = supportedCultures.map(({ code }) => ({
     culture: code,
@@ -160,18 +156,10 @@ export default function CreateEditMonument({ data }) {
     delete monument.cityName;
     monument.cityId = monument.city.id;
     delete monument.city;
-    let saveMethod = monumentService.createMonument;
     if (data) {
-      saveMethod = monumentService.editMonument;
       monument.id = data.id;
     }
-    setLoading(true);
-    saveMethod(monument)
-      .then((e) => {
-        goBack();
-        setLoading(false);
-      })
-      .catch((e) => setLoading(false)); //TODO handle error
+    acceptForm([monument]);
   };
 
   const formik = useFormik({
