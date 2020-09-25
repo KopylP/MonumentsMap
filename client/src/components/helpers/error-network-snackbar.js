@@ -1,23 +1,20 @@
 export default function errorNetworkSnackbar(
   enqueueSnackbar,
-  statusCode,
+  response,
   login = false
 ) {
-  if (typeof statusCode === "string") {
-    enqueueSnackbar(statusCode, { variant: "error" });
+  if (response == null) {
+    enqueueSnackbar("Упсс, перевірте ваше підключення до інтернету", { variant: "error" });
     return;
   }
-  statusCode = statusCode == null ? 0 : statusCode;
+  const { message = null, statusCode } = response.data;
   let errorMessage;
   switch (statusCode) {
-    case 0:
-      errorMessage = "Немає підключення до інтернету";
-      break;
     case 401:
       errorMessage = login ? "Неправльні пошта або пароль" : "Не авторизовано";
       break;
     default:
-      errorMessage = "Не вдалося зберегти зміни";
+      errorMessage = "Не вдалося зберегти зміни. " + (message ? `${message}` : '');
       break;
   }
   enqueueSnackbar(errorMessage, { variant: "error" });

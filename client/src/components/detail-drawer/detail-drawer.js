@@ -12,7 +12,6 @@ import {
   useParams,
 } from "react-router-dom";
 import PhotosDialog from "../photos-dialog/photos-dialog";
-import PhotoLightbox from "../photos-dialog/photo-lightbox/photo-lightbox";
 import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
 import { isMobileOnly } from "react-device-detect";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";

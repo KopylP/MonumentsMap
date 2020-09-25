@@ -15,6 +15,7 @@ import PersonAdd from "@material-ui/icons/PersonAdd";
 import withMonumentService from "../../components/hoc-helpers/with-monument-service";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import { useHistory } from "react-router-dom";
+import errorNetworkSnackbar from "../../components/helpers/error-network-snackbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,7 +85,7 @@ function RegistrationPage({ code, email, registerUser }) {
             history.push("login");
         })
         .catch(e => {
-            enqueueSnackbar(e.response.message);//TODO handle error
+            errorNetworkSnackbar(enqueueSnackbar, e);
         });
     },
   });

@@ -14,8 +14,8 @@ export default function withSimpleAcceptForm(Wrapper, back = true) {
     const { enqueueSnackbar } = useSnackbar();
 
     const handleRequest = (params, options) => {
-      const onSuccess =  options && options.onSuccess || ((p) => p);
-      const onError = options && options.onError || ((p) => p);
+      const onSuccess = (options && options.onSuccess) || ((p) => p);
+      const onError = (options && options.onError) || ((p) => p);
       setLoading(true);
       makeCancelable(acceptFormMethod(...params))
         .then((e) => {
@@ -25,11 +25,9 @@ export default function withSimpleAcceptForm(Wrapper, back = true) {
           if (back) goBack();
         })
         .catch((e) => {
+          console.log(e.response);
           setLoading(false);
-          errorNetworkSnackbar(
-            enqueueSnackbar,
-            e.response && e.response.status
-          );
+          errorNetworkSnackbar(enqueueSnackbar, e.response);
           onError();
         });
     };

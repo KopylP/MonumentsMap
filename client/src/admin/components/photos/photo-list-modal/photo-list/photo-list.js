@@ -73,8 +73,8 @@ function PhotoList({ data, onUpdate = p => p }) {
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const errorSnackbar = (status) => {
-    errorNetworkSnackbar(enqueueSnackbar, status);
+  const errorSnackbar = (e) => {
+    errorNetworkSnackbar(enqueueSnackbar, e.response);
   };
 
   const showMonumentPhoto = (index) => {

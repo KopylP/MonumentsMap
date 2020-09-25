@@ -57,11 +57,7 @@ function LoginPage({ auth }) {
           history.push("/admin");
         })
         .catch((e) => {
-          errorNetworkSnackbar(
-            enqueueSnackbar,
-            e.response ? e.response.status : 0,
-            true
-          );
+          errorNetworkSnackbar(enqueueSnackbar, e.response, true);
         });
     },
   });

@@ -27,7 +27,7 @@ export default function SimpleList({
       data.splice(data.indexOf(oldData), 1);
       setListData(data);
     } catch(e) {
-      errorNetworkSnackbar(enqueueSnackbar, e.response && e.response.status);
+      errorNetworkSnackbar(enqueueSnackbar, e.response);
       throw new Error(e);
     }
   };
