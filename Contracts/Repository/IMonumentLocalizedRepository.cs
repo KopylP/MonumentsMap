@@ -9,6 +9,6 @@ namespace MonumentsMap.Contracts.Repository
         : ILocalizedRepository<LocalizedMonument, EditableLocalizedMonument, Monument>,
         IFilterRepository<LocalizedMonument, MonumentFilterParameters>
     {
-         
+        
     }
 }

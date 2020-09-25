@@ -6,6 +6,7 @@ import withData from "../../../components/hoc-helpers/with-data";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import PhotoListModal from "../photos/photo-list-modal/photo-list-modal";
 import AddPhotoModal from "../photos/add-photo-modal/add-photo-modal";
+import AcceptMonumentTable from "./accept-monument-table";
 
 function MonumentsList({ data }) {
   const {
@@ -19,6 +20,12 @@ function MonumentsList({ data }) {
     { title: "Стан", field: "condition.name" },
     { title: "Захисний номер", field: "protectionNumber" },
     { title: "Додано", field: "createdAt" },
+    {
+      title: "Активна пам'ятка",
+      render: (rowData) => (
+        <AcceptMonumentTable monument={rowData} />
+      ),
+    },
   ]);
 
   const [openPhotoDialog, setOpenPhotoDialog] = useState(false);

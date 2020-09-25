@@ -90,8 +90,8 @@ export default class MonumentService {
     return response.data;
   }
 
-  getAllMonuments = async () => {
-    return await this._getRequest("monument/");
+  getAllMonuments = async (hidden = true) => {
+    return await this._getRequest(`monument/`, true, { hidden });
   };
 
   /**
@@ -101,7 +101,6 @@ export default class MonumentService {
    * @param {*} conditions - array of selected conditions ids
    */
   async getMonumentsByFilter(cities, statuses, conditions, yearsRange, cancelCallback) {
-    console.log("yearRange", yearsRange);
     return await this._getRequest(
       "monument/filter",
       true,
@@ -139,6 +138,10 @@ export default class MonumentService {
 
   editMonument = async (monument) => {
     return await this._putRequest("monument/", monument);
+  }
+
+  toogleMonumentAccepted = async (monumentId) => {
+    return await this._patchRequest(`monument/${monumentId}/toogle/accepted`);
   }
 
   getEditableMonument = async (monumentId) => {

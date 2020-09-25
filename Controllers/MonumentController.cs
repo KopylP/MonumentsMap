@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MonumentsMap.Contracts.Repository;
@@ -29,6 +31,34 @@ namespace MonumentsMap.Controllers
         {
             _monumentPhotoLocalizedRepository = monumentPhotoLocalizedRepository;
             _monumentService = monumentService;
+        }
+        #endregion
+
+        #region REST methods
+        [Authorize(Roles = "Editor")]
+        public async override Task<IActionResult> Get([FromQuery] string cultureCode)
+        {
+            if(User.Identity.IsAuthenticated && HttpContext.Request.Query.ContainsKey("hidden"))
+            {
+                var hidden = Convert.ToBoolean(HttpContext.Request.Query["hidden"].ToString());
+                if(hidden) {
+                    return Ok(await localizedRepository.GetAll(cultureCode));
+                }
+            }
+
+            var monuments = await localizedRepository.Find(cultureCode, p => p.Accepted);
+
+            return Ok(monuments);
+        }
+
+        public async override Task<IActionResult> Get(int id, [FromQuery] string cultureCode)
+        {
+            var monument = await localizedRepository.Get(cultureCode, id);
+            if(!monument.Accepted && !User.Identity.IsAuthenticated)
+            {
+                return Unauthorized(); //TODO hadle error;
+            }
+            return Ok(monument);
         }
         #endregion
 

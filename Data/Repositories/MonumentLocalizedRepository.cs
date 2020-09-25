@@ -149,7 +149,7 @@ namespace MonumentsMap.Data.Repositories
         public async Task<IEnumerable<LocalizedMonument>> GetByFilterAsync(MonumentFilterParameters parameters)
         {
             MinimizeResult = true;
-            IQueryable<Monument> monuments = context.Monuments;
+            IQueryable<Monument> monuments = context.Monuments.Where(p => p.Accepted);
             if (parameters.Statuses.Any())
             {
                 monuments =
