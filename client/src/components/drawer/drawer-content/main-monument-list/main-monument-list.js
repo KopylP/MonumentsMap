@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
 import { List as MaterialList } from "@material-ui/core";
 import { List, AutoSizer } from "react-virtualized";
@@ -7,7 +7,6 @@ import ScrollBar from "../../../common/scroll-bar/scroll-bar";
 import AppContext from "../../../../context/app-context";
 
 function MainMonumentList({ data }) {
-
   const { setCenter, setSelectedMonument } = useContext(AppContext);
 
   const onMonumentItemClick = (monument) => {
@@ -16,8 +15,8 @@ function MainMonumentList({ data }) {
       lng: monument.longitude,
     });
     setTimeout(() => {
-      setSelectedMonument({...monument, showPopup: true});
-    }, 150)//Wait, until map animation ends 
+      setSelectedMonument({ ...monument, showPopup: true });
+    }, 150); //Wait, until map animation ends
   };
 
   const renderRow = ({ index, key, style }) => {
@@ -60,4 +59,6 @@ function MainMonumentList({ data }) {
   );
 }
 
-export default WithLoadingData(MainMonumentList)(() => <div>loading</div>);
+export default WithLoadingData(memo(MainMonumentList))(() => (
+  <div>loading</div>
+));

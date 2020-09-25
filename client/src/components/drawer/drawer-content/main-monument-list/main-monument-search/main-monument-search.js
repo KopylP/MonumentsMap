@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MainMonumentSearch() {
+export default function MainMonumentSearch({ value, onChange }) {
   const classes = useStyles();
 
   return (
@@ -32,6 +32,8 @@ export default function MainMonumentSearch() {
               className={classes.width100per}
               id="input-with-icon-grid"
               label="Пошук за назвою"
+              value={value}
+              onChange={onChange}
             />
           </Grid>
         </Grid>
