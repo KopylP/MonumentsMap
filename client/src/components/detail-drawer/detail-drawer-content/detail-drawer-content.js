@@ -6,6 +6,7 @@ import DetailStatus from "../detail-status/detail-status";
 import DetailTitle from "../detail-title/detail-title";
 import DetailDescription from "../detail-description/detail-description";
 import DetailProtectionNumber from "../detail-protection-number/detail-protection-number";
+import SourceList from "../../common/sources/source-list";
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -47,6 +48,7 @@ export default function DetailDrawerContent({ monument, ...props }) {
           />
           <DetailDescription data={monument && monument.description} />
         </Grid>
+        <SourceList data={monument && monument.sources}/>
       </Grid>
     </div>
   );

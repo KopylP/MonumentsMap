@@ -5,6 +5,7 @@ import DetailDescription from "../../detail-drawer/detail-description/detail-des
 import AppContext from "../../../context/app-context";
 import PhotoDrawerContentTitle from "./photo-drawer-content-title/photo-drawer-content-title";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
+import SourceList from "../../common/sources/source-list";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,6 +54,7 @@ export default function PhotoDrawerContent({
               data={monumentPhotoDetail && monumentPhotoDetail.description}
             />
           </Grid>
+          <SourceList data={monumentPhotoDetail && monumentPhotoDetail.sources}/>
         </Grid>
       </div>
     </div>
