@@ -8,6 +8,7 @@ using MonumentsMap.Contracts.Services;
 using MonumentsMap.Data.Repositories;
 using MonumentsMap.Entities.Models;
 using MonumentsMap.Entities.ViewModels;
+using MonumentsMap.Entities.ViewModels.LocalizedModels;
 
 namespace MonumentsMap.Data.Services
 {
@@ -17,6 +18,7 @@ namespace MonumentsMap.Data.Services
         private readonly IMonumentRepository _monumentRepository;
         private readonly IParticipantMonumentRepository _participantMonumentRepository;
         #endregion
+
         #region constructor
         public MonumentService(IMonumentRepository repo, IParticipantMonumentRepository participantMonumentRepository)
         {
@@ -92,7 +94,7 @@ namespace MonumentsMap.Data.Services
                     });
                 }
             }
-            
+
             // Save changes
             try
             {
@@ -115,7 +117,7 @@ namespace MonumentsMap.Data.Services
 
             var monument = _monumentRepository.Get(monumentId);
 
-            if(monument == null)
+            if (monument == null)
             {
                 throw new NotFoundException("Monument not found");
             }
@@ -124,6 +126,20 @@ namespace MonumentsMap.Data.Services
                 .Find(p => p.MonumentId == monumentId, "Participant");
 
             return participantMonuments.Select(p => p.Participant);
+        }
+
+        public async Task<IEnumerable<LocalizedParticipant>> GetLocalizedParticipants(int monumentId, string cultureCode)
+        {
+            var participants = await _participantMonumentRepository
+                .GetParticipantsByMonumentWithLocalizationsAsync(monumentId);
+
+            return participants.Select(p => new LocalizedParticipant
+            {
+                Id = p.Id,
+                DefaultName = p.DefaultName,
+                Name = p.Name.Localizations.Where(p => p.CultureCode == cultureCode).FirstOrDefault()?.Value
+            })
+            .ToList();
         }
         #endregion
     }

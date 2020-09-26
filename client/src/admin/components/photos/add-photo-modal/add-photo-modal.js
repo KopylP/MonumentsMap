@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     width: 800,
-    maxHeight: "90%",
+    maxHeight: "95%",
     outline: "none",
     boxShadow: theme.shadows[5],
     paddingLeft: 30,

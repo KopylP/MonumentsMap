@@ -13,9 +13,12 @@ namespace MonumentsMap.Data.Repositories
     where TEntity : Entity
     where TContext : DbContext
     {
+        protected readonly DbSet<TEntity> dbSet;
         private readonly TContext context;
+        
         public Repository(TContext context)
         {
+            dbSet = context.Set<TEntity>();
             this.context = context;
         }
 
@@ -23,7 +26,7 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<TEntity> Add(TEntity entity)
         {
-            context.Set<TEntity>().Add(entity);
+            dbSet.Add(entity);
             if (Commit)
                 await context.SaveChangesAsync();
             return entity;
@@ -37,7 +40,7 @@ namespace MonumentsMap.Data.Repositories
                 return entity;
             }
 
-            context.Set<TEntity>().Remove(entity);
+            dbSet.Remove(entity);
             if (Commit)
                 await context.SaveChangesAsync();
             return entity;
@@ -45,7 +48,7 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<List<TEntity>> Find(Func<TEntity, bool> predicate, string includeProperties = "")
         {
-            var entities = await context.Set<TEntity>()
+            var entities = await dbSet
                 .IncludeProps(includeProperties)
                 .ToListAsync();
 
@@ -56,7 +59,7 @@ namespace MonumentsMap.Data.Repositories
         {
             if (string.IsNullOrEmpty(includeProperties))
             {
-                return await context.Set<TEntity>()
+                return await dbSet
                     .FindAsync(id);
             }
             return await context.Set<TEntity>()
@@ -67,8 +70,7 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<List<TEntity>> GetAll(string includeProperties = "")
         {
-            return await context
-                .Set<TEntity>()
+            return await dbSet
                 .IncludeProps(includeProperties)
                 .ToListAsync();
         }
@@ -80,7 +82,7 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<TEntity> Update(TEntity entity)
         {
-            context.Set<TEntity>().Update(entity);
+            dbSet.Update(entity);
             if (Commit)
                 await context.SaveChangesAsync();
             return entity;

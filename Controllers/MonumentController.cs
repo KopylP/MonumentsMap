@@ -145,6 +145,14 @@ namespace MonumentsMap.Controllers
             return Ok(monument);
         }
 
+        [HttpGet("{id:int}/participants")]
+        [ServiceFilter(typeof(CultureCodeResourceFilter))]
+        public async Task<IActionResult> GetMonumentParticipants([FromRoute] int id, [FromQuery] string cultureCode)
+        {
+            var participants = await _monumentService.GetLocalizedParticipants(id, cultureCode);
+            return Ok(participants);
+        }
+
         [HttpGet("{id:int}/monumentPhotos")]
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
         public async Task<IActionResult> MonumentPhotos([FromRoute] int id, [FromQuery] string cultureCode)

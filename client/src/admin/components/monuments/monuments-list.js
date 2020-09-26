@@ -65,7 +65,7 @@ function MonumentsList({ data }) {
             tooltip: "Всі фото",
             onClick: (e, rowData) => {
               setSelectedMonumentId(rowData.id);
-              setOpenAddPhotoDialog(true);
+              setOpenPhotoDialog(true);
             },
           },
         ]}
