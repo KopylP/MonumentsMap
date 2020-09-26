@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +14,7 @@ using MonumentsMap.Contracts.Services;
 using MonumentsMap.Data.Repositories;
 using MonumentsMap.Entities.FilterParameters;
 using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.ViewModels;
 using MonumentsMap.Entities.ViewModels.LocalizedModels;
 using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 using MonumentsMap.Filters;
@@ -119,11 +122,51 @@ namespace MonumentsMap.Controllers
             return Ok(monument);
         }
 
+        [HttpPatch("{id:int}/participants")]
+        public async Task<IActionResult> EditParticipants([FromRoute] int id, IEnumerable<ParticipantViewModel> participantViewModels)
+        {
+            Monument monument = null;
+            try
+            {
+                monument = await _monumentService.EditMonumentParticipantsAsync(new MonumentParticipantsViewModel
+                {
+                    MonumentId = id,
+                    ParticipantViewModels = participantViewModels
+                });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, new InternalServerError(ex.Message));
+            }
+            return Ok(monument);
+        }
+
         [HttpGet("{id:int}/monumentPhotos")]
-        public async Task<IActionResult> MonumentPhotos(int id, [FromQuery] string cultureCode = "uk-UA")
+        [ServiceFilter(typeof(CultureCodeResourceFilter))]
+        public async Task<IActionResult> MonumentPhotos([FromRoute] int id, [FromQuery] string cultureCode)
         {
             var monumentPhotos = await _monumentPhotoLocalizedRepository.Find(cultureCode, p => p.MonumentId == id);
             return Ok(monumentPhotos);
+        }
+
+        [Authorize(Roles = "Editor")]
+        [HttpGet("{id:int}/participants/raw")]
+        public async Task<IActionResult> GetRawMonumentParticipants(int id)
+        {
+            IEnumerable<Participant> participants = null;
+            try
+            {
+                participants = await _monumentService.GetRawParticipantsAsync(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            return Ok(participants.Adapt<ParticipantViewModel[]>());
         }
         #endregion
     }

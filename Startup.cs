@@ -75,6 +75,7 @@ namespace MonumentsMap
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IInvitationService, InvitationService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IParticipantMonumentRepository, ParticipantMonumentRepository>();
             //idenditiy
             services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
             {

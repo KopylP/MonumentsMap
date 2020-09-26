@@ -124,7 +124,9 @@ namespace MonumentsMap.Data.Repositories
                 return result.Include(p => p.Description)
                     .ThenInclude(p => p.Localizations)
                     .Include(p => p.Sources)
-                    .Include(p => p.City);
+                    .Include(p => p.City)
+                    .Include(p => p.ParticipantMonuments)
+                    .ThenInclude(p => p.Participant);
             }
 
             return result;
