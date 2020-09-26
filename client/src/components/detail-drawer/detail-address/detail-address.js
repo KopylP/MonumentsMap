@@ -54,16 +54,16 @@ function DetailAddress({ data, ...props }) {
           </div>
         </Grid>
       ) : (
-        <ContentLoader height="18">
-          <rect x="0" y="0" rx="5" ry="5" width="200" height="10" />
-        </ContentLoader>
+        <LoadingComponent />
       )}
     </React.Fragment>
   );
 }
 
-export default WithLoadingData(DetailAddress)(() => (
+export default WithLoadingData(DetailAddress)(() => <LoadingComponent />);
+
+const LoadingComponent = () => (
   <ContentLoader height="18">
     <rect x="0" y="0" rx="5" ry="5" width="200" height="10" />
   </ContentLoader>
-));
+);

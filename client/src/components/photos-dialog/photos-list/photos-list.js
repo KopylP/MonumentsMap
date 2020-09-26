@@ -24,7 +24,14 @@ const useStyles = makeStyles((theme) => ({
     borderStyle: "solid",
     borderColor: theme.palette.primary.main,
     borderWidth: 3,
+    backgroundColor: "black"
   },
+  imgWhiteBorder: {
+    borderStyle: "solid",
+    borderColor: "white",
+    borderWidth: 3,
+    backgroundColor: "black"
+  }
 }));
 
 export default function PhotosList({
@@ -44,7 +51,7 @@ export default function PhotosList({
             alt="no alt"
             onClick={() => onMonumentPhotoClick(i)}
             className={`${classes.img} ${
-              selectedMonumentPhotoIndex === i ? classes.imgBorder : null
+              selectedMonumentPhotoIndex === i ? classes.imgBorder : classes.imgWhiteBorder
             }`}
           />
         );
