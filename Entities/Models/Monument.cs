@@ -13,6 +13,8 @@ namespace MonumentsMap.Entities.Models
         public int Year { get; set; }
         [Required]
         public Period Period { get; set; }
+        public int? DestroyYear { get; set; }
+        public Period? DestroyPeriod { get; set; }
         [Required]
         public int NameId { get; set; }
         [Required]

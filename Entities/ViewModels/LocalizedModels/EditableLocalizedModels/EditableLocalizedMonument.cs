@@ -9,6 +9,8 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
     {
         public int Year { get; set; }
         public Period Period { get; set; }
+        public int? DestroyYear { get; set; }
+        public Period? DestroyPeriod { get; set; }
         public List<CultureValuePair> Name { get; set; }
         public List<CultureValuePair> Description { get; set; }
         public int CityId { get; set; }
@@ -56,6 +58,8 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
             monument.Latitude = Latitude;
             monument.Longitude = Longitude;
             monument.ProtectionNumber = ProtectionNumber;
+            monument.DestroyYear = DestroyYear;
+            monument.DestroyPeriod = DestroyPeriod;
             monument.Sources.AddRange(Sources);
             foreach (var cultureValuePair in Name)
             {

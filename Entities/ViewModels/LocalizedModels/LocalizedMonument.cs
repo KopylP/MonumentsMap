@@ -10,6 +10,8 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels
         public int Id { get; set; }
         public int Year { get; set; }
         public Period Period { get; set; }
+        public int? DestroyYear { get; set; }
+        public Period? DestroyPeriod { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int CityId { get; set; }
