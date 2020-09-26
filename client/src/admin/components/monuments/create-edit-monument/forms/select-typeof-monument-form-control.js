@@ -6,7 +6,6 @@ import {
   Select,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import AdminContext from "../../../../context/admin-context";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 
 export default function SelectTypeofMonumentFormControl({
@@ -18,10 +17,11 @@ export default function SelectTypeofMonumentFormControl({
   error,
   helperText,
   name,
+  onChangeType = null,
+  onLoadTypes = p => p
 }) {
   const [types, setTypes] = useState([]);
   const makeCancelable = useCancelablePromise();
-
 
   const onTypesLoad = (types) => {
     setTypes(types);
@@ -29,10 +29,19 @@ export default function SelectTypeofMonumentFormControl({
 
   const update = () => {
     makeCancelable(getTypesMethod())
-      .then(types => {
+      .then((types) => {
         setTypes(types);
+        onLoadTypes(types);
       })
-      .catch(); // TODO handle error 
+      .catch(); // TODO handle error
+  };
+
+  const handleChange = (e) => {
+    onChange(e);
+    if (typeof onChangeType === "function") {
+      const targetType = types.find((p) => p.id === e.target.value);
+      onChangeType(targetType);
+    }
   };
 
   useEffect(() => {
@@ -45,7 +54,7 @@ export default function SelectTypeofMonumentFormControl({
       <Select
         value={value}
         onBlur={onBlur}
-        onChange={onChange}
+        onChange={handleChange}
         error={error}
         name={name}
       >

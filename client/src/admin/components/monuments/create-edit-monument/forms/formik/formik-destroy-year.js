@@ -1,7 +1,7 @@
 import { FormControl, TextField } from "@material-ui/core";
 import React from "react";
 
-export default function FormikDestroyYear({ formik }) {
+export default function FormikDestroyYear({ formik, disabled }) {
   return (
     <FormControl style={{ width: "100%" }}>
       <TextField
@@ -10,6 +10,7 @@ export default function FormikDestroyYear({ formik }) {
         type="number"
         name="destroyYear"
         value={formik.values.destroyYear}
+        disabled={disabled}
         onBlur={formik.handleBlur}
         onChange={formik.handleChange}
         error={formik.touched.year && formik.errors.destroyYear}

@@ -79,8 +79,9 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
   const [description, setDescription] = useState(defaultDescription);
   const [sources, setSources] = useState(defaultSources);
   const [defaultCity] = useState("");
+  const [destroyFieldsDisabled, setDestroyFieldsDisabled] = useState(false);
 
-  const onFormSubmit = (values, { resetForm }) => {
+  const onFormSubmit = (values) => {
     const monument = JSON.parse(JSON.stringify(values));
     delete monument.cityName;
     monument.name = name;
@@ -91,6 +92,11 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
     delete monument.city;
     if (data) {
       monument.id = data.id;
+    }
+
+    if (destroyFieldsDisabled) {
+      monument.destroyYear = null;
+      monument.destroyPeriod = null;
     }
     acceptForm([monument]);
   };
@@ -189,6 +195,17 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
     );
   });
 
+  const handleChangeCondition = (condition) => {
+    setDestroyFieldsDisabled(!condition.abbreviation.includes("lost"));
+  };
+
+  const handleLoadConditions = (conditions) => {
+    if (data) {
+      const condition = conditions.find(p => p.id === data.conditionId);
+      setDestroyFieldsDisabled(!condition.abbreviation.includes("lost"));
+    }
+  }
+
   return (
     <ScrollBar>
       <Paper className={classes.paper}>
@@ -219,6 +236,8 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
                 <FormikCondition
                   formik={formik}
                   getTypesMethod={monumentService.getAllConditions}
+                  onChangeCondition={handleChangeCondition}
+                  onLoadConditions={handleLoadConditions}
                 />
               </Grid>
               <Grid item xs={3}>
@@ -231,10 +250,16 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
                 <FormikProtectionNumber formik={formik} />
               </Grid>
               <Grid item xs={6}>
-                <FormikDestroyYear formik={formik} />
+                <FormikDestroyYear
+                  formik={formik}
+                  disabled={destroyFieldsDisabled}
+                />
               </Grid>
               <Grid item xs={6}>
-                <FormikDestroyPeriod formik={formik} />
+                <FormikDestroyPeriod
+                  formik={formik}
+                  disabled={destroyFieldsDisabled}
+                />
               </Grid>
               <Grid item xs={12}>
                 <Grid style={{ backgroundColor: "rgba(240, 240, 240, 0.4)" }}>

@@ -16,7 +16,8 @@ export default function PeriodFormControl({
   name,
   helperText,
   error,
-  required = false
+  required = false,
+  disabled = false
 }) {
   return (
     <FormControl style={{ width: "100%" }} required={required}>
@@ -28,6 +29,7 @@ export default function PeriodFormControl({
         onBlur={onBlur}
         onChange={onChange}
         error={error}
+        disabled={disabled}
       >
         <MenuItem value={Period.Year}>Рік</MenuItem>
         <MenuItem value={Period.StartOfCentury}>Початок століття</MenuItem>
