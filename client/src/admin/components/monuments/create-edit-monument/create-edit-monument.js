@@ -201,10 +201,10 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
 
   const handleLoadConditions = (conditions) => {
     if (data) {
-      const condition = conditions.find(p => p.id === data.conditionId);
+      const condition = conditions.find((p) => p.id === data.conditionId);
       setDestroyFieldsDisabled(!condition.abbreviation.includes("lost"));
     }
-  }
+  };
 
   return (
     <ScrollBar>

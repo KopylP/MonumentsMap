@@ -28,7 +28,7 @@ export default function DetailDrawerContent({ monument, ...props }) {
           <DetailStatus data={monument && monument.status} />
         </Grid>
         <Grid item xs={12}>
-          <DetailCondition data={monument && monument.condition} />
+          <DetailCondition data={monument}  />
         </Grid>
         {monument && monument.protectionNumber ? (
           <Grid item xs={12}>
