@@ -1,13 +1,5 @@
 import React, { useContext, useState } from "react";
-import {
-  Paper,
-  Grid,
-  TextField,
-  FormControl,
-  AppBar,
-  Tabs,
-  Tab,
-} from "@material-ui/core";
+import { Paper, Grid, AppBar, Tabs, Tab } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Source from "../../common/source";
 import { useFormik } from "formik";
@@ -16,10 +8,17 @@ import ScrollBar from "../../../../components/common/scroll-bar/scroll-bar";
 import { supportedCultures } from "../../../../config";
 import AdminContext from "../../../context/admin-context";
 import SimpleSubmitForm from "../../common/simple-submit-form";
-import PeriodFormControl from "./forms/period-form-control";
-import SelectTypeofMonumentFormControl from "./forms/select-typeof-monument-form-control";
-import CityFormControl from "./forms/city-form-control";
 import EditMonumentTabPanel from "./ui/edit-monument-tab-panel";
+import FormikCity from "./forms/formik/formik-city";
+import FormikStatus from "./forms/formik/formik-status";
+import FormikCondition from "./forms/formik/formik-condition";
+import FormikLatitude from "./forms/formik/formik-latitude";
+import FormikLongitude from "./forms/formik/formik-longitude";
+import FormikProtectionNumber from "./forms/formik/formik-protection-number";
+import FormikDestroyYear from "./forms/formik/formik-destroy-year";
+import FormikDestroyPeriod from "./forms/formik/formik-destroy-period";
+import FormikPeriod from "./forms/formik/formik-period";
+import FormikYear from "./forms/formik/formik-year";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -119,8 +118,8 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
       latitude: Yup.number().required("Це поле є обов'язковим"),
       longitude: Yup.number().required("Це поле є обов'язковим"),
       protectionNumber: Yup.string(),
-      destroyYear: Yup.number(),
-      destroyPeriod: Yup.number(),
+      destroyYear: Yup.mixed(),
+      destroyPeriod: Yup.mixed(),
     }),
     onSubmit: onFormSubmit,
   });
@@ -198,192 +197,44 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
           <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={3}>
-                <FormControl style={{ width: "100%" }}>
-                  <TextField
-                    id="standard-basic"
-                    label="Рік побудови"
-                    type="number"
-                    name="year"
-                    required
-                    value={formik.values.year}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    error={formik.touched.year && formik.errors.year}
-                    helperText={
-                      formik.touched.year &&
-                      formik.errors.year &&
-                      formik.errors.year
-                    }
-                  />
-                </FormControl>
+                <FormikYear formik={formik} />
               </Grid>
               <Grid item xs={3}>
-                <PeriodFormControl
-                  label="Період"
-                  name="period"
-                  required
-                  value={formik.values.period}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  error={formik.touched.period && formik.errors.period}
-                  helperText={
-                    formik.touched.period &&
-                    formik.errors.period &&
-                    formik.errors.period
-                  }
-                />
+                <FormikPeriod formik={formik} />
               </Grid>
               <Grid item xs={6}>
-                <CityFormControl
-                  onBlur={formik.onBlur}
-                  onAutocompliteChange={(_, newValue) =>
-                    formik.setFieldValue("city", newValue)
-                  }
-                  onTextFieldChange={formik.handleChange}
-                  autocompliteName="city"
-                  value={formik.values.city}
-                  textFieldName="cityName"
+                <FormikCity
+                  formik={formik}
                   onCitiesLoad={handleCitiesLoad}
                   getCitiesMethod={monumentService.getAllCities}
-                  helperText={
-                    formik.touched.cityName &&
-                    formik.errors.city &&
-                    formik.errors.city
-                  }
-                  error={formik.touched.cityName && formik.errors.city}
-                  label="Місто"
                 />
               </Grid>
               <Grid item xs={6}>
-                <SelectTypeofMonumentFormControl
-                  label="Статус пам'ятки"
-                  value={formik.values.statusId}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  error={formik.touched.statusId && formik.errors.statusId}
-                  name="statusId"
+                <FormikStatus
+                  formik={formik}
                   getTypesMethod={monumentService.getAllStatuses}
-                  helperText={
-                    formik.touched.statusId &&
-                    formik.errors.statusId &&
-                    formik.errors.statusId
-                  }
                 />
               </Grid>
               <Grid item xs={6}>
-                <SelectTypeofMonumentFormControl
-                  label="Стан пам'ятки"
-                  value={formik.values.conditionId}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.conditionId && formik.errors.conditionId
-                  }
-                  name="conditionId"
+                <FormikCondition
+                  formik={formik}
                   getTypesMethod={monumentService.getAllConditions}
-                  helperText={
-                    formik.touched.conditionId &&
-                    formik.errors.conditionId &&
-                    formik.errors.conditionId
-                  }
                 />
               </Grid>
               <Grid item xs={3}>
-                <FormControl style={{ width: "100%" }}>
-                  <TextField
-                    required
-                    id="standard-basic"
-                    name="latitude"
-                    label="Широта"
-                    type="number"
-                    value={formik.values.latitude}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    error={formik.touched.latitude && formik.errors.latitude}
-                    helperText={
-                      formik.touched.latitude &&
-                      formik.errors.latitude &&
-                      formik.errors.latitude
-                    }
-                  />
-                </FormControl>
+                <FormikLatitude formik={formik} />
               </Grid>
               <Grid item xs={3}>
-                <FormControl style={{ width: "100%" }}>
-                  <TextField
-                    required
-                    id="standard-basic"
-                    name="longitude"
-                    label="Довгота"
-                    type="number"
-                    value={formik.values.longitude}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    error={formik.touched.longitude && formik.errors.longitude}
-                    helperText={
-                      formik.touched.longitude &&
-                      formik.errors.longitude &&
-                      formik.errors.longitude
-                    }
-                  />
-                </FormControl>
+                <FormikLongitude formik={formik} />
               </Grid>
               <Grid item xs={6}>
-                <FormControl style={{ width: "100%" }}>
-                  <TextField
-                    id="standard-basic"
-                    name="protectionNumber"
-                    label="Захисний номер"
-                    value={formik.values.protectionNumber}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    error={
-                      formik.touched.protectionNumber &&
-                      formik.errors.protectionNumber
-                    }
-                    helperText={
-                      formik.touched.protectionNumber &&
-                      formik.errors.protectionNumber &&
-                      formik.errors.protectionNumber
-                    }
-                  />
-                </FormControl>
+                <FormikProtectionNumber formik={formik} />
               </Grid>
               <Grid item xs={6}>
-                <FormControl style={{ width: "100%" }}>
-                  <TextField
-                    id="standard-basic"
-                    label="Рік знищення"
-                    type="number"
-                    name="destroyYear"
-                    value={formik.values.destroyYear}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    error={formik.touched.year && formik.errors.destroyYear}
-                    helperText={
-                      formik.touched.destroyYear &&
-                      formik.errors.destroyYear &&
-                      formik.errors.destroyYear
-                    }
-                  />
-                </FormControl>
+                <FormikDestroyYear formik={formik} />
               </Grid>
               <Grid item xs={6}>
-                <PeriodFormControl
-                  label="Період знищення"
-                  name="destroyPeriod"
-                  value={formik.values.destroyPeriod}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.destroyPeriod && formik.errors.destroyPeriod
-                  }
-                  helperText={
-                    formik.touched.destroyPeriod &&
-                    formik.errors.destroyPeriod &&
-                    formik.errors.destroyPeriod
-                  }
-                />
+                <FormikDestroyPeriod formik={formik} />
               </Grid>
               <Grid item xs={12}>
                 <Grid style={{ backgroundColor: "rgba(240, 240, 240, 0.4)" }}>
