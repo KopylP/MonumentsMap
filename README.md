@@ -20,23 +20,21 @@
 ### Teхнології
 React, Asp.net core, Entity Framework
 ### Скріншоти проєкту
-![photo_2020-08-03_20-57-25](https://user-images.githubusercontent.com/37479968/89217692-e4639e80-d5cc-11ea-97eb-8f92bb6a892c.jpg)
+![Знімок екрана 2020-09-26 214108](https://user-images.githubusercontent.com/37479968/94349096-a40b2480-0041-11eb-95e5-1116d12e8bf6.png)
 Карта та бічна панель для фільтрації пам'яток архітектури
 
-![photo_2020-08-03_21-04-57](https://user-images.githubusercontent.com/37479968/89217794-0ceb9880-d5cd-11ea-8a29-f66cd859bcab.jpg)
+![Знімок екрана 2020-09-26 214133](https://user-images.githubusercontent.com/37479968/94349108-b4230400-0041-11eb-9439-5a9320590ba6.png)
 Бічна панель з описом вибраної пам'ятки архітектури
 
-![photo_2020-08-03_21-06-33](https://user-images.githubusercontent.com/37479968/89217891-43c1ae80-d5cd-11ea-8020-1dfb493b40a8.jpg)
-Віконце для додавання нової пам'ятки архітектури
+![Знімок екрана 2020-09-26 214229](https://user-images.githubusercontent.com/37479968/94349113-cdc44b80-0041-11eb-98d8-4208e3d1a5bf.png)
+Галерея фотографій з описами на настільних комп'ютерах
 
-![image_2020-08-03_21-07-49](https://user-images.githubusercontent.com/37479968/89217971-77043d80-d5cd-11ea-9f24-fa83e1e05708.png)
-Панель керування фотографіями вибраної пам'ятки архітектури
+![Знімок екрана 2020-09-26 214316](https://user-images.githubusercontent.com/37479968/94349120-dcaafe00-0041-11eb-8fd7-e71445a18382.png)
+Бічна панель з пам'яткою архітектури, на мобільних пристроях
 
-![image_2020-08-03_21-09-30](https://user-images.githubusercontent.com/37479968/89218116-c2b6e700-d5cd-11ea-97b1-9fe410ed301f.png)
-Віконце для додавання нової фотографії пам'ятки архітектури
+![Знімок екрана 2020-09-26 214336](https://user-images.githubusercontent.com/37479968/94349126-f8ae9f80-0041-11eb-868b-c9e2392709c1.png)
+Галерея фотографій на мобільних пристроях
 
-![image](https://user-images.githubusercontent.com/37479968/91191202-c6cdb480-e6f4-11ea-81d9-72d9de6bf0db.png)
-Деталі фотографії (Великий екран)
+![Знімок екрана 2020-09-26 214358](https://user-images.githubusercontent.com/37479968/94349130-082de880-0042-11eb-8f8b-4428e4a5bac0.png)
+Деталі фотографії з описом на мобільних пристроях
 
-![image](https://user-images.githubusercontent.com/37479968/91191322-ecf35480-e6f4-11ea-8d2c-1a4ca39b784a.png)
-Деталі фотографії (Мобільні пристрої)
