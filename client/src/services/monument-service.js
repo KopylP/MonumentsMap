@@ -160,6 +160,18 @@ export default class MonumentService {
     return await this._getRequest(`monumentphoto/${monumentPhotoId}`);
   };
 
+  getParticipants = async () => {
+    return await this._getRequest(`participant`);
+  }
+
+  getMonumentRawParticipants = async (monumentId) => {
+    return await this._getRequest(`monument/${monumentId}/participants/raw`);
+  }
+
+  editMonumentParticipants = async (monumentId, participantsList) => {
+    return await this._patchRequest(`monument/${monumentId}/participants`, participantsList);
+  }
+
   async savePhoto(photo) {
     return await this._postFormRequest("photo/", photo);
   }

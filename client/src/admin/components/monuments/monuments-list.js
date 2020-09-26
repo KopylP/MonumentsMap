@@ -7,11 +7,16 @@ import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import PhotoListModal from "../photos/photo-list-modal/photo-list-modal";
 import AddPhotoModal from "../photos/add-photo-modal/add-photo-modal";
 import AcceptMonumentTable from "./accept-monument-table";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import PeopleIcon from "@material-ui/icons/People";
 
 function MonumentsList({ data }) {
   const {
     monumentService: { deleteMonument },
   } = useContext(AdminContext);
+
+  const history = useHistory();
+  // const { url } = useRouteMatch();
 
   const [columns, setColumns] = useState([
     { title: "Ім'я", field: "name" },
@@ -22,9 +27,7 @@ function MonumentsList({ data }) {
     { title: "Додано", field: "createdAt" },
     {
       title: "Активна пам'ятка",
-      render: (rowData) => (
-        <AcceptMonumentTable monument={rowData} />
-      ),
+      render: (rowData) => <AcceptMonumentTable monument={rowData} />,
     },
   ]);
 
@@ -41,6 +44,15 @@ function MonumentsList({ data }) {
         onDeleteMethod={deleteMonument}
         extraActions={[
           {
+            icon: () => <PeopleIcon />,
+            tooltip: "Учасники будівництва",
+            onClick: (e, rowData) => {
+              history.push(
+                `monuments/${rowData.id}/participants?name=${rowData.name}`
+              );
+            },
+          },
+          {
             icon: "image",
             tooltip: "Додати фото",
             onClick: (e, rowData) => {
@@ -53,7 +65,7 @@ function MonumentsList({ data }) {
             tooltip: "Всі фото",
             onClick: (e, rowData) => {
               setSelectedMonumentId(rowData.id);
-              setOpenPhotoDialog(true);
+              setOpenAddPhotoDialog(true);
             },
           },
         ]}

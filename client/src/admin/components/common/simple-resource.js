@@ -7,11 +7,13 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Grid, Button } from "@material-ui/core";
+import PropTypes from "prop-types";
 
-export default memo(function SimpleResource({
+function SimpleResource({
   ItemList,
   CreateItem = null,
   UpdateItem = null,
+  extra = [],
 }) {
   const { path, url } = useRouteMatch();
   const { pathname } = useLocation();
@@ -34,6 +36,11 @@ export default memo(function SimpleResource({
       ) : null}
 
       <Switch>
+        {extra.map(({ route, Component }, i) => (
+          <Route exact path={`${path}/${route}`} key={i}>
+            <Component />
+          </Route>
+        ))}
         {CreateItem ? (
           <Route path={`${path}/create`}>
             <CreateItem />
@@ -50,4 +57,16 @@ export default memo(function SimpleResource({
       </Switch>
     </Grid>
   );
-});
+}
+
+SimpleResource.propTypes = {
+  extra: PropTypes.arrayOf({
+    route: PropTypes.string.isRequired,
+    Component: PropTypes.node.isRequired,
+  }),
+  ItemList: PropTypes.node.isRequired,
+  CreateItem: PropTypes.node,
+  UpdateItem: PropTypes.node,
+};
+
+export default memo(SimpleResource);
