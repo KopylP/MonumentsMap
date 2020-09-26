@@ -13,10 +13,9 @@ function DetailCondition({
   return (
     <div>
       <b>Стан: </b>
-      {name}
-      {' '}
+      {`${name} `}
       {destroyYear && destroyPeriod && (
-        <span style={ { fontWeight: 500 } }>
+        <span style={{ fontWeight: 500 }}>
           (<DetailDestroyYear year={destroyYear} period={destroyPeriod} />)
         </span>
       )}
