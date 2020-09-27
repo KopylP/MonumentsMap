@@ -1,23 +1,30 @@
 import React from "react";
 import Period from "../../../models/period";
+import { arabToRoman } from "roman-numbers";
+import { useTranslation } from "react-i18next";
 
 export default function SimpleDetailYear({ year, period }) {
+  const { t } = useTranslation();
+
   let dateText;
   switch (period) {
     case Period.StartOfCentury:
-      dateText = `Початок ${year}-го століття`;
+      dateText = t("Early of century", { century: arabToRoman(year) });
       break;
     case Period.MiddleOfCentury:
-      dateText = `Середина ${year}-го століття`;
+      dateText = t("Middle of the century", { century: arabToRoman(year) });
       break;
     case Period.EndOfCentury:
-      dateText = `Кінець ${year}-го століття`;
+      dateText = t("End of the century", { century: arabToRoman(year) });
       break;
     case Period.Year:
-      dateText = `${year}-й рік`;
+      dateText = t("simple year", { year });
       break;
     case Period.Decades:
-      dateText = `${year % 100}-ті роки ${+("" + year).slice(0, 2) + 1} століття`;
+      dateText = t("Years of the century", {
+        decade: year % 100,
+        century: arabToRoman(+("" + year).slice(0, 2) + 1),
+      });
       break;
   }
 

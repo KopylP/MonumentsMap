@@ -1,6 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import Period from "../../../models/period";
+import { useTranslation } from "react-i18next";
+import { arabToRoman } from "roman-numbers";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -11,22 +13,26 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DetailYear({ year, period, textOnly = false }) {
   const styles = useStyles();
+  const { t } = useTranslation();
   let dateText;
   switch (period) {
     case Period.StartOfCentury:
-      dateText = `Побудовано на початоку ${year}-го століття`;
+      dateText = t("Built in the early of century", { century: arabToRoman(year) });
       break;
     case Period.MiddleOfCentury:
-      dateText = `Побудовано в середині ${year}-го століття`;
+      dateText = t("Built in the middle of the century", { century: arabToRoman(year) });
       break;
     case Period.EndOfCentury:
-      dateText = `Побудовано в кінці ${year}-го століття`;
+      dateText = t("Built in the late of century", { century: arabToRoman(year) });
       break;
     case Period.Year:
-      dateText = `Побудовано у ${year}-му році`;
+      dateText = t("Built in", { year });
       break;
     case Period.Decades:
-      dateText = `Побудовано у ${year % 100}-х роках ${+("" + year).slice(0, 2) + 1} століття`;
+      dateText = t("Built in the years of the century", {
+        decade: year % 100,
+        century: arabToRoman(+("" + year).slice(0, 2) + 1),
+      });
       break;
   }
 

@@ -7,7 +7,7 @@ const YearLabel = ({ year }) => (
     gutterBottom
     style={{ padding: 0, margin: 0 }}
   >
-    {year} р.
+    {year}
   </Typography>
 );
 

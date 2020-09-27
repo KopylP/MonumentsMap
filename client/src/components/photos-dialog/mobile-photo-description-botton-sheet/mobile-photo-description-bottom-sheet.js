@@ -1,7 +1,8 @@
 import React, { useState, memo, useEffect, useLayoutEffect } from "react";
+import { Trans } from "react-i18next";
 import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
 import { usePrevious } from "../../../hooks/hooks";
-import PhotoYear from "../../common/photo-year/photo-year";
+import SimpleDetailYear from "../../detail-drawer/detail-year/simple-detail-year";
 import { doIfNotTheSame } from "../../helpers/conditions";
 
 function areEqual(prevProps, nextProps) {
@@ -93,12 +94,12 @@ export default memo(function MobilePhotoDescriptionBottomSheet({
       >
         {details && (
           <React.Fragment>
-            <PhotoYear year={details.year} period={details.period} />
+            <SimpleDetailYear year={details.year} period={details.period} />
             <div style={{ clear: "both", marginBottom: 2 }} />
             <span>{details.description}</span>
             <br />
             <br />
-            <span>Джерела:</span>
+            <span><Trans>Sources</Trans>:</span>
             <div style={{ clear: "both", marginBottom: 2 }} />
             {details.sources &&
               details.sources.map((source, i) => {

@@ -34,6 +34,7 @@ import {
 import { defineClientCulture } from "../components/helpers/lang";
 import withStore from "../store/with-store";
 import { useSnackbar } from "notistack";
+import { withTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MapPage({ store }) {
+function MapPage({ store, i18n }) {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {
@@ -148,6 +149,11 @@ function MapPage({ store }) {
     );
   }, [selectedMonument]);
 
+  const handleSelectLanguage = () => {
+    i18n.changeLanguage(selectedLanguage.code.split('-')[0]);
+    update();
+  }
+
   useEffect(() => {
     doIfArraysNotEqual(prevSelectedConditions, selectedConditions)(update);
     doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
@@ -156,7 +162,7 @@ function MapPage({ store }) {
       selectedLanguage,
       prevSelectedLanguage,
       (p) => p.code
-    )(update);
+    )(handleSelectLanguage);
   }, [selectedConditions, selectedCities, selectedStatuses, selectedLanguage]);
 
   useEffect(() => {
@@ -215,4 +221,4 @@ function MapPage({ store }) {
   );
 }
 
-export default withStore(MapPage); 
+export default  withTranslation()(withStore(MapPage)); 

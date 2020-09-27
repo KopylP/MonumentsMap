@@ -1,0 +1,21 @@
+{
+    "translations": {
+        "condition": "Stan",
+        "protection number": "Numer ochronny",
+        "Built in the early of century": "Zbudowany na początku {{century}} wieku",
+        "Built in the middle of the century" : "Zbudowany w połowie {{century}} wieku",
+        "Built in the late of century": "Zbudowany pod koniec {{century}} wieku",
+        "Built in": "Zbudowany w {{year}} roku",
+        "Built in the years of the century": "Zbudowany w latach {{decade}}. {{century}} wieku",
+        "Sources": "Żródła",
+        "Early of century": "Początek {{century}} wieku",
+        "Middle of the century": "Połowa {{century}} wieku",
+        "End of the century": "Koniec {{century}} wieku",
+        "Years of the century": "Lata {{decade}}. {{century}} wieku",
+        "simple year": "{{year}} r",
+        "City": "Miasto",
+        "Monument status": "Status zabytku",
+        "Monument condition": "Stan zabytku",
+        "Search by name": "Szukaj według nazwy"
+    }
+}

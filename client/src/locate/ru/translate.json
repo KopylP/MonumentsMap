@@ -1,0 +1,21 @@
+{
+    "translations": {
+        "condition": "Состояние",
+        "protection number": "Защитный номер",
+        "Built in the early of century": "Построено в начале {{century}}-го века",
+        "Built in the middle of the century" : "Построено в середине {{century}}-го века",
+        "Built in the late of century": "Построено в конце {{century}}-го века",
+        "Built in": "Построено в {{year}} году",
+        "Built in the years of the century": "Построено в {{decade}}-х годах {{century}}-го века",
+        "Sources": "Источники",
+        "Early of century": "Начало {{century}}-го века",
+        "Middle of the century": "Середина {{century}}-го века",
+        "End of the century": "Конец {{century}}-го века",
+        "Years of the century": "{{decade}}-е года {{century}}-го века",
+        "simple year": "{{year}} г.",
+        "City": "Город",
+        "Monument status": "Статус памятника",
+        "Monument condition": "Состояние памятника",
+        "Search by name": "Поиск по имени"
+    }
+}

@@ -2,6 +2,7 @@ import React from "react";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
 import ContentLoader from "react-content-loader";
 import DetailDestroyYear from "../detail-destroy-year/detail-destroy-year";
+import { Trans } from "react-i18next";
 
 function DetailCondition({
   data: {
@@ -12,7 +13,7 @@ function DetailCondition({
 }) {
   return (
     <div>
-      <b>Стан: </b>
+      <b> <Trans>condition</Trans>: </b>
       {`${name} `}
       {destroyYear && destroyPeriod && (
         <span style={{ fontWeight: 500 }}>

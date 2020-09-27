@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { AppBar, Toolbar, IconButton, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import PhotoYear from "../../../common/photo-year/photo-year";
 import AppContext from "../../../../context/app-context";
+import SimpleDetailYear from "../../../detail-drawer/detail-year/simple-detail-year";
 
 const useStyles = makeStyles((theme) => ({
   backButton: {
@@ -45,9 +45,9 @@ export default function PhotoDrawerContentTitle({
           </Typography>
           <Typography variant="subtitle2" className={classes.title} style={{textOverflow: "ellipsis"}}>
             {monumentPhoto ? (
-              <PhotoYear
-                year={monumentPhoto && monumentPhoto.year}
-                period={monumentPhoto && monumentPhoto.period}
+              <SimpleDetailYear
+                year={monumentPhoto.year}
+                period={monumentPhoto.period}
               />
             ) : (
               "..."

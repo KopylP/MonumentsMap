@@ -1,0 +1,21 @@
+{
+    "translations": {
+        "condition": "Стан",
+        "protection number": "Захисний номер",
+        "Built in the early of century": "Побудовано на початку {{century}}-го століття",
+        "Built in the middle of the century" : "Побудовано в середині {{century}}-го століття",
+        "Built in the late of century": "Побудовано в кінці {{century}}-го століття",
+        "Built in": "Побудовано у {{year}}-му році",
+        "Built in the years of the century": "Побудовано в {{decade}}-х роках {{century}}-го століття",
+        "Sources": "Джерела",
+        "Early of century": "Початок {{century}}-го століття",
+        "Middle of the century": "Середина {{century}}-го століття",
+        "End of the century": "кінець {{century}}-го століття",
+        "Years of the century": "{{decade}}-ті роки {{century}}-го століття",
+        "simple year": "{{year}} р.",
+        "City": "Місто",
+        "Monument status": "Статус пам'ятки",
+        "Monument condition": "Стан пам'ятки",
+        "Search by name": "Пошук за назвою"
+    }
+}

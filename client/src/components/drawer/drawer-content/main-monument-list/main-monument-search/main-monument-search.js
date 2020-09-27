@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, TextField, useTheme, makeStyles } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   width100per: {
@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MainMonumentSearch({ value, onChange }) {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   return (
     <Grid container className={classes.root}>
@@ -31,7 +32,7 @@ export default function MainMonumentSearch({ value, onChange }) {
             <TextField
               className={classes.width100per}
               id="input-with-icon-grid"
-              label="Пошук за назвою"
+              label={t("Search by name")}
               value={value}
               onChange={onChange}
             />

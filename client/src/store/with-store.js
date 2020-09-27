@@ -42,6 +42,7 @@ export default function withStore(Wrapper) {
           setLoadingMonuments,
           setMonuments,
         }}
+        {...props}
       />
     );
   };

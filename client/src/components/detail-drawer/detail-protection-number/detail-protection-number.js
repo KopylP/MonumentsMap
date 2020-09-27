@@ -1,11 +1,12 @@
 import React from "react";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
 import ContentLoader from 'react-content-loader';
+import { Trans } from "react-i18next";
 
 function DetailCondition({ data }) {
   return (
     <div>
-      <b>Захисний номер: </b>
+      <b><Trans>protection number</Trans>: </b>
       {data}
     </div>
   );

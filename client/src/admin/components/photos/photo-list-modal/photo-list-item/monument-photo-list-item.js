@@ -16,9 +16,8 @@ import {
   ListItemSecondaryAction,
   ListItemIcon,
 } from "@material-ui/core";
-import PhotoYear from "../../../../../components/common/photo-year/photo-year";
 import AdminContext from "../../../../context/admin-context";
-
+import SimpleDetailYear from "../../../../../components/detail-drawer/detail-year/simple-detail-year";
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
@@ -64,7 +63,7 @@ export default function MonumentPhotoListItem({
       </List>
       <CardContent>
         <Typography gutterBottom variant="subtitle2">
-          <PhotoYear year={monumentPhoto.year} period={monumentPhoto.period} />
+          <SimpleDetailYear year={monumentPhoto.year} period={monumentPhoto.period} />
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p" noWrap>
           {monumentPhoto.description || "Немає опису"}

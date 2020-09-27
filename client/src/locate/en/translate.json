@@ -1,0 +1,21 @@
+{
+    "translations": {
+        "condition": "Condition",
+        "protection number": "Protection number",
+        "Built in the early of century": "Built in the early {{century}}-th century",
+        "Built in the middle of the century" : "Built in the middle of the {{century}}-th century",
+        "Built in the late of century": "Built in the late {{century}}-th century",
+        "Built in": "Built in {{year}}",
+        "Built in the years of the century": "Built in the {{decade}}s of the {{century}}-th century",
+        "Sources": "Sources",
+        "Early of century": "Early {{century}}-th century",
+        "Middle of the century": "The middle of the {{century}}-th century",
+        "End of the century": "The end of the {{century}}-th century",
+        "Years of the century": "{{decade}}s of the {{century}}-th century",
+        "simple year": "{{year}}",
+        "City": "City",
+        "Monument status": "Monument status",
+        "Monument condition": "Monument condition",
+        "Search by name": "Search by name"
+    }
+}

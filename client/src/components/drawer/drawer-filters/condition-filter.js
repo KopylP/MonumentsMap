@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import AppContext from "../../../context/app-context";
 import DefaultFilter from "./default-filter";
+import { useTranslation } from "react-i18next";
 
 export default function ConditionFilter() {
   const {
@@ -9,9 +10,11 @@ export default function ConditionFilter() {
     setSelectedConditions,
   } = useContext(AppContext);
 
+  const { t } = useTranslation();
+
   return (
     <DefaultFilter
-      title="Стан пам'ятки архітектури"
+      title={t('Monument condition')}
       selectedValues={selectedConditions}
       setSelectedValues={setSelectedConditions}
       multiple

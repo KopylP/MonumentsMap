@@ -1,17 +1,25 @@
 import React from "react";
 import Period from "../../../models/period";
+import { arabToRoman } from "roman-numbers";
+import { useTranslation } from "react-i18next";
 
 export default function DetailDestroyYear({ year, period }) {
+
+  const { t } = useTranslation();
+
   let dateText;
   switch (period) {
     case Period.Year:
-      dateText = `${year} р.`;
+      dateText = t("simple year", { year });
       break;
     case Period.Decades:
-      dateText = `${year % 100} р. ${+("" + year).slice(0, 2) + 1} ст.`;
+      dateText = t("Years of the century", {
+        decade: year % 100,
+        century: arabToRoman(+("" + year).slice(0, 2) + 1),
+      });
       break;
     default:
-      dateText = `${year} ст.`;
+      dateText = `${arabToRoman(year)}`;
   }
   return <span>{dateText}</span>;
 }

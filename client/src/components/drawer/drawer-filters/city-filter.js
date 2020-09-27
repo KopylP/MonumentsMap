@@ -4,6 +4,7 @@ import { usePrevious } from "../../../hooks/hooks";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Grid, TextField } from "@material-ui/core";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
+import { useTranslation } from "react-i18next";
 
 export default function CityFilter() {
   const {
@@ -19,6 +20,8 @@ export default function CityFilter() {
   const onCitiesLoad = (cities) => {
     setCities(cities);
   };
+
+  const { t } = useTranslation();
 
   const update = () => {
     makeCancelable(monumentService.getAllCities()).then(onCitiesLoad);
@@ -67,7 +70,7 @@ export default function CityFilter() {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Місто"
+            label={t("City")}
             margin="normal"
             style={{ margin: 0 }}
           />
