@@ -6,6 +6,7 @@ import AppContext from "../../../context/app-context";
 import PhotoDrawerContentTitle from "./photo-drawer-content-title/photo-drawer-content-title";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import SourceList from "../../common/sources/source-list";
+import ScrollBar from "../../common/scroll-bar/scroll-bar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,23 +43,25 @@ export default function PhotoDrawerContent({
   }, [monumentPhoto]);
 
   return (
-    <div className={classes.root}>
-      <PhotoDrawerContentTitle
-        monumentPhoto={monumentPhotoDetail}
-        onBack={onBack}
-      />
-      <div style={{ padding: 15 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <DetailDescription
-              data={monumentPhotoDetail && monumentPhotoDetail.description}
-            />
-            <SourceList
-              data={monumentPhotoDetail && monumentPhotoDetail.sources}
-            />
+    <ScrollBar>
+      <div className={classes.root}>
+        <PhotoDrawerContentTitle
+          monumentPhoto={monumentPhotoDetail}
+          onBack={onBack}
+        />
+        <div style={{ padding: 15 }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <DetailDescription
+                data={monumentPhotoDetail && monumentPhotoDetail.description}
+              />
+              <SourceList
+                data={monumentPhotoDetail && monumentPhotoDetail.sources}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
       </div>
-    </div>
+    </ScrollBar>
   );
 }
