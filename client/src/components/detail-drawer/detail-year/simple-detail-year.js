@@ -26,6 +26,9 @@ export default function SimpleDetailYear({ year, period }) {
         century: arabToRoman(+("" + year).slice(0, 2) + 1),
       });
       break;
+    default:
+      dateText = "";
+      break;
   }
 
   return <span>{dateText}</span>;

@@ -34,6 +34,8 @@ export default function DetailYear({ year, period, textOnly = false }) {
         century: arabToRoman(+("" + year).slice(0, 2) + 1),
       });
       break;
+    default:
+      dateText = "";
   }
 
   return <div className={!textOnly ? styles.container : ""}>{dateText}</div>;

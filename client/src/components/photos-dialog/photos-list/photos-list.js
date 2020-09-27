@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { GridList } from "@material-ui/core";
 import AppContext from "../../../context/app-context";
 
 const useStyles = makeStyles((theme) => ({

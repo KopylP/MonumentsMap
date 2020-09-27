@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Dialog,
   Toolbar,
@@ -7,7 +7,7 @@ import {
   GridList,
   GridListTile,
   IconButton,
-  makeStyles, Grid
+  makeStyles,
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import AppContext from "../../../context/app-context";

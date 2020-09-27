@@ -1,10 +1,6 @@
-import React, { useContext, useEffect, useRef, useState, Component } from "react";
+import React, { Component } from "react";
 import { Marker, Popup } from "react-leaflet";
 import markerIcon from "./marker-icon";
-import AppContext from "../../../context/app-context";
-import { popup } from "leaflet";
-import { usePrevious } from "../../../hooks/hooks";
-import MapContext from "../../../context/map-context";
 
 export default class MonumentMarker extends Component {
 
@@ -17,20 +13,6 @@ export default class MonumentMarker extends Component {
   render() {
     const { monument, onClick = (p) => p } = this.props;
     let markerColor;
-    // const { mapSelectedMonumentId } = useContext(MapContext);
-    // const prevMapSelectedMonumentId = usePrevious(mapSelectedMonumentId);
-  
-    
-  
-    // useEffect(() => {
-    //   if (
-    //     mapSelectedMonumentId != null &&
-    //     mapSelectedMonumentId !== prevMapSelectedMonumentId &&
-    //     mapSelectedMonumentId.id === monument.id
-    //   ) {
-    //     markerRef.current.leafletElement.openPopup();
-    //   }
-    // }, [mapSelectedMonumentId]);
   
     switch (monument.condition.abbreviation) {
       case "good-condition":

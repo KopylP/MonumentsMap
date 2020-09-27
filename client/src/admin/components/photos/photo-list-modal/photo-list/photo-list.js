@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { SnackbarProvider, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 import { Button } from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
 import { usePrevious } from "../../../../../hooks/hooks";

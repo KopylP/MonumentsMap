@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Map as LeafMap, TileLayer, Marker, Popup } from "react-leaflet";
+import { Map as LeafMap, TileLayer } from "react-leaflet";
 import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
 import { defaultZoom, accessToken, loadMapZoom } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
-import { isMobile } from "react-device-detect";
-import FullWindowHeightContainer from "../common/full-window-height-container/full-window-height-container";
 
 function Map({ onMonumentSelected = (p) => p }) {
   const {
@@ -29,7 +27,7 @@ function Map({ onMonumentSelected = (p) => p }) {
   };
 
   const changeMapZoomToDefault = () => {
-    if(mapZoom == loadMapZoom) {
+    if(mapZoom === loadMapZoom) {
       setMapZoom(defaultZoom);
     }
   }

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { makeStyles, Menu, MenuItem } from "@material-ui/core";
+import { Menu, MenuItem } from "@material-ui/core";
 
 import { Button } from "@material-ui/core";
 import TranslateIcon from "@material-ui/icons/Translate";

@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect, useLayoutEffect } from "react";
+import React, { useState, memo, useLayoutEffect } from "react";
 import { Trans } from "react-i18next";
 import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
 import { usePrevious } from "../../../hooks/hooks";

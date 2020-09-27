@@ -7,7 +7,7 @@ import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import PhotoListModal from "../photos/photo-list-modal/photo-list-modal";
 import AddPhotoModal from "../photos/add-photo-modal/add-photo-modal";
 import AcceptMonumentTable from "./accept-monument-table";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import PeopleIcon from "@material-ui/icons/People";
 
 function MonumentsList({ data }) {
@@ -16,7 +16,6 @@ function MonumentsList({ data }) {
   } = useContext(AdminContext);
 
   const history = useHistory();
-  // const { url } = useRouteMatch();
 
   const [columns, setColumns] = useState([
     { title: "Ім'я", field: "name" },

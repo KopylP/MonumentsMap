@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  useRouteMatch,
-  useParams,
 } from "react-router-dom";
 import MapPage from "./pages/map-page";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
-import AdminRoutingPage from "./admin/pages/admin-routing-page";
+// import AdminRoutingPage from "./admin/pages/admin-routing-page";
 
 const theme = createMuiTheme({
   palette: {
@@ -30,13 +27,13 @@ function App(props) {
   return (
     <Router>
       <Switch>
-      <Route path="/admin">
+      {/* <Route path="/admin">
           <SnackbarProvider maxSnack={5}>
             <MuiThemeProvider theme={theme}>
               <AdminRoutingPage />
             </MuiThemeProvider>
           </SnackbarProvider>
-        </Route>
+        </Route> */}
         <Route path="/">
           <SnackbarProvider maxSnack={5}>
             <MuiThemeProvider theme={theme}>

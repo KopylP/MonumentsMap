@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { makeStyles, Drawer, SwipeableDrawer } from "@material-ui/core";
+import { makeStyles, SwipeableDrawer } from "@material-ui/core";
 import DrawerContainer from "../common/drawer-container/drawer-container";
 import DetailDrawerHeader from "./detail-drawer-header/detail-drawer-header";
 import DetailDrawerContent from "./detail-drawer-content/detail-drawer-content";
@@ -7,7 +7,6 @@ import AppContext from "../../context/app-context";
 import { usePrevious } from "../../hooks/hooks";
 import ScrollBar from "../common/scroll-bar/scroll-bar";
 import {
-  BrowserRouter as Router,
   useHistory,
   useParams,
 } from "react-router-dom";
@@ -120,6 +119,7 @@ export default function DetailDrawer(props) {
         }}
         transitionDuration={200}
         open={detailDrawerOpen}
+        onOpen={p => p}
       >
         <DrawerBackButton onClick={handleClose} />
         <ScrollBar>

@@ -15,6 +15,7 @@ function MonumentDetailImage({
     <img
       src={getPhotoLink(data.photoId, 500)}
       onClick={() => onMonumentPhotoClicked(data)}
+      alt={"monument"}
       style={{
         width: "100%",
         height: "100%",

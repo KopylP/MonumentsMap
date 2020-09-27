@@ -1,10 +1,7 @@
-import React, { useRef, useState, useEffect, useContext, memo } from "react";
+import React, { useRef, useState, useEffect, memo } from "react";
 import PinchZoomPan from "react-responsive-pinch-zoom-pan";
 import useMutationObserver from "@rooks/use-mutation-observer";
 import { getMinScale } from "react-responsive-pinch-zoom-pan/dist/Utils";
-import PhotoLightboxContext from "../context/photo-lightbox-context";
-import useCancelablePromise from "@rodw95/use-cancelable-promise";
-import Axios from "axios";
 
 export default memo(function PinchZoomImage({
   src,

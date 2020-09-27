@@ -30,7 +30,7 @@ function DetailAddress({ data, ...props }) {
   } = useContext(AppContext);
   const makeCancelable = useCancelablePromise();
 
-  useEffect(() => {
+  const handleDataChange = () => {
     if (data != null) {
       makeCancelable(getAddressInformationFromLatLng(data.lat, data.lng)).then(
         ({ address }) => {
@@ -40,7 +40,9 @@ function DetailAddress({ data, ...props }) {
     } else {
       setAddress(null);
     }
-  }, [data]);
+  };
+
+  useEffect(handleDataChange, [data]);
 
   return (
     <React.Fragment>

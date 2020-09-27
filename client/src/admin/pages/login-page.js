@@ -12,7 +12,6 @@ import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    backgroundColor: "White",
     width: "100%",
     height: "100vh",
     justifyContent: "center",

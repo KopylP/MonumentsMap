@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -9,7 +9,6 @@ import clsx from "clsx";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import LocalStorageService from "../../../services/local-storage-service";
-import AdminContext from "../../context/admin-context";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef } from "react";
 import clsx from "clsx";
-import { makeStyles, Drawer, Slide } from "@material-ui/core";
+import { makeStyles, Drawer } from "@material-ui/core";
 import PhotoDrawerContent from "../photo-drawer-content/photo-drawer-content";
 import PhotoViewer from "../photo-viewer/photo-viewer";
 import AppContext from "../../../context/app-context";
@@ -78,7 +78,7 @@ export default function PhotosContainer({
   const setImageIndex = (index) => {
     setSelectedMonumentPhotoIndex(index);
     setImageLoading(true);
-  }
+  };
 
   const handleMonumentPhotoClick = (monumentPhotoIndex) => {
     setImageIndex(monumentPhotoIndex);
@@ -94,7 +94,7 @@ export default function PhotosContainer({
 
   const handleImageLoading = () => {
     setImageLoading(false);
-  }
+  };
 
   const handleActionButtonsClick = (action) => {
     switch (action) {
@@ -107,6 +107,8 @@ export default function PhotosContainer({
             monumentPhotos[selectedMonumentPhotoIndex].photoId
           )
         );
+        break;
+      default:
         break;
     }
   };

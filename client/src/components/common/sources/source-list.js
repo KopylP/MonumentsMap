@@ -8,12 +8,12 @@ import { Trans } from 'react-i18next'
 function SourceList({ data }) {
   return (
     <div style={{width: "100%"}}>
-      <Typography gutt variant="subtitle2" gutterBottom>
+      <Typography variant="subtitle2" gutterBottom>
         <Trans>Sources</Trans>
       </Typography>
       <ul style={{ marginTop: 0 }}>
-        {data.map((source) => (
-          <SourceItem {...source} key={source.id} />
+        {data.map((source, i) => (
+          <SourceItem {...source} key={i} />
         ))}
       </ul>
     </div>

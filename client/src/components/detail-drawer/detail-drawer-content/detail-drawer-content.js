@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Grid, Avatar, Divider } from "@material-ui/core";
+import { Grid, Divider } from "@material-ui/core";
 import DrawerAddress from "../detail-address/detail-address";
 import DetailCondition from "../detail-condition/detail-condition";
 import DetailStatus from "../detail-status/detail-status";
@@ -8,10 +8,8 @@ import DetailDescription from "../detail-description/detail-description";
 import DetailProtectionNumber from "../detail-protection-number/detail-protection-number";
 import SourceList from "../../common/sources/source-list";
 
-const useStyles = makeStyles((theme) => ({}));
 
 export default function DetailDrawerContent({ monument, ...props }) {
-  const styles = useStyles(props);
 
   return (
     <div style={{ padding: 15 }}>

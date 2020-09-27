@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-// import DrawerImage from "http://localhost:5000/api/photo/2/image";
+import React from "react";
 import { makeStyles } from "@material-ui/core";
-import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
 import PhotoCarousel from "./photo-carousel/photo-carousel";
 import { isMobileOnly } from "react-device-detect";
 import MonumentDetailImage from "./monument-detail-image/monument-detail-image";

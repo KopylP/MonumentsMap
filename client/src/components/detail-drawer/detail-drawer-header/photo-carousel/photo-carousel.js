@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import AppContext from "../../../../context/app-context";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
 import { IconButton, makeStyles, useTheme } from "@material-ui/core";
@@ -6,7 +6,6 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import "./photo-carousel.css";
 import CarouselButtonContainer from "./carousel-button-container/carousel-button-container";
-import StrokeIcon from "../../../common/stroke-icon/stroke-icon";
 import ContentLoader from "react-content-loader";
 import SwipeableViews from "react-swipeable-views";
 import { isMobileOnly } from "react-device-detect";
@@ -44,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
   const { monumentService } = useContext(AppContext);
   const styles = useStyles();
-  const theme = useTheme();
 
   const sortedPhotos = data.sort(sortMonumentPhotos);
 
@@ -79,6 +77,7 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
             onClick={() => onMonumentPhotoClicked(monumentPhoto)}
             src={monumentService.getPhotoLink(monumentPhoto.photoId, 500)}
             key={i}
+            alt={i}
           />
         ))}
       </SwipeableViews>

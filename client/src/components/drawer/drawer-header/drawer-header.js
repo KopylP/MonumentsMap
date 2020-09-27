@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import Fab from "@material-ui/core/Fab";
+import React from "react";
 import DrawerImage from "./drawer-image.jpg";
 import { makeStyles } from "@material-ui/core";
 import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";

@@ -1,7 +1,7 @@
 import React from "react";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from 'clsx';
-import { Paper, makeStyles, IconButton } from "@material-ui/core";
+import { makeStyles, IconButton } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

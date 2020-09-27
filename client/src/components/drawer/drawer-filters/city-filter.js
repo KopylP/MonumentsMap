@@ -29,16 +29,18 @@ export default function CityFilter() {
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
 
-  useEffect(() => {
+  const handleLanguageChange = () => {
     if (
       prevSelectedLanguage == null ||
       selectedLanguage.code !== prevSelectedLanguage.code
     ) {
       update();
     }
-  }, [selectedLanguage]);
+  }
 
-  useEffect(() => {
+  useEffect(handleLanguageChange, [selectedLanguage]);
+
+  const handleCitiesChange = () => {
     const newSelectedCities = selectedCities.map((selectedCity) => {
       const cityIndex = cities.findIndex((p) => p.id === selectedCity.id);
       if (cityIndex !== -1) {
@@ -47,7 +49,9 @@ export default function CityFilter() {
       return selectedCity;
     });
     setSelectedCities(newSelectedCities);
-  }, [cities]);
+  }
+
+  useEffect(handleCitiesChange, [cities]);
 
   const autoCompliteCitiesOptions = {
     options: cities,

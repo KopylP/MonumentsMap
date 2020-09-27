@@ -7,21 +7,16 @@ import Map from "../components/map/map";
 import {
   supportedCultures,
   serverHost,
-  defaultCity,
   defaultClientCulture,
-  yearsRange,
 } from "../config";
 import MonumentService from "../services/monument-service";
 import DetailDrawer from "../components/detail-drawer/detail-drawer";
 import GeocoderService from "../services/geocoder-service";
 import { usePrevious } from "../hooks/hooks";
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useRouteMatch,
-  useParams,
   useHistory,
 } from "react-router-dom";
 import FullWindowHeightContainer from "../components/common/full-window-height-container/full-window-height-container";
@@ -143,11 +138,13 @@ function MapPage({ store, i18n, t }) {
       });
   };
 
-  useEffect(() => {
+  const handleSelectedMonumentChange = () => {
     doIfNotZero(selectedMonument.id)(() =>
       history.push(`${match.path}monument/${selectedMonument.id}`)
     );
-  }, [selectedMonument]);
+  }
+
+  useEffect(handleSelectedMonumentChange, [selectedMonument]);
 
   const handleSelectLanguage = () => {
     i18n.changeLanguage(selectedLanguage.code.split('-')[0]);

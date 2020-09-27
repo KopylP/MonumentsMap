@@ -1,5 +1,5 @@
 import React from "react";
-import { Marker, divIcon } from "leaflet";
+import { divIcon } from "leaflet";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import ReactDOMServer from "react-dom/server";
 

@@ -1,5 +1,4 @@
 import axios from "axios";
-import LocalStorageService from "./local-storage-service";
 import {
   authRequestInterceptor,
   authErrorRequestInterceptor,
@@ -8,8 +7,6 @@ import {
 } from "./interceptors/auth-interceptors";
 
 const CancelToken = axios.CancelToken;
-
-const localStorageService = LocalStorageService.getService();
 
 export default class MonumentService {
   constructor(host, cultureCode = "uk-UA") {

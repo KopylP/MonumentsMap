@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import { supportedCultures } from "../../../config";
 import SimpleSubmitForm from "../common/simple-submit-form";
@@ -10,7 +10,6 @@ import {
   Select,
   MenuItem,
   FormHelperText,
-  Button,
 } from "@material-ui/core";
 import ParticipantRole from "../../../models/participant-role";
 import * as Yup from "yup";

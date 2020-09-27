@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import DrawerContainer from "../common/drawer-container/drawer-container";
 import DrawerHeader from "./drawer-header/drawer-header";
 import DrawerContent from "./drawer-content/drawer-content";
@@ -36,6 +36,7 @@ export default function MainDrawer(props) {
       className={classes.drawerClass}
       variant={isMobileOnly ? "temporary" : "persistent"}
       onClose={handleClose}
+      onOpen={p => p}
       anchor="left"
       classes={{
         paper: classes.drawerPaper,
