@@ -16,6 +16,7 @@
         "City": "Місто",
         "Monument status": "Статус пам'ятки",
         "Monument condition": "Стан пам'ятки",
-        "Search by name": "Пошук за назвою"
+        "Search by name": "Пошук за назвою",
+        "No monuments were found by such criteria": "За такими критеріями не знайдено жодної пам'ятки"
     }
 }

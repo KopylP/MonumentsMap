@@ -16,6 +16,7 @@
         "City": "Город",
         "Monument status": "Статус памятника",
         "Monument condition": "Состояние памятника",
-        "Search by name": "Поиск по имени"
+        "Search by name": "Поиск по имени",
+        "No monuments were found by such criteria": "По таким критериям не найдено ни одного памятника"
     }
 }

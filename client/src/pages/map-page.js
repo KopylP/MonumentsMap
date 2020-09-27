@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MapPage({ store, i18n }) {
+function MapPage({ store, i18n, t }) {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {
@@ -132,7 +132,7 @@ function MapPage({ store, i18n }) {
         setMonuments(monuments);
         closeMonumentsLoading();
         if(monuments.length === 0) {
-          showSnackbar("За такими критеріями не знайдено жодної пам'ятки");
+          showSnackbar(t("No monuments were found by such criteria"));
         } else {
           closeSnackbar();
         }

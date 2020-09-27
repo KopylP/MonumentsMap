@@ -16,6 +16,7 @@
         "City": "Miasto",
         "Monument status": "Status zabytku",
         "Monument condition": "Stan zabytku",
-        "Search by name": "Szukaj według nazwy"
+        "Search by name": "Szukaj według nazwy",
+        "No monuments were found by such criteria": "Według takich kryteriów nie znaleziono żadnych zabytków"
     }
 }
