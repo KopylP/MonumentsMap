@@ -1,5 +1,5 @@
 import { AppBar, IconButton, Toolbar, Typography, makeStyles } from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import CloseIcon from '@material-ui/icons/Close';
 import React from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +20,7 @@ export default function PhotoListAppBar({ name, onBackButtonClick = p => p }) {
           color="inherit"
           onClick={onBackButtonClick}
         >
-          <ArrowBackIcon style={{ color: "white" }} />
+          <CloseIcon style={{ color: "white" }} />
         </IconButton>
         <Typography variant="subtitle1" className={classes.monumentName}>
           {name}

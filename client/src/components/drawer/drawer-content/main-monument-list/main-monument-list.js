@@ -7,16 +7,10 @@ import ScrollBar from "../../../common/scroll-bar/scroll-bar";
 import AppContext from "../../../../context/app-context";
 
 function MainMonumentList({ data }) {
-  const { setCenter, setSelectedMonument } = useContext(AppContext);
+  const { handleMonumentSelected } = useContext(AppContext);
 
   const onMonumentItemClick = (monument) => {
-    setCenter({
-      lat: monument.latitude,
-      lng: monument.longitude,
-    });
-    setTimeout(() => {
-      setSelectedMonument({ ...monument, showPopup: true });
-    }, 150); //Wait, until map animation ends
+    handleMonumentSelected(monument);
   };
 
   const renderRow = ({ index, key, style }) => {

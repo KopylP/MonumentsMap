@@ -9,9 +9,14 @@ export default function markerIcon(color) {
     popupAnchor: [1, -19],
     className: "custom-icon",
     html: ReactDOMServer.renderToString(
-        <LocationOnIcon style={{
-          color: color,
-        }} fontSize="large" />
+      <React.Fragment>
+        <LocationOnIcon
+          style={{
+            color: color,
+          }}
+          fontSize="large"
+        />
+      </React.Fragment>
     ),
   });
 }

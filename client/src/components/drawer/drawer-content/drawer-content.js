@@ -11,6 +11,7 @@ import CityFilter from "../drawer-filters/city-filter";
 import YearFilter from "../drawer-filters/year-filter/year-filter";
 // import MonumentIcons from "../monument-icons/monument-icons";
 import { isMobileOnly } from "react-device-detect";
+import MobileMonumentContainer from "./mobile-monuments-list/mobile-monument-container";
 
 const useStyles = makeStyles({
   root: {
@@ -47,6 +48,7 @@ export default function DrawerContent(props) {
         <CityFilter />
         <StatusFilter />
         <ConditionFilter />
+        { isMobileOnly && <MobileMonumentContainer monuments={monuments}/> }
       </Grid>
       {!isMobileOnly && <SearchableMainMonumentList monuments={monuments} />}
     </div>

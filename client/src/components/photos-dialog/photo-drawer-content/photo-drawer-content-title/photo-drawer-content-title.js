@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { AppBar, Toolbar, IconButton, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import CloseIcon from '@material-ui/icons/Close';
 import AppContext from "../../../../context/app-context";
 import SimpleDetailYear from "../../../detail-drawer/detail-year/simple-detail-year";
 
@@ -37,7 +37,7 @@ export default function PhotoDrawerContentTitle({
           color="inherit"
           onClick={onBack}
         >
-          <ArrowBackIcon style={{ color: "white" }} />
+          <CloseIcon style={{ color: "white" }} />
         </IconButton>
         <div style={{width: "85%"}}>
           <Typography variant="subtitle2" className={classes.monumentsName}>

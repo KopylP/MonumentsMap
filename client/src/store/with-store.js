@@ -16,6 +16,18 @@ export default function withStore(Wrapper) {
     const [monuments, setMonuments] = useState([]);
     const [center, setCenter] = useState(defaultCity);
     const [loadingMonuments, setLoadingMonuments] = useState(false);
+
+    //functions
+    const handleMonumentSelected = (monument) => {
+      setCenter({
+        lat: monument.latitude,
+        lng: monument.longitude,
+      });
+      setTimeout(() => {
+        setSelectedMonument({ ...monument, showPopup: true });
+      }, 150); //Wait, until map animation ends
+    };
+  
     return (
       <Wrapper
         store={{
@@ -41,6 +53,7 @@ export default function withStore(Wrapper) {
           loadingMonuments,
           setLoadingMonuments,
           setMonuments,
+          handleMonumentSelected
         }}
         {...props}
       />
