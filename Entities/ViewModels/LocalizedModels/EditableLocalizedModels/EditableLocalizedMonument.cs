@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MonumentsMap.Entities.Enumerations;
 using MonumentsMap.Entities.Models;
+using MonumentsMap.Extensions;
 
 namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels
 {
@@ -49,6 +51,7 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
                     UpdatedAt = DateTime.Now
                 };
             }
+
             monument.Year = Year;
             monument.Period = Period;
             monument.CityId = CityId;

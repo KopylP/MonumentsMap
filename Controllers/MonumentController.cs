@@ -74,6 +74,7 @@ namespace MonumentsMap.Controllers
             }
             return Ok(monument);
         }
+
         #endregion
 
         #region metods
@@ -175,6 +176,25 @@ namespace MonumentsMap.Controllers
                 return NotFound(new NotFoundError(ex.Message));
             }
             return Ok(participants.Adapt<ParticipantViewModel[]>());
+        }
+
+        [HttpGet("{slug}")]
+        public async Task<IActionResult> GetBySlug(string slug, string cultureCode)
+        {
+            LocalizedMonument monument = null;
+            try
+            {
+                monument = await _monumentService.GetMonumentBySlug(slug, cultureCode);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            if (!monument.Accepted && !User.Identity.IsAuthenticated)
+            {
+                return Unauthorized(new UnauthorizedError());
+            }
+            return Ok(monument);
         }
         #endregion
     }

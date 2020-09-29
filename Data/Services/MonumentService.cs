@@ -17,14 +17,18 @@ namespace MonumentsMap.Data.Services
         #region  private fields
         private readonly IMonumentRepository _monumentRepository;
         private readonly IParticipantMonumentRepository _participantMonumentRepository;
+        private readonly IMonumentLocalizedRepository _monumentLocalizedRepository;
         #endregion
 
         #region constructor
-        public MonumentService(IMonumentRepository repo, IParticipantMonumentRepository participantMonumentRepository)
+        public MonumentService(
+            IMonumentRepository repo,
+            IParticipantMonumentRepository participantMonumentRepository,
+            IMonumentLocalizedRepository monumentLocalizedRepository)
         {
             _monumentRepository = repo;
             _participantMonumentRepository = participantMonumentRepository;
-
+            _monumentLocalizedRepository = monumentLocalizedRepository;
         }
         #endregion
 
@@ -140,6 +144,17 @@ namespace MonumentsMap.Data.Services
                 Name = p.Name.Localizations.Where(p => p.CultureCode == cultureCode).FirstOrDefault()?.Value
             })
             .ToList();
+        }
+
+        public async Task<LocalizedMonument> GetMonumentBySlug(string slug, string cultureCode)
+        {
+            
+            LocalizedMonument monument = await _monumentLocalizedRepository.GetEntityBySlugAsync(slug, cultureCode);
+            if(monument == null)
+            {
+                throw new NotFoundException("Monument by slug not found");
+            }
+            return monument;
         }
         #endregion
     }

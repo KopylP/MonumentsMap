@@ -7,7 +7,7 @@ import {
 import MapPage from "./pages/map-page";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
-// import AdminRoutingPage from "./admin/pages/admin-routing-page";
+import AdminRoutingPage from "./admin/pages/admin-routing-page";
 
 const theme = createMuiTheme({
   palette: {
@@ -27,13 +27,13 @@ function App(props) {
   return (
     <Router>
       <Switch>
-      {/* <Route path="/admin">
+      <Route path="/admin">
           <SnackbarProvider maxSnack={5}>
             <MuiThemeProvider theme={theme}>
               <AdminRoutingPage />
             </MuiThemeProvider>
           </SnackbarProvider>
-        </Route> */}
+        </Route>
         <Route path="/">
           <SnackbarProvider maxSnack={5}>
             <MuiThemeProvider theme={theme}>

@@ -22,6 +22,7 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels
         public double Longitude { get; set; }
         public int? MajorPhotoImageId { get; set; }
         public string ProtectionNumber { get; set; }
+        public string Slug { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public List<SourceViewModel> Sources { get; set; }

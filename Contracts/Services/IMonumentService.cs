@@ -12,5 +12,6 @@ namespace MonumentsMap.Contracts.Services
         Task<Monument> EditMonumentParticipantsAsync(MonumentParticipantsViewModel monumentParticipantsViewModel);
         Task<IEnumerable<Participant>> GetRawParticipantsAsync(int monumentId);
         Task<IEnumerable<LocalizedParticipant>> GetLocalizedParticipants(int monumentId, string cultureCode);
+        Task<LocalizedMonument> GetMonumentBySlug(string slug, string cultureCode);
     }
 }

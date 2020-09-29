@@ -7,7 +7,9 @@ namespace MonumentsMap.Contracts.Repository
 {
     public interface IMonumentLocalizedRepository 
         : ILocalizedRepository<LocalizedMonument, EditableLocalizedMonument, Monument>,
-        IFilterRepository<LocalizedMonument, MonumentFilterParameters>
+        IFilterRepository<LocalizedMonument, MonumentFilterParameters>,
+        ILocalizedSlugRepository<LocalizedMonument>,
+        ISlugRepository<Monument>
     {
         
     }

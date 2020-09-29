@@ -7,7 +7,7 @@ import { isMobile } from "react-device-detect";
 const useStyles = makeStyles((theme) => ({
   backButtonContainer: {
     width: "100%",
-    height: 150,
+    height: 100,
     backgroundImage: `url(${DrawerImage})`,
     backgroundSize: "cover",
     position: "relative",

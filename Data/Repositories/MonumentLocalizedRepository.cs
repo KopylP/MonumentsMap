@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MonumentsMap.Contracts.Repository;
 using MonumentsMap.Entities.Enumerations;
 using MonumentsMap.Entities.FilterParameters;
@@ -22,16 +23,19 @@ namespace MonumentsMap.Data.Repositories
         private readonly IStatusLocalizedRepository statusLocalizedRepository;
         private readonly ICityLocalizedRepository cityLocalizedRepository;
         private readonly IConditionLocalizedRepository conditionLocalizedRepository;
+        private readonly string slugLanguage;
         public MonumentLocalizedRepository(
             ApplicationContext context,
             ICityLocalizedRepository cityLocalizedRepository,
             IConditionLocalizedRepository conditionLocalizedRepository,
-            IStatusLocalizedRepository statusLocalizedRepository
+            IStatusLocalizedRepository statusLocalizedRepository,
+            IConfiguration configuration
         ) : base(context)
         {
             this.statusLocalizedRepository = statusLocalizedRepository;
             this.conditionLocalizedRepository = conditionLocalizedRepository;
             this.cityLocalizedRepository = cityLocalizedRepository;
+            this.slugLanguage = configuration["SlugLanguage"];
         }
 
         protected override EditableLocalizedMonument GetEditableLocalizedEntity(Monument entity) => new EditableLocalizedMonument
@@ -57,6 +61,26 @@ namespace MonumentsMap.Data.Repositories
             Description = entity.Description.GetCultureValuePairs()
         };
 
+        private void ChangeSlugOfMonument(Monument entity)
+        {
+            var slugName = entity.Name
+                .Localizations
+                .Where(p => p.CultureCode == slugLanguage)
+                .FirstOrDefault()
+                .Value
+                .Slugify();
+
+            var monument = GetEntityBySlugAsync(slugName).Result;
+            if (monument != null && monument.Id != entity.Id)
+            {
+                slugName += $"-{entity.Id}";
+            }
+            entity.Slug = slugName;
+        }
+
+        protected override void BeforeModelCreate(Monument entity) => ChangeSlugOfMonument(entity);
+
+        protected override void BeforeModelUpdate(Monument entity) => ChangeSlugOfMonument(entity);
 
         protected override Func<Monument, LocalizedMonument> GetSelectHandler(string cultureCode)
         {
@@ -88,6 +112,7 @@ namespace MonumentsMap.Data.Repositories
                     Description = localizationDescription,
                     DestroyYear = p.DestroyYear,
                     DestroyPeriod = p.DestroyPeriod,
+                    Slug = p.Slug,
                     CityId = p.CityId,
                     StatusId = p.StatusId,
                     ConditionId = p.ConditionId,
@@ -178,21 +203,42 @@ namespace MonumentsMap.Data.Repositories
                     select monument;
             }
             monuments = (await IncludeMinimizeNecessaryProps(monuments).ToListAsync()).AsQueryable();
-            if(parameters.StartYear != null)
+            if (parameters.StartYear != null)
             {
-                monuments = 
+                monuments =
                     from monument in monuments
                     where IfRangeInStartYear(parameters.StartYear.GetValueOrDefault(), RangeByPeriod(monument.Year, monument.Period))
                     select monument;
             }
-            if(parameters.EndYear != null)
+            if (parameters.EndYear != null)
             {
-                monuments = 
+                monuments =
                     from monument in monuments
                     where IfRangeInEndYear(parameters.EndYear.GetValueOrDefault(), RangeByPeriod(monument.Year, monument.Period))
                     select monument;
             }
             return monuments.Select(GetSelectHandler(parameters.CultureCode));
+        }
+
+        public async Task<LocalizedMonument> GetEntityBySlugAsync(string slug, string cultureCode)
+        {
+            var minimizeResultBefore = MinimizeResult;
+            MinimizeResult = false;
+
+            var monument = await Task.Run(() => 
+                IncludeNecessaryProps(context.Monuments)
+                .Where(p => p.Slug == slug)
+                .Select(GetSelectHandler(cultureCode))
+                .FirstOrDefault());
+
+            MinimizeResult = minimizeResultBefore;
+            
+            return monument;
+        }
+
+        public async Task<Monument> GetEntityBySlugAsync(string slug)
+        {
+            return await context.Monuments.Where(p => p.Slug == slug).FirstOrDefaultAsync();
         }
     }
 }

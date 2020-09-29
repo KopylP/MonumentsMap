@@ -140,7 +140,7 @@ function MapPage({ store, i18n, t }) {
 
   const handleSelectedMonumentChange = () => {
     doIfNotZero(selectedMonument.id)(() =>
-      history.push(`${match.path}monument/${selectedMonument.id}`)
+      history.push(`${match.path}monument/${selectedMonument.slug}`)
     );
   }
 

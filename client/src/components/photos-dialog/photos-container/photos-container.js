@@ -124,13 +124,13 @@ export default function PhotosContainer({
   useMutationObserver(containerRef, onSizeChange);
   /* end (1) */
 
-  const container =
-    window !== undefined ? () => window.document.body : undefined;
+  // const container =
+  //   window !== undefined ? () => window.document.body : undefined;
   return (
     <div className={classes.container}>
       <Drawer
         className={classes.drawer}
-        container={container}
+        // container={container}
         variant="persistent"
         anchor="left"
         open={open}

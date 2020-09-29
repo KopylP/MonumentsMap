@@ -20,6 +20,7 @@ namespace MonumentsMap.Data.Repositories
     {
         protected readonly TContext context;
         protected bool MinimizeResult { get; set; } = false;
+        protected virtual Func<LocalizationSet> SlugProperty => null;
         public LocalizedRepository(TContext context)
         {
             this.context = context;
@@ -29,6 +30,7 @@ namespace MonumentsMap.Data.Repositories
         {
             MinimizeResult = false;
             var entity = editableLocalizedEntity.CreateEntity();
+            BeforeModelCreate(entity);
             context.Set<TEntity>().Add(entity);
             try
             {
@@ -109,6 +111,7 @@ namespace MonumentsMap.Data.Repositories
                 throw new NotFoundException();
             }
             var entity = editableLocalizedEntity.CreateEntity(editEntity);
+            BeforeModelUpdate(entity);
             context.Set<TEntity>().Update(entity);
             try
             {
@@ -141,11 +144,15 @@ namespace MonumentsMap.Data.Repositories
             return entity;
         }
 
-        //Convert model to localized model
+        // Convert model to localized model
         protected abstract Func<TEntity, TLocalizedEntity> GetSelectHandler(string cultureCode);
-        //Including required property models that are associated with the main model
+        // Including required property models that are associated with the main model
         protected abstract IQueryable<TEntity> IncludeNecessaryProps(IQueryable<TEntity> source);
-        //Get editable entity model from entity
+        // Get editable entity model from entity
         protected abstract TEditableLocalizedEntity GetEditableLocalizedEntity(TEntity entity);
+        // Execute before model update
+        protected virtual void BeforeModelUpdate(TEntity entity) {}
+        // Execute before model create
+        protected virtual void BeforeModelCreate(TEntity entity) {}
     }
 }
