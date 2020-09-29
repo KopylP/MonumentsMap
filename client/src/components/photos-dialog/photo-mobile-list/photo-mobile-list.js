@@ -1,24 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Dialog,
-  Toolbar,
-  Typography,
-  AppBar,
-  GridList,
-  GridListTile,
-  IconButton,
-  makeStyles,
-} from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Dialog, GridList, GridListTile, makeStyles } from "@material-ui/core";
 import AppContext from "../../../context/app-context";
 import PhotoLightbox from "../photo-lightbox/photo-lightbox";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import sortMonumentPhotos from "../../helpers/sort-monument-photos";
+import PhotoListAppBar from "./photo-list-app-bar/photo-list-app-bar";
 
 const useStyles = makeStyles((theme) => ({
-  backButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
     color: "white",
@@ -32,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
   },
   photoMobileListContainer: {
     boxSizing: "border-box",
-    overflow: "hidden"
-  }
+    overflow: "hidden",
+  },
 }));
 
 export default function PhotoMobileList({ open, setOpen, monumentPhotoId }) {
@@ -52,7 +40,9 @@ export default function PhotoMobileList({ open, setOpen, monumentPhotoId }) {
   useEffect(() => {
     if (open && monumentPhotoId != null) {
       makeCancelable(getMonumentPhotos(monumentPhotoId))
-        .then((monumentPhotos) => setMonumentPhotos(monumentPhotos.sort(sortMonumentPhotos)))
+        .then((monumentPhotos) =>
+          setMonumentPhotos(monumentPhotos.sort(sortMonumentPhotos))
+        )
         .catch(); //TODO handle error
     }
   }, [open]);
@@ -74,35 +64,18 @@ export default function PhotoMobileList({ open, setOpen, monumentPhotoId }) {
       onClose={handleClose}
       className={classes.photoMobileListContainer}
     >
-      <AppBar position="static" color="secondary">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.backButton}
-            color="inherit"
-            onClick={() => setOpen(false)}
-          >
-            <ArrowBackIcon style={{ color: "white" }} />
-          </IconButton>
-          <Typography variant="subtitle1" className={classes.monumentName}>
-            {name}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <GridList
-        cellHeight={160}
-        cols={2}
-      >
-        {monumentPhotos.map((monumentPhoto, i) => (
-          <GridListTile key={monumentPhoto.id} cols={1}>
-            <img
-              src={getPhotoLink(monumentPhoto.photoId, 400)}
-              alt={monumentPhoto.id}
-              onClick={() => handleImageClick(i)}
-            />
-          </GridListTile>
-        ))}
-      </GridList>
+      <PhotoListAppBar name={name} onBackButtonClick={() => setOpen(false)} />
+        <GridList cellHeight={160} cols={2} style={{ margin: 0, transform: "translate(0px, -2px)" }}>
+          {monumentPhotos.map((monumentPhoto, i) => (
+            <GridListTile key={monumentPhoto.id} cols={1}>
+              <img
+                src={getPhotoLink(monumentPhoto.photoId, 400)}
+                alt={monumentPhoto.id}
+                onClick={() => handleImageClick(i)}
+              />
+            </GridListTile>
+          ))}
+        </GridList>
       {monumentPhotos.length > 0 && (
         <PhotoLightbox
           open={openLightbox}
