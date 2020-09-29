@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Map as LeafMap, TileLayer } from "react-leaflet";
 import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
@@ -21,27 +21,34 @@ function Map({ onMonumentSelected = (p) => p }) {
   const [viewPortChange, setViewPortChange] = useState(false);
   const prevCenter = usePrevious(center);
   const [mapZoom, setMapZoom] = useState(loadMapZoom);
+  
+  const canClickMarker = useRef(true);
 
   const closePopups = () => {
     mapRef.current.leafletElement.closePopup();
   };
 
   const changeMapZoomToDefault = () => {
-    if(mapZoom === loadMapZoom) {
+    if (mapZoom === loadMapZoom) {
       setMapZoom(defaultZoom);
     }
-  }
+  };
 
   const handleMonumentMarkerClick = (monument) => {
-    onMonumentSelected(monument);
-  }
+    console.log(canClickMarker.current);
+    if (canClickMarker.current) {
+      onMonumentSelected(monument);
+    } else {
+      closePopups();
+    }
+  };
 
-  const changeCenter = ({lat, lng}) => {
+  const changeCenter = ({ lat, lng }) => {
     setCenter({
       lat: lat + 0.0000001, //Костыль
       lng: lng + 0.0000001, //Костыль
     });
-  }
+  };
 
   const getVisibleMonumentMarkers = () => {
     return monuments
@@ -105,32 +112,45 @@ function Map({ onMonumentSelected = (p) => p }) {
     }
   };
 
+  const handleMoveStart = () => {
+    if (canClickMarker.current) {
+      canClickMarker.current = false;
+      console.log("start");
+    }
+  };
+
+  const handleMoveEnd = () => {
+    updateMarkers();
+    canClickMarker.current = true;    
+  };
+
   return (
-      <LeafMap
-        center={center}
-        animate
-        duration={0.1}
-        onViewportChange={onViewPortChange}
-        onmoveend={updateMarkers}
-        preferCanvas
-        onpopupclose={() => {
-          setMapSelectedMonumentId(null);
-        }}
-        zoom={mapZoom}
-        style={{
-          width: "100%",
-          height: "100%"
-        }}
-        ref={mapRef}
-      >
-        <TileLayer
-          attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
-          url={`https://tile.jawg.io/13da1c9b-4dd5-4a96-84a0-d0464fc95920/{z}/{x}/{y}.png?access-token=${accessToken}`}
-        />
-        <MapContext.Provider value={{ mapSelectedMonumentId }}>
-          {markers}
-        </MapContext.Provider>
-      </LeafMap>
+    <LeafMap
+      center={center}
+      animate
+      duration={0.1}
+      onViewportChange={onViewPortChange}
+      onmovestart={handleMoveStart}
+      onmoveend={handleMoveEnd}
+      preferCanvas
+      onpopupclose={() => {
+        setMapSelectedMonumentId(null);
+      }}
+      zoom={mapZoom}
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
+      ref={mapRef}
+    >
+      <TileLayer
+        attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
+        url={`https://tile.jawg.io/13da1c9b-4dd5-4a96-84a0-d0464fc95920/{z}/{x}/{y}.png?access-token=${accessToken}`}
+      />
+      <MapContext.Provider value={{ mapSelectedMonumentId }}>
+        {markers}
+      </MapContext.Provider>
+    </LeafMap>
   );
 }
 

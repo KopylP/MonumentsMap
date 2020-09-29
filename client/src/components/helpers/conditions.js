@@ -14,11 +14,11 @@ export function doIfNotZero(value) {
   };
 }
 
-export function doIfArraysNotEqual(firstArray, secondArray) {
+export function doIfArraysNotEqual(firstArray, secondArray, selector = (p) => p) {
   return (action) => {
     if (
       typeof firstArray !== "undefined" &&
-      !arraysEqual(firstArray, secondArray)
+      !arraysEqual(firstArray, secondArray, selector)
     )
       action();
   };

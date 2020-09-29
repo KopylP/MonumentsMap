@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import MapPage from "./pages/map-page";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
@@ -27,7 +23,7 @@ function App(props) {
   return (
     <Router>
       <Switch>
-      <Route path="/admin">
+        <Route path="/admin">
           <SnackbarProvider maxSnack={5}>
             <MuiThemeProvider theme={theme}>
               <AdminRoutingPage />

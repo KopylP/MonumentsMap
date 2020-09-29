@@ -154,7 +154,7 @@ function MapPage({ store, i18n, t }) {
   useEffect(() => {
     doIfArraysNotEqual(prevSelectedConditions, selectedConditions)(update);
     doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
-    doIfArraysNotEqual(prevSelectedCities, selectedCities)(update);
+    doIfArraysNotEqual(prevSelectedCities, selectedCities, p => p.id)(update);
     doIfNotTheSame(
       selectedLanguage,
       prevSelectedLanguage,
