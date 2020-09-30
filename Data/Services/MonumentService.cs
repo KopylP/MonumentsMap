@@ -148,9 +148,20 @@ namespace MonumentsMap.Data.Services
 
         public async Task<LocalizedMonument> GetMonumentBySlug(string slug, string cultureCode)
         {
-            
+
             LocalizedMonument monument = await _monumentLocalizedRepository.GetEntityBySlugAsync(slug, cultureCode);
-            if(monument == null)
+            if (monument == null)
+            {
+                throw new NotFoundException("Monument by slug not found");
+            }
+            return monument;
+        }
+
+        public async Task<Monument> GetMonumentBySlug(string slug)
+        {
+
+            var monument = await _monumentLocalizedRepository.GetEntityBySlugAsync(slug);
+            if (monument == null)
             {
                 throw new NotFoundException("Monument by slug not found");
             }

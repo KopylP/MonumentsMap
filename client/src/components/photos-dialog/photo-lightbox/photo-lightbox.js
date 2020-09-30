@@ -84,6 +84,7 @@ const MonumentPhotoLightbox = memo(function ({
         fullscreenEl: false,
         loop: false,
         pinchToClose: false,
+        history: false
         // preload: [0, 0]
       }}
     />

@@ -13,5 +13,6 @@ namespace MonumentsMap.Contracts.Services
         Task<IEnumerable<Participant>> GetRawParticipantsAsync(int monumentId);
         Task<IEnumerable<LocalizedParticipant>> GetLocalizedParticipants(int monumentId, string cultureCode);
         Task<LocalizedMonument> GetMonumentBySlug(string slug, string cultureCode);
+        Task<Monument> GetMonumentBySlug(string slug);
     }
 }

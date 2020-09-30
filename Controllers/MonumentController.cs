@@ -162,6 +162,23 @@ namespace MonumentsMap.Controllers
             return Ok(monumentPhotos);
         }
 
+        [HttpGet("{slug}/monumentPhotos")]
+        [ServiceFilter(typeof(CultureCodeResourceFilter))]
+        public async Task<IActionResult> MonumentPhotosBySlug([FromRoute] string slug, [FromQuery] string cultureCode)
+        {
+            Monument monument = null;
+            try
+            {
+                monument = await _monumentService.GetMonumentBySlug(slug);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new NotFoundError(ex.Message));
+            }
+            var monumentPhotos = await _monumentPhotoLocalizedRepository.Find(cultureCode, p => p.MonumentId == monument.Id);
+            return Ok(monumentPhotos);
+        }
+
         [Authorize(Roles = "Editor")]
         [HttpGet("{id:int}/participants/raw")]
         public async Task<IActionResult> GetRawMonumentParticipants(int id)
