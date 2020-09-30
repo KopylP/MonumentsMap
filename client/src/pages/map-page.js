@@ -4,22 +4,12 @@ import MainDrawer from "../components/drawer/main-drawer";
 import AppContext from "../context/app-context";
 import MenuButton from "../components/common/menu-button/menu-button";
 import Map from "../components/map/map";
-import {
-  supportedCultures,
-  serverHost,
-  defaultClientCulture,
-} from "../config";
+import { supportedCultures, serverHost, defaultClientCulture } from "../config";
 import MonumentService from "../services/monument-service";
 import DetailDrawer from "../components/detail-drawer/detail-drawer";
 import GeocoderService from "../services/geocoder-service";
 import { usePrevious } from "../hooks/hooks";
-import {
-  Switch,
-  Route,
-  useRouteMatch,
-  useHistory,
-} from "react-router-dom";
-import FullWindowHeightContainer from "../components/common/full-window-height-container/full-window-height-container";
+import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import {
   doIfNotTheSame,
@@ -48,14 +38,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1,
   },
   mapContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    overflow: "hidden",
-    height: "100vh",
-    width: "100vw",
+    flexGrow: 1,
   },
 }));
 
@@ -63,11 +46,11 @@ function MapPage({ store, i18n, t }) {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {
-    selectedLanguage, 
+    selectedLanguage,
     setSelectedLanguage,
-    selectedConditions, 
-    selectedCities, 
-    selectedStatuses, 
+    selectedConditions,
+    selectedCities,
+    selectedStatuses,
     selectedYearRange,
     selectedMonument,
     setMainDrawerOpen,
@@ -93,7 +76,7 @@ function MapPage({ store, i18n, t }) {
     setTimeout(() => {
       setLoadingMonuments(false);
     }, 300);
-  }
+  };
 
   function executor(e) {
     setCancelRequest({
@@ -102,8 +85,11 @@ function MapPage({ store, i18n, t }) {
   }
 
   const showSnackbar = (message) => {
-    enqueueSnackbar(message, { variant: "info", anchorOrigin: { horizontal: "center", vertical: "bottom" } });
-  }
+    enqueueSnackbar(message, {
+      variant: "info",
+      anchorOrigin: { horizontal: "center", vertical: "bottom" },
+    });
+  };
 
   const update = () => {
     if (cancelRequest) {
@@ -126,7 +112,7 @@ function MapPage({ store, i18n, t }) {
       .then((monuments) => {
         setMonuments(monuments);
         closeMonumentsLoading();
-        if(monuments.length === 0) {
+        if (monuments.length === 0) {
           showSnackbar(t("No monuments were found by such criteria"));
         } else {
           closeSnackbar();
@@ -142,19 +128,19 @@ function MapPage({ store, i18n, t }) {
     doIfNotZero(selectedMonument.id)(() =>
       history.push(`${match.path}monument/${selectedMonument.slug}`)
     );
-  }
+  };
 
   useEffect(handleSelectedMonumentChange, [selectedMonument]);
 
   const handleSelectLanguage = () => {
-    i18n.changeLanguage(selectedLanguage.code.split('-')[0]);
+    i18n.changeLanguage(selectedLanguage.code.split("-")[0]);
     update();
-  }
+  };
 
   useEffect(() => {
     doIfArraysNotEqual(prevSelectedConditions, selectedConditions)(update);
     doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
-    doIfArraysNotEqual(prevSelectedCities, selectedCities, p => p.id)(update);
+    doIfArraysNotEqual(prevSelectedCities, selectedCities, (p) => p.id)(update);
     doIfNotTheSame(
       selectedLanguage,
       prevSelectedLanguage,
@@ -192,17 +178,15 @@ function MapPage({ store, i18n, t }) {
   return (
     <AppContext.Provider value={contextValues}>
       <div className={classes.app}>
-        <FullWindowHeightContainer style={{ width: "100%" }}>
-          <div className={classes.mapContainer}>
-            <Map
-              onMonumentSelected={(monumentId) =>
-                setSelectedMonument({
-                  ...monuments.find((p) => p.id === monumentId),
-                })
-              }
-            />
-          </div>
-        </FullWindowHeightContainer>
+        <div className={classes.mapContainer}>
+          <Map
+            onMonumentSelected={(monumentId) =>
+              setSelectedMonument({
+                ...monuments.find((p) => p.id === monumentId),
+              })
+            }
+          />
+        </div>
         <MenuButton
           className={classes.menuButton}
           onClick={() => setMainDrawerOpen(true)}
@@ -218,4 +202,4 @@ function MapPage({ store, i18n, t }) {
   );
 }
 
-export default  withTranslation()(withStore(MapPage)); 
+export default withTranslation()(withStore(MapPage));
