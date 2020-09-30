@@ -21,7 +21,7 @@ function Map({ onMonumentSelected = (p) => p }) {
   const [viewPortChange, setViewPortChange] = useState(false);
   const prevCenter = usePrevious(center);
   const [mapZoom, setMapZoom] = useState(loadMapZoom);
-  
+
   const canClickMarker = useRef(true);
 
   const closePopups = () => {
@@ -121,7 +121,7 @@ function Map({ onMonumentSelected = (p) => p }) {
 
   const handleMoveEnd = () => {
     updateMarkers();
-    canClickMarker.current = true;    
+    canClickMarker.current = true;
   };
 
   return (
@@ -138,8 +138,7 @@ function Map({ onMonumentSelected = (p) => p }) {
       }}
       zoom={mapZoom}
       style={{
-        width: "100%",
-        height: "100%",
+        flexGrow: 1,
       }}
       ref={mapRef}
     >

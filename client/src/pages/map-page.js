@@ -178,26 +178,24 @@ function MapPage({ store, i18n, t }) {
   return (
     <AppContext.Provider value={contextValues}>
       <div className={classes.app}>
-        <div className={classes.mapContainer}>
-          <Map
-            onMonumentSelected={(monumentId) =>
-              setSelectedMonument({
-                ...monuments.find((p) => p.id === monumentId),
-              })
-            }
-          />
-        </div>
+        <Map
+          onMonumentSelected={(monumentId) =>
+            setSelectedMonument({
+              ...monuments.find((p) => p.id === monumentId),
+            })
+          }
+        />
         <MenuButton
           className={classes.menuButton}
           onClick={() => setMainDrawerOpen(true)}
         />
+        <MainDrawer />
+        <Switch>
+          <Route path={`${match.path}monument/:monumentId`}>
+            <DetailDrawer />
+          </Route>
+        </Switch>
       </div>
-      <MainDrawer />
-      <Switch>
-        <Route path={`${match.path}monument/:monumentId`}>
-          <DetailDrawer />
-        </Route>
-      </Switch>
     </AppContext.Provider>
   );
 }
