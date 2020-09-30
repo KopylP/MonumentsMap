@@ -6,6 +6,21 @@ import { defaultZoom, accessToken, loadMapZoom } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
+import { makeStyles } from "@material-ui/core";
+import { isMobileOnly } from "react-device-detect";
+
+const useStyles = makeStyles({
+  mobileOnlyMapStyles: {
+    flexGrow: 1,
+  },
+  mapStyles: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+});
 
 function Map({ onMonumentSelected = (p) => p }) {
   const {
@@ -21,6 +36,7 @@ function Map({ onMonumentSelected = (p) => p }) {
   const [viewPortChange, setViewPortChange] = useState(false);
   const prevCenter = usePrevious(center);
   const [mapZoom, setMapZoom] = useState(loadMapZoom);
+  const classes = useStyles();
 
   const canClickMarker = useRef(true);
 
@@ -35,7 +51,6 @@ function Map({ onMonumentSelected = (p) => p }) {
   };
 
   const handleMonumentMarkerClick = (monument) => {
-    console.log(canClickMarker.current);
     if (canClickMarker.current) {
       onMonumentSelected(monument);
     } else {
@@ -137,9 +152,7 @@ function Map({ onMonumentSelected = (p) => p }) {
         setMapSelectedMonumentId(null);
       }}
       zoom={mapZoom}
-      style={{
-        flexGrow: 1,
-      }}
+      className={isMobileOnly ? classes.mobileOnlyMapStyles : classes.mapStyles}
       ref={mapRef}
     >
       <TileLayer
