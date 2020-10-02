@@ -47,7 +47,7 @@ export default function MobileMonumentList({ monuments }) {
                 rowRenderer={renderRow}
                 rowCount={monuments.length}
                 overscanRowCount={3}
-                style={{ outline: "none", justifyContent: "center", padding: 15, }}
+                style={{ outline: "none", justifyContent: "center", padding: 15, overflowY: "scroll" }}
               />
             </ScrollBar>
           );

@@ -4,6 +4,7 @@ import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import DetailYear from "../detail-year/detail-year";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
 import ContentLoader from "react-content-loader";
+import DetailCopyIcon from "./detail-copy-icon";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,6 +37,7 @@ function DetailTitle({ data, ...props }) {
         <h4 className={styles.h4}>{data.name}</h4>
         <DetailYear year={data && data.year} period={data && data.period} />
       </div>
+      <DetailCopyIcon />
     </div>
   );
 }

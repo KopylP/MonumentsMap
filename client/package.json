@@ -30,6 +30,7 @@
     "notistack": "^0.9.17",
     "react": "^16.13.1",
     "react-content-loader": "^5.1.0",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-custom-scrollbars": "^4.2.1",
     "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
