@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import LinkIcon from '@material-ui/icons/Link';
+import ShareIcon from '@material-ui/icons/Share';
 import { IconButton, makeStyles } from "@material-ui/core";
 import { useRouteMatch } from "react-router-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -29,7 +29,7 @@ export default function DetailCopyIcon() {
       onCopy={() => enqueueSnackbar(t("Link copied"), { variant: "success", autoHideDuration: 1000 })}
     >
       <IconButton className={classes.root}>
-        <LinkIcon fontSize="small" className={classes.icon} />
+        <ShareIcon fontSize="small" className={classes.icon} />
       </IconButton>
     </CopyToClipboard>
   );

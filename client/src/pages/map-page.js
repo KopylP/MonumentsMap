@@ -74,9 +74,10 @@ function MapPage({ store, i18n, t }) {
   let match = useRouteMatch();
   const makeCancelable = useCancelablePromise();
 
-  const closeMonumentsLoading = () => {
+  const closeMonumentsLoading = (action = (p) => p) => {
     setTimeout(() => {
       setLoadingMonuments(false);
+      action();
     }, 300);
   };
 
@@ -91,6 +92,18 @@ function MapPage({ store, i18n, t }) {
       variant: "info",
       anchorOrigin: { horizontal: "center", vertical: "bottom" },
     });
+  };
+
+  const handleMonumentsLoading = (monuments) => {
+    const monumentsNotFound = () => {
+      if (monuments.length === 0) {
+        showSnackbar(t("No monuments were found by such criteria"));
+      } else {
+        closeSnackbar();
+      }
+    };
+    setMonuments(monuments);
+    closeMonumentsLoading(monumentsNotFound);
   };
 
   const update = () => {
@@ -111,15 +124,7 @@ function MapPage({ store, i18n, t }) {
         executor
       )
     )
-      .then((monuments) => {
-        setMonuments(monuments);
-        closeMonumentsLoading();
-        if (monuments.length === 0) {
-          showSnackbar(t("No monuments were found by such criteria"));
-        } else {
-          closeSnackbar();
-        }
-      })
+      .then(handleMonumentsLoading)
       .catch((e) => {
         closeMonumentsLoading();
         //TODO show snackbar
