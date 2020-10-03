@@ -20,6 +20,7 @@ import { defineClientCulture } from "../components/helpers/lang";
 import withStore from "../store/with-store";
 import { useSnackbar } from "notistack";
 import { withTranslation } from "react-i18next";
+import MyLocation from "../components/map/my-location/my-location";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -202,6 +203,7 @@ function MapPage({ store, i18n, t }) {
             <DetailDrawer />
           </Route>
         </Switch>
+        <MyLocation />
       </div>
     </AppContext.Provider>
   );

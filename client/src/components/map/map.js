@@ -8,6 +8,7 @@ import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
 import { makeStyles } from "@material-ui/core";
 import { isMobileOnly } from "react-device-detect";
+import MyLocation from "./my-location/my-location";
 
 const useStyles = makeStyles({
   mobileOnlyMapStyles: {
