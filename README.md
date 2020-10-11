@@ -38,3 +38,5 @@ React, Asp.net core, Entity Framework
 ![Знімок екрана 2020-09-26 214358](https://user-images.githubusercontent.com/37479968/94349130-082de880-0042-11eb-8f8b-4428e4a5bac0.png)
 Деталі фотографії з описом на мобільних пристроях
 
+![image](https://user-images.githubusercontent.com/37479968/95671854-ac17a800-0b9b-11eb-8f4f-f19472385869.png)
+Список обраних пам'яток
