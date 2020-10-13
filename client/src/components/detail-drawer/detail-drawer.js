@@ -15,6 +15,9 @@ import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
 import { isMobileOnly } from "react-device-detect";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import PhotoMobileList from "../photos-dialog/photo-mobile-list/photo-mobile-list";
+import { showErrorSnackbar } from "../helpers/snackbar-helpers";
+import { useTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -43,9 +46,13 @@ export default function DetailDrawer(props) {
     setCenter,
   } = useContext(AppContext);
   const [monument, setMonument] = useState(null);
+
+  // This is slug of monument
   const { monumentId } = useParams();
   const history = useHistory();
   const makeCancelable = useCancelablePromise();
+  const { t } = useTranslation();
+  const { enqueueSnackbar } = useSnackbar();
 
   const onMonumentLoad = (monument) => {
     ((monument) => {
@@ -71,7 +78,9 @@ export default function DetailDrawer(props) {
   const loadMonument = () => {
     makeCancelable(monumentService.getMonumentById(monumentId))
       .then(onMonumentLoad)
-      .catch(); //TODO handle error
+      .catch(() => {
+        showErrorSnackbar(enqueueSnackbar, t("Network error"));
+      });
   };
 
   const prevMonumentId = usePrevious(monumentId);

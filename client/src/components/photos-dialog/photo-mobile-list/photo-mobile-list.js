@@ -5,6 +5,9 @@ import PhotoLightbox from "../photo-lightbox/photo-lightbox";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import sortMonumentPhotos from "../../helpers/sort-monument-photos";
 import PhotoListAppBar from "./photo-list-app-bar/photo-list-app-bar";
+import { useSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
+import { showErrorSnackbar } from "../../helpers/snackbar-helpers";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -31,6 +34,8 @@ export default function PhotoMobileList({ open, setOpen, monumentPhotoId }) {
     setOpen(false);
   };
   const [monumentPhotos, setMonumentPhotos] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   const {
     monumentService: { getPhotoLink, getMonumentPhotos },
@@ -43,7 +48,9 @@ export default function PhotoMobileList({ open, setOpen, monumentPhotoId }) {
         .then((monumentPhotos) =>
           setMonumentPhotos(monumentPhotos.sort(sortMonumentPhotos))
         )
-        .catch(); //TODO handle error
+        .catch(() => {
+          showErrorSnackbar(enqueueSnackbar, t("Network error"));
+        });
     }
   }, [open]);
 

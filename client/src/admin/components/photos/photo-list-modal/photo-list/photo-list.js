@@ -19,7 +19,7 @@ function PhotoList({ data, onUpdate = p => p }) {
   } = useContext(AdminContext);
 
   const [monumentPhotos, setMonumentPhotos] = useState(
-    data.map((obj) => ({ deleted: false, ...obj })) //TODO delete deleted
+    data.map((obj) => ({ deleted: false, ...obj }))
   );
 
   const [editMonumentPhotoId, setEditMonumentPhotoId] = useState(null);

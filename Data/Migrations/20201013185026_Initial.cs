@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MonumentsMap.Data.Migrations
 {
@@ -66,7 +67,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(nullable: true),
                     Salt = table.Column<string>(nullable: true),
                     ExpireAt = table.Column<DateTime>(nullable: false)
@@ -81,7 +82,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 },
                 constraints: table =>
                 {
@@ -93,7 +94,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FileName = table.Column<string>(nullable: false),
                     ImageScale = table.Column<double>(nullable: false)
                 },
@@ -107,7 +108,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ClientId = table.Column<string>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: false),
@@ -125,7 +126,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -146,7 +147,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -231,7 +232,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NameId = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },
@@ -257,7 +258,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NameId = table.Column<int>(nullable: false),
                     DescriptionId = table.Column<int>(nullable: true),
                     Abbreviation = table.Column<string>(nullable: false)
@@ -284,7 +285,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     LocalizationSetId = table.Column<int>(nullable: false),
                     CultureCode = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: false)
@@ -311,7 +312,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     DefaultName = table.Column<string>(nullable: false),
                     NameId = table.Column<int>(nullable: true),
                     ParticipantRole = table.Column<int>(nullable: true)
@@ -332,7 +333,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NameId = table.Column<int>(nullable: false),
                     DescriptionId = table.Column<int>(nullable: true),
                     Abbreviation = table.Column<string>(nullable: false)
@@ -359,9 +360,11 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Year = table.Column<int>(nullable: false),
                     Period = table.Column<int>(nullable: false),
+                    DestroyYear = table.Column<int>(nullable: true),
+                    DestroyPeriod = table.Column<int>(nullable: true),
                     NameId = table.Column<int>(nullable: false),
                     DescriptionId = table.Column<int>(nullable: false),
                     CityId = table.Column<int>(nullable: false),
@@ -370,6 +373,7 @@ namespace MonumentsMap.Data.Migrations
                     Accepted = table.Column<bool>(nullable: false),
                     Latitude = table.Column<double>(nullable: false),
                     Longitude = table.Column<double>(nullable: false),
+                    Slug = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     ProtectionNumber = table.Column<string>(nullable: true)
@@ -414,7 +418,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Year = table.Column<int>(nullable: true),
                     Period = table.Column<int>(nullable: true),
                     MonumentId = table.Column<int>(nullable: false),
@@ -450,7 +454,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ParticipantId = table.Column<int>(nullable: false),
                     MonumentId = table.Column<int>(nullable: false)
                 },
@@ -476,7 +480,7 @@ namespace MonumentsMap.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MonumentPhotoId = table.Column<int>(nullable: true),
                     MonumentId = table.Column<int>(nullable: true),
                     Title = table.Column<string>(nullable: false),

@@ -56,7 +56,7 @@ export default function CityFormControl(props) {
   useEffect(() => {
     makeCancelable(getCitiesMethod())
       .then(handleLoadCities)
-      .catch(); // TODO handle error
+      .catch();
   }, []);
 
   const citiesAutocompleteProps = {

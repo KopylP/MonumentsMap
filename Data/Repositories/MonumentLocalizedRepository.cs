@@ -225,14 +225,16 @@ namespace MonumentsMap.Data.Repositories
             var minimizeResultBefore = MinimizeResult;
             MinimizeResult = false;
 
-            var monument = await Task.Run(() => 
-                IncludeNecessaryProps(context.Monuments)
-                .Where(p => p.Slug == slug)
+            var query = context.Monuments
+                .Where(p => p.Slug == slug);
+
+            var monument = (await IncludeNecessaryProps(query)
+                .ToListAsync())
                 .Select(GetSelectHandler(cultureCode))
-                .FirstOrDefault());
+                .FirstOrDefault();
 
             MinimizeResult = minimizeResultBefore;
-            
+
             return monument;
         }
 

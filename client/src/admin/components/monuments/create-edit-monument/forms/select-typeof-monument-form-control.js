@@ -33,7 +33,7 @@ export default function SelectTypeofMonumentFormControl({
         setTypes(types);
         onLoadTypes(types);
       })
-      .catch(); // TODO handle error
+      .catch();
   };
 
   const handleChange = (e) => {

@@ -20,6 +20,7 @@
         "No monuments were found by such criteria": "No monuments were found by such criteria",
         "List of selected monuments": "List of selected monuments",
         "Search": "Search",
-        "Link copied": "Link copied"
+        "Link copied": "Link copied",
+        "Network error": "Ooops, Something went wrong :("
     }
 }

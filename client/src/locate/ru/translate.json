@@ -20,6 +20,7 @@
         "No monuments were found by such criteria": "По таким критериям не найдено ни одного памятника",
         "List of selected monuments": "Список выбраных памятников",
         "Search": "Поиск",
-        "Link copied": "Cсылку скопировано"
+        "Link copied": "Cсылку скопировано",
+        "Network error": "Ой, что-то пошло не так :("
     }
 }

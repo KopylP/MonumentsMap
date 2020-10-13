@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
+import { showErrorSnackbar } from "../helpers/snackbar-helpers";
+import { useSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
 
 export default function withAsyncLoadingData(Wrapper) {
   return function (LoadingComponent) {
@@ -7,6 +10,8 @@ export default function withAsyncLoadingData(Wrapper) {
       const [data, setData] = useState(null);
       const { params = null, getData } = props;
       const makeCancelable = useCancelablePromise();
+      const { enqueueSnackbar } = useSnackbar();
+      const { t } = useTranslation();
       
       useEffect(() => {
         if(Array.isArray(params)) {
@@ -14,7 +19,9 @@ export default function withAsyncLoadingData(Wrapper) {
             .then(data => {
               setData(data);
             })
-            .catch(); // TODO handle error
+            .catch(() => {
+              showErrorSnackbar(enqueueSnackbar, t("Network error"));
+            });
         }
       }, []);
       

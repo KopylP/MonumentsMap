@@ -51,7 +51,8 @@ namespace MonumentsMap
             );
             services.AddDbContext<ApplicationContext>(options =>
             {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                // options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddMemoryCache();
             services.AddScoped<ICityLocalizedRepository, CityLocalizedRepository>();

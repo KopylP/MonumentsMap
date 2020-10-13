@@ -7,6 +7,9 @@ import PhotoDrawerContentTitle from "./photo-drawer-content-title/photo-drawer-c
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import SourceList from "../../common/sources/source-list";
 import ScrollBar from "../../common/scroll-bar/scroll-bar";
+import { showErrorSnackbar } from "../../helpers/snackbar-helpers";
+import { useSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,13 +25,15 @@ export default function PhotoDrawerContent({
   const { monumentService } = useContext(AppContext);
   const classes = useStyles();
   const makeCancelable = useCancelablePromise();
+  const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   const onMonumentPhotoLoad = (monumentPhoto) => {
     setMonumentPhotoDetail(monumentPhoto);
   };
 
   const onMonumentPhotoError = () => {
-    //TODO handle error
+    showErrorSnackbar(enqueueSnackbar, t("Network error"));
   };
 
   const update = () => {

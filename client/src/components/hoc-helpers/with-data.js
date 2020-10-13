@@ -7,10 +7,9 @@ export default function withData(Wrapper, paramsFromRoute = []) {
     const { getData, onError = (p) => p } = props;
     const routeParams = useParams();
     let { params } = props;
-    // const [data, setData] = useState(null);
     const [unauthorized, setUnauthorized] = useState(false);
     const updateData = () => {
-      //TODO remove this method
+      // not implemented
     };
 
     if (paramsFromRoute.length > 0) {

@@ -21,7 +21,6 @@ namespace MonumentsMap
                 .ConfigureLogging(logging => {
                     logging.ClearProviders();
                     logging.AddConsole();
-                    logging.AddFile("Logs/monumentsmap-{Date}.txt");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

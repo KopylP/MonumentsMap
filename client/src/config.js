@@ -3,7 +3,7 @@ import UserRole from "./models/user-role";
 const supportedCultures = [
     {code: "uk-UA", name: "Українська"},
     {code: "en-GB", name: "English"},
-    {code: "pl-PL", name: "Polska"},
+    {code: "pl-PL", name: "Polski"},
     {code: "ru-RU", name: "Русский"},
 ];
 
@@ -11,7 +11,7 @@ const defaultCulture = "uk-UA";
 const defaultClientCulture = "en-GB";
 
 // const serverHost = "https://monumentsmap.herokuapp.com/";
-const serverHost = "http://192.168.30.45:5000/";
+const serverHost = "http://192.168.30.90:5000/";
 
 const defaultCity = {
     lat: 49.5897423, //center point of default city

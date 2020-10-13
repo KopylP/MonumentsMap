@@ -105,6 +105,7 @@ namespace MonumentsMap.Data.Services
             var issurerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["Auth:Jwt:Key"])
             );
+            
             var token = new JwtSecurityToken(
                 issuer: _configuration["Auth:Jwt:Issuer"],
                 audience: _configuration["Auth:Jwt:Audience"],

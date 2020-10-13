@@ -4,6 +4,8 @@ import MobilePhotoDescriptionBottomSheet from "../mobile-photo-description-botto
 import { PhotoSwipe } from "react-photoswipe-2";
 import "react-photoswipe-2/lib/photoswipe.css";
 import "./photo-lightbox.css";
+import { isIOS } from "react-device-detect";
+import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
 
 export default function PhotoLightbox({
   monumentPhotos,
@@ -11,7 +13,6 @@ export default function PhotoLightbox({
   setOpen,
   initIndex = 0,
 }) {
-
   const {
     monumentService: { getPhotoLink },
   } = useContext(AppContext);
@@ -47,6 +48,13 @@ const LightboxWithBottomSheet = memo(function ({
   const [currentIndex, setCurrentIndex] = useState(0);
   return (
     <React.Fragment>
+      {open && (
+        <DrawerBackButton
+          onClick={() => setOpen(false)}
+          attachTo="left"
+          fixed
+        />
+      )}
       <MonumentPhotoLightbox
         images={images}
         open={open}
@@ -54,10 +62,10 @@ const LightboxWithBottomSheet = memo(function ({
         initIndex={initIndex}
         onCurrentIndexChange={setCurrentIndex}
       />
-        <MobilePhotoDescriptionBottomSheet
-          monumentPhoto={images[currentIndex]}
-          visibility={open}
-        />
+      <MobilePhotoDescriptionBottomSheet
+        monumentPhoto={images[currentIndex]}
+        visibility={open}
+      />
     </React.Fragment>
   );
 });
@@ -84,8 +92,7 @@ const MonumentPhotoLightbox = memo(function ({
         fullscreenEl: false,
         loop: false,
         pinchToClose: false,
-        history: false
-        // preload: [0, 0]
+        history: !isIOS,
       }}
     />
   );
