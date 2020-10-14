@@ -1,4 +1,10 @@
 import axios from "axios";
+import {
+  authRequestInterceptor,
+  authErrorRequestInterceptor,
+  authResponseInterceptror,
+  authErrorResponseInterceptor,
+} from "./interceptors/auth-interceptors";
 
 const CancelToken = axios.CancelToken;
 
@@ -13,6 +19,15 @@ export default class MonumentService {
         Accept: "*",
       },
     });
+
+    this._axios.interceptors.request.use(
+      authRequestInterceptor,
+      authErrorRequestInterceptor
+    );
+    this._axios.interceptors.response.use(
+      authResponseInterceptror,
+      authErrorResponseInterceptor
+    );
   }
 
   async _getRequest(

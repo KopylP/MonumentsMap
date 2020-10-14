@@ -1,7 +1,7 @@
 import React from "react";
 import { arabToRoman } from "roman-numbers";
 import { useTranslation } from "react-i18next";
-import Period from "../../../models/period";
+import Period from "../../../../../../models/period";
 
 export default function SimpleDetailYear({ year, period }) {
   const { t } = useTranslation();

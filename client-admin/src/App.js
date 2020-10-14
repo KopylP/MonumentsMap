@@ -1,9 +1,11 @@
 import React from "react";
 import { MemoryRouter, BrowserRouter, Switch, Route } from "react-router-dom";
-import MapPage from "./pages/map-page";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import { SnackbarProvider } from "notistack";
 import { isIOS } from "react-device-detect";
+import LoginPage from "./admin/pages/login-page";
+import RegistrationPage from "./admin/pages/registration-page";
+import AdminPage from "./admin/pages/admin-page";
+import { SnackbarProvider } from "notistack";
 
 const theme = createMuiTheme({
   palette: {
@@ -27,23 +29,30 @@ const memoryHistoryParams = {
 const Router = isIOS ? MemoryRouter : BrowserRouter;
 const routerProps = isIOS ? memoryHistoryParams : {};
 
-
-if(isIOS && oldPathName !== "/" && window.history.pushState) {
+if (isIOS && oldPathName !== "/" && window.history.pushState) {
   window.history.pushState(null, null, "/");
 }
 
 function App() {
   return (
     <Router {...routerProps}>
-      <Switch>
-        <Route path="/">
-          <SnackbarProvider maxSnack={5}>
-            <MuiThemeProvider theme={theme}>
-              <MapPage />
-            </MuiThemeProvider>
-          </SnackbarProvider>
-        </Route>
-      </Switch>
+      <SnackbarProvider maxSnack={5}>
+        <MuiThemeProvider theme={theme}>
+          <div style={{ width: "100%", height: "100%" }}>
+            <Switch>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+              <Route path="/invitation">
+                <RegistrationPage />
+              </Route>
+              <Route path="/">
+                <AdminPage />
+              </Route>
+            </Switch>
+          </div>
+        </MuiThemeProvider>
+      </SnackbarProvider>
     </Router>
   );
 }
