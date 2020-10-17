@@ -36,42 +36,6 @@ export default class MonumentService {
     return response.data;
   }
 
-  async _postRequest(path, data) {
-    const response = await this._axios.post(path, data);
-    return response.data;
-  }
-
-  async _putRequest(path, data) {
-    const response = await this._axios.put(path, data);
-    return response.data;
-  }
-
-  async _patchRequest(path, data) {
-    const response = await this._axios.patch(path, data);
-    return response.data;
-  }
-
-  async _deleteRequest(path) {
-    const response = await this._axios.delete(path);
-    return response.data;
-  }
-
-  async _postFormRequest(path, file) {
-    const data = new FormData();
-    data.append("file", file);
-
-    var config = {
-      method: "post",
-      url: `${this._baseURL}${path}`,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      data: data,
-    };
-    const response = await this._axios.request(config);
-    return response.data;
-  }
-
   getAllMonuments = async (hidden = true) => {
     return await this._getRequest(`monument/`, true, { hidden });
   };
@@ -114,30 +78,6 @@ export default class MonumentService {
     return await this._getRequest("city/");
   }
 
-  createMonument = async (monument) => {
-    return await this._postRequest("monument/", monument);
-  }
-
-  editMonument = async (monument) => {
-    return await this._putRequest("monument/", monument);
-  }
-
-  toogleMonumentAccepted = async (monumentId) => {
-    return await this._patchRequest(`monument/${monumentId}/toogle/accepted`);
-  }
-
-  getEditableMonument = async (monumentId) => {
-    return await this._getRequest(`monument/${monumentId}/editable`);
-  }
-
-  deleteMonument = async (monumentId) => {
-    return await this._deleteRequest(`monument/${monumentId}`);
-  }
-
-  deleteMonumentPhoto = async (monumentPhotoId) => {
-    return await this._deleteRequest(`monumentphoto/${monumentPhotoId}`);
-  };
-
   getMonumentPhoto = async (monumentPhotoId) => {
     return await this._getRequest(`monumentphoto/${monumentPhotoId}`);
   };
@@ -150,35 +90,10 @@ export default class MonumentService {
     return await this._getRequest(`monument/${monumentId}/participants/raw`);
   }
 
-  editMonumentParticipants = async (monumentId, participantsList) => {
-    return await this._patchRequest(`monument/${monumentId}/participants`, participantsList);
-  }
-
-  async savePhoto(photo) {
-    return await this._postFormRequest("photo/", photo);
-  }
-
-  async createPhotoMonument(monumentPhoto) {
-    return await this._postRequest("monumentphoto/", monumentPhoto);
-  }
-
-  async editPhotoMonument(monumentPhoto) {
-    return await this._putRequest("monumentphoto/", monumentPhoto);
-  }
-
   async getPhotoIds(monumentId) {
     return await this._getRequest(`monument/${monumentId}/photo/ids`);
   }
 
-  toogleMonumentMajorPhoto = async (monumentPhotoId) => {
-    return await this._patchRequest(
-      `monumentphoto/${monumentPhotoId}/toogle/majorphoto`
-    );
-  };
-
-  toogleMonumentAccepted = async (monumentId) => {
-    return await this._patchRequest(`monument/${monumentId}/toogle/accepted`);
-  };
 
   getMonumentPhotos = async (monumentId) => {
     return await this._getRequest(`monument/${monumentId}/monumentPhotos`);
@@ -198,52 +113,4 @@ export default class MonumentService {
   getParticipants = async () => {
     return await this._getRequest(`participant`);
   };
-
-  getEditableParticipant = async (participantId) => {
-    return await this._getRequest(`participant/${participantId}/editable`);
-  };
-
-  deleteParticipant = async (participantId) => {
-    return await this._deleteRequest(`participant/${participantId}`);
-  };
-
-  editParticipant = async (participant) => {
-    return await this._putRequest(`participant`, participant);
-  }
-
-  createParticipant = async (participant) => {
-    return await this._postRequest(`participant`, participant);
-  }
-
-  getMe = async () => {
-    return await this._getRequest(`token/me`, false);
-  };
-
-  getUsers = async () => {
-    return await this._getRequest(`user`, false);
-  }
-
-  getUser = async (userId) => {
-    return await this._getRequest(`user/${userId}`, false);
-  }
-
-  deleteUser = async (userId) => {
-    return await this._deleteRequest(`user/${userId}`);
-  }
-
-  getUserRoles = async (userId) => {
-    return await this._getRequest(`user/${userId}/roles`);
-  }
-
-  inviteUser = async (email) => {
-    return this._postRequest('registration/invite', { email });
-  }
-
-  registerUser = async (registerModel) => {
-    return this._postRequest('registration', registerModel);
-  }
-
-  changeUserRoles = async (userId, userRoleModel) => {
-    return this._postRequest(`user/${userId}/roles`, userRoleModel);
-  }
 }

@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  monumentsmapapi:
+    container_name: monumentsmap-api
+    build: .
+    depends_on:
+      - db
+    restart: unless-stopped
+    environment: 
+      ASPNETCORE_URLS: http://+:5000
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: monumentsmap
+  client:
+    container_name: client
+    build: ./client
+    depends_on:
+      - monumentsmapapi
+    restart: unless-stopped
+  client-admin:
+    container_name: client-admin
+    build: ./client-admin
+    ports: 
+      - "3000:3006"
+    depends_on:
+      - monumentsmapapi
+    restart: unless-stopped
+    stdin_open: true
+  nginx:
+    image: nginx:stable-alpine
+    container_name: monumentsmap-docker-nginx
+    ports:
+      - "80:80"
+    volumes: 
+      - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
+    depends_on: 
+      - client
+      - client-admin
+    

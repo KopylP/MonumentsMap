@@ -77,7 +77,7 @@ export default class MonumentService {
 
     var config = {
       method: "post",
-      url: `${this._baseURL}${path}`,
+      url: `${path}`,
       headers: {
         "Content-Type": "multipart/form-data",
       },

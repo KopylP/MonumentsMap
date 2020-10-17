@@ -11,7 +11,7 @@ const defaultCulture = "uk-UA";
 const defaultClientCulture = "en-GB";
 
 // const serverHost = "https://monumentsmap.herokuapp.com/";
-const serverHost = "http://192.168.30.90:5000/";
+const serverHost = "/";
 
 const defaultCity = {
     lat: 49.5897423, //center point of default city

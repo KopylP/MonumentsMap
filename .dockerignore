@@ -1,0 +1,7 @@
+build
+node_modules
+bin
+.vscode
+.vs
+monuments.db
+db
