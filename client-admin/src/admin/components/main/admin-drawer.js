@@ -71,7 +71,7 @@ export default function AdminDrawer({ open, setOpen, routes, roles }) {
               disabled={!roles.some((role) => route.roles.indexOf(role) >= 0)}
               button
               key={route.path}
-              onClick={() => history.push(`${path}${route.path}`)}
+              onClick={() => history.push(`${path}/${route.path}`)}
             >
               {/* <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

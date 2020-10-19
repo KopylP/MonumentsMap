@@ -52,7 +52,7 @@ function LoginPage({ auth }) {
       auth(values.login, values.password)
         .then((token) => {
           localStorageService.setToken(token);
-          history.push("/");
+          history.push("/admin");
         })
         .catch((e) => {
           errorNetworkSnackbar(enqueueSnackbar, e.response, true);

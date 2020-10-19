@@ -7,7 +7,6 @@ export default function withData(Wrapper, paramsFromRoute = []) {
     const { getData, onError = (p) => p } = props;
     const routeParams = useParams();
     let { params } = props;
-    const [unauthorized, setUnauthorized] = useState(false);
     const updateData = () => {
       // not implemented
     };
@@ -19,13 +18,6 @@ export default function withData(Wrapper, paramsFromRoute = []) {
     }
 
     const [data, error, pending] = usePromise(getData, null, params);
-
-    useEffect(() => {
-      if (error && error.response && error.response.status === 401) {
-        setUnauthorized(true);
-      }
-    }, [error]);
-
     return (
       <React.Fragment>
         {data == null && !unauthorized ? (
@@ -42,8 +34,7 @@ export default function withData(Wrapper, paramsFromRoute = []) {
             Loading
           </div>
         ) : null}
-        {unauthorized ? <Redirect to="/admin/login" /> : null}
-        {data && !unauthorized ? (
+        {data ? (
           <Wrapper data={data} onUpdate={updateData} {...props} />
         ) : null}
       </React.Fragment>

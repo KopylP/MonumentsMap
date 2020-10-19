@@ -117,7 +117,7 @@ const RightPanel = memo(({ routes, path }) => {
       {routes
         .filter((route) => !route.separator)
         .map((route) => (
-          <Route path={`${path}${route.path}`}>
+          <Route path={`${path}/${route.path}`}>
             <route.Page />
           </Route>
         ))}

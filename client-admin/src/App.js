@@ -2,10 +2,8 @@ import React from "react";
 import { MemoryRouter, BrowserRouter, Switch, Route } from "react-router-dom";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { isIOS } from "react-device-detect";
-import LoginPage from "./admin/pages/login-page";
-import RegistrationPage from "./admin/pages/registration-page";
-import AdminPage from "./admin/pages/admin-page";
 import { SnackbarProvider } from "notistack";
+import AdminRoutingPage from "./admin/pages/admin-routing-page";
 
 const theme = createMuiTheme({
   palette: {
@@ -36,23 +34,15 @@ if (isIOS && oldPathName !== "/" && window.history.pushState) {
 function App() {
   return (
     <Router {...routerProps}>
-      <SnackbarProvider maxSnack={5}>
-        <MuiThemeProvider theme={theme}>
-          <div style={{ width: "100%", height: "100%" }}>
-            <Switch>
-              <Route path="/login">
-                <LoginPage />
-              </Route>
-              <Route path="/invitation">
-                <RegistrationPage />
-              </Route>
-              <Route path="/">
-                <AdminPage />
-              </Route>
-            </Switch>
-          </div>
-        </MuiThemeProvider>
-      </SnackbarProvider>
+      <Switch>
+        <Route path="/admin">
+          <SnackbarProvider maxSnack={5}>
+            <MuiThemeProvider theme={theme}>
+              <AdminRoutingPage />
+            </MuiThemeProvider>
+          </SnackbarProvider>
+        </Route>
+      </Switch>
     </Router>
   );
 }

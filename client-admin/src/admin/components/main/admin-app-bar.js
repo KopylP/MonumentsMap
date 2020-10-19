@@ -43,7 +43,7 @@ function AdminAppBar({ drawerOpen, onMenuClick, title }) {
   const handleSignOut = () => {
     const lss = LocalStorageService.getService();
     lss.clearToken();
-    history.push("/login");
+    history.push("/admin/login");
   };
 
   return (

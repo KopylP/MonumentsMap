@@ -42,7 +42,7 @@ export default function withData(Wrapper, paramsFromRoute = []) {
             Loading
           </div>
         ) : null}
-        {unauthorized ? <Redirect to="/login" /> : null}
+        {unauthorized ? <Redirect to="/admin/login" /> : null}
         {data && !unauthorized ? (
           <Wrapper data={data} onUpdate={updateData} {...props} />
         ) : null}

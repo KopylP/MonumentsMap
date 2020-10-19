@@ -82,7 +82,7 @@ function RegistrationPage({ code, email, registerUser }) {
       makeCancelable(registerUser(registerModel))
         .then(() => {
             enqueueSnackbar("Вас успішно зареєстровано!");
-            history.push("login");
+            history.push("/admin/login");
         })
         .catch(e => {
             errorNetworkSnackbar(enqueueSnackbar, e);
