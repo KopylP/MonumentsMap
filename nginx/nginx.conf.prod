@@ -4,7 +4,7 @@ server {
     server_name monumentsmap.ua.pl;
 
     location / {
-        proxy_pass http://monumentsmapapi/;
+        proxy_pass http://client;
     }
 
     location /admin {

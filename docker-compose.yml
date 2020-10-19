@@ -8,6 +8,8 @@ services:
     restart: unless-stopped
     environment: 
       ASPNETCORE_URLS: http://+:5000
+    volumes: 
+      - ./Images:/app/Images
   db:
     container_name: db
     image: postgres
@@ -16,6 +18,8 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: monumentsmap
+    # volumes:
+    #   - ./postgres-data:/var/lib/postgresql/data
   client:
     container_name: client
     build: ./client
