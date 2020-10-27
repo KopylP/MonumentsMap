@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../../../../context/app-context";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
 import { IconButton, makeStyles, useTheme } from "@material-ui/core";
@@ -61,6 +61,10 @@ function PhotoCarousel({ data, onMonumentPhotoClicked = (p) => p }) {
   };
 
   const [animateTransitions] = useState(true);
+
+  useEffect(() => {
+    setCurrentIndex(0); // swipeable views animation bug fixed
+  }, []);
 
   return (
     <div className={styles.container}>
