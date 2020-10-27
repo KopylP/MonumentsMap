@@ -22,6 +22,8 @@ const contactMail = "<--Your mail to contact-->";
 
 const accessToken = "<--Access token for https://www.jawg.io map-->";
 
+const mapStyle = "<--Your map style token here https://www.jawg.io -->";
+
 const yearsRange = [1700, new Date().getFullYear()];
 
 // export {
@@ -35,4 +37,5 @@ const yearsRange = [1700, new Date().getFullYear()];
 //     yearsRange,
 //     loadMapZoom,
 //     contactMail
+//     mapStyle,
 // }

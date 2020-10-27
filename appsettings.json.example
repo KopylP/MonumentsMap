@@ -37,8 +37,8 @@
   },
   "Auth": {
     "Jwt": {
-      "Issuer": "http://monuments.pl.ua/",
-      "Audience": "http://monuments.pl.ua/",
+      "Issuer": "http://example.com/",
+      "Audience": "http://example.com/",
       "Key": "--your-unique-key--",
       "TokenExpirationInMinutes": 84600
     }
@@ -46,7 +46,7 @@
   "Invitation": {
     "Key": "--your-unique-key--",
     "ExpirationInHours": 5,
-    "InvitationClientUrl": "http://monuments.pl.ua/admin/invitation?code={invitation}&email={email}"
+    "InvitationClientUrl": "http://example.com/admin/invitation?code={invitation}&email={email}"
   },
   "MailSettings": {
     "Mail": "--your mail here--",

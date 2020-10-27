@@ -2,13 +2,12 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { Map as LeafMap, TileLayer } from "react-leaflet";
 import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
-import { defaultZoom, accessToken, loadMapZoom } from "../../config";
+import { defaultZoom, accessToken, loadMapZoom, mapStyle } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
 import { makeStyles } from "@material-ui/core";
 import { isMobileOnly } from "react-device-detect";
-import MyLocation from "./my-location/my-location";
 
 const useStyles = makeStyles({
   mobileOnlyMapStyles: {
@@ -158,7 +157,7 @@ function Map({ onMonumentSelected = (p) => p }) {
     >
       <TileLayer
         attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
-        url={`https://tile.jawg.io/13da1c9b-4dd5-4a96-84a0-d0464fc95920/{z}/{x}/{y}.png?access-token=${accessToken}`}
+        url={`https://tile.jawg.io/${mapStyle}/{z}/{x}/{y}.png?access-token=${accessToken}`}
       />
       <MapContext.Provider value={{ mapSelectedMonumentId }}>
         {markers}
