@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef } from "react";
 import clsx from "clsx";
-import { makeStyles, Drawer } from "@material-ui/core";
+import { makeStyles, Drawer, CircularProgress } from "@material-ui/core";
 import PhotoDrawerContent from "../photo-drawer-content/photo-drawer-content";
 import PhotoViewer from "../photo-viewer/photo-viewer";
 import AppContext from "../../../context/app-context";
@@ -10,6 +10,7 @@ import PhotosActionButtons from "./photo-action-buttons/photos-action-buttons";
 import MenuButton from "./menu-button";
 import savePhoto from "../../helpers/save-photo";
 import PhotoListSlider from "../photo-list-slider/photo-list-slider";
+import AbsoluteCircularLoader from "../../common/loaders/absolute-circular-loader";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -149,6 +150,7 @@ export default function PhotosContainer({
         })}
         ref={containerRef}
       >
+        {imageLoading && <AbsoluteCircularLoader size="4em" />}
         <MenuButton onClick={(e) => setOpen(!open)} />
         <PhotosActionButtons onClick={handleActionButtonsClick} />
         <PhotoViewer
