@@ -86,13 +86,14 @@ namespace MonumentsMap
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequiredLength = 7;
             }).AddEntityFrameworkStores<ApplicationContext>();
-            services.AddAuthentication(opts => 
+            services.AddAuthentication(opts =>
             {
                 opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(cfg => {
+            .AddJwtBearer(cfg =>
+            {
                 cfg.RequireHttpsMetadata = false;
                 cfg.SaveToken = true;
                 cfg.TokenValidationParameters = new TokenValidationParameters()
@@ -109,6 +110,11 @@ namespace MonumentsMap
                     ValidateAudience = true
                 };
             });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(name: "v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Monuments Map Api", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,6 +129,12 @@ namespace MonumentsMap
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Monuments Map Api V1");
+            });
 
             app.UseCors("WebClientPolicy");
 

@@ -8,7 +8,7 @@ namespace MonumentsMap.Controllers
     [ApiController]
     public class ErrorsController : ControllerBase
     {
-        [Route("{code}")]
+        [HttpGet("{code}")]
         public IActionResult Error(int code)
         {
             var parsedCode = (HttpStatusCode) code;

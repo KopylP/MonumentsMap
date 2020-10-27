@@ -148,7 +148,7 @@ namespace MonumentsMap.Data
                      new Localization
                      {
                          CultureCode = "pl-PL",
-                         Value = "Na granicy straty",
+                         Value = "Na skraju straty",
                      }
                  );
                 onTheVergeOfLoss.Name.Localizations.Add(
@@ -290,47 +290,6 @@ namespace MonumentsMap.Data
                      }
                  );
 
-                var localNational = new Status
-                {
-                    Name = new LocalizationSet
-                    {
-                        Localizations = new List<Localization>()
-                    },
-                    Abbreviation = "local-national",
-                    Description = new LocalizationSet
-                    {
-                        Localizations = new List<Localization>()
-                    }
-                };
-                localNational.Name.Localizations.Add(
-                        new Localization
-                        {
-                            CultureCode = "uk-UA",
-                            Value = "Пам'ятка місцевого значення, що пропонується до національного значення"
-                        }
-                    );
-                localNational.Name.Localizations.Add(
-                    new Localization
-                    {
-                        CultureCode = "en-GB",
-                        Value = "Monument of local significance proposed for national significance",
-                    }
-                 );
-                localNational.Name.Localizations.Add(
-                     new Localization
-                     {
-                         CultureCode = "pl-PL",
-                         Value = "Zabytek o znaczeniu lokalnym proponowany do znaczenia narodowego",
-                     }
-                 );
-                localNational.Name.Localizations.Add(
-                     new Localization
-                     {
-                         CultureCode = "ru-RU",
-                         Value = "Достопримечательность местного значения, предлагается к национальному значению",
-                     }
-                 );
-
                 var national = new Status
                 {
                     Name = new LocalizationSet
@@ -372,47 +331,6 @@ namespace MonumentsMap.Data
                      }
                  );
 
-                var archaeological = new Status
-                {
-                    Name = new LocalizationSet
-                    {
-                        Localizations = new List<Localization>()
-                    },
-                    Abbreviation = "archaeological",
-                    Description = new LocalizationSet
-                    {
-                        Localizations = new List<Localization>()
-                    }
-                };
-                archaeological.Name.Localizations.Add(
-                        new Localization
-                        {
-                            CultureCode = "uk-UA",
-                            Value = "Пам'ятка археології"
-                        }
-                    );
-                archaeological.Name.Localizations.Add(
-                    new Localization
-                    {
-                        CultureCode = "en-GB",
-                        Value = "Archaeological monument",
-                    }
-                 );
-                archaeological.Name.Localizations.Add(
-                     new Localization
-                     {
-                         CultureCode = "pl-PL",
-                         Value = "Pomnik archeologiczny",
-                     }
-                 );
-                archaeological.Name.Localizations.Add(
-                     new Localization
-                     {
-                         CultureCode = "ru-RU",
-                         Value = "Памятка археологии",
-                     }
-                 );
-
                 var worthNoting = new Status
                 {
                     Name = new LocalizationSet
@@ -429,32 +347,32 @@ namespace MonumentsMap.Data
                         new Localization
                         {
                             CultureCode = "uk-UA",
-                            Value = "Варті уваги"
+                            Value = "Не підпадає під жодну категорію"
                         }
                     );
                 worthNoting.Name.Localizations.Add(
                     new Localization
                     {
                         CultureCode = "en-GB",
-                        Value = "Worth noting",
+                        Value = "Does not fall into any category",
                     }
                  );
                 worthNoting.Name.Localizations.Add(
                      new Localization
                      {
                          CultureCode = "pl-PL",
-                         Value = "Warto zwrócić uwagę",
+                         Value = "Nie należy do żadnej kategorii",
                      }
                  );
                 worthNoting.Name.Localizations.Add(
                      new Localization
                      {
                          CultureCode = "ru-RU",
-                         Value = "Достойны внимания",
+                         Value = "Не подпадает ни под одну категорию",
                      }
                  );
 
-                applicationContext.Statuses.AddRange(localNational, monumentOfLocalSignificance, national, archaeological, worthNoting);
+                applicationContext.Statuses.AddRange(monumentOfLocalSignificance, national, worthNoting);
                 applicationContext.SaveChanges();
             }
         }
