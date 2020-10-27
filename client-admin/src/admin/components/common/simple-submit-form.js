@@ -19,7 +19,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleSubmitForm({ disableSubmit = false, loading = false }) {
+export default function SimpleSubmitForm({
+  disableSubmit = false,
+  loading = false,
+  showBack = true,
+}) {
   const history = useHistory();
   const classes = useStyles();
   return (
@@ -30,13 +34,15 @@ export default function SimpleSubmitForm({ disableSubmit = false, loading = fals
       alignItems="center"
       style={{ paddingTop: 15 }}
     >
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => history.goBack()}
-      >
-        Назад
-      </Button>
+      {showBack && (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => history.goBack()}
+        >
+          Назад
+        </Button>
+      )}
       <div className={classes.wrapper}>
         <Button
           variant="contained"
@@ -46,7 +52,9 @@ export default function SimpleSubmitForm({ disableSubmit = false, loading = fals
         >
           Прийняти
         </Button>
-        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+        {loading && (
+          <CircularProgress size={24} className={classes.buttonProgress} />
+        )}
       </div>
     </Grid>
   );

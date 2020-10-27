@@ -25,7 +25,6 @@ export default function withSimpleAcceptForm(Wrapper, back = true) {
           if (back) goBack();
         })
         .catch((e) => {
-          console.log(e.response);
           setLoading(false);
           errorNetworkSnackbar(enqueueSnackbar, e.response);
           onError();

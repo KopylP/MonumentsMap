@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, memo } from "react";
+import React, { useContext, useState, memo } from "react";
 import Modal from "@material-ui/core/Modal";
 import {
   Paper,
@@ -11,17 +11,18 @@ import {
   Select,
   MenuItem,
   FormHelperText,
-  Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import * as cx from "classnames";
 import AdminContext from "../../../context/admin-context";
 import Period from "../../../../models/period";
 import { supportedCultures } from "../../../../config";
 import Source from "../../common/source";
+import SimpleSubmitForm from "../../common/simple-submit-form";
+import { useSnackbar } from "notistack";
+import errorNetworkSnackbar from "../../../helpers/error-network-snackbar";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -62,6 +63,9 @@ export default memo(function AddPhotoModal({
   const handleClose = () => {
     setOpen(false);
   };
+  const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
   const defaultSources = [
     {
       title: "",
@@ -95,6 +99,7 @@ export default memo(function AddPhotoModal({
   };
 
   const onCreateMonumentPhoto = (mp, resetForm) => {
+    setLoading(false);
     setSources(defaultSources);
     resetForm({ values: "" });
     setOpen(false);
@@ -102,7 +107,13 @@ export default memo(function AddPhotoModal({
 
   const onEditMonumentPhoto = (mp) => {
     setOpen(false);
+    setLoading(false);
   };
+
+  const handleError = (e) => {
+    setLoading(false);
+    errorNetworkSnackbar(enqueueSnackbar, e.response);
+  }
 
   const submitPhotoForm = (values, { resetForm }) => {
     const getMonumentPhoto = (photoId, id = null) => {
@@ -118,7 +129,7 @@ export default memo(function AddPhotoModal({
     };
 
     if (data == null) {
-      console.log("Save photo kurva");
+      setLoading(true);
       monumentService
         .savePhoto(file)
         .then((photo) => {
@@ -127,15 +138,15 @@ export default memo(function AddPhotoModal({
           monumentService
             .createPhotoMonument(monumentPhoto)
             .then((mp) => onCreateMonumentPhoto(mp, resetForm))
-            .catch(e => console.error(e)); //TODO handle error
+            .catch(handleError);
         })
-        .catch(); //TODO handle error
+        .catch(handleError);
     } else {
       const monumentPhoto = getMonumentPhoto(data.photoId, data.id);
       monumentService
         .editPhotoMonument(monumentPhoto)
         .then(onEditMonumentPhoto)
-        .catch(); //TODO handle error
+        .catch(handleError);
     }
   };
 
@@ -278,15 +289,7 @@ export default memo(function AddPhotoModal({
                 <Grid item xs={12}>
                   <Source sources={sources} setSources={setSources} />
                 </Grid>
-                <Grid xs={12} item>
-                  <Button
-                    type="submit"
-                    style={{ float: "right" }}
-                    color="secondary"
-                  >
-                    { data ? "Редагувати" : "Додати"}
-                  </Button>
-                </Grid>
+                <SimpleSubmitForm loading={loading} showBack={false}/>
               </Grid>
             </form>
           </Paper>
