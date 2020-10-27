@@ -22,6 +22,7 @@ import { useSnackbar } from "notistack";
 import { withTranslation } from "react-i18next";
 import MyLocation from "../components/map/my-location/my-location";
 import { showErrorSnackbar } from "../components/helpers/snackbar-helpers";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -127,15 +128,16 @@ function MapPage({ store, i18n, t }) {
     )
       .then(handleMonumentsLoading)
       .catch((e) => {
-        closeMonumentsLoading();
-        showErrorSnackbar(enqueueSnackbar, t("Network error"));
+        if (!Axios.isCancel(e)) {
+          closeMonumentsLoading();
+          showErrorSnackbar(enqueueSnackbar, t("Network error"));
+        }
       });
   };
 
   const handleSelectedMonumentChange = () => {
     doIfNotZero(selectedMonument.id)(() => {
-      if (!selectedMonument.slug || selectedMonument.slug == "")
-      {
+      if (!selectedMonument.slug || selectedMonument.slug == "") {
         history.push(`${match.path}monument/${selectedMonument.id}`);
       } else {
         history.push(`${match.path}monument/${selectedMonument.slug}`);
