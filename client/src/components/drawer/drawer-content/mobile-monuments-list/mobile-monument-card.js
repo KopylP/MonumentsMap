@@ -56,6 +56,7 @@ export default function MobileMonumentCard({
                 whiteSpace: "nowrap",
                 textOverflow: "ellipsis",
                 overflow: "hidden",
+                fontFamily: "'PT Sans', sans-serif"
               }}
             >
               {name}

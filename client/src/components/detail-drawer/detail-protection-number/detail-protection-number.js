@@ -5,7 +5,7 @@ import { Trans } from "react-i18next";
 
 function DetailCondition({ data }) {
   return (
-    <div>
+    <div style={{fontSize: 15}}>
       <b><Trans>protection number</Trans>: </b>
       {data}
     </div>

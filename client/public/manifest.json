@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Monuments Map",
+  "name": "Interactive map of architectural monuments of Poltava.",
   "icons": [
     {
       "src": "favicon.ico",

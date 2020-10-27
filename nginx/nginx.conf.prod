@@ -1,7 +1,7 @@
 server {
     listen 80;
 
-    server_name monumentsmap.ua.pl;
+    server_name monuments.pl.ua www.monuments.pl.ua;
 
     location / {
         proxy_pass http://client;
@@ -15,4 +15,35 @@ server {
         proxy_pass http://monumentsmap-api:5000;
     }
 
+    # location / {
+    #     return 301 https://$host$request_uri;
+    # }  
+
+    # location ~ /.well-known/acme-challenge {
+    #     allow all;
+    #     root /var/www/cetbot;
+    # }
+
 }
+
+# server {
+    # listen 443 ssl;
+
+    # server_name monuments.pl.ua;
+
+    # SSL code
+    # ssl_certificate /etc/nginx/ssl/live/monuments.pl.ua/fullchain.pem;
+    # ssl_certificate_key /etc/nginx/ssl/live/monuments.pl.ua/privkey.pem;
+
+#     location / {
+#         proxy_pass http://client;
+#     }
+
+#     location /admin {
+#         proxy_pass http://client-admin;
+#     }
+
+#     location /api {
+#         proxy_pass http://monumentsmap-api:5000;
+#     }
+# }

@@ -8,9 +8,7 @@ import DetailDescription from "../detail-description/detail-description";
 import DetailProtectionNumber from "../detail-protection-number/detail-protection-number";
 import SourceList from "../../common/sources/source-list";
 
-
 export default function DetailDrawerContent({ monument, ...props }) {
-
   return (
     <div style={{ padding: 15 }}>
       <Grid container spacing={3}>
@@ -23,16 +21,20 @@ export default function DetailDrawerContent({ monument, ...props }) {
         </Grid>
         <Divider style={{ width: "100%" }} light />
         <Grid item xs={12}>
-          <DetailStatus data={monument && monument.status} />
-        </Grid>
-        <Grid item xs={12}>
-          <DetailCondition data={monument}  />
-        </Grid>
-        {monument && monument.protectionNumber ? (
-          <Grid item xs={12}>
-            <DetailProtectionNumber data={monument.protectionNumber} />
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <DetailStatus data={monument && monument.status} />
+            </Grid>
+            <Grid item xs={12}>
+              <DetailCondition data={monument} />
+            </Grid>
+            {monument && monument.protectionNumber ? (
+              <Grid item xs={12}>
+                <DetailProtectionNumber data={monument.protectionNumber} />
+              </Grid>
+            ) : null}
           </Grid>
-        ) : null}
+        </Grid>
         <Divider style={{ width: "100%" }} light />
         <Grid item xs={12}>
           <DetailTitle

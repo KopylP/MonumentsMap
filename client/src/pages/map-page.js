@@ -37,8 +37,6 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     bottom: 0,
     display: "flex",
-    // flexDirection: "row",
-    // alignItems: "stretch",
     zIndex: 1,
   },
   mapContainer: {

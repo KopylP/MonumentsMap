@@ -12,7 +12,7 @@ function DetailCondition({
   },
 }) {
   return (
-    <div>
+    <div style={{fontSize: 15}}>
       <b> <Trans>condition</Trans>: </b>
       {`${name} `}
       {destroyYear != null && destroyPeriod != null && (

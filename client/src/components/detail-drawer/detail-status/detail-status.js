@@ -3,7 +3,10 @@ import WithLoadingData from "../../hoc-helpers/with-loading-data";
 import ContentLoader from "react-content-loader";
 
 function DetailStatus({ data }) {
-  return <div>{data.name}</div>;
+  return <div style={{
+    color: "#",
+    fontSize: 15,
+  }}>{data.name}</div>;
 }
 
 export default WithLoadingData(DetailStatus)(() => (

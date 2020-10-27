@@ -148,7 +148,7 @@ namespace MonumentsMap
                 var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                 context.Database.Migrate();
                 var cultures = Configuration.GetSection("SupportedCultures").Get<List<Culture>>();
-                DbSeed.Seed(context, roleManager, userManager, cultures);
+                DbSeed.Seed(context, roleManager, userManager, cultures, Configuration);
             }
         }
     }

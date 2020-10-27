@@ -2,6 +2,7 @@ import React, { useState, memo, useLayoutEffect } from "react";
 import { Trans } from "react-i18next";
 import SwipeableBottomSheet from "react-swipeable-bottom-sheet";
 import { usePrevious } from "../../../hooks/hooks";
+import { ContactMail } from "../../common/contact-mail/contact-mail";
 import SimpleDetailYear from "../../detail-drawer/detail-year/simple-detail-year";
 import { doIfNotTheSame } from "../../helpers/conditions";
 
@@ -96,10 +97,18 @@ export default memo(function MobilePhotoDescriptionBottomSheet({
           <React.Fragment>
             <SimpleDetailYear year={details.year} period={details.period} />
             <div style={{ clear: "both", marginBottom: 2 }} />
-            <span>{details.description}</span>
+            {details.description !== "" && <span>{details.description}</span>}
+            {details.description === "" && (
+              <span>
+                <Trans>Know about</Trans>
+                <ContactMail />
+              </span>
+            )}
             <br />
             <br />
-            <span><Trans>Sources</Trans>:</span>
+            <span>
+              <Trans>Sources</Trans>:
+            </span>
             <div style={{ clear: "both", marginBottom: 2 }} />
             {details.sources &&
               details.sources.map((source, i) => {

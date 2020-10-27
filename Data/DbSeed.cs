@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using MonumentsMap.Entities.Models;
 
 namespace MonumentsMap.Data
@@ -12,14 +13,15 @@ namespace MonumentsMap.Data
         public static void Seed(ApplicationContext applicationContext,
             RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager,
-            List<Culture> cultures)
+            List<Culture> cultures,
+            IConfiguration configuration)
         {
             CultureSeed(applicationContext, cultures);
             ConditionSeed(applicationContext);
             StatusSeed(applicationContext);
             CitySeed(applicationContext);
             RolesFeed(roleManager).Wait();
-            UsersSeed(userManager).Wait();
+            UsersSeed(userManager, configuration["Superuser:Mail"], configuration["Superuser:Password"]).Wait();
         }
         private static void CultureSeed(ApplicationContext application, List<Culture> cultures)
         {
@@ -516,21 +518,21 @@ namespace MonumentsMap.Data
             }
         }
 
-        private static async Task UsersSeed(UserManager<ApplicationUser> userManager)
+        private static async Task UsersSeed(UserManager<ApplicationUser> userManager, string mail, string password)
         {
             var user_Admin = new ApplicationUser()
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = "Admin",
-                Email = "admin@monumentsmap.com",
+                UserName = "Superuser",
+                Email = mail,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                DisplayName = "Admin"
+                DisplayName = "Superuser"
             };
 
             if (await userManager.FindByNameAsync(user_Admin.UserName) == null)
             {
-                await userManager.CreateAsync(user_Admin, "Pass4Admin");
+                await userManager.CreateAsync(user_Admin, password);
                 await userManager.AddToRoleAsync(user_Admin, "Admin");
                 await userManager.AddToRoleAsync(user_Admin, "Editor");
                 user_Admin.EmailConfirmed = true;

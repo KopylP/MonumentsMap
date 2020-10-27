@@ -27,8 +27,7 @@ const memoryHistoryParams = {
 const Router = isIOS ? MemoryRouter : BrowserRouter;
 const routerProps = isIOS ? memoryHistoryParams : {};
 
-
-if(isIOS && oldPathName !== "/" && window.history.pushState) {
+if (isIOS && oldPathName !== "/" && window.history.pushState) {
   window.history.pushState(null, null, "/");
 }
 

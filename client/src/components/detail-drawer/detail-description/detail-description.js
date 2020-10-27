@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
 import { List } from "react-content-loader";
 import Markdown from "markdown-to-jsx";
+import { ContactMail } from "../../common/contact-mail/contact-mail";
+import { Trans } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -14,7 +16,13 @@ function DetailDescription({ data, ...props }) {
   const styles = useStyles(props);
   return (
     <div className={styles.container}>
-      <Markdown>{'\n' + data}</Markdown>
+      {data !== "" && <Markdown>{"\n" + data}</Markdown>}
+      {data === "" && (
+        <p style={{ textAlign: "center", textIndent: 0 }}>
+          <Trans>Know about</Trans>
+          <ContactMail />
+        </p>
+      )}
     </div>
   );
 }
