@@ -3,7 +3,7 @@ server {
 
     server_name monuments.pl.ua www.monuments.pl.ua;
 
-    location / {
+    location /map {
         proxy_pass http://client;
     }
 
@@ -35,9 +35,9 @@ server {
     # ssl_certificate /etc/nginx/ssl/live/monuments.pl.ua/fullchain.pem;
     # ssl_certificate_key /etc/nginx/ssl/live/monuments.pl.ua/privkey.pem;
 
-#     location / {
-#         proxy_pass http://client;
-#     }
+#    location /map {
+#        proxy_pass http://client;
+#    }
 
 #     location /admin {
 #         proxy_pass http://client-admin;
