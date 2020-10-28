@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { isMobileOnly } from "react-device-detect";
 import { defaultCity, supportedCultures, yearsRange } from "../config";
 
 export default function withStore(Wrapper) {
   return (props) => {
-    const [mainDrawerOpen, setMainDrawerOpen] = useState(true);
+    const [mainDrawerOpen, setMainDrawerOpen] = useState(!isMobileOnly);
     const [detailDrawerOpen, setDetailDrawerOpen] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(
       supportedCultures[0]

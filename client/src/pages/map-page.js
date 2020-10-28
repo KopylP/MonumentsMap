@@ -24,7 +24,6 @@ import MyLocation from "../components/map/my-location/my-location";
 import { showErrorSnackbar } from "../components/helpers/snackbar-helpers";
 import Axios from "axios";
 import AppLoader from "../components/common/loaders/app-loader/app-loader";
-import { isMobile, isMobileOnly } from "react-device-detect";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {

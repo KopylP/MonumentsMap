@@ -1,9 +1,9 @@
 import React from "react";
-import { MemoryRouter, BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MapPage from "./pages/map-page";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
-import { isIOS } from "react-device-detect";
+// import { isIOS } from "react-device-detect";
 
 const theme = createMuiTheme({
   palette: {
@@ -19,21 +19,9 @@ const theme = createMuiTheme({
   adminDrawerWidth: 240,
 });
 
-const oldPathName = window.location.pathname;
-const memoryHistoryParams = {
-  initialEntries: [{ pathname: oldPathName }],
-  initialIndex: 0,
-};
-const Router = isIOS ? MemoryRouter : BrowserRouter;
-const routerProps = isIOS ? memoryHistoryParams : {};
-
-if (isIOS && oldPathName !== "/" && window.history.pushState) {
-  window.history.pushState(null, null, "/");
-}
-
 function App() {
   return (
-    <Router {...routerProps}>
+    <BrowserRouter basename="/map">
       <Switch>
         <Route path="/">
           <SnackbarProvider maxSnack={5}>
@@ -43,7 +31,7 @@ function App() {
           </SnackbarProvider>
         </Route>
       </Switch>
-    </Router>
+    </BrowserRouter>
   );
 }
 
