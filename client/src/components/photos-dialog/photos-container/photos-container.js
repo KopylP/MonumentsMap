@@ -77,8 +77,10 @@ export default function PhotosContainer({
   };
 
   const setImageIndex = (index) => {
-    setSelectedMonumentPhotoIndex(index);
-    setImageLoading(true);
+    if (index !== selectedMonumentPhotoIndex) {
+      setSelectedMonumentPhotoIndex(index);
+      setImageLoading(true);
+    }
   };
 
   const handleMonumentPhotoClick = (monumentPhotoIndex) => {
