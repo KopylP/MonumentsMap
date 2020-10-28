@@ -23,6 +23,8 @@ import { withTranslation } from "react-i18next";
 import MyLocation from "../components/map/my-location/my-location";
 import { showErrorSnackbar } from "../components/helpers/snackbar-helpers";
 import Axios from "axios";
+import AppLoader from "../components/common/loaders/app-loader/app-loader";
+import { isMobile, isMobileOnly } from "react-device-detect";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -37,8 +39,8 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    display: "flex",
     zIndex: 1,
+    display: "flex",
   },
   mapContainer: {
     flexGrow: 1,
@@ -71,6 +73,7 @@ function MapPage({ store, i18n, t }) {
   const prevSelectedYearRange = usePrevious(selectedYearRange);
 
   const [cancelRequest, setCancelRequest] = useState(null);
+  const [firstLoading, setFirstLoading] = useState(true);
   const history = useHistory();
   let match = useRouteMatch();
   const makeCancelable = useCancelablePromise();
@@ -78,6 +81,7 @@ function MapPage({ store, i18n, t }) {
   const closeMonumentsLoading = (action = (p) => p) => {
     setTimeout(() => {
       setLoadingMonuments(false);
+      firstLoading && setFirstLoading(false);
       action();
     }, 300);
   };
@@ -192,7 +196,11 @@ function MapPage({ store, i18n, t }) {
 
   return (
     <AppContext.Provider value={contextValues}>
-      <div className={classes.app}>
+      <AppLoader show={firstLoading} />
+      <div
+        className={classes.app}
+        style={{ visibility: firstLoading ? "hidden" : "visible" }}
+      >
         <Map
           onMonumentSelected={(monumentId) =>
             setSelectedMonument({
