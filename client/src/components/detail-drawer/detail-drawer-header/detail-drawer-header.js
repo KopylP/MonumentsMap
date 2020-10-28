@@ -1,7 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
-import PhotoCarousel from "./photo-carousel/photo-carousel";
-import { isMobileOnly } from "react-device-detect";
 import MonumentDetailImage from "./monument-detail-image/monument-detail-image";
 
 const useStyles = makeStyles((theme) => ({
