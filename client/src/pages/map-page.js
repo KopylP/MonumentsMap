@@ -23,7 +23,6 @@ import { withTranslation } from "react-i18next";
 import MyLocation from "../components/map/my-location/my-location";
 import { showErrorSnackbar } from "../components/helpers/snackbar-helpers";
 import Axios from "axios";
-import AppLoader from "../components/common/loaders/app-loader/app-loader";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -87,7 +86,8 @@ function MapPage({ store, i18n, t }) {
 
   const handleFirstLoading = () => {
     const loadImage = document.getElementById('bundle-loader');
-    loadImage.remove(); //TODO make animable
+    loadImage.style.pointerEvents = "none";
+    loadImage.style.opacity = 0;
     setFirstLoading(false);
   }
 
@@ -201,7 +201,6 @@ function MapPage({ store, i18n, t }) {
 
   return (
     <AppContext.Provider value={contextValues}>
-      <AppLoader show={firstLoading} />
       <div
         className={classes.app}
         style={{ visibility: firstLoading ? "hidden" : "visible" }}
