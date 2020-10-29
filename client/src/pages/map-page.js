@@ -80,10 +80,16 @@ function MapPage({ store, i18n, t }) {
   const closeMonumentsLoading = (action = (p) => p) => {
     setTimeout(() => {
       setLoadingMonuments(false);
-      firstLoading && setFirstLoading(false);
+      firstLoading && handleFirstLoading();
       action();
     }, 300);
   };
+
+  const handleFirstLoading = () => {
+    const loadImage = document.getElementById('bundle-loader');
+    loadImage.remove(); //TODO make animable
+    setFirstLoading(false);
+  }
 
   function executor(e) {
     setCancelRequest({
