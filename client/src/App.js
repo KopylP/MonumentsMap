@@ -3,7 +3,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MapPage from "./pages/map-page";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
-// import { isIOS } from "react-device-detect";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./i18n";
 
 const theme = createMuiTheme({
   palette: {
@@ -21,17 +22,19 @@ const theme = createMuiTheme({
 
 function App() {
   return (
-    <BrowserRouter basename="/map">
-      <Switch>
-        <Route path="/">
-          <SnackbarProvider maxSnack={5}>
-            <MuiThemeProvider theme={theme}>
-              <MapPage />
-            </MuiThemeProvider>
-          </SnackbarProvider>
-        </Route>
-      </Switch>
-    </BrowserRouter>
+    <I18nextProvider i18n={i18n}>
+      <BrowserRouter basename="/map">
+        <Switch>
+          <Route path="/">
+            <SnackbarProvider maxSnack={5}>
+              <MuiThemeProvider theme={theme}>
+                <MapPage />
+              </MuiThemeProvider>
+            </SnackbarProvider>
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </I18nextProvider>
   );
 }
 
