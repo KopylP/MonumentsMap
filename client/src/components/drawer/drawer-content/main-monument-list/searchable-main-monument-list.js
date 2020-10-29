@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MainMonumentSearch from "./main-monument-search/main-monument-search";
-import { Box } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import MainMonumentList from "./main-monument-list";
 export default function SearchableMainMonumentList({ monuments = [] }) {
 

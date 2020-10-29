@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../../../../context/app-context";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
-import { IconButton, makeStyles, useTheme } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import "./photo-carousel.css";

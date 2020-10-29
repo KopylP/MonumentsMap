@@ -6,7 +6,7 @@ import { defaultZoom, accessToken, loadMapZoom, mapStyle } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { isMobileOnly } from "react-device-detect";
 
 const useStyles = makeStyles({

@@ -1,7 +1,7 @@
 import React from "react";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Fab from "@material-ui/core/Fab";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   fabBackRightAttach: {

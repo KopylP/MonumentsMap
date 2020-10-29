@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import clsx from "clsx";
-import { makeStyles, Drawer, CircularProgress } from "@material-ui/core";
+import Drawer from "@material-ui/core/Drawer";
+import { makeStyles } from "@material-ui/core/styles";
 import PhotoDrawerContent from "../photo-drawer-content/photo-drawer-content";
 import PhotoViewer from "../photo-viewer/photo-viewer";
 import AppContext from "../../../context/app-context";

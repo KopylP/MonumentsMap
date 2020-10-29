@@ -51,6 +51,7 @@
     "react-virtualized": "^9.21.2",
     "reselect": "^4.0.0",
     "roman-numbers": "^1.0.1",
+    "source-map-explorer": "^2.5.0",
     "styled-components": "^5.1.1",
     "typescript": "^3.9.7",
     "use-orientation-change": "^1.0.4",
@@ -58,8 +59,9 @@
     "yup": "^0.29.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -77,5 +79,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.1",
+    "babel-plugin-transform-imports": "^2.0.0",
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.1.6"
   }
 }

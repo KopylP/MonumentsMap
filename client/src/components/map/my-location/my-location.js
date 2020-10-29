@@ -1,4 +1,5 @@
-import { IconButton, makeStyles } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import MyLocationIcon from "@material-ui/icons/MyLocation";
 import getLocation from "../../helpers/get-location";
 import React, { useContext } from "react";

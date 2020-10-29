@@ -1,5 +1,6 @@
 import React from "react";
-import { Dialog, Fade } from "@material-ui/core";
+import Fade from "@material-ui/core/Fade";
+import Dialog from "@material-ui/core/Dialog";
 import PhotosContainer from "./photos-container/photos-container";
 
 

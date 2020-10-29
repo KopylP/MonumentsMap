@@ -1,13 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import AppContext from "../../../context/app-context";
 import { usePrevious } from "../../../hooks/hooks";
-import {
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import useCancelablePromise from '@rodw95/use-cancelable-promise';
 
 export default function DefaultFilter({

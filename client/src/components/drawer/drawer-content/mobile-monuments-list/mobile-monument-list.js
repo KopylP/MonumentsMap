@@ -3,7 +3,7 @@ import { List, AutoSizer } from "react-virtualized";
 import ScrollBar from "../../../common/scroll-bar/scroll-bar";
 import AppContext from "../../../../context/app-context";
 import MobileMonumentCard from "./mobile-monument-card";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyle = makeStyles({
   root: {

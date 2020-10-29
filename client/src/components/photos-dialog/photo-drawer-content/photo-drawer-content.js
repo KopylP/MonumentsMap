@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Grid } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import DetailDescription from "../../detail-drawer/detail-description/detail-description";
 import AppContext from "../../../context/app-context";

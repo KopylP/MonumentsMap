@@ -1,5 +1,6 @@
 import React from "react";
-import { makeStyles, Avatar } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
+import { makeStyles } from "@material-ui/core/styles";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import DetailYear from "../detail-year/detail-year";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";

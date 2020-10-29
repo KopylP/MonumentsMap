@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import MainDrawer from "../components/drawer/main-drawer";
 import AppContext from "../context/app-context";
 import MenuButton from "../components/common/menu-button/menu-button";

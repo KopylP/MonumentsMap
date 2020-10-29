@@ -4,7 +4,7 @@ import DrawerHeader from "./drawer-header/drawer-header";
 import DrawerContent from "./drawer-content/drawer-content";
 import AppContext from "../../context/app-context";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { isMobileOnly } from "react-device-detect";
 
 const useStyles = makeStyles((theme) => ({

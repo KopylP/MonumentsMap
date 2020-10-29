@@ -1,4 +1,4 @@
-import { useTheme } from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
 import React, { useContext } from "react";
 import ContentLoader from "react-content-loader";
 import AppContext from "../../../../context/app-context";

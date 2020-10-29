@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PinchZoomImageContainer from "../photo-lightbox/pinch-zoom-image-container/pinch-zoom-image-container";
 import PinchZoomImage from "../photo-lightbox/pinch-zoom-image/pinch-zoom-image";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import PhotoLightboxContext from "../photo-lightbox/context/photo-lightbox-context";
 
 const useStyles = makeStyles({

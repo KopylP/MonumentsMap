@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import { makeStyles, SwipeableDrawer } from "@material-ui/core";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import { makeStyles } from "@material-ui/core/styles";
 import DrawerContainer from "../common/drawer-container/drawer-container";
 import DetailDrawerHeader from "./detail-drawer-header/detail-drawer-header";
 import DetailDrawerContent from "./detail-drawer-content/detail-drawer-content";

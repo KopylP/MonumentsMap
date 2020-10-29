@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Dialog, GridList, GridListTile, makeStyles } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import { makeStyles } from "@material-ui/core/styles";
 import AppContext from "../../../context/app-context";
 import PhotoLightbox from "../photo-lightbox/photo-lightbox";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";

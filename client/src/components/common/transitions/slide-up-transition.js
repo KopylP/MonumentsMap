@@ -1,4 +1,4 @@
-import { Slide } from "@material-ui/core";
+import Slide from "@material-ui/core/Slide";
 import React from "react";
 
 const SlideUpTransition = React.forwardRef(function Transition(props, ref) {

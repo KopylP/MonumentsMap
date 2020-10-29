@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import Period from "../../../models/period";
 import { useTranslation } from "react-i18next";
 import { arabToRoman } from "roman-numbers";

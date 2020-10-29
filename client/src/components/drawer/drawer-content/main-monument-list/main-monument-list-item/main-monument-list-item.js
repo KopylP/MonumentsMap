@@ -1,12 +1,10 @@
 import React, { useContext } from "react";
-import {
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  Divider,
-  Typography,
-} from "@material-ui/core";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
 import AppContext from "../../../../../context/app-context";
 import SimpleDetailYear from "../../../../detail-drawer/detail-year/simple-detail-year";
 

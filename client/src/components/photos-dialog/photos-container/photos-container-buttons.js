@@ -2,7 +2,7 @@ import React from "react";
 import CarouselButtonContainer from "../../detail-drawer/detail-drawer-header/photo-carousel/carousel-button-container/carousel-button-container";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import { IconButton } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 
 export default function PhotosContainerButtons({
   onLeftClick,

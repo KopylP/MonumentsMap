@@ -1,5 +1,6 @@
 import React from "react";
-import { Grid, Divider } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Divider from "@material-ui/core/Divider";
 import DrawerAddress from "../detail-address/detail-address";
 import DetailCondition from "../detail-condition/detail-condition";
 import DetailStatus from "../detail-status/detail-status";

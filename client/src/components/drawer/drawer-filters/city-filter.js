@@ -2,7 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import AppContext from "../../../context/app-context";
 import { usePrevious } from "../../../hooks/hooks";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Grid, TextField } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import { useTranslation } from "react-i18next";
 

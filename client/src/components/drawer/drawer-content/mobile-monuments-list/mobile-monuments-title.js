@@ -1,5 +1,7 @@
 import React from "react";
-import { AppBar, Toolbar, IconButton, Typography } from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';

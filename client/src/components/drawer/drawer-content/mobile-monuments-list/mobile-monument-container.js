@@ -1,4 +1,5 @@
-import { Button, Grid } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import React, { useState } from "react";
 import { Trans } from "react-i18next";
 import MobileMonumentsListDialog from "./mobile-monument-list-dialog";

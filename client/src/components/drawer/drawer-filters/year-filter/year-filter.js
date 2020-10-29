@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
-import { Grid, Slider, makeStyles } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Slider from "@material-ui/core/Slider";
+import { makeStyles } from "@material-ui/core/styles";
 import YearLabel from "./year-label";
 import { yearsRange } from "../../../../config";
 import AppContext from "../../../../context/app-context";

@@ -1,7 +1,8 @@
 import React from "react";
 import ShareIcon from '@material-ui/icons/Share';
-import { IconButton, makeStyles } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
 

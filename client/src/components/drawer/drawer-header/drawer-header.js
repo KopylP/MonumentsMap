@@ -1,6 +1,6 @@
 import React from "react";
 import DrawerImage from "./drawer-image.jpg";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import DrawerBackButton from "../../common/drawer-back-button/drawer-back-button";
 import { isMobile } from "react-device-detect";
 

@@ -1,4 +1,4 @@
-import { Dialog } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
 import React, { useState } from "react";
 import SlideUpTransition from "../../../common/transitions/slide-up-transition";
 import MobileMonumentList from "./mobile-monument-list";

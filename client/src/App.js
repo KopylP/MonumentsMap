@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MapPage from "./pages/map-page";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { SnackbarProvider } from "notistack";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
