@@ -1,7 +1,8 @@
 import React, { memo, useContext } from "react";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
 import { default as MaterialList } from "@material-ui/core/List";
-import { List, AutoSizer } from "react-virtualized";
+import { List } from "react-virtualized/dist/commonjs/List";
+import { AutoSizer } from "react-virtualized/dist/commonjs/List";
 import MainMonumentListItem from "./main-monument-list-item/main-monument-list-item";
 import ScrollBar from "../../../common/scroll-bar/scroll-bar";
 import AppContext from "../../../../context/app-context";

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import { List, AutoSizer } from "react-virtualized";
+import { List } from "react-virtualized/dist/commonjs/List";
+import { AutoSizer } from "react-virtualized/dist/commonjs/List";
 import ScrollBar from "../../../common/scroll-bar/scroll-bar";
 import AppContext from "../../../../context/app-context";
 import MobileMonumentCard from "./mobile-monument-card";
