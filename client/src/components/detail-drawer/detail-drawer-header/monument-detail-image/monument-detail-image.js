@@ -1,8 +1,8 @@
 import { useTheme } from "@material-ui/core/styles";
 import React, { useContext } from "react";
-import ContentLoader from "react-content-loader";
 import AppContext from "../../../../context/app-context";
 import WithLoadingData from "../../../hoc-helpers/with-loading-data";
+import DrawerAnimContentLoader from "../../drawer-anim-content-loader/drawer-anim-content-loader";
 
 function MonumentDetailImage({
   data,
@@ -29,7 +29,7 @@ function MonumentDetailImage({
 export default WithLoadingData(MonumentDetailImage)(() => {
     const theme = useTheme();
     return (
-      <ContentLoader
+      <DrawerAnimContentLoader
         height={theme.detailDrawerHeaderHeight}
         width={theme.detailDrawerWidth}
       >
@@ -39,6 +39,6 @@ export default WithLoadingData(MonumentDetailImage)(() => {
           width={theme.detailDrawerWidth}
           height={theme.detailDrawerHeaderHeight}
         />
-      </ContentLoader>
+      </DrawerAnimContentLoader>
     );
   });

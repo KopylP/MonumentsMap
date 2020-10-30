@@ -7,10 +7,7 @@ import DetailDrawerContent from "./detail-drawer-content/detail-drawer-content";
 import AppContext from "../../context/app-context";
 import { usePrevious } from "../../hooks/hooks";
 import ScrollBar from "../common/scroll-bar/scroll-bar";
-import {
-  useHistory,
-  useParams,
-} from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import PhotosDialog from "../photos-dialog/photos-dialog";
 import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
 import { isMobileOnly } from "react-device-detect";
@@ -19,6 +16,7 @@ import PhotoMobileList from "../photos-dialog/photo-mobile-list/photo-mobile-lis
 import { showErrorSnackbar } from "../helpers/snackbar-helpers";
 import { useTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
+import { detailDrawerTransitionDuration } from "./config";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -56,12 +54,7 @@ export default function DetailDrawer(props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const onMonumentLoad = (monument) => {
-    ((monument) => {
-      centerMap(monument);
-      setTimeout(() => {
-        setMonument(monument);
-      }, 200);
-    })(monument);
+    setMonument(monument);
   };
 
   //change selectedMonument to open popup on the map
@@ -77,11 +70,13 @@ export default function DetailDrawer(props) {
   //---/end/----//
 
   const loadMonument = () => {
-    makeCancelable(monumentService.getMonumentById(monumentId))
-      .then(onMonumentLoad)
-      .catch(() => {
-        showErrorSnackbar(enqueueSnackbar, t("Network error"));
-      });
+    setTimeout(() => {
+      makeCancelable(monumentService.getMonumentById(monumentId))
+        .then(onMonumentLoad)
+        .catch(() => {
+          showErrorSnackbar(enqueueSnackbar, t("Network error"));
+        });
+    }, detailDrawerTransitionDuration); // wait until drawer will opened
   };
 
   const prevMonumentId = usePrevious(monumentId);
@@ -114,7 +109,7 @@ export default function DetailDrawer(props) {
     setDetailDrawerOpen(false);
     setTimeout(() => {
       history.replace("/");
-    }, 200);
+    }, detailDrawerTransitionDuration);
   };
 
   return (
@@ -127,9 +122,9 @@ export default function DetailDrawer(props) {
         classes={{
           paper: classes.drawerPaper,
         }}
-        transitionDuration={200}
+        transitionDuration={detailDrawerTransitionDuration}
         open={detailDrawerOpen}
-        onOpen={p => p}
+        onOpen={(p) => p}
       >
         <DrawerBackButton onClick={handleClose} />
         <ScrollBar>

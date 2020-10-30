@@ -7,7 +7,7 @@ import { usePrevious } from "../../hooks/hooks";
 import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
 import { makeStyles } from "@material-ui/core/styles";
-import { isMobileOnly } from "react-device-detect";
+import { isChrome, isIOS, isMobileOnly } from "react-device-detect";
 
 const useStyles = makeStyles({
   mobileOnlyMapStyles: {
@@ -68,6 +68,7 @@ function Map({ onMonumentSelected = (p) => p }) {
   const getVisibleMonumentMarkers = () => {
     return monuments
       .filter((monument) => {
+        if (isIOS && isChrome) return true;
         const latLng = new LatLng(monument.latitude, monument.longitude);
         const markerOnMap = mapRef.current.leafletElement
           .getBounds()
@@ -143,7 +144,7 @@ function Map({ onMonumentSelected = (p) => p }) {
     <LeafMap
       center={center}
       animate
-      duration={0.1}
+      duration={0.2}
       onViewportChange={onViewPortChange}
       onmovestart={handleMoveStart}
       onmoveend={handleMoveEnd}

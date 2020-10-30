@@ -26,7 +26,7 @@ export default function withStore(Wrapper) {
       });
       setTimeout(() => {
         setSelectedMonument({ ...monument, showPopup: true });
-      }, 150); //Wait, until map animation ends
+      }, 300); //Wait, until map animation ends
     };
   
     return (

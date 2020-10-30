@@ -10,13 +10,13 @@ const useStyles = makeStyles((theme) => ({
   },
   img: {
     maxWidth: 100,
-    height: "auto",
+    height: 65,
     marginLeft: 5,
     marginRight: 5,
     marginBottom: 5,
     boxSizing: "border-box",
-    maxHeight: 70,
-    objectFit: "scale-down",
+    // maxHeight: 70,
+    objectFit: "cover",
     flexGrow: 1,
   },
   imgBorder: {

@@ -88,6 +88,9 @@ function MapPage({ store, i18n, t }) {
     const loadImage = document.getElementById('bundle-loader');
     loadImage.style.pointerEvents = "none";
     loadImage.style.opacity = 0;
+    setTimeout(() => {
+      loadImage.remove();
+    }, 1000);
     setFirstLoading(false);
   }
 

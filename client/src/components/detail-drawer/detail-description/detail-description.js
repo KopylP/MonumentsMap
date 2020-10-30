@@ -1,10 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
-import { List } from "react-content-loader";
 import Markdown from "markdown-to-jsx";
 import { ContactMail } from "../../common/contact-mail/contact-mail";
 import { Trans } from "react-i18next";
+import DrawerAnimList from "../drawer-anim-content-loader/drawer-anim-list";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,5 +27,5 @@ function DetailDescription({ data, ...props }) {
   );
 }
 export default WithLoadingData(DetailDescription)(() => (
-  <List style={{ marginTop: 15 }} />
+  <DrawerAnimList style={{ marginTop: 15 }} />
 ));

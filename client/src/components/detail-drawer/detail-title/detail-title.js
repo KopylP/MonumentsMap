@@ -4,8 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import DetailYear from "../detail-year/detail-year";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
-import ContentLoader from "react-content-loader";
 import DetailCopyIcon from "./detail-copy-icon";
+import DrawerAnimContentLoader from "../drawer-anim-content-loader/drawer-anim-content-loader";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -44,7 +44,7 @@ function DetailTitle({ data, ...props }) {
 }
 
 export default WithLoadingData(DetailTitle)(() => (
-  <ContentLoader
+  <DrawerAnimContentLoader
     speed={2}
     width={300}
     height={40}
@@ -55,5 +55,5 @@ export default WithLoadingData(DetailTitle)(() => (
     <rect x="48" y="8" rx="3" ry="3" width="200" height="6" />
     <rect x="48" y="26" rx="3" ry="3" width="150" height="6" />
     <circle cx="20" cy="20" r="20" />
-  </ContentLoader>
+  </DrawerAnimContentLoader>
 ));

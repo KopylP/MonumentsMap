@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import Grid  from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import RoomIcon from "@material-ui/icons/Room";
-import ContentLoader from "react-content-loader";
 import AppContext from "../../../context/app-context";
 import WithLoadingData from "../../hoc-helpers/with-loading-data";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
+import DrawerAnimContentLoader from "../drawer-anim-content-loader/drawer-anim-content-loader";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -66,7 +66,7 @@ function DetailAddress({ data, ...props }) {
 export default WithLoadingData(DetailAddress)(() => <LoadingComponent />);
 
 const LoadingComponent = () => (
-  <ContentLoader height="18">
+  <DrawerAnimContentLoader height="18">
     <rect x="0" y="0" rx="5" ry="5" width="200" height="10" />
-  </ContentLoader>
+  </DrawerAnimContentLoader>
 );
