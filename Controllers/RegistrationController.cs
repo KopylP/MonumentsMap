@@ -28,7 +28,7 @@ namespace MonumentsMap.Controllers
         #endregion
         #region REST methods
         [HttpPost]
-        public async Task<IActionResult> Register(RegistrationUserViewModel registrationUserViewModel)
+        public async Task<IActionResult> Register([FromBody] RegistrationUserViewModel registrationUserViewModel)
         {
             var result = await _invitationService
                 .CheckInvitationCodeAsync(registrationUserViewModel.Email, registrationUserViewModel.InviteCode);
@@ -59,7 +59,7 @@ namespace MonumentsMap.Controllers
         #endregion
         #region public methods
         [HttpPost("Invite")]
-        public async Task<IActionResult> Invite(InvitationRequestViewModel invitationRequestViewModel)
+        public async Task<IActionResult> Invite([FromBody] InvitationRequestViewModel invitationRequestViewModel)
         {
             var inviteResponseModel = await _invitationService
                 .CreateInviteAsync(invitationRequestViewModel.Email);
