@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: "cover",
     position: "relative",
     backgroundPosition: "center",
-    flexShrink: 0
   },
   fabBack: {
     position: "absolute",

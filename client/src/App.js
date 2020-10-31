@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import MonumentService from "./services/monument-service";
 import GeocoderService from "./services/geocoder-service";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
@@ -10,7 +10,6 @@ import AppContext from "./context/app-context";
 import { serverHost } from "./config";
 import AppRouter from "./components/app-router/app-router";
 
-const MapPage = React.lazy(() => import("./pages/map-page"));
 
 const theme = createMuiTheme({
   palette: {
@@ -27,9 +26,7 @@ const theme = createMuiTheme({
 });
 
 function App({ store }) {
-  console.log(store);
   const { selectedLanguage } = store;
-
   const monumentService = new MonumentService(
     serverHost,
     selectedLanguage.code

@@ -6,7 +6,8 @@ const useStyles = makeStyles((theme) => ({
   imagesContainer: {
     width: "100%",
     height: theme.detailDrawerHeaderHeight,
-    flexShrink: 0,
+    flexShrink: 1,
+    minHeight: 150,
   },
 }));
 

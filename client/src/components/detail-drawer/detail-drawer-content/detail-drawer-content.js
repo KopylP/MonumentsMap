@@ -9,7 +9,7 @@ import DetailProtectionNumber from "../detail-protection-number/detail-protectio
 
 export default function DetailDrawerContent({ monument, ...props }) {
   return (
-    <div style={{ padding: 15 }}>
+    <div style={{ padding: 15, flexShrink: 0, }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <DrawerAddress
