@@ -20,7 +20,7 @@ export default function MobileMonumentList({ monuments }) {
   const classes = useStyle();
 
   const onMonumentItemClick = (monument) => {
-    handleMonumentSelected(monument);
+    handleMonumentSelected(monument, false);
   };
 
   const renderRow = ({ index, key, style }) => {

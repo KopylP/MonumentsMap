@@ -25,6 +25,7 @@ const useStyles = makeStyles({
 function Map({ onMonumentSelected = (p) => p }) {
   const {
     detailDrawerOpen,
+    setDetailDrawerOpen,
     monuments,
     center,
     setCenter,
@@ -107,13 +108,7 @@ function Map({ onMonumentSelected = (p) => p }) {
       changeCenter(center);
     }
   }, [center]);
-
-  useEffect(() => {
-    if (selectedMonument.showPopup) {
-      setMapSelectedMonumentId({ id: selectedMonument.id });
-    }
-  }, [selectedMonument]);
-
+  
   const updateMarkers = () => {
     setMarkers(getVisibleMonumentMarkers());
   };

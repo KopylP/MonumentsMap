@@ -1,15 +1,25 @@
 import React, { useState } from "react";
 import { isMobileOnly } from "react-device-detect";
-import { defaultCity, supportedCultures, yearsRange } from "../config";
+import { useTranslation } from "react-i18next";
+import { defineClientCulture } from "../components/helpers/lang";
+import {
+  defaultCity,
+  defaultClientCulture,
+  supportedCultures,
+  yearsRange,
+} from "../config";
 
 export default function withStore(Wrapper) {
   return (props) => {
+
+    const { i18n } = useTranslation();
+
     const [mainDrawerOpen, setMainDrawerOpen] = useState(!isMobileOnly);
     const [detailDrawerOpen, setDetailDrawerOpen] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(
-      supportedCultures[0]
+      defineClientCulture(supportedCultures, defaultClientCulture)
     );
-    const [selectedMonument, setSelectedMonument] = useState({ id: 0 });
+    const [selectedMonument, setSelectedMonument] = useState();
     const [selectedConditions, setSelectedConditions] = useState([]);
     const [selectedStatuses, setSelectedStatuses] = useState([]);
     const [selectedCities, setSelectedCities] = useState([]);
@@ -18,17 +28,37 @@ export default function withStore(Wrapper) {
     const [center, setCenter] = useState(defaultCity);
     const [loadingMonuments, setLoadingMonuments] = useState(false);
 
-    //functions
-    const handleMonumentSelected = (monument) => {
-      setCenter({
-        lat: monument.latitude,
-        lng: monument.longitude,
-      });
-      setTimeout(() => {
-        setSelectedMonument({ ...monument, showPopup: true });
-      }, 300); //Wait, until map animation ends
+    const _openDetailDrawer = () => {
+      if (!detailDrawerOpen) {
+        setDetailDrawerOpen(true);
+      }
     };
-  
+
+    //functions
+    const handleMonumentSelected = (monument, centerize = true) => {
+      if (monument) {
+        setSelectedMonument({ ...monument });
+        if (centerize) {
+          setCenter({
+            lat: monument.latitude,
+            lng: monument.longitude,
+          });
+          setTimeout(() => {
+            _openDetailDrawer();
+          }, 300); //Wait, until map animation ends
+        } else {
+          _openDetailDrawer();
+        }
+      }
+    };
+
+    const handleLanguageSelected = (language) => {
+      if (language) {
+        setSelectedLanguage(language);
+        i18n.changeLanguage(language.code.split("-")[0]);
+      }
+    };
+
     return (
       <Wrapper
         store={{
@@ -54,7 +84,8 @@ export default function withStore(Wrapper) {
           loadingMonuments,
           setLoadingMonuments,
           setMonuments,
-          handleMonumentSelected
+          handleMonumentSelected,
+          handleLanguageSelected
         }}
         {...props}
       />

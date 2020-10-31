@@ -1,25 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MainDrawer from "../components/drawer/main-drawer";
 import AppContext from "../context/app-context";
 import MenuButton from "../components/common/menu-button/menu-button";
 import Map from "../components/map/map";
-import { supportedCultures, serverHost, defaultClientCulture } from "../config";
-import MonumentService from "../services/monument-service";
 import DetailDrawer from "../components/detail-drawer/detail-drawer";
-import GeocoderService from "../services/geocoder-service";
 import { usePrevious } from "../hooks/hooks";
-import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import {
   doIfNotTheSame,
-  doIfNotZero,
   doIfArraysNotEqual,
 } from "../components/helpers/conditions";
-import { defineClientCulture } from "../components/helpers/lang";
-import withStore from "../store/with-store";
 import { useSnackbar } from "notistack";
-import { withTranslation } from "react-i18next";
+import { useTranslation, withTranslation } from "react-i18next";
 import MyLocation from "../components/map/my-location/my-location";
 import { showErrorSnackbar } from "../components/helpers/snackbar-helpers";
 import Axios from "axios";
@@ -45,24 +38,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MapPage({ store, i18n, t }) {
+function MapPage() {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {
     selectedLanguage,
-    setSelectedLanguage,
     selectedConditions,
     selectedCities,
     selectedStatuses,
     selectedYearRange,
-    selectedMonument,
     setMainDrawerOpen,
     monuments,
     setMonuments,
-    setSelectedMonument,
+    handleMonumentSelected,
+    monumentService,
     loadingMonuments,
     setLoadingMonuments,
-  } = store;
+  } = useContext(AppContext);
+
+  const { t } = useTranslation();
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
   const prevSelectedConditions = usePrevious(selectedConditions);
@@ -72,8 +66,7 @@ function MapPage({ store, i18n, t }) {
 
   const [cancelRequest, setCancelRequest] = useState(null);
   const [firstLoading, setFirstLoading] = useState(true);
-  const history = useHistory();
-  let match = useRouteMatch();
+
   const makeCancelable = useCancelablePromise();
 
   const closeMonumentsLoading = (action = (p) => p) => {
@@ -85,14 +78,14 @@ function MapPage({ store, i18n, t }) {
   };
 
   const handleFirstLoading = () => {
-    const loadImage = document.getElementById('bundle-loader');
+    const loadImage = document.getElementById("bundle-loader");
     loadImage.style.pointerEvents = "none";
     loadImage.style.opacity = 0;
     setTimeout(() => {
       loadImage.remove();
     }, 1000);
     setFirstLoading(false);
-  }
+  };
 
   function executor(e) {
     setCancelRequest({
@@ -147,20 +140,7 @@ function MapPage({ store, i18n, t }) {
       });
   };
 
-  const handleSelectedMonumentChange = () => {
-    doIfNotZero(selectedMonument.id)(() => {
-      if (!selectedMonument.slug || selectedMonument.slug == "") {
-        history.push(`${match.path}monument/${selectedMonument.id}`);
-      } else {
-        history.push(`${match.path}monument/${selectedMonument.slug}`);
-      }
-    });
-  };
-
-  useEffect(handleSelectedMonumentChange, [selectedMonument]);
-
   const handleSelectLanguage = () => {
-    i18n.changeLanguage(selectedLanguage.code.split("-")[0]);
     update();
   };
 
@@ -179,56 +159,28 @@ function MapPage({ store, i18n, t }) {
     doIfArraysNotEqual(prevSelectedYearRange, selectedYearRange)(update);
   }, [selectedYearRange]);
 
-  useEffect(
-    () =>
-      setSelectedLanguage(
-        defineClientCulture(supportedCultures, defaultClientCulture)
-      ),
-    []
-  );
-
-  const monumentService = new MonumentService(
-    serverHost,
-    selectedLanguage.code
-  );
-
-  const geocoderService = new GeocoderService(
-    selectedLanguage.code.split("-")[0]
-  );
-
-  const contextValues = {
-    ...store,
-    monumentService,
-    geocoderService,
-  };
-
   return (
-    <AppContext.Provider value={contextValues}>
-      <div
-        className={classes.app}
-        style={{ visibility: firstLoading ? "hidden" : "visible" }}
-      >
-        <Map
-          onMonumentSelected={(monumentId) =>
-            setSelectedMonument({
-              ...monuments.find((p) => p.id === monumentId),
-            })
-          }
-        />
-        <MenuButton
-          className={classes.menuButton}
-          onClick={() => setMainDrawerOpen(true)}
-        />
-        <MainDrawer />
-        <Switch>
-          <Route path={`${match.path}monument/:monumentId`}>
-            <DetailDrawer />
-          </Route>
-        </Switch>
-        <MyLocation />
-      </div>
-    </AppContext.Provider>
+    <div
+      className={classes.app}
+      style={{ visibility: firstLoading ? "hidden" : "visible" }}
+    >
+      <Map
+        onMonumentSelected={(monumentId) =>
+          handleMonumentSelected(
+            monuments.find((p) => p.id === monumentId),
+            false
+          )
+        }
+      />
+      <MenuButton
+        className={classes.menuButton}
+        onClick={() => setMainDrawerOpen(true)}
+      />
+      <MainDrawer />
+      <DetailDrawer />
+      <MyLocation />
+    </div>
   );
 }
 
-export default withTranslation()(withStore(MapPage));
+export default withTranslation()(MapPage);

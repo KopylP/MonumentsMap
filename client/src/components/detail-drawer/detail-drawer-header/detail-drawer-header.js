@@ -17,7 +17,6 @@ export default function DetailDrawerHeader({
   const classes = useStyles();
   return (
     <div className={classes.imagesContainer}>
-      {/* {isMobileOnly ? ( */}
       <MonumentDetailImage
         data={
           monument &&
@@ -26,12 +25,6 @@ export default function DetailDrawerHeader({
         }
         onMonumentPhotoClicked={onMonumentPhotoClicked}
       />
-      {/* ) : (
-        <PhotoCarousel
-          data={monument && monument.monumentPhotos}
-          onMonumentPhotoClicked={onMonumentPhotoClicked}
-        />
-      )} */}
     </div>
   );
 }
