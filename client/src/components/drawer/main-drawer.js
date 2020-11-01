@@ -11,21 +11,17 @@ import { closeDrawer } from "../../actions/filter-actions";
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
     width: theme.drawerWidth,
-    [theme.breakpoints.down(theme.drawerWidth + 20)]: {
-      width: "95%",
+    [theme.breakpoints.down(theme.drawerWidth)]: {
+      width: "100%",
     },
     flexShrink: 0,
   },
   drawerPaper: {
     width: theme.drawerWidth,
-    [theme.breakpoints.down(theme.drawerWidth + 20)]: {
-      width: "95%",
+    [theme.breakpoints.down(theme.drawerWidth)]: {
+      width: "100%",
     },
   },
-  floatingMenu: {
-    outline: 0,
-    boxShadow: "none"
-  }
 }));
 
 function MainDrawer({ drawerOpen, closeDrawer }) {
@@ -44,9 +40,6 @@ function MainDrawer({ drawerOpen, closeDrawer }) {
       anchor="left"
       classes={{
         paper: classes.drawerPaper,
-      }}
-      PaperProps={{
-        className: classes.floatingMenu
       }}
       open={isMobileOnly ? drawerOpen : true}
     >

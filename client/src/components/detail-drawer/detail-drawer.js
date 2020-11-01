@@ -12,54 +12,47 @@ const useStyles = makeStyles((theme) => ({
   drawerClass: {
     width: theme.detailDrawerWidth,
     flexShrink: 0,
-    [theme.breakpoints.down(theme.detailDrawerWidth + 20)]: {
-      width: "95%",
+    [theme.breakpoints.down(theme.detailDrawerWidth)]: {
+      width: "100%",
     },
   },
   drawerPaper: {
     width: theme.detailDrawerWidth,
-    [theme.breakpoints.down(theme.detailDrawerWidth + 20)]: {
-      width: "95%",
+    [theme.breakpoints.down(theme.detailDrawerWidth)]: {
+      width: "100%",
     },
   },
-  floatingMenu: {
-    outline: 0,
-    boxShadow: "none"
-  }
 }));
 
 function DetailDrawer({ detailDrawerOpen, closeDetailDrawer }) {
-
   const classes = useStyles();
 
-  
   const handleClose = () => {
     closeDetailDrawer();
   };
 
   return (
-      <SwipeableDrawer
-        className={classes.drawerClass}
-        variant={isMobileOnly ? "temporary" : "persistent"}
-        onClose={handleClose}
-        anchor="left"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-        PaperProps={{
-          className: classes.floatingMenu
-        }}
-        transitionDuration={detailDrawerTransitionDuration}
-        open={detailDrawerOpen}
-        onOpen={(p) => p}
-      >
-        <DrawerBackButton onClick={handleClose} />
-        <DetailDrawerRoot />
-      </SwipeableDrawer>
+    <SwipeableDrawer
+      className={classes.drawerClass}
+      variant={isMobileOnly ? "temporary" : "persistent"}
+      onClose={handleClose}
+      anchor="left"
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+      transitionDuration={detailDrawerTransitionDuration}
+      open={detailDrawerOpen}
+      onOpen={(p) => p}
+    >
+      <DrawerBackButton onClick={handleClose} />
+      <DetailDrawerRoot />
+    </SwipeableDrawer>
   );
-};
+}
 
-const bindStateToProps = ({ detailMonument: { detailDrawerOpen } }) => ({detailDrawerOpen});
+const bindStateToProps = ({ detailMonument: { detailDrawerOpen } }) => ({
+  detailDrawerOpen,
+});
 const bindDispatchToProps = { closeDetailDrawer };
 
 export default connect(bindStateToProps, bindDispatchToProps)(DetailDrawer);
