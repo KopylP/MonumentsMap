@@ -1,10 +1,16 @@
-import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import MapPage from "./pages/map-page";
+import React, { useState } from "react";
+import MonumentService from "./services/monument-service";
+import GeocoderService from "./services/geocoder-service";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { SnackbarProvider } from "notistack";
-import { I18nextProvider } from "react-i18next";
-import i18n from "./i18n";
+import { I18nextProvider, useTranslation } from "react-i18next";
+import i18nFile from "./i18n";
+import AppContext from "./context/app-context";
+import { defaultClientCulture, serverHost, supportedCultures } from "./config";
+import AppRouter from "./components/app-router/app-router";
+import { Provider } from "react-redux";
+import store from "./store";
+import { defineClientCulture } from "./components/helpers/lang";
 
 const theme = createMuiTheme({
   palette: {
@@ -21,21 +27,48 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const { i18n } = useTranslation();
+
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    defineClientCulture(supportedCultures, defaultClientCulture)
+  );
+
+  const handleLanguageSelected = (language) => {
+    if (language) {
+      setSelectedLanguage(language);
+      i18n.changeLanguage(language.code.split("-")[0]);
+    }
+  };
+
+  const monumentService = new MonumentService(
+    serverHost,
+    selectedLanguage.code
+  );
+
+  const geocoderService = new GeocoderService(
+    selectedLanguage.code.split("-")[0]
+  );
+
+  const contextValues = {
+    monumentService,
+    geocoderService,
+    selectedLanguage,
+    handleLanguageSelected,
+  };
+
   return (
-    <I18nextProvider i18n={i18n}>
-      <BrowserRouter basename="/map">
-        <Switch>
-          <Route path="/">
+    <AppContext.Provider value={contextValues}>
+      <Provider store={store}>
+        <I18nextProvider i18n={i18nFile}>
+          <MuiThemeProvider theme={theme}>
             <SnackbarProvider maxSnack={5}>
-              <MuiThemeProvider theme={theme}>
-                <MapPage />
-              </MuiThemeProvider>
+              <AppRouter />
             </SnackbarProvider>
-          </Route>
-        </Switch>
-      </BrowserRouter>
-    </I18nextProvider>
+          </MuiThemeProvider>
+        </I18nextProvider>
+      </Provider>
+    </AppContext.Provider>
   );
 }
 
-export default App;
+export default React.memo(App);

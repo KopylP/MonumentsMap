@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import AppContext from "../../../context/app-context";
 import DefaultFilter from "./default-filter";
 import { useTranslation } from "react-i18next";
+import { changeStatuses } from "../../../actions/filter-actions";
+import { connect } from "react-redux";
 
-export default function StatusFilter() {
+function StatusFilter({ statuses, changeStatuses }) {
   const {
     monumentService: { getAllStatuses },
-    selectedStatuses,
-    setSelectedStatuses,
   } = useContext(AppContext);
 
   const { t } = useTranslation();
@@ -15,10 +15,15 @@ export default function StatusFilter() {
   return (
     <DefaultFilter
       title={t("Monument status")}
-      selectedValues={selectedStatuses}
-      setSelectedValues={setSelectedStatuses}
+      selectedValues={statuses}
+      setSelectedValues={changeStatuses}
       multiple
       getDataMethod={getAllStatuses}
     />
   );
 }
+
+const mapStateToProps = ({ filter: { statuses } }) => ({ statuses });
+const mapDispatchToProps = { changeStatuses };
+
+export default connect(mapStateToProps, mapDispatchToProps)(StatusFilter);

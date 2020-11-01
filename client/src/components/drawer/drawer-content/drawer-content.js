@@ -12,6 +12,7 @@ import YearFilter from "../drawer-filters/year-filter/year-filter";
 // import MonumentIcons from "../monument-icons/monument-icons";
 import { isMobileOnly } from "react-device-detect";
 import MobileMonumentContainer from "./mobile-monuments-list/mobile-monument-container";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles({
   root: {
@@ -31,13 +32,15 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DrawerContent(props) {
-  const { monuments, loadingMonuments } = useContext(AppContext);
+function DrawerContent({ monumentsLoading, monuments }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      {loadingMonuments && (
-        <LinearProgress className={classes.loadingIndicatior} color="secondary"/>
+      {monumentsLoading && (
+        <LinearProgress
+          className={classes.loadingIndicatior}
+          color="secondary"
+        />
       )}
       <Grid container justify="flex-start" spacing={2}>
         <Grid item xs={12}>
@@ -48,9 +51,15 @@ export default function DrawerContent(props) {
         <CityFilter />
         <StatusFilter />
         <ConditionFilter />
-        { isMobileOnly && <MobileMonumentContainer monuments={monuments}/> }
+        {isMobileOnly && <MobileMonumentContainer monuments={monuments} />}
       </Grid>
       {!isMobileOnly && <SearchableMainMonumentList monuments={monuments} />}
     </div>
   );
 }
+
+const bindStateToProps = ({ monument: { monuments, loading } }) => ({
+  monuments,
+  monumentsLoading: loading,
+});
+export default connect(bindStateToProps)(DrawerContent);

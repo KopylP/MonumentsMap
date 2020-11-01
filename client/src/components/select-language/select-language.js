@@ -8,21 +8,21 @@ import AppContext from "../../context/app-context";
 
 export default function SelectLanguage(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { selectedLanguage, setSelectedLanguage } = useContext(AppContext);
+  const { selectedLanguage, handleLanguageSelected } = useContext(AppContext);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = (culture = null) => {
-    if (culture !== null) {
-      setSelectedLanguage(culture);
-    }
+    handleLanguageSelected(culture);
     setAnchorEl(null);
   };
 
   const menuItems = supportedCultures.map((culture, i) => (
-    <MenuItem key={i} onClick={() => handleMenuClose(culture)}>{culture.name}</MenuItem>
+    <MenuItem key={i} onClick={() => handleMenuClose(culture)}>
+      {culture.name}
+    </MenuItem>
   ));
 
   return (

@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MainDrawer from "../components/drawer/main-drawer";
 import AppContext from "../context/app-context";
 import MenuButton from "../components/common/menu-button/menu-button";
 import Map from "../components/map/map";
-import { supportedCultures, serverHost, defaultClientCulture } from "../config";
-import MonumentService from "../services/monument-service";
 import DetailDrawer from "../components/detail-drawer/detail-drawer";
-import GeocoderService from "../services/geocoder-service";
 import { usePrevious } from "../hooks/hooks";
-import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
-import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import {
   doIfNotTheSame,
-  doIfNotZero,
   doIfArraysNotEqual,
 } from "../components/helpers/conditions";
-import { defineClientCulture } from "../components/helpers/lang";
-import withStore from "../store/with-store";
 import { useSnackbar } from "notistack";
-import { withTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import MyLocation from "../components/map/my-location/my-location";
 import { showErrorSnackbar } from "../components/helpers/snackbar-helpers";
-import Axios from "axios";
+import { connect } from "react-redux";
+import { fetchMonuments } from "../actions/monument-actions";
+import withMonumentService from "../components/hoc-helpers/with-monument-service";
+import { bindActionCreators } from "redux";
+import { changeMonument } from "../actions/detail-monument-actions";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -45,60 +41,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MapPage({ store, i18n, t }) {
+function MapPage({
+  monuments,
+  fetchMonuments,
+  error,
+  statuses,
+  conditions,
+  cities,
+  yearsRange,
+  changeMonument,
+}) {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const {
-    selectedLanguage,
-    setSelectedLanguage,
-    selectedConditions,
-    selectedCities,
-    selectedStatuses,
-    selectedYearRange,
-    selectedMonument,
-    setMainDrawerOpen,
-    monuments,
-    setMonuments,
-    setSelectedMonument,
-    loadingMonuments,
-    setLoadingMonuments,
-  } = store;
+  const { selectedLanguage } = useContext(AppContext);
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
-  const prevSelectedConditions = usePrevious(selectedConditions);
-  const prevSelectedCities = usePrevious(selectedCities);
-  const prevSelectedStatuses = usePrevious(selectedStatuses);
-  const prevSelectedYearRange = usePrevious(selectedYearRange);
+  const prevSelectedConditions = usePrevious(conditions);
+  const prevSelectedCities = usePrevious(cities);
+  const prevSelectedStatuses = usePrevious(statuses);
+  const prevSelectedYearRange = usePrevious(yearsRange);
+  const prevMonuments = usePrevious(monuments);
 
-  const [cancelRequest, setCancelRequest] = useState(null);
-  const [firstLoading, setFirstLoading] = useState(true);
-  const history = useHistory();
-  let match = useRouteMatch();
-  const makeCancelable = useCancelablePromise();
-
-  const closeMonumentsLoading = (action = (p) => p) => {
-    setTimeout(() => {
-      setLoadingMonuments(false);
-      firstLoading && handleFirstLoading();
-      action();
-    }, 300);
-  };
-
-  const handleFirstLoading = () => {
-    const loadImage = document.getElementById('bundle-loader');
-    loadImage.style.pointerEvents = "none";
-    loadImage.style.opacity = 0;
-    setTimeout(() => {
-      loadImage.remove();
-    }, 1000);
-    setFirstLoading(false);
-  }
-
-  function executor(e) {
-    setCancelRequest({
-      cancel: e,
-    });
-  }
+  const { t } = useTranslation();
 
   const showSnackbar = (message) => {
     enqueueSnackbar(message, {
@@ -108,127 +72,82 @@ function MapPage({ store, i18n, t }) {
     });
   };
 
-  const handleMonumentsLoading = (monuments) => {
-    const monumentsNotFound = () => {
-      if (monuments.length === 0) {
-        showSnackbar(t("No monuments were found by such criteria"));
-      } else {
-        closeSnackbar();
-      }
-    };
-    setMonuments(monuments);
-    closeMonumentsLoading(monumentsNotFound);
-  };
-
   const update = () => {
-    if (cancelRequest) {
-      cancelRequest.cancel();
-    }
-
-    if (!loadingMonuments) {
-      setLoadingMonuments(true);
-    }
-
-    makeCancelable(
-      monumentService.getMonumentsByFilter(
-        selectedCities.map((c) => c.id),
-        selectedStatuses,
-        selectedConditions,
-        selectedYearRange,
-        executor
-      )
-    )
-      .then(handleMonumentsLoading)
-      .catch((e) => {
-        if (!Axios.isCancel(e)) {
-          closeMonumentsLoading();
-          showErrorSnackbar(enqueueSnackbar, t("Network error"));
-        }
-      });
+    fetchMonuments(cities, statuses, conditions, yearsRange);
   };
-
-  const handleSelectedMonumentChange = () => {
-    doIfNotZero(selectedMonument.id)(() => {
-      if (!selectedMonument.slug || selectedMonument.slug == "") {
-        history.push(`${match.path}monument/${selectedMonument.id}`);
-      } else {
-        history.push(`${match.path}monument/${selectedMonument.slug}`);
-      }
-    });
-  };
-
-  useEffect(handleSelectedMonumentChange, [selectedMonument]);
 
   const handleSelectLanguage = () => {
-    i18n.changeLanguage(selectedLanguage.code.split("-")[0]);
     update();
   };
 
   useEffect(() => {
-    doIfArraysNotEqual(prevSelectedConditions, selectedConditions)(update);
-    doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
-    doIfArraysNotEqual(prevSelectedCities, selectedCities, (p) => p.id)(update);
+    doIfArraysNotEqual(prevSelectedConditions, conditions)(update);
+    doIfArraysNotEqual(prevSelectedStatuses, statuses)(update);
+    doIfArraysNotEqual(prevSelectedCities, cities, (p) => p.id)(update);
+    doIfArraysNotEqual(prevSelectedYearRange, yearsRange)(update);
     doIfNotTheSame(
       selectedLanguage,
       prevSelectedLanguage,
       (p) => p.code
     )(handleSelectLanguage);
-  }, [selectedConditions, selectedCities, selectedStatuses, selectedLanguage]);
+  }, [conditions, cities, statuses, selectedLanguage, yearsRange]);
 
   useEffect(() => {
-    doIfArraysNotEqual(prevSelectedYearRange, selectedYearRange)(update);
-  }, [selectedYearRange]);
+    if (!error && prevMonuments && monuments.length === 0) {
+      setTimeout(() => {
+        showSnackbar(t("No monuments were found by such criteria"));
+      }, 400);
+    } else {
+      closeSnackbar();
+    }
+  }, [monuments]);
 
-  useEffect(
-    () =>
-      setSelectedLanguage(
-        defineClientCulture(supportedCultures, defaultClientCulture)
-      ),
-    []
-  );
-
-  const monumentService = new MonumentService(
-    serverHost,
-    selectedLanguage.code
-  );
-
-  const geocoderService = new GeocoderService(
-    selectedLanguage.code.split("-")[0]
-  );
-
-  const contextValues = {
-    ...store,
-    monumentService,
-    geocoderService,
-  };
+  useEffect(() => {
+    if (error) showErrorSnackbar(enqueueSnackbar, t("Network error"));
+  }, [error]);
 
   return (
-    <AppContext.Provider value={contextValues}>
-      <div
-        className={classes.app}
-        style={{ visibility: firstLoading ? "hidden" : "visible" }}
-      >
-        <Map
-          onMonumentSelected={(monumentId) =>
-            setSelectedMonument({
-              ...monuments.find((p) => p.id === monumentId),
-            })
-          }
-        />
-        <MenuButton
-          className={classes.menuButton}
-          onClick={() => setMainDrawerOpen(true)}
-        />
-        <MainDrawer />
-        <Switch>
-          <Route path={`${match.path}monument/:monumentId`}>
-            <DetailDrawer />
-          </Route>
-        </Switch>
-        <MyLocation />
-      </div>
-    </AppContext.Provider>
+    <div
+      className={classes.app}
+      // style={{ visibility: firstLoading ? "hidden" : "visible" }}
+    >
+      <Map
+        onMonumentSelected={(monumentId) =>
+          changeMonument(
+            monuments.find((p) => p.id === monumentId),
+            false
+          )
+        }
+      />
+      <MenuButton className={classes.menuButton} />
+      <MainDrawer />
+      <DetailDrawer />
+      <MyLocation />
+    </div>
   );
 }
 
-export default withTranslation()(withStore(MapPage));
+const mapStateToProps = ({
+  monument: { monuments, error },
+  filter: { statuses, conditions, cities, yearsRange },
+}) => ({
+  monuments,
+  error,
+  statuses,
+  conditions,
+  cities,
+  yearsRange,
+});
+
+const mapDispatchToProps = (dispatch, { monumentService }) => {
+  return bindActionCreators(
+    {
+      fetchMonuments: fetchMonuments(monumentService),
+      changeMonument: changeMonument(),
+    },
+    dispatch
+  );
+};
+export default withMonumentService()(
+  connect(mapStateToProps, mapDispatchToProps)(MapPage)
+);

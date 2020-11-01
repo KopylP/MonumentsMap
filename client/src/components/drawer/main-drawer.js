@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import DrawerContainer from "../common/drawer-container/drawer-container";
 import DrawerHeader from "./drawer-header/drawer-header";
 import DrawerContent from "./drawer-content/drawer-content";
-import AppContext from "../../context/app-context";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { makeStyles } from "@material-ui/core/styles";
 import { isMobileOnly } from "react-device-detect";
+import { connect } from "react-redux";
+import { closeDrawer } from "../../actions/filter-actions";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -23,25 +24,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MainDrawer(props) {
-  const { mainDrawerOpen, setMainDrawerOpen } = useContext(AppContext);
-  const classes = useStyles(props);
+function MainDrawer({ drawerOpen, closeDrawer }) {
+  const classes = useStyles();
 
   const handleClose = () => {
-    setMainDrawerOpen(false);
-  }
+    closeDrawer();
+  };
 
   return (
     <SwipeableDrawer
       className={classes.drawerClass}
       variant={isMobileOnly ? "temporary" : "persistent"}
       onClose={handleClose}
-      onOpen={p => p}
+      onOpen={(p) => p}
       anchor="left"
       classes={{
         paper: classes.drawerPaper,
       }}
-      open={mainDrawerOpen}
+      open={isMobileOnly ? drawerOpen : true}
     >
       <DrawerContainer>
         <DrawerHeader onBack={handleClose} />
@@ -50,3 +50,8 @@ export default function MainDrawer(props) {
     </SwipeableDrawer>
   );
 }
+
+const mapStateToProps = ({ filter: { drawerOpen } }) => ({ drawerOpen });
+const mapDispatchToProps = { closeDrawer };
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainDrawer);

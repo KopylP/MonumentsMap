@@ -6,13 +6,13 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import { useTranslation } from "react-i18next";
+import { changeCities } from "../../../actions/filter-actions";
+import { connect } from "react-redux";
 
-export default function CityFilter() {
+function CityFilter({ selectedCities, changeCities }) {
   const {
     monumentService,
     selectedLanguage,
-    selectedCities,
-    setSelectedCities,
   } = useContext(AppContext);
   const makeCancelable = useCancelablePromise();
 
@@ -42,6 +42,7 @@ export default function CityFilter() {
   useEffect(handleLanguageChange, [selectedLanguage]);
 
   const handleCitiesChange = () => {
+
     const newSelectedCities = selectedCities.map((selectedCity) => {
       const cityIndex = cities.findIndex((p) => p.id === selectedCity.id);
       if (cityIndex !== -1) {
@@ -49,7 +50,7 @@ export default function CityFilter() {
       }
       return selectedCity;
     });
-    setSelectedCities(newSelectedCities);
+    changeCities(newSelectedCities);
   }
 
   useEffect(handleCitiesChange, [cities]);
@@ -60,7 +61,7 @@ export default function CityFilter() {
   };
 
   const onSelectedCitiesChange = (e, newValue) => {
-    setSelectedCities(newValue);
+    changeCities(newValue);
   };
 
   return (
@@ -84,3 +85,8 @@ export default function CityFilter() {
     </Grid>
   );
 }
+
+const mapStateToProps = ({ filter: { cities } }) => ({selectedCities: cities});
+const mapDispatchToProps = { changeCities };
+
+export default connect(mapStateToProps, mapDispatchToProps)(CityFilter);

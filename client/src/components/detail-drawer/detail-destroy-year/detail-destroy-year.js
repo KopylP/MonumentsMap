@@ -5,8 +5,6 @@ import { useTranslation } from "react-i18next";
 
 export default function DetailDestroyYear({ year, period }) {
 
-  console.log(period, year);
-
   const { t } = useTranslation();
 
   let dateText;

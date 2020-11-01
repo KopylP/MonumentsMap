@@ -6,7 +6,8 @@ const useStyles = makeStyles((theme) => ({
   imagesContainer: {
     width: "100%",
     height: theme.detailDrawerHeaderHeight,
-    flexShrink: 0,
+    flexShrink: 1,
+    minHeight: 150,
   },
 }));
 
@@ -17,7 +18,6 @@ export default function DetailDrawerHeader({
   const classes = useStyles();
   return (
     <div className={classes.imagesContainer}>
-      {/* {isMobileOnly ? ( */}
       <MonumentDetailImage
         data={
           monument &&
@@ -26,12 +26,6 @@ export default function DetailDrawerHeader({
         }
         onMonumentPhotoClicked={onMonumentPhotoClicked}
       />
-      {/* ) : (
-        <PhotoCarousel
-          data={monument && monument.monumentPhotos}
-          onMonumentPhotoClicked={onMonumentPhotoClicked}
-        />
-      )} */}
     </div>
   );
 }

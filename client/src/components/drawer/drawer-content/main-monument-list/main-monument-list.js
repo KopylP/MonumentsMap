@@ -4,13 +4,13 @@ import { List as MaterialList } from "@material-ui/core/";
 import { List, AutoSizer } from "react-virtualized";
 import MainMonumentListItem from "./main-monument-list-item/main-monument-list-item";
 import ScrollBar from "../../../common/scroll-bar/scroll-bar";
-import AppContext from "../../../../context/app-context";
+import { connect } from "react-redux";
+import { changeMonument } from "../../../../actions/detail-monument-actions";
+import { bindActionCreators } from "redux";
 
-function MainMonumentList({ data }) {
-  const { handleMonumentSelected } = useContext(AppContext);
-
+function MainMonumentList({ data, changeMonument }) {
   const onMonumentItemClick = (monument) => {
-    handleMonumentSelected(monument);
+    changeMonument(monument);
   };
 
   const renderRow = ({ index, key, style }) => {
@@ -53,6 +53,9 @@ function MainMonumentList({ data }) {
   );
 }
 
-export default WithLoadingData(memo(MainMonumentList))(() => (
+const bindDispatchToProps = (dispatch) =>
+  bindActionCreators({ changeMonument: changeMonument() }, dispatch);
+
+export default WithLoadingData(memo(connect(null, bindDispatchToProps)(MainMonumentList)))(() => (
   <div>loading</div>
 ));
