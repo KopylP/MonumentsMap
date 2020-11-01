@@ -42,7 +42,7 @@ function DetailDrawerRoot({ selectedMonument, detailDrawerOpen }) {
       setMonument(null);
       loadMonument();
     }
-  }, [detailDrawerOpen]);
+  }, [detailDrawerOpen, selectedMonument]);
 
 
   return (
