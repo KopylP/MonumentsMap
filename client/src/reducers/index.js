@@ -1,13 +1,10 @@
 import { combineReducers } from "redux";
+import filterReducer from "./filter-reducer";
 import monumentReducer from "./monument-reducer";
-const initialState = {
-    monuments: [],
-    loading: true,
-    error: null,
-};
 
 const reducer = combineReducers({
-    monument: monumentReducer
+    monument: monumentReducer,
+    filter: filterReducer
 });
 
 export default reducer;

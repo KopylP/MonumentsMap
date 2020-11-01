@@ -134,7 +134,6 @@ export default memo(function AddPhotoModal({
         .savePhoto(file)
         .then((photo) => {
           const monumentPhoto = getMonumentPhoto(photo.id);
-          console.log(monumentPhoto);
           monumentService
             .createPhotoMonument(monumentPhoto)
             .then((mp) => onCreateMonumentPhoto(mp, resetForm))

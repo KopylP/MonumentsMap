@@ -21,7 +21,6 @@ function EditMonumentParticipants({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(participants);
     acceptForm([itemId, participants]);
   };
 

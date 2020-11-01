@@ -19,7 +19,6 @@ const mergeTwoArraysByKey = (
   if (secondArray.length > firstArray.length)
     throw new Error("Second array sould be less or equal then firstArray");
   const changedFirstArray = firstArray.map((obj) => {
-    console.log(obj);
     if (firstKey !== newKey) {
       Object.defineProperty(
         obj,
@@ -49,7 +48,6 @@ const mergeTwoArraysByKey = (
 
   changedFirstArray.sort(compareValuesInArray);
   changedSecondArray.sort(compareValuesInArray);
-  console.log(changedFirstArray);
   const concatArray = [];
   changedSecondArray.forEach((obj) => {
     concatArray.push(obj);

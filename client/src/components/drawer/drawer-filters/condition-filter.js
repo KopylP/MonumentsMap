@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import AppContext from "../../../context/app-context";
 import DefaultFilter from "./default-filter";
 import { useTranslation } from "react-i18next";
+import { connect } from "react-redux";
+import { changeConditions } from "../../../actions/filter-actions";
 
-export default function ConditionFilter() {
+function ConditionFilter({ conditions, changeConditions }) {
   const {
     monumentService: { getAllConditions },
-    selectedConditions,
-    setSelectedConditions,
   } = useContext(AppContext);
 
   const { t } = useTranslation();
@@ -15,10 +15,15 @@ export default function ConditionFilter() {
   return (
     <DefaultFilter
       title={t('Monument condition')}
-      selectedValues={selectedConditions}
-      setSelectedValues={setSelectedConditions}
+      selectedValues={conditions}
+      setSelectedValues={changeConditions}
       multiple
       getDataMethod={getAllConditions}
     />
   );
 }
+
+const mapStateToProps = ({ filter: { conditions } }) => ({ conditions });
+const mapDispatchToProps = { changeConditions };
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConditionFilter);

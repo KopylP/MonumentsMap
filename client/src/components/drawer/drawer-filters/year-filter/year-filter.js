@@ -3,8 +3,9 @@ import Grid from "@material-ui/core/Grid";
 import Slider from "@material-ui/core/Slider";
 import { makeStyles } from "@material-ui/core/styles";
 import YearLabel from "./year-label";
-import { yearsRange } from "../../../../config";
-import AppContext from "../../../../context/app-context";
+import { yearsRange as yearsRangeDefault } from "../../../../config";
+import { changeYearsRange } from "../../../../actions/filter-actions";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles({
   root: {
@@ -21,24 +22,23 @@ const useStyles = makeStyles({
   },
 });
 
-export default function YearFilter() {
+function YearFilter({ yearsRange, changeYearsRange }) {
   const classes = useStyles();
-  const { setSelectedYearRange, selectedYearRange } = useContext(AppContext);
-  const [value, setValue] = useState(selectedYearRange);
+  const [value, setValue] = useState(yearsRange);
   const [valueCanChanged, setValueCanChanged] = useState(true);
 
   const handleChange = (_, newValue) => {
     setValue(newValue);
-  }
+  };
 
   const handleChangeCommitted = (_, newValue) => {
-    if(valueCanChanged) {
+    if (valueCanChanged) {
       setValueCanChanged(false);
       setValue(newValue);
-      setSelectedYearRange(newValue);
+      changeYearsRange(newValue);
       setTimeout(() => setValueCanChanged(true), 50);
     }
-  }
+  };
 
   return (
     <Grid item xs={12}>
@@ -50,16 +50,24 @@ export default function YearFilter() {
             onChangeCommitted={handleChangeCommitted}
             valueLabelDisplay="auto"
             aria-labelledby="range-slider"
-            min={yearsRange[0]}
-            max={yearsRange[1]}
+            min={yearsRangeDefault[0]}
+            max={yearsRangeDefault[1]}
             // getAriaValueText={valuetext}
           />
         </div>
         <div className={classes.yearContainer}>
-          <YearLabel year={selectedYearRange[0]} />
-          <YearLabel year={selectedYearRange[1]} />
+          <YearLabel year={yearsRange[0]} />
+          <YearLabel year={yearsRange[1]} />
         </div>
       </div>
     </Grid>
   );
 }
+
+const mapStateToProps = ({ filter: { yearsRange } }) => ({
+  yearsRange,
+});
+
+const mapDispatchToProps = { changeYearsRange };
+
+export default connect(mapStateToProps, mapDispatchToProps)(YearFilter);

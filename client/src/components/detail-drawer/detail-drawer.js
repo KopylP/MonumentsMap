@@ -34,7 +34,6 @@ export default memo(function DetailDrawer() {
 
   
   const handleClose = () => {
-    console.log("detail drawer on close");
     setDetailDrawerOpen(false);
   };
 

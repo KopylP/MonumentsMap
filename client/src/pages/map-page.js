@@ -40,28 +40,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MapPage({ monuments, fetchMonuments, error }) {
+function MapPage({
+  monuments,
+  fetchMonuments,
+  error,
+  statuses,
+  conditions,
+  cities,
+  yearsRange,
+}) {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const {
-    selectedLanguage,
-    selectedConditions,
-    selectedCities,
-    selectedStatuses,
-    selectedYearRange,
-    setMainDrawerOpen,
-    handleMonumentSelected,
-  } = useContext(AppContext);
+  const { selectedLanguage, handleMonumentSelected } = useContext(AppContext);
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
-  const prevSelectedConditions = usePrevious(selectedConditions);
-  const prevSelectedCities = usePrevious(selectedCities);
-  const prevSelectedStatuses = usePrevious(selectedStatuses);
-  const prevSelectedYearRange = usePrevious(selectedYearRange);
+  const prevSelectedConditions = usePrevious(conditions);
+  const prevSelectedCities = usePrevious(cities);
+  const prevSelectedStatuses = usePrevious(statuses);
+  const prevSelectedYearRange = usePrevious(yearsRange);
   const prevMonuments = usePrevious(monuments);
 
   const { t } = useTranslation();
-
 
   const showSnackbar = (message) => {
     enqueueSnackbar(message, {
@@ -72,12 +71,7 @@ function MapPage({ monuments, fetchMonuments, error }) {
   };
 
   const update = () => {
-    fetchMonuments(
-      selectedCities,
-      selectedStatuses,
-      selectedConditions,
-      selectedYearRange
-    );
+    fetchMonuments(cities, statuses, conditions, yearsRange);
   };
 
   const handleSelectLanguage = () => {
@@ -85,22 +79,18 @@ function MapPage({ monuments, fetchMonuments, error }) {
   };
 
   useEffect(() => {
-    doIfArraysNotEqual(prevSelectedConditions, selectedConditions)(update);
-    doIfArraysNotEqual(prevSelectedStatuses, selectedStatuses)(update);
-    doIfArraysNotEqual(prevSelectedCities, selectedCities, (p) => p.id)(update);
+    doIfArraysNotEqual(prevSelectedConditions, conditions)(update);
+    doIfArraysNotEqual(prevSelectedStatuses, statuses)(update);
+    doIfArraysNotEqual(prevSelectedCities, cities, (p) => p.id)(update);
+    doIfArraysNotEqual(prevSelectedYearRange, yearsRange)(update);
     doIfNotTheSame(
       selectedLanguage,
       prevSelectedLanguage,
       (p) => p.code
     )(handleSelectLanguage);
-  }, [selectedConditions, selectedCities, selectedStatuses, selectedLanguage]);
+  }, [conditions, cities, statuses, selectedLanguage, yearsRange]);
 
   useEffect(() => {
-    doIfArraysNotEqual(prevSelectedYearRange, selectedYearRange)(update);
-  }, [selectedYearRange]);
-
-  useEffect(() => {
-    console.log("error", error);
     if (!error && prevMonuments && monuments.length === 0) {
       setTimeout(() => {
         showSnackbar(t("No monuments were found by such criteria"));
@@ -127,10 +117,7 @@ function MapPage({ monuments, fetchMonuments, error }) {
           )
         }
       />
-      <MenuButton
-        className={classes.menuButton}
-        onClick={() => setMainDrawerOpen(true)}
-      />
+      <MenuButton className={classes.menuButton} />
       <MainDrawer />
       <DetailDrawer />
       <MyLocation />
@@ -138,9 +125,16 @@ function MapPage({ monuments, fetchMonuments, error }) {
   );
 }
 
-const mapStateToProps = ({ monument: { monuments, error } }) => ({
+const mapStateToProps = ({
+  monument: { monuments, error },
+  filter: { statuses, conditions, cities, yearsRange },
+}) => ({
   monuments,
   error,
+  statuses,
+  conditions,
+  cities,
+  yearsRange,
 });
 const mapDispatchToProps = (dispatch, { monumentService }) => {
   return bindActionCreators(

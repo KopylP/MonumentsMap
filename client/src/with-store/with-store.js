@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { isMobileOnly } from "react-device-detect";
 import { useTranslation } from "react-i18next";
 import { defineClientCulture } from "../components/helpers/lang";
 import {
@@ -14,19 +13,13 @@ export default function withStore(Wrapper) {
 
     const { i18n } = useTranslation();
 
-    const [mainDrawerOpen, setMainDrawerOpen] = useState(!isMobileOnly);
     const [detailDrawerOpen, setDetailDrawerOpen] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(
       defineClientCulture(supportedCultures, defaultClientCulture)
     );
     const [selectedMonument, setSelectedMonument] = useState();
-    const [selectedConditions, setSelectedConditions] = useState([]);
-    const [selectedStatuses, setSelectedStatuses] = useState([]);
-    const [selectedCities, setSelectedCities] = useState([]);
     const [selectedYearRange, setSelectedYearRange] = useState(yearsRange);
-    const [monuments, setMonuments] = useState([]);
     const [center, setCenter] = useState(defaultCity);
-    const [loadingMonuments, setLoadingMonuments] = useState(false);
 
     const _openDetailDrawer = () => {
       if (!detailDrawerOpen) {
@@ -62,28 +55,16 @@ export default function withStore(Wrapper) {
     return (
       <Wrapper
         contextStore={{
-          mainDrawerOpen,
-          setMainDrawerOpen,
           selectedLanguage,
           setSelectedLanguage,
           selectedMonument,
           setSelectedMonument,
           detailDrawerOpen,
           setDetailDrawerOpen,
-          selectedConditions,
-          setSelectedConditions,
-          selectedCities,
-          setSelectedCities,
-          selectedStatuses,
-          setSelectedStatuses,
-          monuments,
           center,
           setCenter,
           selectedYearRange,
           setSelectedYearRange,
-          loadingMonuments,
-          setLoadingMonuments,
-          setMonuments,
           handleMonumentSelected,
           handleLanguageSelected
         }}
