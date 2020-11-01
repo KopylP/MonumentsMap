@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  floatingMenu: {
+    outline: 0,
+    boxShadow: "none"
+  }
 }));
 
 function MainDrawer({ drawerOpen, closeDrawer }) {
@@ -40,6 +44,9 @@ function MainDrawer({ drawerOpen, closeDrawer }) {
       anchor="left"
       classes={{
         paper: classes.drawerPaper,
+      }}
+      PaperProps={{
+        className: classes.floatingMenu
       }}
       open={isMobileOnly ? drawerOpen : true}
     >

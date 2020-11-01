@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  floatingMenu: {
+    outline: 0,
+    boxShadow: "none"
+  }
 }));
 
 function DetailDrawer({ detailDrawerOpen, closeDetailDrawer }) {
@@ -41,6 +45,9 @@ function DetailDrawer({ detailDrawerOpen, closeDetailDrawer }) {
         anchor="left"
         classes={{
           paper: classes.drawerPaper,
+        }}
+        PaperProps={{
+          className: classes.floatingMenu
         }}
         transitionDuration={detailDrawerTransitionDuration}
         open={detailDrawerOpen}
