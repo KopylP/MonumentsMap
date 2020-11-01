@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { List, AutoSizer } from "react-virtualized";
 import ScrollBar from "../../../common/scroll-bar/scroll-bar";
-import AppContext from "../../../../context/app-context";
 import MobileMonumentCard from "./mobile-monument-card";
 import { makeStyles } from "@material-ui/core/styles";
+import { changeMonument } from "../../../../actions/detail-monument-actions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 const useStyle = makeStyles({
   root: {
@@ -12,25 +14,24 @@ const useStyle = makeStyles({
     boxSizing: "border-box",
     backgroundColor: "#e4e4e4",
     display: "flex",
-  }
+  },
 });
 
-export default function MobileMonumentList({ monuments }) {
-  const { handleMonumentSelected } = useContext(AppContext);
+function MobileMonumentList({ monuments, changeMonument }) {
   const classes = useStyle();
 
   const onMonumentItemClick = (monument) => {
-    handleMonumentSelected(monument, false);
+    changeMonument(monument, false);
   };
 
   const renderRow = ({ index, key, style }) => {
     return (
-        <MobileMonumentCard
-          key={key}
-          monument={monuments[index]}
-          style={style}
-          onClick={() => onMonumentItemClick(monuments[index])}
-        />
+      <MobileMonumentCard
+        key={key}
+        monument={monuments[index]}
+        style={style}
+        onClick={() => onMonumentItemClick(monuments[index])}
+      />
     );
   };
 
@@ -47,7 +48,12 @@ export default function MobileMonumentList({ monuments }) {
                 rowRenderer={renderRow}
                 rowCount={monuments.length}
                 overscanRowCount={3}
-                style={{ outline: "none", justifyContent: "center", padding: 15, overflowY: "scroll" }}
+                style={{
+                  outline: "none",
+                  justifyContent: "center",
+                  padding: 15,
+                  overflowY: "scroll",
+                }}
               />
             </ScrollBar>
           );
@@ -56,3 +62,8 @@ export default function MobileMonumentList({ monuments }) {
     </div>
   );
 }
+
+const bindDispatchToProps = (dispatch) =>
+  bindActionCreators({ changeMonument: changeMonument() }, dispatch);
+
+export default connect(null, bindDispatchToProps)(MobileMonumentList);

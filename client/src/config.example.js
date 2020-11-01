@@ -16,7 +16,6 @@ const defaultCity = {
 }
 
 const defaultZoom = 18;
-const loadMapZoom = 17;
 
 const contactMail = "<--Your mail to contact-->";
 

@@ -2,12 +2,13 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { Map as LeafMap, TileLayer } from "react-leaflet";
 import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
-import { defaultZoom, accessToken, loadMapZoom, mapStyle } from "../../config";
+import { defaultZoom, accessToken, mapStyle } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
 import { LatLng } from "leaflet";
 import { makeStyles } from "@material-ui/core/styles";
 import { isChrome, isIOS, isMobileOnly } from "react-device-detect";
 import { connect } from "react-redux";
+import { changeCenter } from "../../actions/map-actions";
 
 const useStyles = makeStyles({
   mobileOnlyMapStyles: {
@@ -22,31 +23,24 @@ const useStyles = makeStyles({
   },
 });
 
-function Map({monuments, onMonumentSelected = (p) => p }) {
-  const {
-    detailDrawerOpen,
-    center,
-    setCenter,
-    selectedMonument,
-  } = useContext(AppContext);
-
+function Map({
+  monuments,
+  onMonumentSelected = (p) => p,
+  center,
+  changeCenter,
+  detailDrawerOpen,
+  selectedMonument,
+}) {
   const [markers, setMarkers] = useState([]);
   const mapRef = React.useRef(null);
   const [viewPortChange, setViewPortChange] = useState(false);
   const prevCenter = usePrevious(center);
-  const [mapZoom, setMapZoom] = useState(loadMapZoom);
   const classes = useStyles();
 
   const canClickMarker = useRef(true);
 
   const closePopups = () => {
     mapRef.current.leafletElement.closePopup();
-  };
-
-  const changeMapZoomToDefault = () => {
-    if (mapZoom === loadMapZoom) {
-      setMapZoom(defaultZoom);
-    }
   };
 
   const handleMonumentMarkerClick = (monument) => {
@@ -57,8 +51,8 @@ function Map({monuments, onMonumentSelected = (p) => p }) {
     }
   };
 
-  const changeCenter = ({ lat, lng }) => {
-    setCenter({
+  const handleChangeCenter = ({ lat, lng }) => {
+    changeCenter({
       lat: lat + 0.0000001, //Костыль
       lng: lng + 0.0000001, //Костыль
     });
@@ -87,7 +81,7 @@ function Map({monuments, onMonumentSelected = (p) => p }) {
   };
 
   useEffect(() => {
-      setMarkers(getVisibleMonumentMarkers());
+    setMarkers(getVisibleMonumentMarkers());
   }, [monuments]);
 
   useEffect(() => {
@@ -100,11 +94,10 @@ function Map({monuments, onMonumentSelected = (p) => p }) {
       prevCenter.lat === center.lat &&
       prevCenter.lng === center.lng
     ) {
-      changeMapZoomToDefault();
-      changeCenter(center);
+      handleChangeCenter(center);
     }
   }, [center]);
-  
+
   const updateMarkers = () => {
     setMarkers(getVisibleMonumentMarkers());
   };
@@ -122,7 +115,6 @@ function Map({monuments, onMonumentSelected = (p) => p }) {
   const handleMoveStart = () => {
     if (canClickMarker.current) {
       canClickMarker.current = false;
-      console.log("start");
     }
   };
 
@@ -140,7 +132,7 @@ function Map({monuments, onMonumentSelected = (p) => p }) {
       onmovestart={handleMoveStart}
       onmoveend={handleMoveEnd}
       preferCanvas
-      zoom={mapZoom}
+      zoom={defaultZoom}
       className={isMobileOnly ? classes.mobileOnlyMapStyles : classes.mapStyles}
       ref={mapRef}
     >
@@ -148,11 +140,21 @@ function Map({monuments, onMonumentSelected = (p) => p }) {
         attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
         url={`https://tile.jawg.io/${mapStyle}/{z}/{x}/{y}.png?access-token=${accessToken}`}
       />
-        {markers}
+      {markers}
     </LeafMap>
   );
 }
 
-const mapStateToProps = ({ monument: { monuments } }) => ({ monuments });
+const mapStateToProps = ({
+  monument: { monuments },
+  map: { center },
+  detailMonument: { detailDrawerOpen, selectedMonument },
+}) => ({
+  monuments,
+  center,
+  detailDrawerOpen,
+  selectedMonument,
+});
 
-export default connect(mapStateToProps)(React.memo(Map));
+const mapDispatchToProps = { changeCenter };
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Map));

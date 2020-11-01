@@ -1,11 +1,12 @@
-import React, { memo, useContext } from "react";
+import React from "react";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { makeStyles } from "@material-ui/core/styles";
-import AppContext from "../../context/app-context";
 import DrawerBackButton from "../common/drawer-back-button/drawer-back-button";
 import { isMobileOnly } from "react-device-detect";
 import { detailDrawerTransitionDuration } from "./config";
 import DetailDrawerRoot from "./detail-drawer-root/detail-drawer-root";
+import { connect } from "react-redux";
+import { closeDetailDrawer } from "../../actions/detail-monument-actions";
 
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
@@ -23,18 +24,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default memo(function DetailDrawer() {
+function DetailDrawer({ detailDrawerOpen, closeDetailDrawer }) {
 
   const classes = useStyles();
 
-  const {
-    detailDrawerOpen,
-    setDetailDrawerOpen,
-  } = useContext(AppContext);
-
   
   const handleClose = () => {
-    setDetailDrawerOpen(false);
+    closeDetailDrawer();
   };
 
   return (
@@ -54,4 +50,9 @@ export default memo(function DetailDrawer() {
         <DetailDrawerRoot />
       </SwipeableDrawer>
   );
-});
+};
+
+const bindStateToProps = ({ detailMonument: { detailDrawerOpen } }) => ({detailDrawerOpen});
+const bindDispatchToProps = { closeDetailDrawer };
+
+export default connect(bindStateToProps, bindDispatchToProps)(DetailDrawer);

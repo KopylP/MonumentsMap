@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 import { fetchMonuments } from "../actions/monument-actions";
 import withMonumentService from "../components/hoc-helpers/with-monument-service";
 import { bindActionCreators } from "redux";
+import { changeMonument } from "../actions/detail-monument-actions";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -48,10 +49,11 @@ function MapPage({
   conditions,
   cities,
   yearsRange,
+  changeMonument,
 }) {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const { selectedLanguage, handleMonumentSelected } = useContext(AppContext);
+  const { selectedLanguage } = useContext(AppContext);
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
   const prevSelectedConditions = usePrevious(conditions);
@@ -111,7 +113,7 @@ function MapPage({
     >
       <Map
         onMonumentSelected={(monumentId) =>
-          handleMonumentSelected(
+          changeMonument(
             monuments.find((p) => p.id === monumentId),
             false
           )
@@ -136,9 +138,13 @@ const mapStateToProps = ({
   cities,
   yearsRange,
 });
+
 const mapDispatchToProps = (dispatch, { monumentService }) => {
   return bindActionCreators(
-    { fetchMonuments: fetchMonuments(monumentService) },
+    {
+      fetchMonuments: fetchMonuments(monumentService),
+      changeMonument: changeMonument(),
+    },
     dispatch
   );
 };

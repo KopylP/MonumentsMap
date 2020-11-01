@@ -3,15 +3,15 @@ import DrawerContainer from "../../common/drawer-container/drawer-container";
 import DetailDrawerHeader from "../detail-drawer-header/detail-drawer-header";
 import DetailDrawerContent from "../detail-drawer-content/detail-drawer-content";
 import AppContext from "../../../context/app-context";
-import { usePrevious } from "../../../hooks/hooks";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import { showErrorSnackbar } from "../../helpers/snackbar-helpers";
 import { useTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
 import { detailDrawerTransitionDuration } from "../config";
+import { connect } from "react-redux";
 
-export default function DetailDrawerRoot() {
-  const { monumentService, selectedMonument } = useContext(AppContext);
+function DetailDrawerRoot({ selectedMonument, detailDrawerOpen }) {
+  const { monumentService } = useContext(AppContext);
 
   const [monument, setMonument] = useState(null);
 
@@ -37,19 +37,13 @@ export default function DetailDrawerRoot() {
     }, detailDrawerTransitionDuration); // wait until drawer will opened
   };
 
-  const prevSelectedMonument = usePrevious(selectedMonument);
-
   useEffect(() => {
-    if (
-      selectedMonument &&
-      (typeof prevSelectedMonument == "undefined" ||
-        (selectedMonument.id !== 0 &&
-          prevSelectedMonument.id !== selectedMonument.id))
-    ) {
+    if (selectedMonument && detailDrawerOpen) {
       setMonument(null);
       loadMonument();
     }
-  }, [selectedMonument]);
+  }, [detailDrawerOpen]);
+
 
   return (
     <DrawerContainer>
@@ -61,3 +55,10 @@ export default function DetailDrawerRoot() {
     </DrawerContainer>
   );
 }
+
+const bindStateToProps = ({ detailMonument: { selectedMonument, detailDrawerOpen } }) => ({
+  selectedMonument,
+  detailDrawerOpen
+});
+
+export default connect(bindStateToProps)(DetailDrawerRoot);
