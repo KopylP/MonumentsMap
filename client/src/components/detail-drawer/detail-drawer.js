@@ -12,16 +12,20 @@ const useStyles = makeStyles((theme) => ({
   drawerClass: {
     width: theme.detailDrawerWidth,
     flexShrink: 0,
-    [theme.breakpoints.down(theme.detailDrawerWidth)]: {
-      width: "100%",
+    [theme.breakpoints.down(theme.detailDrawerWidth + 20)]: {
+      width: "95%",
     },
   },
   drawerPaper: {
     width: theme.detailDrawerWidth,
-    [theme.breakpoints.down(theme.detailDrawerWidth)]: {
-      width: "100%",
+    [theme.breakpoints.down(theme.detailDrawerWidth + 20)]: {
+      width: "95%",
     },
   },
+  floatingMenu: {
+    outline: 0,
+    boxShadow: "none"
+  }
 }));
 
 function DetailDrawer({ detailDrawerOpen, closeDetailDrawer }) {
@@ -41,6 +45,9 @@ function DetailDrawer({ detailDrawerOpen, closeDetailDrawer }) {
         anchor="left"
         classes={{
           paper: classes.drawerPaper,
+        }}
+        PaperProps={{
+          className: classes.floatingMenu
         }}
         transitionDuration={detailDrawerTransitionDuration}
         open={detailDrawerOpen}
