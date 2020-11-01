@@ -1,10 +1,32 @@
 server {
+
     listen 80;
 
     server_name monuments.pl.ua www.monuments.pl.ua;
 
+    # server_tokens off;
+
+    # location /.well-known/acme-challenge/ {
+    #     root /var/www/certbot;
+    # }
+
+    # location / {
+    #     return 301 https://$host$request_uri;
+    # }
+
     location /map {
-        proxy_pass http://client;
+    
+    gzip on;
+    gzip_disable "msie6";
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_min_length 0;
+    gzip_types text/plain application/javascript text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype;
+    
+    proxy_pass http://client;
     }
 
     location /admin {
@@ -14,26 +36,28 @@ server {
     location /api {
         proxy_pass http://monumentsmap-api:5000;
     }
-
-    # location / {
-    #     return 301 https://$host$request_uri;
-    # }  
-
-    # location ~ /.well-known/acme-challenge {
-    #     allow all;
-    #     root /var/www/cetbot;
-    # }
-
 }
 
 # server {
-    # listen 443 ssl;
+#     listen 443 ssl;
 
-    # server_name monuments.pl.ua;
+#     server_name monuments.pl.ua www.monuments.pl.ua;
 
-    # SSL code
-    # ssl_certificate /etc/nginx/ssl/live/monuments.pl.ua/fullchain.pem;
-    # ssl_certificate_key /etc/nginx/ssl/live/monuments.pl.ua/privkey.pem;
+#     gzip on;
+#     gzip_disable "msie6";
+#     gzip_vary on;
+#     gzip_proxied any;
+#     gzip_comp_level 6;
+#     gzip_buffers 16 8k;
+#     gzip_http_version 1.1;
+#     gzip_min_length 0;
+#     gzip_types text/plain application/javascript text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype;
+
+#     #SSL code
+#     ssl_certificate /etc/letsencrypt/live/monuments.pl.ua/fullchain.pem;
+#     ssl_certificate_key /etc/letsencrypt/live/monuments.pl.ua/privkey.pem;
+#     include /etc/letsencrypt/options-ssl-nginx.conf;
+#     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
 #    location /map {
 #        proxy_pass http://client;
