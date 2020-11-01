@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MainDrawer from "../components/drawer/main-drawer";
 import AppContext from "../context/app-context";
@@ -6,16 +6,18 @@ import MenuButton from "../components/common/menu-button/menu-button";
 import Map from "../components/map/map";
 import DetailDrawer from "../components/detail-drawer/detail-drawer";
 import { usePrevious } from "../hooks/hooks";
-import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import {
   doIfNotTheSame,
   doIfArraysNotEqual,
 } from "../components/helpers/conditions";
 import { useSnackbar } from "notistack";
-import { useTranslation, withTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import MyLocation from "../components/map/my-location/my-location";
 import { showErrorSnackbar } from "../components/helpers/snackbar-helpers";
-import Axios from "axios";
+import { connect } from "react-redux";
+import { fetchMonuments } from "../actions/monument-actions";
+import withMonumentService from "../components/hoc-helpers/with-monument-service";
+import { bindActionCreators } from "redux";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MapPage() {
+function MapPage({ monuments, fetchMonuments, error }) {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {
@@ -48,50 +50,18 @@ function MapPage() {
     selectedStatuses,
     selectedYearRange,
     setMainDrawerOpen,
-    monuments,
-    setMonuments,
     handleMonumentSelected,
-    monumentService,
-    loadingMonuments,
-    setLoadingMonuments,
   } = useContext(AppContext);
-
-  const { t } = useTranslation();
 
   const prevSelectedLanguage = usePrevious(selectedLanguage);
   const prevSelectedConditions = usePrevious(selectedConditions);
   const prevSelectedCities = usePrevious(selectedCities);
   const prevSelectedStatuses = usePrevious(selectedStatuses);
   const prevSelectedYearRange = usePrevious(selectedYearRange);
+  const prevMonuments = usePrevious(monuments);
 
-  const [cancelRequest, setCancelRequest] = useState(null);
-  const [firstLoading, setFirstLoading] = useState(true);
+  const { t } = useTranslation();
 
-  const makeCancelable = useCancelablePromise();
-
-  const closeMonumentsLoading = (action = (p) => p) => {
-    setTimeout(() => {
-      setLoadingMonuments(false);
-      firstLoading && handleFirstLoading();
-      action();
-    }, 300);
-  };
-
-  const handleFirstLoading = () => {
-    const loadImage = document.getElementById("bundle-loader");
-    loadImage.style.pointerEvents = "none";
-    loadImage.style.opacity = 0;
-    setTimeout(() => {
-      loadImage.remove();
-    }, 1000);
-    setFirstLoading(false);
-  };
-
-  function executor(e) {
-    setCancelRequest({
-      cancel: e,
-    });
-  }
 
   const showSnackbar = (message) => {
     enqueueSnackbar(message, {
@@ -101,43 +71,13 @@ function MapPage() {
     });
   };
 
-  const handleMonumentsLoading = (monuments) => {
-    const monumentsNotFound = () => {
-      if (monuments.length === 0) {
-        showSnackbar(t("No monuments were found by such criteria"));
-      } else {
-        closeSnackbar();
-      }
-    };
-    setMonuments(monuments);
-    closeMonumentsLoading(monumentsNotFound);
-  };
-
   const update = () => {
-    if (cancelRequest) {
-      cancelRequest.cancel();
-    }
-
-    if (!loadingMonuments) {
-      setLoadingMonuments(true);
-    }
-
-    makeCancelable(
-      monumentService.getMonumentsByFilter(
-        selectedCities.map((c) => c.id),
-        selectedStatuses,
-        selectedConditions,
-        selectedYearRange,
-        executor
-      )
-    )
-      .then(handleMonumentsLoading)
-      .catch((e) => {
-        if (!Axios.isCancel(e)) {
-          closeMonumentsLoading();
-          showErrorSnackbar(enqueueSnackbar, t("Network error"));
-        }
-      });
+    fetchMonuments(
+      selectedCities,
+      selectedStatuses,
+      selectedConditions,
+      selectedYearRange
+    );
   };
 
   const handleSelectLanguage = () => {
@@ -159,10 +99,25 @@ function MapPage() {
     doIfArraysNotEqual(prevSelectedYearRange, selectedYearRange)(update);
   }, [selectedYearRange]);
 
+  useEffect(() => {
+    console.log("error", error);
+    if (!error && prevMonuments && monuments.length === 0) {
+      setTimeout(() => {
+        showSnackbar(t("No monuments were found by such criteria"));
+      }, 400);
+    } else {
+      closeSnackbar();
+    }
+  }, [monuments]);
+
+  useEffect(() => {
+    if (error) showErrorSnackbar(enqueueSnackbar, t("Network error"));
+  }, [error]);
+
   return (
     <div
       className={classes.app}
-      style={{ visibility: firstLoading ? "hidden" : "visible" }}
+      // style={{ visibility: firstLoading ? "hidden" : "visible" }}
     >
       <Map
         onMonumentSelected={(monumentId) =>
@@ -183,4 +138,16 @@ function MapPage() {
   );
 }
 
-export default withTranslation()(MapPage);
+const mapStateToProps = ({ monument: { monuments, error } }) => ({
+  monuments,
+  error,
+});
+const mapDispatchToProps = (dispatch, { monumentService }) => {
+  return bindActionCreators(
+    { fetchMonuments: fetchMonuments(monumentService) },
+    dispatch
+  );
+};
+export default withMonumentService()(
+  connect(mapStateToProps, mapDispatchToProps)(MapPage)
+);

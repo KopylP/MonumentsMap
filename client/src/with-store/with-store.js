@@ -61,7 +61,7 @@ export default function withStore(Wrapper) {
 
     return (
       <Wrapper
-        store={{
+        contextStore={{
           mainDrawerOpen,
           setMainDrawerOpen,
           selectedLanguage,

@@ -4,10 +4,10 @@ import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
 import { defaultZoom, accessToken, loadMapZoom, mapStyle } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
-import MapContext from "../../context/map-context";
 import { LatLng } from "leaflet";
 import { makeStyles } from "@material-ui/core/styles";
 import { isChrome, isIOS, isMobileOnly } from "react-device-detect";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles({
   mobileOnlyMapStyles: {
@@ -22,18 +22,16 @@ const useStyles = makeStyles({
   },
 });
 
-function Map({ onMonumentSelected = (p) => p }) {
+function Map({monuments, onMonumentSelected = (p) => p }) {
   const {
     detailDrawerOpen,
-    setDetailDrawerOpen,
-    monuments,
     center,
     setCenter,
     selectedMonument,
   } = useContext(AppContext);
+
   const [markers, setMarkers] = useState([]);
   const mapRef = React.useRef(null);
-  const [mapSelectedMonumentId, setMapSelectedMonumentId] = useState(null);
   const [viewPortChange, setViewPortChange] = useState(false);
   const prevCenter = usePrevious(center);
   const [mapZoom, setMapZoom] = useState(loadMapZoom);
@@ -89,9 +87,7 @@ function Map({ onMonumentSelected = (p) => p }) {
   };
 
   useEffect(() => {
-    if (typeof monuments !== "undefined") {
       setMarkers(getVisibleMonumentMarkers());
-    }
   }, [monuments]);
 
   useEffect(() => {
@@ -144,9 +140,6 @@ function Map({ onMonumentSelected = (p) => p }) {
       onmovestart={handleMoveStart}
       onmoveend={handleMoveEnd}
       preferCanvas
-      onpopupclose={() => {
-        setMapSelectedMonumentId(null);
-      }}
       zoom={mapZoom}
       className={isMobileOnly ? classes.mobileOnlyMapStyles : classes.mapStyles}
       ref={mapRef}
@@ -155,11 +148,11 @@ function Map({ onMonumentSelected = (p) => p }) {
         attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
         url={`https://tile.jawg.io/${mapStyle}/{z}/{x}/{y}.png?access-token=${accessToken}`}
       />
-      <MapContext.Provider value={{ mapSelectedMonumentId }}>
         {markers}
-      </MapContext.Provider>
     </LeafMap>
   );
 }
 
-export default React.memo(Map);
+const mapStateToProps = ({ monument: { monuments } }) => ({ monuments });
+
+export default connect(mapStateToProps)(React.memo(Map));
