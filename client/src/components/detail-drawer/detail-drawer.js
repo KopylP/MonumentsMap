@@ -12,14 +12,14 @@ const useStyles = makeStyles((theme) => ({
   drawerClass: {
     width: theme.detailDrawerWidth,
     flexShrink: 0,
-    [theme.breakpoints.down(theme.detailDrawerWidth)]: {
-      width: "100%",
+    [theme.breakpoints.down(theme.detailDrawerWidth + 20)]: {
+      width: "95%",
     },
   },
   drawerPaper: {
     width: theme.detailDrawerWidth,
-    [theme.breakpoints.down(theme.detailDrawerWidth)]: {
-      width: "100%",
+    [theme.breakpoints.down(theme.detailDrawerWidth + 20)]: {
+      width: "95%",
     },
   },
   floatingMenu: {

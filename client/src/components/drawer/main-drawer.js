@@ -11,15 +11,15 @@ import { closeDrawer } from "../../actions/filter-actions";
 const useStyles = makeStyles((theme) => ({
   drawerClass: {
     width: theme.drawerWidth,
-    [theme.breakpoints.down(theme.drawerWidth)]: {
-      width: "100%",
+    [theme.breakpoints.down(theme.drawerWidth + 20)]: {
+      width: "95%",
     },
     flexShrink: 0,
   },
   drawerPaper: {
     width: theme.drawerWidth,
-    [theme.breakpoints.down(theme.drawerWidth)]: {
-      width: "100%",
+    [theme.breakpoints.down(theme.drawerWidth + 20)]: {
+      width: "95%",
     },
   },
   floatingMenu: {
