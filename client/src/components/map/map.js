@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Map as LeafMap, TileLayer } from "react-leaflet";
-import AppContext from "../../context/app-context";
 import MonumentMarker from "./marker/monument-marker";
 import { defaultZoom, accessToken, mapStyle } from "../../config";
 import { usePrevious } from "../../hooks/hooks";

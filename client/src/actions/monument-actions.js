@@ -1,10 +1,18 @@
 import Axios from "axios";
 import {
+  CHANGE_CENCEL_REQUEST,
   FETCH_MONUMENTS_FAILURE,
   FETCH_MONUMENTS_LOADING_END,
   FETCH_MONUMENTS_REQUEST,
   FETCH_MONUMENTS_SUCCESS,
 } from "../constants";
+
+const changeCancelRequest = (e) => {
+  return {
+    type: CHANGE_CENCEL_REQUEST,
+    payload: e
+  }
+}
 
 const monumentsRequest = () => {
   return {
@@ -32,21 +40,21 @@ const monumentsLoadingEnd = () => {
   };
 };
 
-let cancelRequest = null;
-
-function executor(e) {
-  cancelRequest = e;
-}
-
 export const fetchMonuments = (monumentService) => (
   selectedCities,
   selectedStatuses,
   selectedConditions,
   selectedYearRange
-) => (dispatch) => {
-  if (cancelRequest) {
-    cancelRequest();
+) => (dispatch, getState) => {
+
+  function executor(e) {
+    dispatch(changeCancelRequest(e));
   }
+
+  if (getState().monument.cancelRequest) {
+    getState().monument.cancelRequest();
+  }
+
   dispatch(monumentsRequest());
 
   monumentService
