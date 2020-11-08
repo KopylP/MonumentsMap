@@ -17,16 +17,13 @@ export default class MonumentService {
 
   async _getRequest(
     path,
-    withCultureCode = true,
     params = {},
     cancelCallback = (p) => p
   ) {
     let _params = {
       ...params,
     };
-    if (withCultureCode) {
-      _params["cultureCode"] = this._cultureCode;
-    }
+    _params["cultureCode"] = this._cultureCode;
     const response = await this._axios.get(path, {
       params: _params,
       cancelToken: new CancelToken(function executor(c) {
@@ -46,16 +43,21 @@ export default class MonumentService {
    * @param {*} statuses - array of selected statuses ids
    * @param {*} conditions - array of selected conditions ids
    */
-  async getMonumentsByFilter(cities, statuses, conditions, yearsRange, cancelCallback) {
+  async getMonumentsByFilter(
+    cities,
+    statuses,
+    conditions,
+    yearsRange,
+    cancelCallback
+  ) {
     return await this._getRequest(
       "monument/filter",
-      true,
       {
         cities,
         statuses,
         conditions,
         startYear: yearsRange[0],
-        endYear: yearsRange[1]
+        endYear: yearsRange[1],
       },
       cancelCallback
     );
@@ -63,19 +65,19 @@ export default class MonumentService {
 
   getMonumentById = async (id) => {
     return await this._getRequest(`monument/${id}`);
-  }
+  };
 
   getAllStatuses = async () => {
     return await this._getRequest("status/");
-  }
+  };
 
   getAllConditions = async () => {
     return await this._getRequest("condition/");
-  }
+  };
 
   getAllCities = async () => {
     return await this._getRequest("city/");
-  }
+  };
 
   getMonumentPhoto = async (monumentPhotoId) => {
     return await this._getRequest(`monumentphoto/${monumentPhotoId}`);
@@ -83,16 +85,11 @@ export default class MonumentService {
 
   getParticipants = async () => {
     return await this._getRequest(`participant`);
-  }
-
-  getMonumentRawParticipants = async (monumentId) => {
-    return await this._getRequest(`monument/${monumentId}/participants/raw`);
-  }
+  };
 
   async getPhotoIds(monumentId) {
     return await this._getRequest(`monument/${monumentId}/photo/ids`);
   }
-
 
   getMonumentPhotos = async (monumentId) => {
     return await this._getRequest(`monument/${monumentId}/monumentPhotos`);
@@ -100,13 +97,6 @@ export default class MonumentService {
 
   getPhotoLink = (photoId, size) => {
     return `${this._baseURL}photo/${photoId}/image${size ? "/" + size : ""}`;
-  };
-
-  getMonumentMonumentPhotoEditable = async (monumentPhotoId) => {
-    return await this._getRequest(
-      `monumentphoto/${monumentPhotoId}/editable`,
-      false
-    );
   };
 
   getParticipants = async () => {
