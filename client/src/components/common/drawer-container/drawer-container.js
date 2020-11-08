@@ -1,5 +1,6 @@
 import React from "react";
 import * as cx from "classnames";
+import { isAndroid } from "react-device-detect";
 
 export default function DrawerContainer(props) {
 
@@ -9,7 +10,7 @@ export default function DrawerContainer(props) {
         width: "100%",
         height: "100%",
         overflowX: "hidden",
-        overflowY: "auto",
+        overflowY:  isAndroid ? "scroll" : "auto",
         flexDirection: "column",
         justifyContent: "start"
     }}
