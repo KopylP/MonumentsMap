@@ -71,7 +71,7 @@ namespace MonumentsMap.Controllers
             }
         }
         [HttpGet("{id}/image/{size}")]
-        public async Task<IActionResult> GetImageAsync(int id, int size)
+        public async Task<IActionResult> GetImageAsync(int id, int size, [FromQuery] bool base64 = false)
         {
             byte[] image;
 
@@ -86,6 +86,12 @@ namespace MonumentsMap.Controllers
             {
                 return StatusCode(500, new InternalServerError());
             }
+
+            if (base64) 
+            {
+                return Ok(new { image = "data:image/png;base64," + Convert.ToBase64String(image) });
+            }
+
             return File(image, "image/jpeg");
         }
         #endregion
