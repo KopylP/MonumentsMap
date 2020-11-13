@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 30,
     paddingBottom: 30,
     paddingTop: 10,
+    overflow: "auto"
   },
   image: {
     width: "40%",
@@ -215,6 +216,7 @@ export default memo(function AddPhotoModal({
                     showFileNames={true}
                     showFileNamesInPreview={true}
                     dropzoneText={"Перетягни фотографію"}
+                    maxFileSize={6000000}
                   />
                 )}
                 <Grid item xs={12}>
