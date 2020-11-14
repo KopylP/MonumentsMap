@@ -6,7 +6,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Contracts.Repository;
-using MonumentsMap.Data.Repositories;
 using MonumentsMap.Data.Services;
 using MonumentsMap.Entities.Models;
 
@@ -57,12 +56,19 @@ namespace MonumentsMap.Controllers
 
         #region methods
         [HttpGet("{id}/image")]
-        public async Task<IActionResult> GetImageAsync(int id)
+        public async Task<IActionResult> GetImageAsync(int id, [FromQuery] bool base64 = false)
         {
             var photo = await _photoRepository.Get(id);
             try
             {
                 var (fileType, image) = _photoService.FetchImage(photo.Id.ToString(), photo.FileName);
+                if (base64)
+                {
+                    byte[] imageBytes = new byte[image.Length];
+                    await image.ReadAsync(imageBytes, 0, (int)image.Length);
+                    return Ok(new { image = "data:image/png;base64," + Convert.ToBase64String(imageBytes) });
+                }
+
                 return File(image, fileType);
             }
             catch
@@ -76,18 +82,18 @@ namespace MonumentsMap.Controllers
             byte[] image;
 
             var photo = await _photoRepository.Get(id);
-            if(photo == null) 
+            if (photo == null)
                 return NotFound(new NotFoundError("Monument photo model not found"));
             try
             {
-                image = await  _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
+                image = await _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
             }
             catch
             {
                 return StatusCode(500, new InternalServerError());
             }
 
-            if (base64) 
+            if (base64)
             {
                 return Ok(new { image = "data:image/png;base64," + Convert.ToBase64String(image) });
             }
