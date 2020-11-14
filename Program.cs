@@ -25,6 +25,9 @@ namespace MonumentsMap
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel(conf => {
+                        conf.Limits.MaxRequestBodySize = 6_000_000;
+                    });
                 });
     }
 }
