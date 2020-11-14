@@ -34,6 +34,7 @@ namespace MonumentsMap.Controllers
 
         #region rest methods
         [HttpPost]
+        [RequestSizeLimit(6_000_000)]
         public async Task<IActionResult> Post([FromForm] IFormFile file)
         {
             var photo = new Photo
