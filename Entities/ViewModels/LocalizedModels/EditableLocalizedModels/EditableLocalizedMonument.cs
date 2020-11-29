@@ -32,7 +32,6 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
                 monument.Description?.Localizations?.Clear();
                 monument.Name?.Localizations?.Clear();
                 monument.Sources?.Clear();
-                monument.UpdatedAt = DateTime.Now;
             }
             else
             {
@@ -47,8 +46,6 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
                         Localizations = new List<Localization>()
                     },
                     Sources = new List<Source>(),
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
                 };
             }
 
