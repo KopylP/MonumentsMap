@@ -82,8 +82,7 @@ namespace MonumentsMap.Data.Services
                 ClientId = clientId,
                 UserId = userId,
                 Type = 0,
-                Value = Guid.NewGuid().ToString("N"),
-                CreatedAt = DateTime.UtcNow
+                Value = Guid.NewGuid().ToString("N")
             };
         }
         private async Task<TokenResponseViewModel> CreateAccessTokenAsync(ApplicationUser user, string refreshToken)

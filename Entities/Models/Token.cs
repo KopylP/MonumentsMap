@@ -13,10 +13,6 @@ namespace MonumentsMap.Entities.Models
         public string Value { get; set; }
         [Required]
         public string UserId { get; set; }
-        [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime ModifiedAt { get; set; }
         #endregion
     }
 }
