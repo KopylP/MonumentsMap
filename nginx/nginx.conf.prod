@@ -1,6 +1,6 @@
 server {
     client_max_body_size 6M;
-    
+
     listen 80;
 
     server_name monuments.pl.ua www.monuments.pl.ua;
