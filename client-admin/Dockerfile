@@ -16,6 +16,7 @@ FROM node:13.12.0-alpine
 COPY --from=build /app/build /app
 COPY server/* /app/server/
 WORKDIR /app/server
+ENV TOOL_NODE_FLAGS=--max_old_space_size=4096
 RUN npm install -g --silent
 EXPOSE 80
 CMD ["npm", "start"]
