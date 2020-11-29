@@ -26,6 +26,8 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<TEntity> Add(TEntity entity)
         {
+            entity.CreatedAt = DateTime.Now;
+            entity.UpdatedAt = DateTime.Now;
             dbSet.Add(entity);
             if (Commit)
                 await context.SaveChangesAsync();
@@ -82,6 +84,7 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<TEntity> Update(TEntity entity)
         {
+            entity.UpdatedAt = DateTime.Now;
             dbSet.Update(entity);
             if (Commit)
                 await context.SaveChangesAsync();

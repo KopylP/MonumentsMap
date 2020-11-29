@@ -30,6 +30,8 @@ namespace MonumentsMap.Data.Repositories
         {
             MinimizeResult = false;
             var entity = editableLocalizedEntity.CreateEntity();
+            entity.CreatedAt = DateTime.Now;
+            entity.UpdatedAt = DateTime.Now;
             BeforeModelCreate(entity);
             context.Set<TEntity>().Add(entity);
             try
@@ -111,6 +113,7 @@ namespace MonumentsMap.Data.Repositories
                 throw new NotFoundException();
             }
             var entity = editableLocalizedEntity.CreateEntity(editEntity);
+            entity.UpdatedAt = DateTime.Now;
             BeforeModelUpdate(entity);
             context.Set<TEntity>().Update(entity);
             try

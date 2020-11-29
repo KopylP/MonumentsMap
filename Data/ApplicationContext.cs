@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using MonumentsMap.Entities.Models;
+using MonumentsMap.Entities.Enumerations;
+using System;
 
 namespace MonumentsMap.Data
 {
@@ -39,6 +41,18 @@ namespace MonumentsMap.Data
                 .HasOne(p => p.Monument)
                 .WithMany(p => p.Sources)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Monument>()
+                .Property(p => p.Period)
+                .HasConversion(v => v.ToString(),
+                    v => (Period)Enum.Parse(typeof(Period), v));
+            modelBuilder.Entity<Monument>()
+                .Property(p => p.DestroyPeriod)
+                .HasConversion(v => v.ToString(),
+                    v => (Period)Enum.Parse(typeof(Period), v));
+            modelBuilder.Entity<MonumentPhoto>()
+                .Property(p => p.Period)
+                .HasConversion(v => v.ToString(),
+                    v => (Period)Enum.Parse(typeof(Period), v));
         }
         #endregion
     }

@@ -33,10 +33,6 @@ namespace MonumentsMap.Entities.Models
         public double Longitude { get; set; }
         [Required]
         public string Slug { get; set; }
-        [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime UpdatedAt { get; set; }
         public string ProtectionNumber { get; set; }
         #endregion
         #region lazy props
