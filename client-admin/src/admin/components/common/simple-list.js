@@ -26,7 +26,7 @@ export default function SimpleList({
       const data = [...listData];
       data.splice(data.indexOf(oldData), 1);
       setListData(data);
-    } catch(e) {
+    } catch (e) {
       errorNetworkSnackbar(enqueueSnackbar, e.response);
       throw new Error(e);
     }
@@ -49,6 +49,8 @@ export default function SimpleList({
       ]}
       options={{
         actionsColumnIndex: -1,
+        pageSize: 10,
+        pageSizeOptions: [5, 10, 100]
       }}
       editable={{
         onRowDelete: handleDeleteData,

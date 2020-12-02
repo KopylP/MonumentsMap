@@ -20,41 +20,44 @@ function SimpleResource({
 
   return (
     <Grid container spacing={3}>
-      {path === pathname ? (
-        <Grid
-          container
-          direction="row"
-          justify="flex-end"
-          alignItems="baseline"
-        >
-          <Link to={`${url}/create`}>
-            <Button color="secondary" variant="contained">
-              Створити
-            </Button>
-          </Link>
-        </Grid>
-      ) : null}
-
-      <Switch>
-        {extra.map(({ route, Component }, i) => (
-          <Route exact path={`${path}/${route}`} key={i}>
-            <Component />
-          </Route>
-        ))}
-        {CreateItem ? (
-          <Route path={`${path}/create`}>
-            <CreateItem />
-          </Route>
+      <Grid xs={12}>
+        {path === pathname ? (
+          <Grid
+            container
+            direction="row"
+            justify="flex-end"
+            alignItems="baseline"
+          >
+            <Link to={`${url}/create`}>
+              <Button color="secondary" variant="contained">
+                Створити
+              </Button>
+            </Link>
+          </Grid>
         ) : null}
-        {UpdateItem ? (
-          <Route path={`${path}/:itemId`}>
-            <UpdateItem />
+      </Grid>
+      <Grid xs={12}>
+        <Switch>
+          {extra.map(({ route, Component }, i) => (
+            <Route exact path={`${path}/${route}`} key={i}>
+              <Component />
+            </Route>
+          ))}
+          {CreateItem ? (
+            <Route path={`${path}/create`}>
+              <CreateItem />
+            </Route>
+          ) : null}
+          {UpdateItem ? (
+            <Route path={`${path}/:itemId`}>
+              <UpdateItem />
+            </Route>
+          ) : null}
+          <Route exact path={path}>
+            <ItemList />
           </Route>
-        ) : null}
-        <Route exact path={path}>
-          <ItemList />
-        </Route>
-      </Switch>
+        </Switch>
+      </Grid>
     </Grid>
   );
 }

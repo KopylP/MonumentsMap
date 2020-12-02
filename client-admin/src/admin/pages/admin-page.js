@@ -19,9 +19,13 @@ import withAuthService from "../components/hoc-helpers/with-auth-service";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   content: {
-    flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
@@ -29,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: -theme.adminDrawerWidth,
     position: "releative",
+    overflow: "auto",
+    width: "100%",
   },
   contentShift: {
     transition: theme.transitions.create("margin", {

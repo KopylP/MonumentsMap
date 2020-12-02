@@ -7,7 +7,7 @@ import RegistrationPage from "./registration-page";
 export default function AdminRoutingPage() {
   let match = useRouteMatch();
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    // <div style={{ width: "100%", height: "100%", overflow: "auto" }}>
       <Switch>
         <Route path={`${match.path}/login`}>
           <LoginPage />
@@ -19,6 +19,6 @@ export default function AdminRoutingPage() {
           <AdminPage />
         </Route>
       </Switch>
-    </div>
+    // </div>
   );
 }
