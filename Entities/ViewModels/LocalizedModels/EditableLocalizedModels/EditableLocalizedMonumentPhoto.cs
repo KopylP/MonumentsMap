@@ -51,7 +51,7 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
                     monumentPhoto.Description.Localizations.Add(new Localization
                     {
                         CultureCode = cultureValue.Culture,
-                        Value = cultureValue.Value
+                        Value = cultureValue.Value.Trim()
                     });
                 }
             }

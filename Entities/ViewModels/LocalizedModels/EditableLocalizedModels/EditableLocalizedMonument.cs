@@ -66,7 +66,7 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
                 monument.Name.Localizations.Add(new Localization
                 {
                     CultureCode = cultureValuePair.Culture,
-                    Value = cultureValuePair.Value
+                    Value = cultureValuePair.Value.Trim()
                 });
             }
             foreach (var cultureValuePair in Description)
@@ -74,7 +74,7 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
                 monument.Description.Localizations.Add(new Localization
                 {
                     CultureCode = cultureValuePair.Culture,
-                    Value = cultureValuePair.Value
+                    Value = cultureValuePair.Value.Trim()
                 });
             }
             return monument;
