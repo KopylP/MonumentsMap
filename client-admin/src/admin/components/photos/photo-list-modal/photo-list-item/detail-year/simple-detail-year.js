@@ -9,22 +9,19 @@ export default function SimpleDetailYear({ year, period }) {
   let dateText;
   switch (period) {
     case Period.StartOfCentury:
-      dateText = t("Early of century", { century: arabToRoman(year) });
+      dateText = `Early of ${arabToRoman(year)} century`;
       break;
     case Period.MiddleOfCentury:
-      dateText = t("Middle of the century", { century: arabToRoman(year) });
+      dateText = `Middle of ${arabToRoman(year)} the century`;
       break;
     case Period.EndOfCentury:
-      dateText = t("End of the century", { century: arabToRoman(year) });
+      dateText = `End of the ${arabToRoman(year)} century`;
       break;
     case Period.Year:
-      dateText = t("simple year", { year });
+      dateText = year;
       break;
     case Period.Decades:
-      dateText = t("Years of the century", {
-        decade: year % 100,
-        century: arabToRoman(+("" + year).slice(0, 2) + 1),
-      });
+      dateText = `${ year % 100} years of the ${arabToRoman(+('' + year).slice(0, 2) + 1)} century`;
       break;
     default:
       dateText = "";
