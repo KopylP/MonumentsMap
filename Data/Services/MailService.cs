@@ -1,9 +1,7 @@
-using System.IO;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using Microsoft.Extensions.Options;
-using MimeKit;
 using MonumentsMap.Contracts.Services;
 using MonumentsMap.Entities.Mail;
 using MonumentsMap.Entities.Settings;
@@ -21,34 +19,19 @@ namespace MonumentsMap.Data.Services
         #region interface methods
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
-            var email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
-            email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
-            email.Subject = mailRequest.Subject;
-            var builder = new BodyBuilder();
-            if (mailRequest.Attachments != null)
-            {
-                byte[] fileBytes;
-                foreach (var file in mailRequest.Attachments)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            file.CopyTo(ms);
-                            fileBytes = ms.ToArray();
-                        }
-                        builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
-                    }
-                }
-            }
-            builder.HtmlBody = mailRequest.Body;
-            email.Body = builder.ToMessageBody();
-            using var smtp = new SmtpClient();
-            smtp.Connect(_mailSettings.Host, _mailSettings.Port);
-            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
-            await smtp.SendAsync(email);
-            smtp.Disconnect(true);
+            using var client = new SmtpClient(_mailSettings.Host);
+            client.Port = 587;
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential(_mailSettings.Mail, _mailSettings.Password);
+            var from = new MailAddress(_mailSettings.Mail);
+            var to = new MailAddress(mailRequest.ToEmail);
+
+            var message = new MailMessage(from, to);
+            message.Body = mailRequest.Body;
+            message.BodyEncoding = System.Text.Encoding.UTF8;
+            message.Subject = mailRequest.Subject;
+            await Task.Run(() => client.Send(message));
         }
         #endregion
     }
