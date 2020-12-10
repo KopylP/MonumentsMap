@@ -21,7 +21,7 @@ namespace MonumentsMap.Data.Services
         {
             using var client = new SmtpClient(_mailSettings.Host);
             client.Port = 587;
-            client.EnableSsl = true;
+            client.EnableSsl = false;
             client.UseDefaultCredentials = false;
             client.Credentials = new NetworkCredential(_mailSettings.Mail, _mailSettings.Password);
             var from = new MailAddress(_mailSettings.Mail);
