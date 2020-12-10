@@ -31,16 +31,17 @@ namespace MonumentsMap.Data.Services
             var prevMonumentMajorPhoto = (await _monumentPhotoRepository
                 .Find(p => p.MajorPhoto && p.Id != monumentPhotoId && p.MonumentId == monumentPhoto.MonumentId))
                 .FirstOrDefault();
-            _monumentPhotoRepository.Commit = false;
             if (prevMonumentMajorPhoto != null)
             {
                 prevMonumentMajorPhoto.MajorPhoto = false;
-                await _monumentPhotoRepository.Update(prevMonumentMajorPhoto);
+                await _monumentPhotoRepository.Update(prevMonumentMajorPhoto, false);
             }
+
             monumentPhoto.MajorPhoto = !monumentPhoto.MajorPhoto;
-            await _monumentPhotoRepository.Update(monumentPhoto);
+            
+            await _monumentPhotoRepository.Update(monumentPhoto, false);
             await _monumentPhotoRepository.SaveChangeAsync();
-            _monumentPhotoRepository.Commit = true;
+
             return monumentPhoto;
         }
         public async Task<MonumentPhoto> Remove(int monumentPhotoId)

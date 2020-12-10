@@ -62,8 +62,6 @@ namespace MonumentsMap.Data.Services
             var oldParticipantMonuments = await _participantMonumentRepository
                 .Find(p => p.MonumentId == monumentParticipantsViewModel.MonumentId);
 
-            _participantMonumentRepository.Commit = false;
-
             List<ParticipantViewModel> sameParticipants = new List<ParticipantViewModel>();
 
             // DELETE old participant monuments
@@ -77,7 +75,7 @@ namespace MonumentsMap.Data.Services
 
                     if (sameParticipant == null)
                     {
-                        await _participantMonumentRepository.Delete(oldParticipantMonument.Id);
+                        await _participantMonumentRepository.Delete(oldParticipantMonument.Id, false);
                     }
                     else
                     {
@@ -95,7 +93,7 @@ namespace MonumentsMap.Data.Services
                     {
                         MonumentId = monument.Id,
                         ParticipantId = participant.Id
-                    });
+                    }, false);
                 }
             }
 
@@ -107,10 +105,6 @@ namespace MonumentsMap.Data.Services
             catch (DbUpdateException ex)
             {
                 throw new InternalServerErrorException(ex.InnerException?.Message);
-            }
-            finally
-            {
-                _participantMonumentRepository.Commit = true;
             }
 
             return monument;
