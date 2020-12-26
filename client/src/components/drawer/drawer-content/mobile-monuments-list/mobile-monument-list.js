@@ -47,7 +47,7 @@ function MobileMonumentList({ monuments, changeMonument }) {
                 rowHeight={230}
                 rowRenderer={renderRow}
                 rowCount={monuments.length}
-                overscanRowCount={3}
+                overscanRowCount={10}
                 style={{
                   outline: "none",
                   justifyContent: "center",

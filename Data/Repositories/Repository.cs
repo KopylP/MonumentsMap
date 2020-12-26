@@ -24,8 +24,12 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<TEntity> Add(TEntity entity, bool commit = true)
         {
-            entity.CreatedAt = DateTime.Now;
-            entity.UpdatedAt = DateTime.Now;
+            if (entity is BusinessEntity be)
+            {
+                be.CreatedAt = DateTime.Now;
+                be.UpdatedAt = DateTime.Now;
+            }
+            
             dbSet.Add(entity);
             if (commit)
                 await context.SaveChangesAsync();
@@ -82,7 +86,10 @@ namespace MonumentsMap.Data.Repositories
 
         public async Task<TEntity> Update(TEntity entity, bool commit = true)
         {
-            entity.UpdatedAt = DateTime.Now;
+            if (entity is BusinessEntity be)
+            {
+                be.UpdatedAt = DateTime.Now;
+            }
             dbSet.Update(entity);
             if (commit)
                 await context.SaveChangesAsync();

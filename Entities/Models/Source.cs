@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Entities.Models
 {
-    public class Source : Entity
+    public class Source : BusinessEntity
     {
         public int? MonumentPhotoId { get; set; }
         public int? MonumentId { get; set; }

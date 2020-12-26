@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Entities.Models
 {
-    public class MonumentPhoto : Entity
+    public class MonumentPhoto : BusinessEntity
     {
         #region props
         public int? Year { get; set; }

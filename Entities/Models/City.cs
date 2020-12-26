@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace MonumentsMap.Entities.Models
 {
-    public class City : Entity
+    public class City : BusinessEntity
     {
         #region  props
         [Required]

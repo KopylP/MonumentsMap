@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MonumentsMap.Entities.Models
 {
-    public class Condition : Entity
+    public class Condition : BusinessEntity
     {
         #region props
         [Required]
