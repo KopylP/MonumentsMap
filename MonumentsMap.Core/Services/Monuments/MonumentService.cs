@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MonumentsMap.Application.Dto.Monuments;
@@ -10,7 +9,6 @@ using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Core.Extensions;
-using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
@@ -160,7 +158,7 @@ namespace MonumentsMap.Data.Services
             {
                 throw new NotFoundException("Monument by slug not found");
             }
-            return LocalizeMonument(monument, cultureCode, true);
+            return LocalizedMonumentDto.ToDto(monument, cultureCode);
         }
 
         public async Task<Monument> GetMonumentBySlug(string slug)
@@ -180,62 +178,6 @@ namespace MonumentsMap.Data.Services
                     .FirstOrDefault();
 
         }
-
-        private LocalizedMonumentDto LocalizeMonument(Monument monument, string cultureCode, bool extended = true)
-        {
-            var localizedMonument = new LocalizedMonumentDto
-            {
-                Id = monument.Id,
-                Year = monument.Year,
-                Period = monument.Period,
-                Name = monument.Name.GetNameByCode(cultureCode),
-                Description = monument.Description.GetNameByCode(cultureCode),
-                DestroyYear = monument.DestroyYear,
-                DestroyPeriod = monument.DestroyPeriod,
-                Slug = monument.Slug,
-                CityId = monument.CityId,
-                StatusId = monument.StatusId,
-                ConditionId = monument.ConditionId,
-                Accepted = monument.Accepted,
-                Latitude = monument.Latitude,
-                Longitude = monument.Longitude,
-                CreatedAt = monument.CreatedAt,
-                UpdatedAt = monument.UpdatedAt,
-                ProtectionNumber = monument.ProtectionNumber,
-                MajorPhotoImageId = monument.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId
-            };
-
-            localizedMonument.Condition = new LocalizedConditionDto
-            {
-                Id = monument.Condition.Id,
-                Abbreviation = monument.Condition.Abbreviation,
-                Name = monument.Condition.Name.GetNameByCode(cultureCode),
-                Description = monument.Condition.Description.GetNameByCode(cultureCode)
-            };
-
-            if (extended)
-            {
-                localizedMonument.City = new LocalizedCityDto
-                {
-                    Id = monument.City.Id,
-                    Name = monument.City.Name.GetNameByCode(cultureCode)
-                };
-
-                localizedMonument.Sources = monument.Sources.Adapt<SourceDto[]>().ToList();
-                localizedMonument.MonumentPhotos = monument.MonumentPhotos.Adapt<MonumentPhotoDto[]>().ToList();
-                localizedMonument.Status = new LocalizedStatusDto
-                {
-                    Id = monument.Status.Id,
-                    Abbreviation = monument.Status.Abbreviation,
-                    Name = monument.Status.Name.GetNameByCode(cultureCode),
-                    Description = monument.Status.Description.GetNameByCode(cultureCode)
-                };
-            }
-
-            return localizedMonument;
-        }
-
-
         public async Task<IEnumerable<LocalizedMonumentDto>> GetAsync(string cultureCode)
         {
             var monuments = await _monumentRepository.GetAll(
@@ -245,7 +187,7 @@ namespace MonumentsMap.Data.Services
                 m => m.Description.Localizations,
                 m => m.MonumentPhotos);
 
-            return monuments.Select(p => LocalizeMonument(p, cultureCode, false));
+            return monuments.Select(p => LocalizedMonumentDto.ToDto(p, cultureCode));
         }
 
         public async Task<LocalizedMonumentDto> GetAsync(int id, string cultureCode)
@@ -265,7 +207,7 @@ namespace MonumentsMap.Data.Services
             {
                 throw new NotFoundException("Monument by id not found");
             }
-            return LocalizeMonument(monument, cultureCode, true);
+            return LocalizedMonumentDto.ToDto(monument, cultureCode);
         }
 
         public async Task<EditableLocalizedMonumentDto> GetEditable(int id)
@@ -280,28 +222,7 @@ namespace MonumentsMap.Data.Services
                 throw new NotFoundException("Monument by id not found");
             }
 
-            return new EditableLocalizedMonumentDto
-            {
-                Id = entity.Id,
-                Period = entity.Period,
-                CityId = entity.CityId,
-                StatusId = entity.StatusId,
-                ConditionId = entity.ConditionId,
-                Accepted = entity.Accepted,
-                Latitude = entity.Latitude,
-                DestroyPeriod = entity.DestroyPeriod,
-                DestroyYear = entity.DestroyYear,
-                Year = entity.Year,
-                Longitude = entity.Longitude,
-                ProtectionNumber = entity.ProtectionNumber,
-                Sources = entity.Sources.Select(p =>
-                {
-                    p.Monument = null;
-                    return p;
-                }).ToList(),
-                Name = entity.Name.GetCultureValuePairs(),
-                Description = entity.Description.GetCultureValuePairs()
-            };
+            return EditableLocalizedMonumentDto.FromEntity(entity);
         }
 
         public async Task<Monument> EditAsync(EditableLocalizedMonumentDto model)
@@ -334,7 +255,7 @@ namespace MonumentsMap.Data.Services
         public async Task<IEnumerable<LocalizedMonumentDto>> GetByFilterAsync(MonumentFilterParameters parameters)
         {
             var monuments = await _monumentRepository.GetByFilterAsync(parameters);
-            return await Task.FromResult(monuments.Select(p => LocalizeMonument(p, parameters.CultureCode, false)));
+            return await Task.FromResult(monuments.Select(p => LocalizedMonumentDto.ToDto(p, parameters.CultureCode)));
         }
 
         public async Task<int> RemoveAsync(int id)
@@ -355,7 +276,7 @@ namespace MonumentsMap.Data.Services
                 m => m.Description.Localizations,
                 m => m.MonumentPhotos);
 
-            return monuments.Select(p => LocalizeMonument(p, cultureCode, false));
+            return monuments.Select(p => LocalizedMonumentDto.ToDto(p, cultureCode));
         }
 
         private void ChangeSlugOfMonument(Monument entity)

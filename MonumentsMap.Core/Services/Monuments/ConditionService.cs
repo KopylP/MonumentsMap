@@ -2,12 +2,12 @@
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Services.Monuments;
-using MonumentsMap.Core.Extensions;
 using MonumentsMap.Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using MonumentsMap.Domain.Repository;
+using MonumentsMap.Application.Extensions;
 
 namespace MonumentsMap.Core.Services.Monuments
 {

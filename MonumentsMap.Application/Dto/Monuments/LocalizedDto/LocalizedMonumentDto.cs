@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Mapster;
+using MonumentsMap.Application.Extensions;
 using MonumentsMap.Domain.Enumerations;
+using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
 {
@@ -30,5 +34,72 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
         public LocalizedStatusDto Status { get; set; }
         public List<MonumentPhotoDto> MonumentPhotos { get; set; }
 
+        public static LocalizedMonumentDto ToDto(Monument monument, string cultureCode)
+        {
+            var localizedMonument = new LocalizedMonumentDto
+            {
+                Id = monument.Id,
+                Year = monument.Year,
+                Period = monument.Period,
+                Name = monument.Name.GetNameByCode(cultureCode),
+                Description = monument.Description.GetNameByCode(cultureCode),
+                DestroyYear = monument.DestroyYear,
+                DestroyPeriod = monument.DestroyPeriod,
+                Slug = monument.Slug,
+                CityId = monument.CityId,
+                StatusId = monument.StatusId,
+                ConditionId = monument.ConditionId,
+                Accepted = monument.Accepted,
+                Latitude = monument.Latitude,
+                Longitude = monument.Longitude,
+                CreatedAt = monument.CreatedAt,
+                UpdatedAt = monument.UpdatedAt,
+                ProtectionNumber = monument.ProtectionNumber,
+                MajorPhotoImageId = monument.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId
+            };
+
+            if (monument.Condition != null)
+            {
+                localizedMonument.Condition = new LocalizedConditionDto
+                {
+                    Id = monument.Condition.Id,
+                    Abbreviation = monument.Condition.Abbreviation,
+                    Name = monument.Condition.Name.GetNameByCode(cultureCode),
+                    Description = monument.Condition.Description.GetNameByCode(cultureCode)
+                };
+            }
+
+            if (monument.City != null)
+            {
+                localizedMonument.City = new LocalizedCityDto
+                {
+                    Id = monument.City.Id,
+                    Name = monument.City.Name.GetNameByCode(cultureCode)
+                };
+            }
+
+            if (monument.Sources != null)
+            {
+                localizedMonument.Sources = monument.Sources.Adapt<SourceDto[]>().ToList();
+            }
+
+            if (monument.MonumentPhotos != null)
+            {
+                localizedMonument.MonumentPhotos = monument.MonumentPhotos.Adapt<MonumentPhotoDto[]>().ToList();
+            }
+
+            if (monument.Status != null)
+            {   
+                localizedMonument.Status = new LocalizedStatusDto
+                {
+                    Id = monument.Status.Id,
+                    Abbreviation = monument.Status.Abbreviation,
+                    Name = monument.Status.Name.GetNameByCode(cultureCode),
+                    Description = monument.Status.Description.GetNameByCode(cultureCode)
+                };
+            }
+
+            return localizedMonument;
+        }
     }
 }

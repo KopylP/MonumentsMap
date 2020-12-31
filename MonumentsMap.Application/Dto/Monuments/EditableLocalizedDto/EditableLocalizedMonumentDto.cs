@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using MonumentsMap.Application.Extensions;
 using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.Models;
 
@@ -75,6 +77,32 @@ namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
                 });
             }
             return monument;
+        }
+
+        public static EditableLocalizedMonumentDto FromEntity(Monument entity)
+        {
+            return new EditableLocalizedMonumentDto
+            {
+                Id = entity.Id,
+                Period = entity.Period,
+                CityId = entity.CityId,
+                StatusId = entity.StatusId,
+                ConditionId = entity.ConditionId,
+                Accepted = entity.Accepted,
+                Latitude = entity.Latitude,
+                DestroyPeriod = entity.DestroyPeriod,
+                DestroyYear = entity.DestroyYear,
+                Year = entity.Year,
+                Longitude = entity.Longitude,
+                ProtectionNumber = entity.ProtectionNumber,
+                Sources = entity.Sources.Select(p =>
+                {
+                    p.Monument = null;
+                    return p;
+                }).ToList(),
+                Name = entity.Name.GetCultureValuePairs(),
+                Description = entity.Description.GetCultureValuePairs()
+            };
         }
     }
 }

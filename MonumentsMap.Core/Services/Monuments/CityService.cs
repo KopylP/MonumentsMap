@@ -6,8 +6,8 @@ using MonumentsMap.Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using MonumentsMap.Core.Extensions;
 using MonumentsMap.Domain.Repository;
+using MonumentsMap.Application.Extensions;
 
 namespace MonumentsMap.Core.Services.Monuments
 {

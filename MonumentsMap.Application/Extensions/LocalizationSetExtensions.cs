@@ -3,7 +3,7 @@ using System.Linq;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Domain.Models;
 
-namespace MonumentsMap.Core.Extensions
+namespace MonumentsMap.Application.Extensions
 {
     public static class LocalizationSetExtensions
     {
