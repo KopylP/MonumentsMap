@@ -4,7 +4,7 @@ using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments;
-using MonumentsMap.Application.Dto.Monuments.FilterParameters;
+using MonumentsMap.Domain.FilterParameters;
 
 namespace MonumentsMap.Application.Services.Monuments
 {

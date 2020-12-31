@@ -1,5 +1,4 @@
-
-namespace MonumentsMap.Application.Dto.Monuments.FilterParameters
+namespace MonumentsMap.Domain.FilterParameters
 {
     public class MonumentFilterParameters
     {
