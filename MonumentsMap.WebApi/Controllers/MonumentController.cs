@@ -4,14 +4,13 @@ using System.Threading.Tasks;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
-using MonumentsMap.Application.Dto.Monuments.FilterParameters;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Services.Monuments;
+using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Filters;
 

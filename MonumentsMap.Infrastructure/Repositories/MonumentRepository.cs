@@ -64,7 +64,7 @@ namespace MonumentsMap.Infrastructure.Repositories
                     select monument;
             }
 
-            return await monuments.ToListAsync();
+            return monuments.ToList();
         }
 
         private bool IfRangeInEndYear(int endYear, (int startYear, int endYear) range) => endYear >= range.startYear;
