@@ -1,8 +1,8 @@
 version: "3.8"
 services:
-  monumentsmapapi:
+  api:
     container_name: monumentsmap-api
-    build: .
+    build: ./MonumentsMap.WebApi
     depends_on:
       - db
     restart: unless-stopped
