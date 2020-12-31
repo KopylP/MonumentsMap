@@ -8,7 +8,7 @@
     "@material-ui/core": "^4.10.2",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
-    "@react-google-maps/api": "^1.9.7",
+    "@react-google-maps/api": "^1.13.0",
     "@rodw95/use-cancelable-promise": "0.0.2",
     "@rooks/use-mutation-observer": "^3.6.0",
     "@testing-library/jest-dom": "^4.2.4",

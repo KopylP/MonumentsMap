@@ -23,8 +23,8 @@ import { changeMonument } from "../actions/detail-monument-actions";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     position: "fixed",
-    left: 50,
-    top: 10,
+    left: 15,
+    top: 15,
     zIndex: 999,
   },
   app: {
@@ -121,8 +121,8 @@ function MapPage({
       />
       <MenuButton className={classes.menuButton} />
       <MainDrawer />
-      <DetailDrawer />
-      <MyLocation />
+      {/* <DetailDrawer /> */}
+      {/* <MyLocation /> */}
     </div>
   );
 }

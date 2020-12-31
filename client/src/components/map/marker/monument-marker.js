@@ -1,51 +1,77 @@
 import React, { Component } from "react";
-import { Marker, Popup } from "react-leaflet";
-import markerIcon from "./marker-icon";
+import { Marker } from "@react-google-maps/api";
+import IconPink from "./map-marker-alt-solid-pink.svg";
+import IconRed from "./map-marker-alt-solid-red.svg";
+import MonumentInfoWindow from "./monument-info-window/monument-info-window";
+import { connect } from "react-redux";
+import { changeMonument } from "../../../actions/detail-monument-actions";
+import { bindActionCreators } from "redux";
 
-export default class MonumentMarker extends Component {
-
-  markerRef = React.createRef();
-
-  getLatLng = () => {
-    this.markerRef.current.leafletElement.getLatLng();
-  }
+class MonumentMarker extends Component {
+  handleClick = () => {
+    const { monument, changeMonument, selectedMonument } = this.props;
+    changeMonument(monument, false);
+    console.log("selected Monument", selectedMonument);
+  };
 
   render() {
-    const { monument, onClick = (p) => p } = this.props;
-    let markerColor;
-  
+    const { monument, selectedMonument } = this.props;
+    let markerIcon;
+
     switch (monument.condition.abbreviation) {
       case "good-condition":
-        markerColor = "green";
+      case "verge-of-loss":
+      case "needs-repair":
+        markerIcon = IconPink;
         break;
       case "lost":
-        markerColor = "red";
-        break;
       case "lost-recently":
-        markerColor = "red";
-        break;
-      case "verge-of-loss":
-        markerColor = "orange";
-        break;
-      case "needs-repair":
-        markerColor = "orange";
+        markerIcon = IconRed;
         break;
       default:
-        markerColor = "green";
+        markerIcon = IconPink;
     }
-  
+
+    const icon = {
+      url: markerIcon,
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    };
+
+    const handleWindowClose = () => {
+      console.log("CLOOOOOSE");
+      changeMonument(null, false);
+    };
+
     return (
       <Marker
-        onclick={(e) => onClick(monument.id)}
-        icon={markerIcon(markerColor)}
+        onClick={this.handleClick}
+        icon={icon}
         position={{
           lat: monument.latitude,
           lng: monument.longitude,
         }}
-        ref={this.markerRef}
       >
-        <Popup autoPan={false}>{monument.name}</Popup>
+        {selectedMonument && selectedMonument.id === monument.id && (
+          <MonumentInfoWindow {...monument} onWindowClose={handleWindowClose} />
+        )}
       </Marker>
     );
   }
 }
+
+const bindStateToProps = ({ detailMonument: { selectedMonument } }) => ({
+  selectedMonument,
+});
+
+const bindDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      changeMonument: changeMonument(),
+    },
+    dispatch
+  );
+
+export default connect(bindStateToProps, bindDispatchToProps)(MonumentMarker);

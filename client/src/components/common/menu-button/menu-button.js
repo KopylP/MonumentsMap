@@ -10,7 +10,9 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     background: "white",
     borderRadius: 5,
+    backgroundColor: theme.palette.secondary.main,
     padding: 5,
+    color: "white",
     "&:hover": {
       background: "#eee",
     },

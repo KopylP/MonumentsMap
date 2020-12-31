@@ -1,24 +1,20 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import { Map as LeafMap, TileLayer } from "react-leaflet";
+import React, { useEffect } from "react";
 import MonumentMarker from "./marker/monument-marker";
-import { defaultZoom, accessToken, mapStyle } from "../../config";
+import { defaultZoom } from "../../config";
 import { usePrevious } from "../../hooks/hooks";
-import { LatLng } from "leaflet";
-import { makeStyles } from "@material-ui/core/styles";
-import { isChrome, isIOS, isMobileOnly } from "react-device-detect";
+import { makeStyles, StylesProvider } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { changeCenter } from "../../actions/map-actions";
+import {
+  GoogleMap,
+  LoadScript,
+  useGoogleMap,
+  useJsApiLoader,
+} from "@react-google-maps/api";
 
 const useStyles = makeStyles({
   mobileOnlyMapStyles: {
     flexGrow: 1,
-  },
-  mapStyles: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
 });
 
@@ -30,24 +26,15 @@ function Map({
   detailDrawerOpen,
   selectedMonument,
 }) {
-  const [markers, setMarkers] = useState([]);
   const mapRef = React.useRef(null);
-  const [viewPortChange, setViewPortChange] = useState(false);
   const prevCenter = usePrevious(center);
-  const classes = useStyles();
-
-  const canClickMarker = useRef(true);
-
-  const closePopups = () => {
-    mapRef.current.leafletElement.closePopup();
-  };
 
   const handleMonumentMarkerClick = (monument) => {
-    if (canClickMarker.current) {
-      onMonumentSelected(monument);
-    } else {
-      closePopups();
-    }
+    // if (canClickMarker.current) {
+    //   onMonumentSelected(monument);
+    // } else {
+    //   closePopups();
+    // }
   };
 
   const handleChangeCenter = ({ lat, lng }) => {
@@ -57,35 +44,13 @@ function Map({
     });
   };
 
-  const getVisibleMonumentMarkers = () => {
-    return monuments
-      .filter((monument) => {
-        if (isIOS && isChrome) return true;
-        const latLng = new LatLng(monument.latitude, monument.longitude);
-        const markerOnMap = mapRef.current.leafletElement
-          .getBounds()
-          .contains(latLng);
-        return markerOnMap;
-      })
-      .map((monument, i) => {
-        return (
-          <MonumentMarker
-            onClick={handleMonumentMarkerClick}
-            monument={monument}
-            selectedMonumentId={selectedMonument && selectedMonument.id}
-            key={monument.id}
-          />
-        );
-      });
+  const mapStyles = {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   };
-
-  useEffect(() => {
-    setMarkers(getVisibleMonumentMarkers());
-  }, [monuments]);
-
-  useEffect(() => {
-    if (detailDrawerOpen === false) closePopups();
-  }, [detailDrawerOpen]);
 
   useEffect(() => {
     if (
@@ -97,62 +62,35 @@ function Map({
     }
   }, [center]);
 
-  const updateMarkers = () => {
-    setMarkers(getVisibleMonumentMarkers());
-  };
-
-  const onViewPortChange = () => {
-    if (viewPortChange === false) {
-      setViewPortChange(true);
-      updateMarkers();
-      setTimeout(() => {
-        setViewPortChange(false);
-      }, 150);
-    }
-  };
-
-  const handleMoveStart = () => {
-    if (canClickMarker.current) {
-      canClickMarker.current = false;
-    }
-  };
-
-  const handleMoveEnd = () => {
-    updateMarkers();
-    canClickMarker.current = true;
-  };
-
   return (
-    <LeafMap
-      center={center}
-      animate
-      duration={0.2}
-      onViewportChange={onViewPortChange}
-      onmovestart={handleMoveStart}
-      onmoveend={handleMoveEnd}
-      preferCanvas
-      zoom={defaultZoom}
-      className={isMobileOnly ? classes.mobileOnlyMapStyles : classes.mapStyles}
-      ref={mapRef}
+    <LoadScript
+      googleMapsApiKey="AIzaSyB4nR9f1DNEJ8Cwze3ZRSQU4wCosKVtI6s"
+      mapIds={["9ca280824ef8f1b9"]}
     >
-      <TileLayer
-        attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors'
-        url={`https://tile.jawg.io/${mapStyle}/{z}/{x}/{y}.png?access-token=${accessToken}`}
-      />
-      {markers}
-    </LeafMap>
+      <GoogleMap
+        mapContainerStyle={mapStyles}
+        center={center}
+        zoom={defaultZoom}
+        options={{
+          streetViewControl: false,
+          fullscreenControl: false,
+          zoomControl: true,
+          scaleControl: true,
+          mapTypeControl: false,
+          mapId: "9ca280824ef8f1b9",
+        }}
+      >
+        {monuments.map((p) => (
+          <MonumentMarker monument={p} />
+        ))}
+      </GoogleMap>
+    </LoadScript>
   );
 }
 
-const mapStateToProps = ({
-  monument: { monuments },
-  map: { center },
-  detailMonument: { detailDrawerOpen, selectedMonument },
-}) => ({
+const mapStateToProps = ({ monument: { monuments }, map: { center } }) => ({
   monuments,
   center,
-  detailDrawerOpen,
-  selectedMonument,
 });
 
 const mapDispatchToProps = { changeCenter };
