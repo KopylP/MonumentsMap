@@ -16,4 +16,4 @@ COPY --from=build-env /app/out .
 RUN apt-get update
 RUN apt-get install -y libfreetype6
 RUN apt-get install -y libfontconfig1
-ENTRYPOINT ["dotnet", "MonumentsMap.dll"]
+ENTRYPOINT ["dotnet", "MonumentsMap.WebApi.dll"]
