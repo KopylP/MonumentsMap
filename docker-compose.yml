@@ -24,13 +24,13 @@ services:
     container_name: client
     build: ./client
     depends_on:
-      - monumentsmapapi
+      - api
     restart: unless-stopped
   client-admin:
     container_name: client-admin
     build: ./client-admin
     depends_on:
-      - monumentsmapapi
+      - api
     restart: unless-stopped
     stdin_open: true
   nginx:
