@@ -22,7 +22,4 @@
     <ProjectReference Include="..\MonumentsMap.Domain\MonumentsMap.Domain.csproj" />
     <ProjectReference Include="..\MonumentsMap.Infrastructure\MonumentsMap.Infrastructure.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
 </Project>
