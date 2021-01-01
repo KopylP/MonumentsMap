@@ -22,6 +22,7 @@ namespace MonumentsMap.Infrastructure.Repositories
                 .Include(p => p.Participant)
                 .ThenInclude(p => p.Name)
                 .ThenInclude(p => p.Localizations)
+                .Where(p => p.MonumentId == monumentId)
                 .Select(p => p.Participant)
                 .ToListAsync();
         }

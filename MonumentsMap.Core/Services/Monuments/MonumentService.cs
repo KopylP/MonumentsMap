@@ -113,17 +113,8 @@ namespace MonumentsMap.Data.Services
 
         public async Task<IEnumerable<Participant>> GetRawParticipantsAsync(int monumentId)
         {
-            var monument = await _monumentRepository.Get(monumentId);
-
-            if (monument == null)
-            {
-                throw new NotFoundException("Monument not found");
-            }
-
-            var participantMonuments = await _participantMonumentRepository
-                .Find(p => p.MonumentId == monumentId, x => x.Participant);
-
-            return participantMonuments.Select(p => p.Participant);
+            return await _participantMonumentRepository
+                .GetParticipantsByMonumentWithLocalizationsAsync(monumentId);
         }
 
         public async Task<IEnumerable<LocalizedParticipantDto>> GetLocalizedParticipants(int monumentId, string cultureCode)
@@ -131,13 +122,9 @@ namespace MonumentsMap.Data.Services
             var participants = await _participantMonumentRepository
                 .GetParticipantsByMonumentWithLocalizationsAsync(monumentId);
 
-            return participants.Select(p => new LocalizedParticipantDto
-            {
-                Id = p.Id,
-                DefaultName = p.DefaultName,
-                Name = p.Name.Localizations.Where(p => p.CultureCode == cultureCode).FirstOrDefault()?.Value
-            })
-            .ToList();
+            return participants
+                .Select(p => LocalizedParticipantDto.ToDto(p, cultureCode))
+                .ToList();
         }
 
         public async Task<LocalizedMonumentDto> GetMonumentBySlug(string slug, string cultureCode)
