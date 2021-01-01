@@ -10,16 +10,13 @@ namespace MonumentsMap.Filters
 {
     public class CultureCodeResourceFilter : Attribute, IResourceFilter
     {
-        #region private fields
         private readonly string _defaultLanguageCode;
-        #endregion
-        #region constructor
+
         public CultureCodeResourceFilter(IConfiguration Configuration) { _defaultLanguageCode = Configuration["DefaultLanguage"]; }
-        #endregion
-        #region IResourceFilter methods
+
         public void OnResourceExecuted(ResourceExecutedContext context)
         {
-            //without realization
+            // without realization
         }
 
         public void OnResourceExecuting(ResourceExecutingContext context)
@@ -34,6 +31,5 @@ namespace MonumentsMap.Filters
                 context.Result = new RedirectResult(url);
             }
         }
-        #endregion
     }
 }
