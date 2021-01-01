@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mapster;
+using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Extensions;
 using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.Models;

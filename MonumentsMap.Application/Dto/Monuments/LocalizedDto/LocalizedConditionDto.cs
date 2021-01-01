@@ -1,3 +1,5 @@
+using MonumentsMap.Application.Dto.Localized;
+
 namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
 {
     public class LocalizedConditionDto : BaseLocalizedDto

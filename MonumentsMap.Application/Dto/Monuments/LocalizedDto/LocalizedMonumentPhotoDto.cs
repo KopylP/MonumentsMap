@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.Models;
 

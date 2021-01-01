@@ -1,4 +1,6 @@
-namespace MonumentsMap.Application.Dto.Localized
+﻿namespace MonumentsMap.Application.Dto.Localized
 {
-    public abstract class TLocalizedRestService { }
+    public class BaseLocalizedDto
+    {
+    }
 }

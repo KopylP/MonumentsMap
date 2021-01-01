@@ -1,6 +1,5 @@
 ﻿using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
-using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
