@@ -67,7 +67,7 @@ namespace MonumentsMap.Core.Services.Monuments
 
         public async Task<EditableLocalizedCityDto> GetEditable(int id)
         {
-            var city = await _cityRepository.Get(id);
+            var city = await _cityRepository.Get(id, p => p.Name.Localizations);
 
             return new EditableLocalizedCityDto
             {

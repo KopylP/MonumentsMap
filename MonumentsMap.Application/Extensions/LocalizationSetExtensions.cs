@@ -7,14 +7,18 @@ namespace MonumentsMap.Application.Extensions
 {
     public static class LocalizationSetExtensions
     {
-        public static List<CultureValuePair> GetCultureValuePairs(this LocalizationSet localizationSet) => localizationSet
-            .Localizations
-            .Select(p => new CultureValuePair
-            {
-                Culture = p.CultureCode,
-                Value = p.Value
-            })
-            .ToList();
+        public static List<CultureValuePair> GetCultureValuePairs(this LocalizationSet localizationSet)
+        {
+            if (localizationSet == null) return null;
+            return localizationSet
+                .Localizations
+                .Select(p => new CultureValuePair
+                {
+                    Culture = p.CultureCode,
+                    Value = p.Value
+                })
+                .ToList();
+        }
 
         public static string GetNameByCode(this LocalizationSet localizationSet, string cultureCode)
         {

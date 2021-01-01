@@ -184,7 +184,6 @@ namespace MonumentsMap.Data.Services
                 m => m.Condition.Description,
                 m => m.Condition.Name,
                 m => m.Name.Localizations,
-                m => m.Description.Localizations,
                 m => m.MonumentPhotos);
 
             return monuments.Select(p => LocalizedMonumentDto.ToDto(p, cultureCode));
@@ -273,7 +272,6 @@ namespace MonumentsMap.Data.Services
                 m => m.Condition.Description,
                 m => m.Condition.Name,
                 m => m.Name.Localizations,
-                m => m.Description.Localizations,
                 m => m.MonumentPhotos);
 
             return monuments.Select(p => LocalizedMonumentDto.ToDto(p, cultureCode));
