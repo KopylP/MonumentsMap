@@ -11,20 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using MonumentsMap.Application.Services.Auth;
-using MonumentsMap.Application.Services.Invitation;
-using MonumentsMap.Application.Services.Mail;
-using MonumentsMap.Application.Services.Monuments;
-using MonumentsMap.Application.Services.User;
-using MonumentsMap.Core.Services.Monuments;
-using MonumentsMap.Data.Repositories;
-using MonumentsMap.Data.Services;
+using MonumentsMap.Core.Extensions;
 using MonumentsMap.Domain.Models;
-using MonumentsMap.Domain.Repository;
 using MonumentsMap.Filters;
 using MonumentsMap.Framework.Settings;
+using MonumentsMap.Infrastructure.Extensions;
 using MonumentsMap.Infrastructure.Persistence;
-using MonumentsMap.Infrastructure.Repositories;
 
 namespace MonumentsMap
 {
@@ -57,29 +49,8 @@ namespace MonumentsMap
             });
             services.AddMemoryCache();
 
-            services.AddScoped<IPhotoRepository, PhotoRepository>();
-            services.AddScoped<ICityRepository, CityRepository>();
-            services.AddScoped<IConditionRepository, ConditionRepository>();
-            services.AddScoped<IInvitationRepository, InvitationRepository>();
-            services.AddScoped<IMonumentPhotoRepository, MonumentPhotoRepository>();
-            services.AddScoped<IMonumentRepository, MonumentRepository>();
-            services.AddScoped<IParticipantMonumentRepository, ParticipantMonumentRepository>();
-            services.AddScoped<IParticipantRepository, ParticipantRepository>();
-            services.AddScoped<IStatusRepository, StatusRepository>();
-            services.AddScoped<ITokenRepository, TokenRepository>();
-
-            services.AddScoped<IMonumentPhotoService, MonumentPhotoService>();
-            services.AddScoped<IMonumentService, MonumentService>();
-            services.AddScoped<ICityService, CityService>();
-            services.AddScoped<IConditionService, ConditionService>();
-            services.AddScoped<IParticipantService, ParticipantService>();
-            services.AddScoped<IStatusService, StatusService>();
-
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IMailService, MailService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IInvitationService, InvitationService>();
-            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddRepositories();
+            services.AddServices();
 
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
             services.AddScoped<CultureCodeResourceFilter>();

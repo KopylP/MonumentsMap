@@ -9,12 +9,12 @@ using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Extensions;
 using MonumentsMap.Application.Services.Monuments;
+using MonumentsMap.Data.Services;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
-using MonumentsMap.Infrastructure.Persistence;
 
-namespace MonumentsMap.Data.Services
+namespace MonumentsMap.Core.Services.Monuments
 {
     public class MonumentPhotoService : IMonumentPhotoService
     {

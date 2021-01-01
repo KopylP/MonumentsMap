@@ -13,7 +13,7 @@ using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
 
-namespace MonumentsMap.Data.Services
+namespace MonumentsMap.Core.Services.Monuments
 {
     public class MonumentService : IMonumentService
     {
