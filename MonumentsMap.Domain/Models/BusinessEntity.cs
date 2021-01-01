@@ -7,6 +7,7 @@ namespace MonumentsMap.Domain.Models
     {
         [Required]
         public DateTime CreatedAt { get; set; }
+
         [Required]
         public DateTime UpdatedAt { get; set; }
     }

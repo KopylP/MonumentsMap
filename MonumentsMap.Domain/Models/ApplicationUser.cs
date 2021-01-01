@@ -9,8 +9,10 @@ namespace MonumentsMap.Domain.Models
     {
         [Required]
         public string DisplayName { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
+
         [Required]
         public DateTime UpdatedAt { get; set; }
     }

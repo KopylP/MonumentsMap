@@ -6,6 +6,7 @@ namespace MonumentsMap.Domain.Models
     {
         [Required]
         public string FileName { get; set; }
+
         [Required]
         public double ImageScale { get; set; }
     }
