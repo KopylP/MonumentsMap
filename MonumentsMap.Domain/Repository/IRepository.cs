@@ -11,7 +11,8 @@ namespace MonumentsMap.Domain.Repository
     {
         Task<List<T>> GetAll(params Expression<Func<T, object>>[] includes);
         Task<T> Get(int id, params Expression<Func<T, object>>[] includes);
-        Task<List<T>> Find(Func<T, bool> predicate, params Expression<Func<T, object>>[] includes);
+        Task<T> Single(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+        Task<List<T>> Find(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
         Task<T> Add(T entity);
         Task<T> Update(T entity);
         Task<T> Delete(int id);

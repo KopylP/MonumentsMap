@@ -46,16 +46,14 @@ namespace MonumentsMap.Infrastructure.Repositories
             return entity;
         }
 
-        public async Task<List<TEntity>> Find(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<List<TEntity>> Find(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = context.Set<TEntity>();
             if (includes != null)
                 foreach (var include in includes)
                     query = query.Include(include);
 
-            var entities = await query.ToListAsync();
-
-            return entities.Where(predicate).ToList();
+            return await query.Where(predicate).ToListAsync();
         }
 
         public IQueryable<TEntity> GetQuery()
@@ -98,6 +96,18 @@ namespace MonumentsMap.Infrastructure.Repositories
             }
             dbSet.Update(entity);
             return await Task.FromResult(entity);
+        }
+
+        public async Task<TEntity> Single(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = context.Set<TEntity>();
+            if (includes != null)
+                foreach (var include in includes)
+                    query = query.Include(include);
+
+            return await query
+                .Where(predicate)
+                .FirstOrDefaultAsync();
         }
     }
 }

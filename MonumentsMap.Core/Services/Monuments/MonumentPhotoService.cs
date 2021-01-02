@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mapster;
 using MonumentsMap.Application.Dto.Monuments;
@@ -164,7 +165,7 @@ namespace MonumentsMap.Core.Services.Monuments
             };
         }
 
-        public async Task<IEnumerable<LocalizedMonumentPhotoDto>> FindAsync(string cultureCode, Func<MonumentPhoto, bool> predicate)
+        public async Task<IEnumerable<LocalizedMonumentPhotoDto>> FindAsync(string cultureCode, Expression<Func<MonumentPhoto, bool>> predicate)
         {
             var localizedEntities = (await _monumentPhotoRepository.Find(
                 predicate,
