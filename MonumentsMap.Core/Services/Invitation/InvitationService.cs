@@ -8,6 +8,7 @@ using MonumentsMap.Application.Dto.Mail;
 using MonumentsMap.Application.Services.Invitation;
 using MonumentsMap.Application.Services.Mail;
 using MonumentsMap.Domain.Models;
+using MonumentsMap.Domain.Repository;
 using MonumentsMap.Framework.Utilities;
 using MonumentsMap.Infrastructure.Persistence;
 using MonumentsMap.Infrastructure.UnitOfWork;
@@ -17,63 +18,60 @@ namespace MonumentsMap.Data.Services
     public class InvitationService : IInvitationService
     {
         private readonly IMailService _emailService;
-        private readonly ApplicationContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IInvitationRepository _invitationRepository;
         private readonly string _invitationSecretKey;
         private readonly int _expirationInHours;
         private readonly string _invitationClientUrlPattern;
 
         public InvitationService(
             IMailService emailService,
-            ApplicationContext context,
             IConfiguration configuration,
+            IInvitationRepository invitationRepository,
             UserManager<ApplicationUser> userManager)
         {
             _emailService = emailService;
-            _context = context;
             _invitationSecretKey = configuration["Invitation:Key"];
             _expirationInHours = configuration.GetValue<int>("Invitation:ExpirationInHours");
             _invitationClientUrlPattern = configuration["Invitation:InvitationClientUrl"];
+            _invitationRepository = invitationRepository;
             _userManager = userManager;
         }
 
         public async Task<InvitationResponseDto> CreateInviteAsync(string email)
         {
-            using (var uow = new UnitOfWork(_context))
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null) return null;
+            var now = DateTime.Now;
+
+            var invitations = await _invitationRepository
+                .Find(p => p.Email == email && p.ExpireAt > now);
+
+            foreach (var invitation in invitations)
             {
-                var user = await _userManager.FindByEmailAsync(email);
-                if (user != null) return null;
-                var now = DateTime.Now;
-
-                var invitations = await uow.InvitationRepository
-                    .Find(p => p.Email == email && p.ExpireAt > now);
-
-                foreach (var invitation in invitations)
-                {
-                    await uow.InvitationRepository.Delete(invitation.Id);
-                }
-
-                var expireAt = now.AddHours(_expirationInHours);
-                string salt = Guid.NewGuid().ToString();
-                await uow.InvitationRepository.Add(new Invitation
-                {
-                    Email = email,
-                    ExpireAt = expireAt,
-                    Salt = salt
-
-                });
-                string emailSaltKey = GetEmailWithSaltAndKey(email, salt);
-                string invitationCode = HashUtility.ComputeSha256Hash(emailSaltKey);
-
-                await uow.SaveAsync();
-
-                return new InvitationResponseDto
-                {
-                    InvitationCode = invitationCode,
-                    Email = email,
-                    ExpireAt = expireAt
-                };
+                await _invitationRepository.Delete(invitation.Id);
             }
+
+            var expireAt = now.AddHours(_expirationInHours);
+            string salt = Guid.NewGuid().ToString();
+            await _invitationRepository.Add(new Invitation
+            {
+                Email = email,
+                ExpireAt = expireAt,
+                Salt = salt
+
+            });
+            string emailSaltKey = GetEmailWithSaltAndKey(email, salt);
+            string invitationCode = HashUtility.ComputeSha256Hash(emailSaltKey);
+
+            await _invitationRepository.SaveChangeAsync();
+
+            return new InvitationResponseDto
+            {
+                InvitationCode = invitationCode,
+                Email = email,
+                ExpireAt = expireAt
+            };
         }
 
         public async Task InvitePersonAsync(InvitationResponseDto invitation)
@@ -91,19 +89,16 @@ namespace MonumentsMap.Data.Services
 
         public async Task<InvitationResult> CheckInvitationCodeAsync(string email, string invitationCode)
         {
-            using (var uow = new UnitOfWork(_context))
-            {
-                var user = await _userManager.FindByEmailAsync(email);
-                if (user != null) return InvitationResult.UserAlreadyExists;
-                var now = DateTime.Now;
-                var invitations = await uow.InvitationRepository
-                    .Find(p => p.Email == email && p.ExpireAt > now);
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null) return InvitationResult.UserAlreadyExists;
+            var now = DateTime.Now;
+            var invitations = await _invitationRepository
+                .Find(p => p.Email == email && p.ExpireAt > now);
 
-                if (!invitations.Any()) return InvitationResult.InvitationDoesNotExistOrExpired;
-                var invitation = invitations.FirstOrDefault();
-                var originalInvitationCode = HashUtility.ComputeSha256Hash(GetEmailWithSaltAndKey(invitation.Email, invitation.Salt));
-                return originalInvitationCode == invitationCode ? InvitationResult.Ok : InvitationResult.InvalidInvitationCode;
-            }
+            if (!invitations.Any()) return InvitationResult.InvitationDoesNotExistOrExpired;
+            var invitation = invitations.FirstOrDefault();
+            var originalInvitationCode = HashUtility.ComputeSha256Hash(GetEmailWithSaltAndKey(invitation.Email, invitation.Salt));
+            return originalInvitationCode == invitationCode ? InvitationResult.Ok : InvitationResult.InvalidInvitationCode;
         }
 
         private string GetEmailWithSaltAndKey(string email, string salt)
