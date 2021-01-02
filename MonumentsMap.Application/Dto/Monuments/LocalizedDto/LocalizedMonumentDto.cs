@@ -35,7 +35,7 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
         public LocalizedStatusDto Status { get; set; }
         public List<MonumentPhotoDto> MonumentPhotos { get; set; }
 
-        public static LocalizedMonumentDto ToDto(Monument monument, string cultureCode)
+        public static LocalizedMonumentDto ToDto(Monument monument, string cultureCode, params string[] excludes)
         {
             var localizedMonument = new LocalizedMonumentDto
             {
@@ -59,7 +59,7 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
                 MajorPhotoImageId = monument.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId
             };
 
-            if (monument.Condition != null)
+            if (monument.Condition != null && !excludes.Contains(nameof(monument.Condition)))
             {
                 localizedMonument.Condition = new LocalizedConditionDto
                 {
@@ -70,7 +70,7 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
                 };
             }
 
-            if (monument.City != null)
+            if (monument.City != null && !excludes.Contains(nameof(monument.City)))
             {
                 localizedMonument.City = new LocalizedCityDto
                 {
@@ -79,17 +79,17 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
                 };
             }
 
-            if (monument.Sources != null)
+            if (monument.Sources != null && !excludes.Contains(nameof(monument.Sources)))
             {
                 localizedMonument.Sources = monument.Sources.Adapt<SourceDto[]>().ToList();
             }
 
-            if (monument.MonumentPhotos != null)
+            if (monument.MonumentPhotos != null && !excludes.Contains(nameof(monument.MonumentPhotos)))
             {
                 localizedMonument.MonumentPhotos = monument.MonumentPhotos.Adapt<MonumentPhotoDto[]>().ToList();
             }
 
-            if (monument.Status != null)
+            if (monument.Status != null && !excludes.Contains(nameof(monument.Status)))
             {   
                 localizedMonument.Status = new LocalizedStatusDto
                 {

@@ -266,7 +266,7 @@ namespace MonumentsMap.Core.Services.Monuments
         public async Task<IEnumerable<LocalizedMonumentDto>> GetByFilterAsync(MonumentFilterParameters parameters)
         {
             var monuments = await _monumentRepository.GetByFilterAsync(parameters);
-            return await Task.FromResult(monuments.Select(p => LocalizedMonumentDto.ToDto(p, parameters.CultureCode)));
+            return await Task.FromResult(monuments.Select(p => LocalizedMonumentDto.ToDto(p, parameters.CultureCode, nameof(p.MonumentPhotos))));
         }
 
         public async Task<int> RemoveAsync(int id)
