@@ -18,16 +18,24 @@ namespace MonumentsMap.Core.Services.Monuments
     public class MonumentService : IMonumentService
     {
         private string slugLanguage;
+
         private IMonumentRepository _monumentRepository;
         private IParticipantMonumentRepository _participantMonumentRepository;
+        private IStatusRepository _statusRepository;
+        private IConditionRepository _conditionRepository;
+        
         public MonumentService(
             IConfiguration configuration,
             IMonumentRepository monumentRepository,
-            IParticipantMonumentRepository participantMonumentRepository)
+            IParticipantMonumentRepository participantMonumentRepository,
+            IStatusRepository statusRepository,
+            IConditionRepository conditionRepository)
         {
             slugLanguage = configuration["SlugLanguage"];
             _monumentRepository = monumentRepository;
             _participantMonumentRepository = participantMonumentRepository;
+            _statusRepository = statusRepository;
+            _conditionRepository = conditionRepository;
         }
 
         public async Task<Monument> ToogleMonument(int monumentId)
@@ -129,22 +137,27 @@ namespace MonumentsMap.Core.Services.Monuments
 
         public async Task<LocalizedMonumentDto> GetMonumentBySlug(string slug, string cultureCode)
         {
-            var monument = (await _monumentRepository.Find(p => p.Slug == slug,
-                m => m.Status.Description.Localizations,
-                m => m.Status.Name.Localizations,
-                m => m.Condition.Description.Localizations,
-                m => m.Condition.Name.Localizations,
+            var monument = await _monumentRepository.Single(
+                p => p.Slug == slug,
                 m => m.Sources,
                 m => m.MonumentPhotos,
                 m => m.Name.Localizations,
                 m => m.Description.Localizations,
-                m => m.City.Name.Localizations))
-                .FirstOrDefault();
+                m => m.City.Name.Localizations);
 
             if (monument == null)
             {
-                throw new NotFoundException("Monument by slug not found");
+                throw new NotFoundException("Monument by id not found");
             }
+
+            monument.Status = await _statusRepository.Get(monument.StatusId, 
+                m => m.Description.Localizations,
+                m => m.Name.Localizations);
+            
+            monument.Condition = await _conditionRepository.Get(monument.ConditionId,
+                m => m.Description.Localizations,
+                m => m.Name.Localizations);
+
             return LocalizedMonumentDto.ToDto(monument, cultureCode);
         }
 
@@ -179,10 +192,6 @@ namespace MonumentsMap.Core.Services.Monuments
         public async Task<LocalizedMonumentDto> GetAsync(int id, string cultureCode)
         {
             var monument = await _monumentRepository.Get(id,
-                m => m.Status.Description.Localizations,
-                m => m.Status.Name.Localizations,
-                m => m.Condition.Description.Localizations,
-                m => m.Condition.Name.Localizations,
                 m => m.Sources,
                 m => m.MonumentPhotos,
                 m => m.Name.Localizations,
@@ -193,6 +202,15 @@ namespace MonumentsMap.Core.Services.Monuments
             {
                 throw new NotFoundException("Monument by id not found");
             }
+
+            monument.Status = await _statusRepository.Get(monument.StatusId, 
+                m => m.Description.Localizations,
+                m => m.Name.Localizations);
+            
+            monument.Condition = await _conditionRepository.Get(monument.ConditionId,
+                m => m.Description.Localizations,
+                m => m.Name.Localizations);
+
             return LocalizedMonumentDto.ToDto(monument, cultureCode);
         }
 
