@@ -43,6 +43,7 @@ namespace MonumentsMap.Domain.Models
         public double Longitude { get; set; }
 
         [Required]
+        [Column(TypeName = "varchar(100)")]
         public string Slug { get; set; }
 
         public string ProtectionNumber { get; set; }

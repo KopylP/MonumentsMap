@@ -2,16 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MonumentsMap.Infrastructure.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace MonumentsMap.Data.Migrations
+namespace MonumentsMap.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210102103324_MonumentSlugUnique")]
+    partial class MonumentSlugUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,7 +262,7 @@ namespace MonumentsMap.Data.Migrations
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
@@ -275,9 +277,6 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Abbreviation")
-                        .IsUnique();
 
                     b.HasIndex("DescriptionId");
 
@@ -490,7 +489,7 @@ namespace MonumentsMap.Data.Migrations
 
                     b.Property<string>("DefaultName")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("NameId")
                         .HasColumnType("integer");
@@ -502,9 +501,6 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DefaultName")
-                        .IsUnique();
 
                     b.HasIndex("NameId");
 
@@ -608,7 +604,7 @@ namespace MonumentsMap.Data.Migrations
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
@@ -623,9 +619,6 @@ namespace MonumentsMap.Data.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Abbreviation")
-                        .IsUnique();
 
                     b.HasIndex("DescriptionId");
 

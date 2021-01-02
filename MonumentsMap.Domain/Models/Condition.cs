@@ -12,6 +12,7 @@ namespace MonumentsMap.Domain.Models
         public int? DescriptionId { get; set; }
 
         [Required]
+        [Column(TypeName = "varchar(50)")]
         public string Abbreviation { get; set; }
 
         [ForeignKey("NameId")]

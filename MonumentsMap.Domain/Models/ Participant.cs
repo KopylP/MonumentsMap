@@ -8,6 +8,7 @@ namespace MonumentsMap.Domain.Models
     public class Participant : BusinessEntity
     {
         [Required]
+        [Column(TypeName = "varchar(50)")]
         public string DefaultName { get; set; }
 
         public int? NameId { get; set; }

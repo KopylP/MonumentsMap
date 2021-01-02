@@ -28,26 +28,47 @@ namespace MonumentsMap.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Source>()
                 .HasOne(p => p.MonumentPhoto)
                 .WithMany(p => p.Sources)
                 .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Source>()
                 .HasOne(p => p.Monument)
                 .WithMany(p => p.Sources)
                 .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Monument>()
                 .Property(p => p.Period)
                 .HasConversion(v => v.ToString(),
                     v => (Period)Enum.Parse(typeof(Period), v));
+
             modelBuilder.Entity<Monument>()
                 .Property(p => p.DestroyPeriod)
                 .HasConversion(v => v.ToString(),
                     v => (Period)Enum.Parse(typeof(Period), v));
+
+            modelBuilder.Entity<Monument>()
+                .HasIndex(p => p.Slug)
+                .IsUnique();
+
             modelBuilder.Entity<MonumentPhoto>()
                 .Property(p => p.Period)
                 .HasConversion(v => v.ToString(),
                     v => (Period)Enum.Parse(typeof(Period), v));
+
+            modelBuilder.Entity<Condition>()
+                .HasIndex(p => p.Abbreviation)
+                .IsUnique();
+            
+            modelBuilder.Entity<Status>()
+                .HasIndex(p => p.Abbreviation)
+                .IsUnique();
+
+            modelBuilder.Entity<Participant>()
+                .HasIndex(p => p.DefaultName)
+                .IsUnique();
         }
     }
 }
