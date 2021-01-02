@@ -23,19 +23,22 @@ namespace MonumentsMap.Core.Services.Monuments
         private IParticipantMonumentRepository _participantMonumentRepository;
         private IStatusRepository _statusRepository;
         private IConditionRepository _conditionRepository;
+        private ICityRepository _cityRepository;
         
         public MonumentService(
             IConfiguration configuration,
             IMonumentRepository monumentRepository,
             IParticipantMonumentRepository participantMonumentRepository,
             IStatusRepository statusRepository,
-            IConditionRepository conditionRepository)
+            IConditionRepository conditionRepository,
+            ICityRepository cityRepository)
         {
             slugLanguage = configuration["SlugLanguage"];
             _monumentRepository = monumentRepository;
             _participantMonumentRepository = participantMonumentRepository;
             _statusRepository = statusRepository;
             _conditionRepository = conditionRepository;
+            _cityRepository = cityRepository;
         }
 
         public async Task<Monument> ToogleMonument(int monumentId)
@@ -142,13 +145,15 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.Sources,
                 m => m.MonumentPhotos,
                 m => m.Name.Localizations,
-                m => m.Description.Localizations,
-                m => m.City.Name.Localizations);
+                m => m.Description.Localizations);
 
             if (monument == null)
             {
                 throw new NotFoundException("Monument by id not found");
             }
+            
+            monument.City = await _cityRepository.Get(monument.CityId,
+                m => m.Name.Localizations);
 
             monument.Status = await _statusRepository.Get(monument.StatusId, 
                 m => m.Description.Localizations,
@@ -195,13 +200,15 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.Sources,
                 m => m.MonumentPhotos,
                 m => m.Name.Localizations,
-                m => m.Description.Localizations,
-                m => m.City.Name.Localizations);
+                m => m.Description.Localizations);
 
             if (monument == null)
             {
                 throw new NotFoundException("Monument by id not found");
             }
+
+            monument.City = await _cityRepository.Get(monument.CityId,
+                m => m.Name.Localizations);
 
             monument.Status = await _statusRepository.Get(monument.StatusId, 
                 m => m.Description.Localizations,
