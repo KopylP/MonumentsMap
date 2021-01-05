@@ -7,15 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonumentsMap.Domain", "Monu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonumentsMap.WebApi", "MonumentsMap.WebApi\MonumentsMap.WebApi.csproj", "{45286766-8705-4CDB-B1F4-13145D3F6FF2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonumentsMap.WebMvc", "MonumentsMap.WebMvc\MonumentsMap.WebMvc.csproj", "{B81720A6-B6B4-4905-B05C-5F780BC42EE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonumentsMap.Core", "MonumentsMap.Core\MonumentsMap.Core.csproj", "{02481396-8A71-42E6-B816-029FDFBF3DF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonumentsMap.Core", "MonumentsMap.Core\MonumentsMap.Core.csproj", "{02481396-8A71-42E6-B816-029FDFBF3DF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonumentsMap.Application", "MonumentsMap.Application\MonumentsMap.Application.csproj", "{19583112-F6E4-4085-BB1F-3EFA501A72DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonumentsMap.Application", "MonumentsMap.Application\MonumentsMap.Application.csproj", "{19583112-F6E4-4085-BB1F-3EFA501A72DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonumentsMap.Infrastructure", "MonumentsMap.Infrastructure\MonumentsMap.Infrastructure.csproj", "{4373E462-0887-4D81-9C2E-F35FC46845B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonumentsMap.Infrastructure", "MonumentsMap.Infrastructure\MonumentsMap.Infrastructure.csproj", "{4373E462-0887-4D81-9C2E-F35FC46845B5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonumentsMap.Framework", "MonumentsMap.Framework\MonumentsMap.Framework.csproj", "{03754FF3-C00B-48B4-B95D-A30CC5E0D786}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonumentsMap.Framework", "MonumentsMap.Framework\MonumentsMap.Framework.csproj", "{03754FF3-C00B-48B4-B95D-A30CC5E0D786}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +29,6 @@ Global
 		{45286766-8705-4CDB-B1F4-13145D3F6FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45286766-8705-4CDB-B1F4-13145D3F6FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45286766-8705-4CDB-B1F4-13145D3F6FF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B81720A6-B6B4-4905-B05C-5F780BC42EE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B81720A6-B6B4-4905-B05C-5F780BC42EE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B81720A6-B6B4-4905-B05C-5F780BC42EE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B81720A6-B6B4-4905-B05C-5F780BC42EE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02481396-8A71-42E6-B816-029FDFBF3DF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02481396-8A71-42E6-B816-029FDFBF3DF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02481396-8A71-42E6-B816-029FDFBF3DF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
