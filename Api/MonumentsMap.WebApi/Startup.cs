@@ -44,7 +44,6 @@ namespace MonumentsMap
             );
             services.AddDbContext<ApplicationContext>(options =>
             {
-                // options.UseSqlite(Configuration.GetConnectionString("SqliteConnection")); 
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddMemoryCache();
@@ -55,7 +54,7 @@ namespace MonumentsMap
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
             services.AddScoped<CultureCodeResourceFilter>();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-            //idenditiy
+
             services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
             {
                 opts.Password.RequireDigit = true;
@@ -64,6 +63,7 @@ namespace MonumentsMap
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequiredLength = 7;
             }).AddEntityFrameworkStores<ApplicationContext>();
+            
             services.AddAuthentication(opts =>
             {
                 opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -118,7 +118,7 @@ namespace MonumentsMap
 
             app.UseStaticFiles();
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
