@@ -45,7 +45,10 @@ namespace MonumentsMap
             );
             services.AddDbContext<ApplicationContext>(options =>
             {
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), o => 
+                {
+                    o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                });
             });
             services.AddMemoryCache();
 

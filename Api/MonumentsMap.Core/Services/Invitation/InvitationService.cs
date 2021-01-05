@@ -10,8 +10,6 @@ using MonumentsMap.Application.Services.Mail;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Framework.Utilities;
-using MonumentsMap.Infrastructure.Persistence;
-using MonumentsMap.Infrastructure.UnitOfWork;
 
 namespace MonumentsMap.Data.Services
 {
