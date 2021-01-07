@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -18,6 +19,7 @@ using MonumentsMap.Filters;
 using MonumentsMap.Framework.Settings;
 using MonumentsMap.Infrastructure.Extensions;
 using MonumentsMap.Infrastructure.Persistence;
+using MonumentsMap.WebApi.Extensions;
 
 namespace MonumentsMap
 {
@@ -93,6 +95,8 @@ namespace MonumentsMap
                 };
             });
 
+            services.AddNginxCertificateForwarding();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(name: "v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Monuments Map Api", Version = "v1" });
@@ -117,6 +121,8 @@ namespace MonumentsMap
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
+            app.UseCertificateForwarding();
+
             app.UseSwagger();
 
             app.UseSwaggerUI(c => {
@@ -127,7 +133,7 @@ namespace MonumentsMap
 
             app.UseStaticFiles();
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
