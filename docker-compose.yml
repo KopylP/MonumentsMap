@@ -7,7 +7,7 @@ services:
       - db
     restart: unless-stopped
     environment: 
-      ASPNETCORE_URLS: http://+:5000;https://+:5001
+      ASPNETCORE_URLS: http://+:5000
     volumes: 
       - ./Images:/app/Images
       - ./certbot/conf:/app/letsencrypt
