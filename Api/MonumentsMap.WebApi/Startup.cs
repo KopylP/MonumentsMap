@@ -95,7 +95,7 @@ namespace MonumentsMap
                 };
             });
 
-            services.AddNginxCertificateForwarding();
+            // services.AddNginxCertificateForwarding();
 
             services.AddSwaggerGen(c =>
             {
@@ -121,7 +121,7 @@ namespace MonumentsMap
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            app.UseCertificateForwarding();
+            // app.UseCertificateForwarding();
 
             app.UseSwagger();
 
