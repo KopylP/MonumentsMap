@@ -95,8 +95,6 @@ namespace MonumentsMap
                 };
             });
 
-            // services.AddNginxCertificateForwarding();
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(name: "v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Monuments Map Api", Version = "v1" });
@@ -121,8 +119,6 @@ namespace MonumentsMap
                 ForwardedHeaders = ForwardedHeaders.All
             });
 
-            // app.UseCertificateForwarding();
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c => {
@@ -132,8 +128,6 @@ namespace MonumentsMap
             app.UseCors("WebClientPolicy");
 
             app.UseStaticFiles();
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 

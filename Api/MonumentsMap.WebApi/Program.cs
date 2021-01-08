@@ -23,12 +23,6 @@ namespace MonumentsMap
                     webBuilder.UseStartup<Startup>();
                     webBuilder.ConfigureKestrel(conf => {
                         conf.Limits.MaxRequestBodySize = 6_000_000;
-                        conf.ConfigureHttpsDefaults(o => 
-                        {
-                            o.ServerCertificate = X509Certificate2
-                                .CreateFromPemFile("/app/letsencrypt/live/monuments.pl.ua/fullchain.pem",
-                                 "/app/letsencrypt/live/monuments.pl.ua/privkey.pem");
-                        });
                     });
                 });
     }

@@ -10,7 +10,6 @@ services:
       ASPNETCORE_URLS: http://+:5000
     volumes: 
       - ./Images:/app/Images
-      - ./certbot/conf:/app/letsencrypt
   db:
     container_name: db
     image: postgres
