@@ -97,23 +97,15 @@ namespace MonumentsMap
             {
                 c.SwaggerDoc(name: "v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Monuments Map Api", Version = "v1" });
             });
-
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | 
-                    ForwardedHeaders.XForwardedProto;
-                // Only loopback proxies are allowed by default.
-                // Clear that restriction because forwarders are enabled by explicit 
-                // configuration.
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
-            });
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
+            });
 
             app.UseExceptionHandler("/errors/500");
 
@@ -123,8 +115,6 @@ namespace MonumentsMap
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseForwardedHeaders();
 
             app.UseSwagger();
 
