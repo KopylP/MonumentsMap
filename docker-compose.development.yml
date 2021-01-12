@@ -1,0 +1,56 @@
+version: "3.8"
+services:
+  api:
+    container_name: api
+    build: 
+      context: ./Api
+      dockerfile: Dockerfile.Development
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes: 
+      - ./Api:/app
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: monumentsmap
+    # volumes:
+    #   - ./postgres-data:/var/lib/postgresql/data
+  client:
+    container_name: client
+    build: 
+      context: ./client
+      dockerfile: Dockerfile.Development
+    volumes: 
+      - ./client:/app
+    depends_on:
+      - api
+    restart: unless-stopped
+    stdin_open: true
+  client-admin:
+    container_name: client-admin
+    build: 
+      context: ./client-admin
+      dockerfile: Dockerfile.Development
+    volumes: 
+      - ./client-admin:/app
+    depends_on:
+      - api
+    restart: unless-stopped
+    stdin_open: true
+  nginx:
+    image: nginx:stable-alpine
+    container_name: monumentsmap-docker-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes: 
+      - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
+    depends_on: 
+      - api
+      - client
+      - client-admin
