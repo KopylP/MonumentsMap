@@ -2,9 +2,12 @@ version: "3.8"
 services:
   api:
     container_name: api
-    build: .src/Api
+    build:
+      context: ./src
+      dockerfile: ./Api/Dockerfile
     depends_on:
       - db
+      - rabbitmq
     restart: unless-stopped
     environment: 
       ASPNETCORE_URLS: http://+
@@ -54,6 +57,14 @@ services:
     hostname: rabbitmq
     ports: 
       - 15672:15672
+  mail_service:
+    container_name: mail_service
+    build:
+      context: ./src
+      dockerfile: ./MailService/Dockerfile
+    restart: unless-stopped
+    depends_on: 
+      - rabbitmq
   certbot:
     image: certbot/certbot
     restart: unless-stopped

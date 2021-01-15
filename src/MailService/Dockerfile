@@ -2,8 +2,8 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY . ./MailService
-COPY ../Contracts ./Contracts
+COPY ./MailService ./MailService
+COPY ./Contracts ./Contracts
 
 RUN dotnet restore "./MailService/MonumentsMap.MailService/MonumentsMap.MailService.csproj"
 
