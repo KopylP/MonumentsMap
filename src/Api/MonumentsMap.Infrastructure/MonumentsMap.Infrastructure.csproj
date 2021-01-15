@@ -5,8 +5,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.1" />
+    <PackageReference Include="MassTransit" Version="7.1.2" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.2" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.2" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.2" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Contracts\MonumentsMap.Contracts\MonumentsMap.Contracts.csproj" />
     <ProjectReference Include="..\MonumentsMap.Domain\MonumentsMap.Domain.csproj" />
   </ItemGroup>
 </Project>

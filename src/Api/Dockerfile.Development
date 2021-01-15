@@ -1,0 +1,10 @@
+FROM mcr.microsoft.com/dotnet/sdk:5.0
+WORKDIR /app/Api/MonumentsMap.WebApi
+RUN apt-get clean
+RUN apt-get update
+RUN apt-get install -y libfreetype6
+RUN apt-get install -y libfontconfig1
+
+EXPOSE 5000
+
+ENTRYPOINT ["dotnet", "watch", "run"]

@@ -17,6 +17,7 @@ using MonumentsMap.Domain.Models;
 using MonumentsMap.Filters;
 using MonumentsMap.Framework.Settings;
 using MonumentsMap.Infrastructure.Extensions;
+using MonumentsMap.Infrastructure.Messaging.Extensions;
 using MonumentsMap.Infrastructure.Persistence;
 
 namespace MonumentsMap
@@ -58,6 +59,9 @@ namespace MonumentsMap
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
             services.AddScoped<CultureCodeResourceFilter>();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
+            services.AddMessagingBus(Configuration.GetValue("RabbitHost", "rabbitmq://localhost"));
+            services.AddMessagingServices();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
             {
