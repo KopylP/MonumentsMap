@@ -7,7 +7,7 @@ services:
       - db
     restart: unless-stopped
     environment: 
-      ASPNETCORE_URLS: http://+:5000
+      ASPNETCORE_URLS: http://+
     volumes: 
       - ./Images:/app/Images
   db:
