@@ -3,7 +3,7 @@ services:
   api:
     container_name: api
     build: 
-      context: ./Api
+      context: ./src/Api
       dockerfile: Dockerfile.Development
     depends_on:
       - db

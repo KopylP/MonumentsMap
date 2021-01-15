@@ -2,7 +2,7 @@ version: "3.8"
 services:
   api:
     container_name: api
-    build: ./Api
+    build: .src/Api
     depends_on:
       - db
     restart: unless-stopped
@@ -48,6 +48,13 @@ services:
       - client-admin
       - certbot
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  rebbitmq:
+    image: rebbitmq:3.8-rc-management
+    container_name: rabbitmq
+    hostname: local-rabbitmq
+    ports: 
+      - 15672:15672
+      - 5672:5672
   certbot:
     image: certbot/certbot
     restart: unless-stopped
