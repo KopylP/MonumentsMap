@@ -48,13 +48,12 @@ services:
       - client-admin
       - certbot
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-  rebbitmq:
-    image: rebbitmq:3.8-rc-management
+  rabbitmq:
+    image: rabbitmq:3-management
     container_name: rabbitmq
-    hostname: local-rabbitmq
+    hostname: rabbitmq
     ports: 
       - 15672:15672
-      - 5672:5672
   certbot:
     image: certbot/certbot
     restart: unless-stopped

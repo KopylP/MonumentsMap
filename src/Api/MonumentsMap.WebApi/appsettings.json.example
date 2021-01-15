@@ -58,5 +58,6 @@
   "Superuser": {
     "Mail": "--your user details here--",
     "Password": "--your user password here--"
-  }
+  },
+  "RabbitHost": "rabbitmq://rabbitmq"
 }

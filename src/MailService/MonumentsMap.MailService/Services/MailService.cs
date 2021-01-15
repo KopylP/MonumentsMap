@@ -1,7 +1,7 @@
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using MonumentsMap.Contracts.Mail;
+using MonumentsMap.Contracts.Mail.Commands;
 using MonumentsMap.MailService.Models;
 using System.Threading.Tasks;
 

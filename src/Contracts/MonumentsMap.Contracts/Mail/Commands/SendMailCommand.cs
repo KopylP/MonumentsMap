@@ -1,6 +1,6 @@
 using System;
 
-namespace MonumentsMap.Contracts.Mail
+namespace MonumentsMap.Contracts.Mail.Commands
 {
     public class SendMailCommand : BaseCommand
     {

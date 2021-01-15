@@ -9,7 +9,7 @@ services:
       - db
     restart: unless-stopped
     volumes: 
-      - ./Api:/app
+      - ./src:/app
   db:
     container_name: db
     image: postgres
@@ -54,3 +54,17 @@ services:
       - api
       - client
       - client-admin
+  rebbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports: 
+      - 15672:15672
+  mail_service:
+    container_name: mail_service
+    build: 
+      context: ./src/MailService
+      dockerfile: Dockerfile.Development
+    restart: unless-stopped
+    volumes: 
+      - ./src:/app  

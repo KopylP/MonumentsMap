@@ -4,7 +4,7 @@ namespace MonumentsMap.Contracts
 {
     public abstract class BaseCommand
     {
-        Guid CommandId { get; set; }
-        DateTime Timestamp { get; set; }
+        public Guid CommandId { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

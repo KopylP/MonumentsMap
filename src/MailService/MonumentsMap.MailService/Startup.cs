@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using MonumentsMap.Contracts;
 using MonumentsMap.MailService.Consumers;
 using MonumentsMap.MailService.Models;
 
@@ -34,12 +35,19 @@ namespace MonumentsMap.MailService
 
             services.AddMassTransit(config =>
             {
-                config.AddConsumer<SendMailConsumer>();
+                config.AddConsumer<SendMailConsumer>(conf => 
+                {
+                    
+                });
                 config.AddBus(context => Bus.Factory.CreateUsingRabbitMq(c =>
                 {
                     c.UseHealthCheck(context);
                     c.Host(Configuration.GetValue("RabbitHost", "rabbitmq://localhost"));
-                    c.ConfigureEndpoints(context, KebabCaseEndpointNameFormatter.Instance);
+                    
+                    c.ReceiveEndpoint(RebbitMqMassTransitConstants.SendMailQueue, cs =>
+                    {
+                        cs.ConfigureConsumer<SendMailConsumer>(context);
+                    });
                 }));
             });
 

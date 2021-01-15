@@ -1,35 +1,27 @@
-using System.IO;
+using System;
 using System.Threading.Tasks;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.Extensions.Options;
-using MimeKit;
 using MonumentsMap.Application.Dto.Mail;
 using MonumentsMap.Application.Services.Mail;
-using MonumentsMap.Framework.Settings;
+using MonumentsMap.Infrastructure.Messaging.Mail;
 
 namespace MonumentsMap.Data.Services
 {
     public class MailService : IMailService
     {
-        private readonly MailSettings _mailSettings;
+        private readonly MailSender _mailSender;
 
-        public MailService(IOptions<MailSettings> mailSettings) => _mailSettings = mailSettings.Value;
+        public MailService(MailSender mailSender) => _mailSender = mailSender;
 
         public async Task SendEmailAsync(MailRequestDto mailRequest)
         {
-            var email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
-            email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
-            email.Subject = mailRequest.Subject;
-            var builder = new BodyBuilder();
-            builder.HtmlBody = mailRequest.Body;
-            email.Body = builder.ToMessageBody();
-            using var smtp = new SmtpClient();
-            smtp.Connect(_mailSettings.Host, _mailSettings.Port, false);
-            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
-            await smtp.SendAsync(email);
-            smtp.Disconnect(true);
+            await _mailSender.SendMailAsync(new Contracts.Mail.Commands.SendMailCommand
+            {
+                CommandId = Guid.NewGuid(),
+                Timestamp = DateTime.Now,
+                ToEmail = mailRequest.ToEmail,
+                Body = mailRequest.Body,
+                Subject = mailRequest.Subject
+            });
         }
     }
 }

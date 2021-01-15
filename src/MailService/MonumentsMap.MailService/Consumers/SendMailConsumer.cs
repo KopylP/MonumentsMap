@@ -1,5 +1,5 @@
 ﻿using MassTransit;
-using MonumentsMap.Contracts.Mail;
+using MonumentsMap.Contracts.Mail.Commands;
 using System.Threading.Tasks;
 
 namespace MonumentsMap.MailService.Consumers
