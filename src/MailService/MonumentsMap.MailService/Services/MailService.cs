@@ -37,7 +37,9 @@ namespace MonumentsMap.MailService.Services
             } 
             catch (SslHandshakeException ex)
             {
-                _logger.LogInformation("ISSURE" + ex.ServerCertificate.Issuer);
+                _logger.LogInformation("ISSURE " + ex.ServerCertificate.Issuer);
+                _logger.LogInformation("Subject " + ex.ServerCertificate.Subject);
+                _logger.LogInformation("Handle " + ex.ServerCertificate.Handle);
             }
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
