@@ -40,6 +40,7 @@ namespace MonumentsMap.MailService.Services
                 _logger.LogInformation("ISSURE " + ex.ServerCertificate.Issuer);
                 _logger.LogInformation("Subject " + ex.ServerCertificate.Subject);
                 _logger.LogInformation("Handle " + ex.ServerCertificate.Handle);
+                smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.None);
             }
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
