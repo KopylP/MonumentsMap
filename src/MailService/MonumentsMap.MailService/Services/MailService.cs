@@ -1,5 +1,6 @@
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MonumentsMap.Contracts.Mail.Commands;
@@ -11,8 +12,10 @@ namespace MonumentsMap.MailService.Services
     class MailService
     {
         private readonly MailSettings _mailSettings;
+        private readonly ILogger _logger;
 
-        public MailService(IOptions<MailSettings> mailSettings) => _mailSettings = mailSettings.Value;
+        public MailService(IOptions<MailSettings> mailSettings, ILogger logger) 
+            => (_mailSettings, _logger) = (mailSettings.Value, logger);
 
         public async Task SendEmailAsync(SendMailCommand mailRequest)
         {
@@ -25,6 +28,8 @@ namespace MonumentsMap.MailService.Services
             builder.HtmlBody = mailRequest.Body;
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
+
+            _logger.LogInformation($"SMTP LOCAL DOMAIN {smtp.LocalDomain}");
 
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.Auto);
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
