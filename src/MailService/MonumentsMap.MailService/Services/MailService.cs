@@ -31,7 +31,14 @@ namespace MonumentsMap.MailService.Services
 
             _logger.LogInformation($"SMTP LOCAL DOMAIN {smtp.LocalDomain}");
 
-            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.Auto);
+            try
+            {
+                smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.Auto);
+            } 
+            catch (SslHandshakeException ex)
+            {
+                _logger.LogInformation("ISSURE" + ex.ServerCertificate.Issuer);
+            }
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
