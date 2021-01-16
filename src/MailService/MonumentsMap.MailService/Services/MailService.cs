@@ -26,7 +26,7 @@ namespace MonumentsMap.MailService.Services
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
 
-            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.Auto);
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
