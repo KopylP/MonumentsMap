@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MonumentsMap.Contracts;
 using MonumentsMap.MailService.Consumers;
 using MonumentsMap.MailService.Models;
@@ -50,6 +51,10 @@ namespace MonumentsMap.MailService
                     });
                 }));
             });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<Startup>>();
+            services.AddSingleton(typeof(ILogger), logger);
 
             services.AddMassTransitHostedService();
         }

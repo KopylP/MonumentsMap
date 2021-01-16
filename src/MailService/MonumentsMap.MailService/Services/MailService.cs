@@ -12,9 +12,9 @@ namespace MonumentsMap.MailService.Services
     class MailService
     {
         private readonly MailSettings _mailSettings;
-        private readonly ILogger<Program> _logger;
+        private readonly ILogger _logger;
 
-        public MailService(IOptions<MailSettings> mailSettings, ILogger<Program> logger) 
+        public MailService(IOptions<MailSettings> mailSettings, ILogger logger) 
             => (_mailSettings, _logger) = (mailSettings.Value, logger);
 
         public async Task SendEmailAsync(SendMailCommand mailRequest)
