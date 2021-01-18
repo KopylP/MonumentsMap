@@ -118,13 +118,14 @@ namespace MonumentsMap
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+
+                app.UseSwaggerUI(c => {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Monuments Map Api V1");
+                    c.RoutePrefix = "api/docs";
+                });
             }
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Monuments Map Api V1");
-            });
 
             app.UseCors("WebClientPolicy");
 
