@@ -4,13 +4,13 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels
 {
-    public class EditableLocalizedStatusDto : BaseEditableLocalizedDto<Status>
+    public class EditableLocalizedStatusDto : BaseEditableLocalizedDto
     {
         public List<CultureValuePair> Name { get; set; }
         public List<CultureValuePair> Description { get; set; }
         public string Abbreviation { get; set; }
 
-        public override Status CreateEntity(Status editStatus = null)
+        public Status CreateEntity(Status editStatus = null)
         {
             Status status = null;
             if (editStatus != null)

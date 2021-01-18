@@ -6,18 +6,16 @@ using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Services;
-using MonumentsMap.Domain.Models;
 using MonumentsMap.Filters;
 
 namespace MonumentsMap.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LocalizedController<TLocalizedRestService, TLocalizedEntity, TEditableLocalizedEntity, TEntity> : ControllerBase
-    where TLocalizedRestService : ILocalizedRestService<TLocalizedEntity, TEditableLocalizedEntity, TEntity>
+    public class LocalizedController<TLocalizedRestService, TLocalizedEntity, TEditableLocalizedEntity> : ControllerBase
+    where TLocalizedRestService : ILocalizedRestService<TLocalizedEntity, TEditableLocalizedEntity>
     where TLocalizedEntity : BaseLocalizedDto
-    where TEntity : Entity
-    where TEditableLocalizedEntity : BaseEditableLocalizedDto<TEntity>
+    where TEditableLocalizedEntity : BaseEditableLocalizedDto
     {
         protected readonly TLocalizedRestService localizedRestService;
         protected readonly string DefaultCulture;
@@ -52,25 +50,25 @@ namespace MonumentsMap.Controllers
         [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Post([FromBody] TEditableLocalizedEntity editableLocalizedEntity)
         {
-            TEntity entity = null;
+            int entityId = 0;
             try
             {
-                entity = await localizedRestService.CreateAsync(editableLocalizedEntity);
+                entityId = await localizedRestService.CreateAsync(editableLocalizedEntity);
             }
             catch (InternalServerErrorException ex)
             {
                 return StatusCode(500, new InternalServerError(ex.Message));
             }
-            return Ok(entity);
+            return Ok(entityId);
         }
         [HttpPut]
         [Authorize(Roles = "Editor")]
         public async virtual Task<IActionResult> Put([FromBody] TEditableLocalizedEntity editableLocalizedCity)
         {
-            TEntity entity = null;
+            int entityId = 0;
             try
             {
-                entity = await localizedRestService.EditAsync(editableLocalizedCity);
+                entityId = await localizedRestService.EditAsync(editableLocalizedCity);
             }
             catch (NotFoundException ex)
             {
@@ -80,7 +78,7 @@ namespace MonumentsMap.Controllers
             {
                 return StatusCode(500, new InternalServerError(ex.Message));
             }
-            return Ok(entity);
+            return Ok(entityId);
         }
         [HttpDelete("{id}")]
         [Authorize(Roles = "Editor")]

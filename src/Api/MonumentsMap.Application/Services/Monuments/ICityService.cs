@@ -4,7 +4,7 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Application.Services.Monuments
 {
-    public interface ICityService : ILocalizedRestService<LocalizedCityDto, EditableLocalizedCityDto, City>
+    public interface ICityService : ILocalizedRestService<LocalizedCityDto, EditableLocalizedCityDto>
     {
     }
 }

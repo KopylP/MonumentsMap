@@ -2,7 +2,6 @@
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Services.Monuments;
-using MonumentsMap.Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
@@ -19,15 +18,15 @@ namespace MonumentsMap.Core.Services.Monuments
             _cityRepository = cityRepository;
         }
 
-        public async Task<City> CreateAsync(EditableLocalizedCityDto model)
+        public async Task<int> CreateAsync(EditableLocalizedCityDto model)
         {
                 var entity = model.CreateEntity();
                 await _cityRepository.Add(entity);
                 await _cityRepository.SaveChangeAsync();
-                return entity;
+                return entity.Id;
         }
 
-        public async Task<City> EditAsync(EditableLocalizedCityDto model)
+        public async Task<int> EditAsync(EditableLocalizedCityDto model)
         {
                 var city = await _cityRepository.Get(model.Id,
                     p => p.Name.Localizations);
@@ -36,7 +35,7 @@ namespace MonumentsMap.Core.Services.Monuments
 
                 await _cityRepository.SaveChangeAsync();
 
-                return entity;
+                return entity.Id;
         }
 
         public async Task<IEnumerable<LocalizedCityDto>> GetAsync(string cultureCode)

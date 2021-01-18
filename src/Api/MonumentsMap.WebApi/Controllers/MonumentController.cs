@@ -11,12 +11,11 @@ using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Domain.FilterParameters;
-using MonumentsMap.Domain.Models;
 using MonumentsMap.Filters;
 
 namespace MonumentsMap.Controllers
 {
-    public class MonumentController : LocalizedController<IMonumentService, LocalizedMonumentDto, EditableLocalizedMonumentDto, Monument>
+    public class MonumentController : LocalizedController<IMonumentService, LocalizedMonumentDto, EditableLocalizedMonumentDto>
     {
         private IMonumentPhotoService _monumentPhotoService;
         public MonumentController(IMonumentService localizedRestService, IMonumentPhotoService monumentPhotoService) : base(localizedRestService)
@@ -86,10 +85,10 @@ namespace MonumentsMap.Controllers
         [Authorize(Roles = "Editor")]
         public async Task<IActionResult> ToogleAccepted(int id)
         {
-            Monument monument = null;
+            int monumentId;
             try
             {
-                monument = await localizedRestService.ToogleMonument(id);
+                monumentId = await localizedRestService.ToogleMonument(id);
             }
             catch (NotFoundException ex)
             {
@@ -100,16 +99,16 @@ namespace MonumentsMap.Controllers
                 return StatusCode(500, new InternalServerError(ex.Message));
             }
 
-            return Ok(monument);
+            return Ok(monumentId);
         }
 
         [HttpPatch("{id:int}/participants")]
         public async Task<IActionResult> EditParticipants([FromRoute] int id, IEnumerable<ParticipantDto> participantViewModels)
         {
-            Monument monument = null;
+            int monumentId;
             try
             {
-                monument = await localizedRestService.EditMonumentParticipantsAsync(new MonumentParticipantsDto
+                monumentId = await localizedRestService.EditMonumentParticipantsAsync(new MonumentParticipantsDto
                 {
                     MonumentId = id,
                     Participants = participantViewModels
@@ -123,7 +122,7 @@ namespace MonumentsMap.Controllers
             {
                 return StatusCode(500, new InternalServerError(ex.Message));
             }
-            return Ok(monument);
+            return Ok(monumentId);
         }
 
         [HttpGet("{id:int}/participants")]
@@ -146,16 +145,16 @@ namespace MonumentsMap.Controllers
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
         public async Task<IActionResult> MonumentPhotosBySlug([FromRoute] string slug, [FromQuery] string cultureCode)
         {
-            Monument monument = null;
+            int id;
             try
             {
-                monument = await localizedRestService.GetMonumentBySlug(slug);
+                id = await localizedRestService.GetMonumentIdBySlug(slug);
             }
             catch (NotFoundException ex)
             {
                 return NotFound(new NotFoundError(ex.Message));
             }
-            var monumentPhotos = await _monumentPhotoService.FindAsync(cultureCode, p => p.MonumentId == monument.Id);
+            var monumentPhotos = await _monumentPhotoService.FindAsync(cultureCode, p => p.MonumentId == id);
             return Ok(monumentPhotos);
         }
 
@@ -163,7 +162,7 @@ namespace MonumentsMap.Controllers
         [HttpGet("{id:int}/participants/raw")]
         public async Task<IActionResult> GetRawMonumentParticipants(int id)
         {
-            IEnumerable<Participant> participants = null;
+            IEnumerable<ParticipantDto> participants = null;
             try
             {
                 participants = await localizedRestService.GetRawParticipantsAsync(id);

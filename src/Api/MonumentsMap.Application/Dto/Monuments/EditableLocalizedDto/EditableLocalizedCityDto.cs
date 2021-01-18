@@ -3,11 +3,11 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
 {
-    public class EditableLocalizedCityDto : BaseEditableLocalizedDto<City>
+    public class EditableLocalizedCityDto : BaseEditableLocalizedDto
     {
         public List<CultureValuePair> Name { get; set; }
 
-        public override City CreateEntity(City editableCity = null)
+        public City CreateEntity(City editableCity = null)
         {
             City city = null;
             if (editableCity != null)

@@ -4,7 +4,7 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Application.Services.Monuments
 {
-    public interface IConditionService : ILocalizedRestService<LocalizedConditionDto, EditableLocalizedConditionDto, Condition>
+    public interface IConditionService : ILocalizedRestService<LocalizedConditionDto, EditableLocalizedConditionDto>
     {
     }
 }

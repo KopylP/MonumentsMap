@@ -3,13 +3,13 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
 {
-    public class EditableLocalizedConditionDto : BaseEditableLocalizedDto<Condition>
+    public class EditableLocalizedConditionDto : BaseEditableLocalizedDto
     {
         public List<CultureValuePair> Name { get; set; }
         public List<CultureValuePair> Description { get; set; }
         public string Abbreviation { get; set; }
 
-        public override Condition CreateEntity(Condition editCondition = null)
+        public Condition CreateEntity(Condition editCondition = null)
         {
             Condition condition = null;
             if (editCondition != null)

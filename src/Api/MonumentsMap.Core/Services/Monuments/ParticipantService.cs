@@ -19,16 +19,16 @@ namespace MonumentsMap.Core.Services.Monuments
             _participantRepository = participantRepository;
         }
 
-        public async Task<Participant> CreateAsync(EditableLocalizedParticipantDto model)
+        public async Task<int> CreateAsync(EditableLocalizedParticipantDto model)
         {
             var entity = model.CreateEntity();
             await _participantRepository.Add(entity);
             await _participantRepository.SaveChangeAsync();
-            return entity;
+            return entity.Id;
 
         }
 
-        public async Task<Participant> EditAsync(EditableLocalizedParticipantDto model)
+        public async Task<int> EditAsync(EditableLocalizedParticipantDto model)
         {
             var participant = await _participantRepository.Get(model.Id,
                 p => p.Name.Localizations);
@@ -37,7 +37,7 @@ namespace MonumentsMap.Core.Services.Monuments
 
             await _participantRepository.SaveChangeAsync();
 
-            return entity;
+            return entity.Id;
         }
 
         public async Task<IEnumerable<LocalizedParticipantDto>> GetAsync(string cultureCode)

@@ -20,15 +20,15 @@ namespace MonumentsMap.Core.Services.Monuments
             _conditionRepository = conditionRepository;
         }
 
-        public async Task<Condition> CreateAsync(EditableLocalizedConditionDto model)
+        public async Task<int> CreateAsync(EditableLocalizedConditionDto model)
         {
                 var entity = model.CreateEntity();
                 await _conditionRepository.Add(entity);
                 await _conditionRepository.SaveChangeAsync();
-                return entity;
+                return entity.Id;
         }
 
-        public async Task<Condition> EditAsync(EditableLocalizedConditionDto model)
+        public async Task<int> EditAsync(EditableLocalizedConditionDto model)
         {
                 var condition = await _conditionRepository.Get(model.Id,
                     p => p.Name.Localizations,
@@ -39,7 +39,7 @@ namespace MonumentsMap.Core.Services.Monuments
 
                 await _conditionRepository.SaveChangeAsync();
 
-                return entity;
+                return entity.Id;
         }
 
         public async Task<IEnumerable<LocalizedConditionDto>> GetAsync(string cultureCode)

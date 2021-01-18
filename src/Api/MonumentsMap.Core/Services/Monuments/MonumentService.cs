@@ -41,7 +41,7 @@ namespace MonumentsMap.Core.Services.Monuments
             _cityRepository = cityRepository;
         }
 
-        public async Task<Monument> ToogleMonument(int monumentId)
+        public async Task<int> ToogleMonument(int monumentId)
         {
 
             var monument = await _monumentRepository.Get(monumentId);
@@ -61,10 +61,10 @@ namespace MonumentsMap.Core.Services.Monuments
 
             await _monumentRepository.SaveChangeAsync();
 
-            return monument;
+            return monument.Id;
         }
 
-        public async Task<Monument> EditMonumentParticipantsAsync(MonumentParticipantsDto monumentParticipantsViewModel)
+        public async Task<int> EditMonumentParticipantsAsync(MonumentParticipantsDto monumentParticipantsViewModel)
         {
             var monument = await _monumentRepository.Get(monumentParticipantsViewModel.MonumentId);
             if (monument == null)
@@ -119,13 +119,19 @@ namespace MonumentsMap.Core.Services.Monuments
                 throw new InternalServerErrorException(ex.InnerException?.Message);
             }
 
-            return monument;
+            return monument.Id;
         }
 
-        public async Task<IEnumerable<Participant>> GetRawParticipantsAsync(int monumentId)
+        public async Task<IEnumerable<ParticipantDto>> GetRawParticipantsAsync(int monumentId)
         {
-            return await _participantMonumentRepository
-                .GetParticipantsByMonumentWithLocalizationsAsync(monumentId);
+            return (await _participantMonumentRepository
+                .GetParticipantsByMonumentWithLocalizationsAsync(monumentId))
+                .Select(p => new ParticipantDto
+                { 
+                    DefaultName = p.DefaultName,
+                    ParticipantRole = p.ParticipantRole,
+                    Id = p.Id
+                });
         }
 
         public async Task<IEnumerable<LocalizedParticipantDto>> GetLocalizedParticipants(int monumentId, string cultureCode)
@@ -166,14 +172,14 @@ namespace MonumentsMap.Core.Services.Monuments
             return LocalizedMonumentDto.ToDto(monument, cultureCode);
         }
 
-        public async Task<Monument> GetMonumentBySlug(string slug)
+        public async Task<int> GetMonumentIdBySlug(string slug)
         {
             var monument = await GetMonumentBySlugOrNull(slug);
             if (monument == null)
             {
                 throw new NotFoundException("Monument by slug not found");
             }
-            return monument;
+            return monument.Id;
         }
 
         private async Task<Monument> GetMonumentBySlugOrNull(string slug)
@@ -236,7 +242,7 @@ namespace MonumentsMap.Core.Services.Monuments
             return EditableLocalizedMonumentDto.FromEntity(entity);
         }
 
-        public async Task<Monument> EditAsync(EditableLocalizedMonumentDto model)
+        public async Task<int> EditAsync(EditableLocalizedMonumentDto model)
         {
             var monument = await _monumentRepository.Get(model.Id,
                 p => p.Sources,
@@ -250,17 +256,17 @@ namespace MonumentsMap.Core.Services.Monuments
             await _monumentRepository.Update(entity);
             await _monumentRepository.SaveChangeAsync();
 
-            return entity;
+            return entity.Id;
         }
 
-        public async Task<Monument> CreateAsync(EditableLocalizedMonumentDto model)
+        public async Task<int> CreateAsync(EditableLocalizedMonumentDto model)
         {
             var entity = model.CreateEntity();
             await _monumentRepository.Add(entity);
             ChangeSlugOfMonument(entity);
             await _monumentRepository.SaveChangeAsync();
 
-            return entity;
+            return entity.Id;
         }
 
         public async Task<IEnumerable<LocalizedMonumentDto>> GetByFilterAsync(MonumentFilterParameters parameters)

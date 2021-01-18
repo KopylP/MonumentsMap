@@ -27,10 +27,13 @@ namespace MonumentsMap.Core.Services.Monuments
             _monumentPhotoRepository = monumentPhotoRepository;
         }
 
-        public async Task<MonumentPhoto> ToogleMajorPhotoAsync(int monumentPhotoId)
+        public async Task<int> ToogleMajorPhotoAsync(int monumentPhotoId)
         {
             var monumentPhoto = await _monumentPhotoRepository.Get(monumentPhotoId);
-            if (monumentPhoto == null) return null;
+            if (monumentPhoto == null)
+            {
+                throw new NotFoundException("Monument Photo not found");
+            }
             var prevMonumentMajorPhoto = (await _monumentPhotoRepository
                 .Find(p => p.MajorPhoto && p.Id != monumentPhotoId && p.MonumentId == monumentPhoto.MonumentId))
                 .FirstOrDefault();
@@ -46,7 +49,7 @@ namespace MonumentsMap.Core.Services.Monuments
 
             await _monumentPhotoRepository.SaveChangeAsync();
 
-            return monumentPhoto;
+            return monumentPhoto.Id;
         }
 
         public async Task<IEnumerable<LocalizedMonumentPhotoDto>> GetAsync(string cultureCode)
@@ -104,7 +107,7 @@ namespace MonumentsMap.Core.Services.Monuments
             };
         }
 
-        public async Task<MonumentPhoto> EditAsync(EditableLocalizedMonumentPhotoDto model)
+        public async Task<int> EditAsync(EditableLocalizedMonumentPhotoDto model)
         {
             var monumentPhoto = await _monumentPhotoRepository.Get(model.Id,
             p => p.Sources,
@@ -115,10 +118,10 @@ namespace MonumentsMap.Core.Services.Monuments
 
             await _monumentPhotoRepository.SaveChangeAsync();
 
-            return entity;
+            return entity.Id;
         }
 
-        public async Task<MonumentPhoto> CreateAsync(EditableLocalizedMonumentPhotoDto model)
+        public async Task<int> CreateAsync(EditableLocalizedMonumentPhotoDto model)
         {
             var monumentPhoto = await _monumentPhotoRepository.Get(model.Id);
             var entity = model.CreateEntity(monumentPhoto);
@@ -126,7 +129,7 @@ namespace MonumentsMap.Core.Services.Monuments
 
             await _monumentPhotoRepository.SaveChangeAsync();
 
-            return entity;
+            return entity.Id;
         }
 
         public async Task<int> RemoveAsync(int monumentPhotoId)

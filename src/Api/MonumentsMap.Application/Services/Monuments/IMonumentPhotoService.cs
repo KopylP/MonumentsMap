@@ -8,9 +8,9 @@ using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Application.Services.Monuments
 {
-    public interface IMonumentPhotoService: ILocalizedRestService<LocalizedMonumentPhotoDto, EditableLocalizedMonumentPhotoDto, MonumentPhoto>
+    public interface IMonumentPhotoService: ILocalizedRestService<LocalizedMonumentPhotoDto, EditableLocalizedMonumentPhotoDto>
     {
-        Task<MonumentPhoto> ToogleMajorPhotoAsync(int monumentPhotoId);
+        Task<int> ToogleMajorPhotoAsync(int monumentPhotoId);
         Task<IEnumerable<LocalizedMonumentPhotoDto>> FindAsync(string cultureCode, Expression<Func<MonumentPhoto, bool>> predicate);
     }
 }

@@ -6,7 +6,7 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
 {
-    public class EditableLocalizedMonumentDto : BaseEditableLocalizedDto<Monument>
+    public class EditableLocalizedMonumentDto : BaseEditableLocalizedDto
     {
         public int Year { get; set; }
         public Period Period { get; set; }
@@ -22,7 +22,7 @@ namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
         public double Longitude { get; set; }
         public string ProtectionNumber { get; set; }
         public List<Source> Sources { get; set; }
-        public override Monument CreateEntity(Monument entity = null)
+        public Monument CreateEntity(Monument entity = null)
         {
             Monument monument = null;
             if (entity != null)

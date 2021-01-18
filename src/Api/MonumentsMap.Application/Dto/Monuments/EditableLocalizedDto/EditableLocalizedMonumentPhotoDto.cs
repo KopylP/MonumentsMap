@@ -5,7 +5,7 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels
 {
-    public class EditableLocalizedMonumentPhotoDto : BaseEditableLocalizedDto<MonumentPhoto>
+    public class EditableLocalizedMonumentPhotoDto : BaseEditableLocalizedDto
     {
         public int? Year { get; set; }
         public Period? Period { get; set; }
@@ -13,7 +13,7 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
         public int PhotoId { get; set; }
         public List<CultureValuePair> Description { get; set; }
         public List<Source> Sources { get; set; }
-        public override MonumentPhoto CreateEntity(MonumentPhoto entity = null)
+        public MonumentPhoto CreateEntity(MonumentPhoto entity = null)
         {
             MonumentPhoto monumentPhoto = null;
             if (entity != null)

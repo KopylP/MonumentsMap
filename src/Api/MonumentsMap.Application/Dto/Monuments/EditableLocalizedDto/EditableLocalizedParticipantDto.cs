@@ -5,13 +5,13 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels
 {
-    public class EditableLocalizedParticipantDto : BaseEditableLocalizedDto<Participant>
+    public class EditableLocalizedParticipantDto : BaseEditableLocalizedDto
     {
         public string DefaultName { get; set; }
         public List<CultureValuePair> Name { get; set; }
         public ParticipantRole? ParticipantRole { get; set; }
 
-        public override Participant CreateEntity(Participant entity = null)
+        public Participant CreateEntity(Participant entity = null)
         {
             Participant participant = null;
             if (entity != null)
