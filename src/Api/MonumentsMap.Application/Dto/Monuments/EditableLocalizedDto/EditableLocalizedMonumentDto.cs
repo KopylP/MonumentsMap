@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Mapster;
 using MonumentsMap.Application.Extensions;
 using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.Models;
@@ -21,7 +22,7 @@ namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string ProtectionNumber { get; set; }
-        public List<Source> Sources { get; set; }
+        public List<SourceDto> Sources { get; set; }
         public Monument CreateEntity(Monument entity = null)
         {
             Monument monument = null;
@@ -59,7 +60,7 @@ namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
             monument.ProtectionNumber = ProtectionNumber;
             monument.DestroyYear = DestroyYear;
             monument.DestroyPeriod = DestroyPeriod;
-            monument.Sources.AddRange(Sources);
+            monument.Sources.AddRange(Sources.Adapt<Source[]>());
             foreach (var cultureValuePair in Name)
             {
                 monument.Name.Localizations.Add(new Localization
@@ -95,11 +96,7 @@ namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
                 Year = entity.Year,
                 Longitude = entity.Longitude,
                 ProtectionNumber = entity.ProtectionNumber,
-                Sources = entity.Sources.Select(p =>
-                {
-                    p.Monument = null;
-                    return p;
-                }).ToList(),
+                Sources = entity.Sources.Adapt<SourceDto[]>().ToList(),
                 Name = entity.Name.GetCultureValuePairs(),
                 Description = entity.Description.GetCultureValuePairs()
             };

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Mapster;
+using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.Models;
@@ -12,7 +14,7 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
         public int MonumentId { get; set; }
         public int PhotoId { get; set; }
         public List<CultureValuePair> Description { get; set; }
-        public List<Source> Sources { get; set; }
+        public List<SourceDto> Sources { get; set; }
         public MonumentPhoto CreateEntity(MonumentPhoto entity = null)
         {
             MonumentPhoto monumentPhoto = null;
@@ -39,7 +41,7 @@ namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedMode
             monumentPhoto.PhotoId = PhotoId;
             monumentPhoto.MonumentId = MonumentId;
 
-            monumentPhoto.Sources.AddRange(Sources);
+            monumentPhoto.Sources.AddRange(Sources.Adapt<Source[]>());
             if (Description == null || Description.ToArray().Length == 0)
             {
                 monumentPhoto.DescriptionId = null;
