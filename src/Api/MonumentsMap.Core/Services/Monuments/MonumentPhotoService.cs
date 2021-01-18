@@ -98,11 +98,7 @@ namespace MonumentsMap.Core.Services.Monuments
                 Period = entity.Period,
                 MonumentId = entity.MonumentId,
                 PhotoId = entity.PhotoId,
-                Sources = entity.Sources.Select(p =>
-                {
-                    p.MonumentPhoto = null;
-                    return p;
-                }).ToList(),
+                Sources = entity.Sources.Adapt<SourceDto[]>().ToList(),
                 Description = entity.Description.GetCultureValuePairs()
             };
         }
