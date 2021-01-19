@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -86,6 +87,29 @@ namespace MonumentsMap.Core.Services.Photo
                 }
             }
             return image;
+        }
+
+        public async Task<string> GetImageThumbnailBase64(string subDir, string fileName, int resizeWidth)
+        {
+            string dirPath = GetDirPath(subDir);
+            string path = Path.Combine(dirPath, fileName);
+            string imageBase64 = null;
+           
+            string cacheKey = $"{path}{resizeWidth}base64";
+            if (!_cache.TryGetValue(cacheKey, out imageBase64))
+            {
+                byte[] image;
+                using (var stream = File.OpenRead(path))
+                {
+                    using (var imageStream = ImageUtility.GetIamgeThumbnail(stream, resizeWidth))
+                    {
+                        image = new byte[imageStream.Length];
+                        await imageStream.ReadAsync(image, 0, (int)imageStream.Length);
+                    }
+                }
+                imageBase64 = "data:image/png;base64," + Convert.ToBase64String(image);
+            }
+            return imageBase64;
         }
     }
 }

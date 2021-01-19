@@ -43,7 +43,7 @@ namespace MonumentsMap.Controllers
             }
             catch
             {
-               return StatusCode(500, new InternalServerError());
+                return StatusCode(500, new InternalServerError());
             }
             return Ok(photo.Adapt<PhotoDto>());
         }
@@ -73,26 +73,25 @@ namespace MonumentsMap.Controllers
         [HttpGet("{id}/image/{size}")]
         public async Task<IActionResult> GetImageAsync(int id, int size, [FromQuery] bool base64 = false)
         {
-            byte[] image;
 
             var photo = await _photoRepository.Get(id);
             if (photo == null)
                 return NotFound(new NotFoundError("Monument photo model not found"));
             try
             {
-                image = await _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
+                if (base64)
+                {
+                    return Ok(new { image = await _photoService.GetImageThumbnailBase64(photo.Id.ToString(), photo.FileName, size) });
+                }
+                else
+                {
+                    return File(await _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size), "image/jpeg");
+                }
             }
             catch
             {
                 return StatusCode(500, new InternalServerError());
             }
-
-            if (base64)
-            {
-                return Ok(new { image = "data:image/png;base64," + Convert.ToBase64String(image) });
-            }
-
-            return File(image, "image/jpeg");
         }
     }
 }

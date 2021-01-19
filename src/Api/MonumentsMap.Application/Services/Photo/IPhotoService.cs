@@ -10,6 +10,7 @@ namespace MonumentsMap.Data.Services
         (string fileType, FileStream image) FetchImage(string subDir, string fileName);
         bool DeleteSubDir(string subDir);
         Task<byte[]> GetImageThumbnail(string subDir, string fileName, int resizeWidth);
+        Task<string> GetImageThumbnailBase64(string subDir, string fileName, int resizeWidth);
 
     }
 }
