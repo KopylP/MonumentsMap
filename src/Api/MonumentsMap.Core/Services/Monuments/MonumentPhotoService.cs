@@ -120,9 +120,8 @@ namespace MonumentsMap.Core.Services.Monuments
 
         public async Task<int> CreateAsync(EditableLocalizedMonumentPhotoDto model)
         {
-            var monumentPhoto = await _monumentPhotoRepository.Get(model.Id);
-            var entity = model.CreateEntity(monumentPhoto);
-            await _monumentPhotoRepository.Update(entity);
+            var entity = model.CreateEntity();
+            await _monumentPhotoRepository.Add(entity);
 
             await _monumentPhotoRepository.SaveChangeAsync();
 

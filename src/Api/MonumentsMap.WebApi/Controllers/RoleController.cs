@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MonumentsMap.Controllers
 {
     [ApiController]
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
     public class RoleController : ControllerBase

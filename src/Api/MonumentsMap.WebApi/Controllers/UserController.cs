@@ -11,6 +11,7 @@ using MonumentsMap.Entities.ViewModels;
 
 namespace MonumentsMap.Controllers
 {
+    [ApiVersion("1.0")]
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]

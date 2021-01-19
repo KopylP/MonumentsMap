@@ -8,6 +8,7 @@ using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Controllers
 {
+    [ApiVersion("1.0")]
     public class MonumentPhotoController : LocalizedController<IMonumentPhotoService, LocalizedMonumentPhotoDto, EditableLocalizedMonumentPhotoDto>
     {
         public MonumentPhotoController(IMonumentPhotoService localizedRestService) : base(localizedRestService)

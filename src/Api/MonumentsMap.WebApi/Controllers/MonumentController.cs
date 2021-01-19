@@ -15,6 +15,7 @@ using MonumentsMap.Filters;
 
 namespace MonumentsMap.Controllers
 {
+    [ApiVersion("1.0")]
     public class MonumentController : LocalizedController<IMonumentService, LocalizedMonumentDto, EditableLocalizedMonumentDto>
     {
         private IMonumentPhotoService _monumentPhotoService;

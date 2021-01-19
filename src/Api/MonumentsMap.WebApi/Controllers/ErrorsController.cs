@@ -6,6 +6,7 @@ namespace MonumentsMap.Controllers
 {
     [Route("/errors")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class ErrorsController : ControllerBase
     {
         [HttpGet("{code}")]

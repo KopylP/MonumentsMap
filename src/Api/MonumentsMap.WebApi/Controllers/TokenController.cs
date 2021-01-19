@@ -11,6 +11,7 @@ using MonumentsMap.Entities.ViewModels;
 namespace MonumentsMap.Controllers
 {
     [ApiController]
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
     public class TokenController : ControllerBase
     {

@@ -12,6 +12,7 @@ using MonumentsMap.Domain.Repository;
 namespace MonumentsMap.Controllers
 {
     [ApiController]
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
     public class PhotoController : ControllerBase
     {
