@@ -4,8 +4,8 @@ using System.Linq;
 using Mapster;
 using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Extensions;
-using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.Models;
+using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
 {

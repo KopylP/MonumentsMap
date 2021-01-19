@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
-using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.Models;
+using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels
 {

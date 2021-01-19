@@ -15,4 +15,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enumerations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonumentsMap.Framework\MonumentsMap.Framework.csproj" />
+  </ItemGroup>
+
 </Project>

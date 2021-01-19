@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using MonumentsMap.Application.Dto.Localized;
-using MonumentsMap.Domain.Enumerations;
-using MonumentsMap.Domain.Models;
+using MonumentsMap.Application.Dto.Photo;
+using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
 {
@@ -13,7 +13,7 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
         public int MonumentId { get; set; }
         public string Description { get; set; }
         public int PhotoId { get; set; }
-        public Photo Photo { get; set; }
+        public PhotoDto Photo { get; set; }
         public bool MajorPhoto { get; set; }
         public List<SourceDto> Sources { get; set; }
     }

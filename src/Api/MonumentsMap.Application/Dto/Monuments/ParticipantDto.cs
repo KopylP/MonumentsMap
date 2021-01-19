@@ -1,4 +1,4 @@
-using MonumentsMap.Domain.Enumerations;
+using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Application.Dto.Monuments
 {

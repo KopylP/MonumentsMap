@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
+using MonumentsMap.Data.Services;
 using MonumentsMap.Framework.Settings;
 using MonumentsMap.Framework.Utilities;
 
-namespace MonumentsMap.Data.Services
+namespace MonumentsMap.Core.Services.Photo
 {
-    public class PhotoService: IPhotoService
+    public class PhotoService : IPhotoService
     {
         private ImageFilesParams _imageFilesParams;
         private IHostEnvironment _env;

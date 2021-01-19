@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Mapster;
 using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
+using MonumentsMap.Application.Dto.Photo;
 using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Extensions;
 using MonumentsMap.Application.Services.Monuments;
@@ -159,7 +160,7 @@ namespace MonumentsMap.Core.Services.Monuments
                 MonumentId = p.MonumentId,
                 MajorPhoto = p.MajorPhoto,
                 Sources = p.Sources.Adapt<SourceDto[]>().ToList(),
-                Photo = p.Photo,
+                Photo = p.Photo.Adapt<PhotoDto>(),
                 Description = p.Description.GetNameByCode(cultureCode)
             };
         }

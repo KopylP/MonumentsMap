@@ -5,6 +5,7 @@ using MonumentsMap.Application.Services.Mail;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Application.Services.User;
 using MonumentsMap.Core.Services.Monuments;
+using MonumentsMap.Core.Services.Photo;
 using MonumentsMap.Data.Services;
 
 namespace MonumentsMap.Core.Extensions

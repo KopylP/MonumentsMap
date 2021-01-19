@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Domain.Enumerations;
 using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
+using MonumentsMap.Framework.Enums.Monuments;
 using MonumentsMap.Infrastructure.Persistence;
 using System.Collections.Generic;
 using System.Linq;

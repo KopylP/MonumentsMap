@@ -1,4 +1,4 @@
-namespace MonumentsMap.Domain.Enumerations
+namespace MonumentsMap.Framework.Enums.Monuments
 {
     public enum Period
     {

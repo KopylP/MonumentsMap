@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Api.Errors;
+using MonumentsMap.Application.Dto.Photo;
 using MonumentsMap.Data.Services;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
@@ -42,7 +44,7 @@ namespace MonumentsMap.Controllers
             {
                return StatusCode(500, new InternalServerError());
             }
-            return Ok(photo);
+            return Ok(photo.Adapt<PhotoDto>());
         }
 
         [HttpGet("{id}/image")]

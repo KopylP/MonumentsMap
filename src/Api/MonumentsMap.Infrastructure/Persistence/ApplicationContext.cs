@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using MonumentsMap.Domain.Models;
-using MonumentsMap.Domain.Enumerations;
+using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Infrastructure.Persistence
 {

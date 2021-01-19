@@ -1,4 +1,4 @@
-using MonumentsMap.Domain.Enumerations;
+using MonumentsMap.Framework.Enums.Monuments;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

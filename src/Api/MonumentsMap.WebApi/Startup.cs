@@ -58,7 +58,6 @@ namespace MonumentsMap
 
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
             services.AddScoped<CultureCodeResourceFilter>();
-            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
             services.AddMessagingBus(Configuration.GetValue("RabbitHost", "rabbitmq://localhost"));
             services.AddMessagingServices();
