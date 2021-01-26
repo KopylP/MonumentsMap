@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using MonumentsMap.Framework.Enums.Monuments;
 using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Infrastructure.Persistence
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
+        public ApplicationContext(DbContextOptions options) : base(options) { }
 
         public DbSet<City> Cities { get; set; }
         public DbSet<Condition> Conditions { get; set; }

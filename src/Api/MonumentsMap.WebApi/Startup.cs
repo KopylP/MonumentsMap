@@ -75,6 +75,15 @@ namespace MonumentsMap
             services.AddMessagingBus(Configuration.GetValue("RabbitHost", "rabbitmq://localhost"));
             services.AddMessagingServices();
 
+            services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
+            {
+                opts.Password.RequireDigit = true;
+                opts.Password.RequireLowercase = true;
+                opts.Password.RequireUppercase = true;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequiredLength = 7;
+            }).AddEntityFrameworkStores<ApplicationContext>();
+
             services.AddAuthentication(opts =>
             {
                 opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -149,9 +158,10 @@ namespace MonumentsMap
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationContext>();
                 var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                 context.Database.Migrate();
                 var cultures = Configuration.GetSection("SupportedCultures").Get<List<Culture>>();
-                DbSeed.Seed(context, cultures, Configuration);
+                DbSeed.Seed(context, roleManager, userManager, cultures, Configuration);
             }
         }
     }

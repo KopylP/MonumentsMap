@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Contracts\MonumentsMap.Contracts\MonumentsMap.Contracts.csproj" />
+    <ProjectReference Include="..\..\Contracts\MonumentsMap.Contracts\MonumentsMap.Contracts.csproj" />
   </ItemGroup>
-
 </Project>
