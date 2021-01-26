@@ -157,11 +157,9 @@ namespace MonumentsMap
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationContext>();
-                var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-                var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                 context.Database.Migrate();
                 var cultures = Configuration.GetSection("SupportedCultures").Get<List<Culture>>();
-                DbSeed.Seed(context, roleManager, userManager, cultures, Configuration);
+                DbSeed.Seed(context, cultures, Configuration);
             }
         }
     }
