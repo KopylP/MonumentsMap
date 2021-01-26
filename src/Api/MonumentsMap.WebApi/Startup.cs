@@ -75,15 +75,6 @@ namespace MonumentsMap
             services.AddMessagingBus(Configuration.GetValue("RabbitHost", "rabbitmq://localhost"));
             services.AddMessagingServices();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
-            {
-                opts.Password.RequireDigit = true;
-                opts.Password.RequireLowercase = true;
-                opts.Password.RequireUppercase = true;
-                opts.Password.RequireNonAlphanumeric = false;
-                opts.Password.RequiredLength = 7;
-            }).AddEntityFrameworkStores<ApplicationContext>();
-
             services.AddAuthentication(opts =>
             {
                 opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

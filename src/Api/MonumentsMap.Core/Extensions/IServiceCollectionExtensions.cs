@@ -22,9 +22,9 @@ namespace MonumentsMap.Core.Extensions
             services.AddScoped<IParticipantService, ParticipantService>();
             services.AddScoped<IStatusService, StatusService>();
 
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IInvitationService, InvitationService>();
+            //services.AddTransient<ITokenService, TokenService>();
+            //services.AddTransient<IUserService, UserService>();
+            //services.AddTransient<IInvitationService, InvitationService>();
             services.AddScoped<IPhotoService, PhotoService>();
         }
 

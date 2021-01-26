@@ -6,7 +6,7 @@ using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Infrastructure.Persistence
 {
-    public class ApplicationContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationContext : DbContext
     {
         public ApplicationContext(DbContextOptions options) : base(options) { }
 
