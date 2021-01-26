@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MonumentsMap.Domain.Models;
-using MonumentsMap.Entities.ViewModels;
+using MonumentsMap.Application.Dto.User;
 
 namespace MonumentsMap.Application.Services.User
 {
     public interface IUserService
     {
-        Task<IEnumerable<ApplicationUser>> GetUsersAsync();
-        Task<UserDto> GetUserByIdAsync(string userId);
-        Task<ApplicationUser> DeleteUserAsync(string userId);
-        Task<IEnumerable<RoleDto>> GetUserRolesAsync(string userId);
-        Task<UserDto> ChangeUserRolesAsync(string userId, UserRoleDto userRoleViewModel);
-        Task<UserDto> RemoveUserFromRolesAsync(string userId, UserRoleDto userRoleViewModel);
+        Task<IEnumerable<UserResponseDto>> GetUsersAsync();
+        Task<UserResponseDto> GetUserByIdAsync(string userId);
+        Task<UserResponseDto> DeleteUserAsync(string userId);
+        Task<IEnumerable<RoleResponseDto>> GetUserRolesAsync(string userId);
+        Task<UserResponseDto> ChangeUserRolesAsync(string userId, UserRoleRequestDto userRoleViewModel);
+        Task<UserResponseDto> RemoveUserFromRolesAsync(string userId, UserRoleRequestDto userRoleViewModel);
     }
 }

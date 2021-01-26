@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using MonumentsMap.Data.Repositories;
-using MonumentsMap.Domain.Repository;
+﻿using MonumentsMap.Domain.Repository;
 using MonumentsMap.Infrastructure.Persistence;
 using MonumentsMap.Infrastructure.Repositories;
 using System;
@@ -14,14 +12,12 @@ namespace MonumentsMap.Infrastructure.UnitOfWork
 
         private ICityRepository _cityRepository;
         private IConditionRepository _conditionRepository;
-        private IInvitationRepository _invitationRepository;
         private IMonumentPhotoRepository _monumentPhotoRepository;
         private IMonumentRepository _monumentRepository;
         private IParticipantMonumentRepository _participantMonumentRepository;
         private IParticipantRepository _participantRepository;
         private IPhotoRepository _photoRepository;
         private IStatusRepository _statusRepository;
-        private ITokenRepository _tokenRepository;
 
         public UnitOfWork(ApplicationContext context)
         {
@@ -51,19 +47,6 @@ namespace MonumentsMap.Infrastructure.UnitOfWork
                     _conditionRepository = new ConditionRepository(_context);
                 }
                 return _conditionRepository;
-            }
-        }
-
-        public IInvitationRepository InvitationRepository
-        {
-            get
-            {
-
-                if (_invitationRepository == null)
-                {
-                    _invitationRepository = new InvitationRepository(_context);
-                }
-                return _invitationRepository;
             }
         }
 
@@ -138,18 +121,6 @@ namespace MonumentsMap.Infrastructure.UnitOfWork
                     _statusRepository = new StatusRepository(_context);
                 }
                 return _statusRepository;
-            }
-        }
-
-        public ITokenRepository TokenRepository
-        {
-            get
-            {
-                if (_tokenRepository == null)
-                {
-                    _tokenRepository = new TokenRepository(_context);
-                }
-                return _tokenRepository;
             }
         }
 

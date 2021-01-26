@@ -1,6 +1,5 @@
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
-using MonumentsMap.Infrastructure.Messaging.Mail;
 
 namespace MonumentsMap.Infrastructure.Messaging.Extensions
 {
@@ -10,7 +9,7 @@ namespace MonumentsMap.Infrastructure.Messaging.Extensions
         {
             services.AddMassTransit(x =>
             {
-
+                x.SetKebabCaseEndpointNameFormatter();
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(host);
@@ -22,7 +21,6 @@ namespace MonumentsMap.Infrastructure.Messaging.Extensions
 
         public static void AddMessagingServices(this IServiceCollection services)
         {
-            services.AddScoped<MailSender>();
         }
     }
 }

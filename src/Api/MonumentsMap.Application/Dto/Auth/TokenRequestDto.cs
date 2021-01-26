@@ -1,4 +1,4 @@
-namespace MonumentsMap.Entities.ViewModels
+namespace MonumentsMap.Application.Dto.Auth
 {
     public class TokenRequestDto
     {

@@ -1,14 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using MonumentsMap.Framework.Enums.Monuments;
 using MonumentsMap.Domain.Models;
 
 namespace MonumentsMap.Infrastructure.Persistence
 {
-    public class ApplicationContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationContext : DbContext
     {
-        public ApplicationContext(DbContextOptions options) : base(options) { }
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
         public DbSet<City> Cities { get; set; }
         public DbSet<Condition> Conditions { get; set; }
@@ -20,10 +19,8 @@ namespace MonumentsMap.Infrastructure.Persistence
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Source> Sources { get; set; }
-        public DbSet<Token> Tokens { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<ParticipantMonument> ParticipantMonuments { get; set; }
-        public DbSet<Invitation> Invitations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

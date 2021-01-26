@@ -1,4 +1,5 @@
 using MonumentsMap.Application.Dto.Invitation;
+using MonumentsMap.Application.Dto.User;
 using System.Threading.Tasks;
 
 
@@ -6,8 +7,7 @@ namespace MonumentsMap.Application.Services.Invitation
 {
     public interface IInvitationService
     {
-        Task<InvitationResponseDto> CreateInviteAsync(string email);
-        Task InvitePersonAsync(InvitationResponseDto invitation);
-        Task<InvitationResult> CheckInvitationCodeAsync(string email, string invitationCode);
+        Task<InvitationResponseDto> InviteAsync(InvitationRequestDto dto);
+        Task<UserResponseDto> RegisterAsync(RegisterUserRequestDto dto);
     }
 }

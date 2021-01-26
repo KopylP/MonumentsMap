@@ -1,12 +1,13 @@
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Api.Errors;
-using MonumentsMap.Application.Extensions;
+using MonumentsMap.Application.Dto.Auth;
+using MonumentsMap.Application.Dto.User;
 using MonumentsMap.Application.Services.Auth;
-using MonumentsMap.Domain.Models;
-using MonumentsMap.Entities.ViewModels;
+using MonumentsMap.Application.Services.User;
+using MonumentsMap.Contracts.Exceptions;
 
 namespace MonumentsMap.Controllers
 {
@@ -16,12 +17,12 @@ namespace MonumentsMap.Controllers
     public class TokenController : ControllerBase
     {
         private readonly ITokenService _tokenServise;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
 
-        public TokenController(ITokenService tokenService, UserManager<ApplicationUser> userManager)
+        public TokenController(ITokenService tokenService, IUserService userService)
         {
             _tokenServise = tokenService;
-            _userManager = userManager;
+            _userService = userService;
         }
 
         [HttpPost("Auth")]
@@ -30,35 +31,38 @@ namespace MonumentsMap.Controllers
             if (model == null) 
                 return BadRequest(new BadRequestError("Model is incorrect"));
 
-            TokenResponseDto tokenResponse = null;
-            switch (model.grant_type)
+            try
             {
-                case "password":
-                    tokenResponse = await _tokenServise.GetTokenAsync(model);
-                    break;
-                case "refresh_token":
-                    tokenResponse = await _tokenServise.RefreshTokenAsync(model);
-                    break;
-                default:
-                    return Unauthorized(new UnauthorizedError());
+                var tokenResponse = await _tokenServise.GetTokenAsync(model);
+                return Ok(tokenResponse);
             }
-
-            if (tokenResponse == null) 
-                return Unauthorized(new UnauthorizedError());
-
-            return Ok(tokenResponse);
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(new UnauthorizedError(ex.Message));
+            }
         }
 
         [HttpGet("Me")]
         [Authorize]
         public async Task<IActionResult> GetMe()
         {
-            var user = await _userManager.GetUserAsync(User);
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            UserResponseDto user;
+
+            try
+            {
+                user = await _userService.GetUserByIdAsync(userId);
+            }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(new UnauthorizedError(ex.Message));
+            }
             
             if (user == null)
-             return Unauthorized(new UnauthorizedError());
+                return Unauthorized(new UnauthorizedError());
 
-            return Ok(await user.AdaptUserToModelAsync(_userManager));
+            return Ok(user);
         }
     }
 }

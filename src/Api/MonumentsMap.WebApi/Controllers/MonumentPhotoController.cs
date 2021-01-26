@@ -2,8 +2,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
-using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Services.Monuments;
+using MonumentsMap.Contracts.Exceptions;
 using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 
 namespace MonumentsMap.Controllers

@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
-using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Services;
+using MonumentsMap.Contracts.Exceptions;
 using MonumentsMap.Filters;
 
 namespace MonumentsMap.Controllers

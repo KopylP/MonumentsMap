@@ -1,118 +1,104 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Application.Exceptions;
-using MonumentsMap.Application.Extensions;
+using AutoMapper;
+using MassTransit;
+using MonumentsMap.Application.Dto.User;
 using MonumentsMap.Application.Services.User;
-using MonumentsMap.Core.Extensions;
-using MonumentsMap.Domain.Models;
-using MonumentsMap.Entities.ViewModels;
+using MonumentsMap.Contracts.User;
 
 namespace MonumentsMap.Data.Services
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private IRequestClient<GetUsersCommand> _getUsersRequest;
+        private IRequestClient<ChangeUserRolesCommand> _changeUserRolesRequest;
+        private IRequestClient<DeleteUserByIdCommand> _deleteUserByIdRequest;
+        private IRequestClient<RemoveUserFromRolesCommand> _removeUserFromRolesRequest;
+        private IRequestClient<GetUserByIdCommand> _getUserbyIdRequest;
+        private IRequestClient<GetUserRolesCommand> _getUserRolesRequest;
+        private IMapper _mapper;
 
-        public UserService(UserManager<ApplicationUser> userManager) => _userManager = userManager;
-
-        public async Task<UserDto> ChangeUserRolesAsync(string userId, UserRoleDto userRoleViewModel)
+        public UserService(
+            IMapper mapper,
+            IRequestClient<GetUsersCommand> requestGetUsers,
+            IRequestClient<ChangeUserRolesCommand> changeUserRolesRequest,
+            IRequestClient<DeleteUserByIdCommand> deleteUserByIdRequest,
+            IRequestClient<RemoveUserFromRolesCommand> removeUserFromRolesRequest,
+            IRequestClient<GetUserRolesCommand> getUserRolesRequest,
+            IRequestClient<GetUserByIdCommand> getUserByIdRequest)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new NotFoundException("User not found");
-            }
-
-            var userRoles = await _userManager.GetRolesAsync(user);
-
-            if (!userRoles.Contains("Admin") && userRoleViewModel.RoleNames.Contains("Admin"))
-            {
-                throw new BadRequestException("System provides only one administrator");
-            }
-
-            if (userRoles.Contains("Admin") && !userRoleViewModel.RoleNames.Contains("Admin"))
-            {
-                throw new BadRequestException("It is impossible to take away administrator rights from the administrator");
-            }
-            
-            var removeRolesResult = await _userManager
-                .RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
-
-            if (!removeRolesResult.Succeeded)
-            {
-                throw new InternalServerErrorException("Failed to delete user roles");
-            }
-            var result = await _userManager.AddToRolesAsync(user, userRoleViewModel.RoleNames);
-            if (!result.Succeeded)
-            {
-                throw new InternalServerErrorException("Failed to add user to roles");
-            }
-            return await user.AdaptUserToModelAsync(_userManager);
+            _mapper = mapper;
+            _getUsersRequest = requestGetUsers;
+            _changeUserRolesRequest = changeUserRolesRequest;
+            _deleteUserByIdRequest = deleteUserByIdRequest;
+            _removeUserFromRolesRequest = removeUserFromRolesRequest;
+            _getUserRolesRequest = getUserRolesRequest;
+            _getUserbyIdRequest = getUserByIdRequest;
         }
 
-        public async Task<ApplicationUser> DeleteUserAsync(string userId)
+        public async Task<UserResponseDto> ChangeUserRolesAsync(string userId, UserRoleRequestDto userRoleViewModel)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Contains("Admin"))
+            var request = new ChangeUserRolesCommand
             {
-                throw new ProhibitException("Can't delete a user with administrator rights");
-            }
-            if (user == null)
-            {
-                throw new NotFoundException("User not found");
-            }
-            await _userManager.DeleteAsync(user);
-            return user;
+                UserId = userId,
+                RoleNames = userRoleViewModel.RoleNames
+            };
+
+            var response = await _changeUserRolesRequest.GetResponse<UserResult>(request);
+            return _mapper.Map<UserResponseDto>(response.Message);
         }
 
-        public async Task<UserDto> GetUserByIdAsync(string userId)
+        public async Task<UserResponseDto> DeleteUserAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            var request = new DeleteUserByIdCommand
             {
-                throw new NotFoundException("User not found");
-            }
-            return await user.AdaptUserToModelAsync(_userManager);
+                UserId = userId
+            };
+
+            var response = await _deleteUserByIdRequest.GetResponse<UserResult>(request);
+            return _mapper.Map<UserResponseDto>(response.Message);
         }
 
-        public async Task<IEnumerable<RoleDto>> GetUserRolesAsync(string userId)
+        public async Task<UserResponseDto> GetUserByIdAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            var request = new GetUserByIdCommand
             {
-                throw new NotFoundException("User not found");
-            }
-            return (await _userManager.GetRolesAsync(user))
-                .Select(p => new RoleDto { Name = p });
+                UserId = userId
+            };
+
+            var response = await _getUserbyIdRequest.GetResponse<UserResult>(request);
+            return _mapper.Map<UserResponseDto>(response.Message);
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetUsersAsync()
+        public async Task<IEnumerable<RoleResponseDto>> GetUserRolesAsync(string userId)
         {
-            return await _userManager.Users.ToListAsync();
+            var request = new GetUserRolesCommand
+            {
+                UserId = userId
+            };
+
+            var response = await _getUserRolesRequest.GetResponse<IEnumerable<RoleResult>>(request);
+            return _mapper.Map<RoleResponseDto[]>(response.Message);
         }
 
-        public async Task<UserDto> RemoveUserFromRolesAsync(string userId, UserRoleDto userRoleViewModel)
+        public async Task<IEnumerable<UserResponseDto>> GetUsersAsync()
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            var request = new GetUsersCommand { };
+            var response = await _getUsersRequest.GetResponse<IEnumerable<UserResult>>(request);
+            return _mapper.Map<UserResponseDto[]>(response.Message).AsEnumerable();
+        }
+
+        public async Task<UserResponseDto> RemoveUserFromRolesAsync(string userId, UserRoleRequestDto userRoleViewModel)
+        {
+            var request = new RemoveUserFromRolesCommand
             {
-                throw new NotFoundException("User not found");
-            }
-            var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Contains("Admin"))
-            {
-                throw new ProhibitException("Can't remove roles from user with administrator rights");
-            }
-            var result = await _userManager.RemoveFromRolesAsync(user, userRoleViewModel.RoleNames);
-            if (!result.Succeeded)
-            {
-                throw new InternalServerErrorException("Failed to remove roles from user");
-            }
-            return await user.AdaptUserToModelAsync(_userManager);
+                UserId = userId,
+                RoleNames = userRoleViewModel.RoleNames
+            };
+
+            var response = await _removeUserFromRolesRequest.GetResponse<UserResult>(request);
+            return _mapper.Map<UserResponseDto>(response.Message);
         }
     }
 }

@@ -8,8 +8,8 @@ using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
-using MonumentsMap.Application.Exceptions;
 using MonumentsMap.Application.Services.Monuments;
+using MonumentsMap.Contracts.Exceptions;
 using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Filters;
 

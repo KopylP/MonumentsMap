@@ -15,8 +15,5 @@ namespace MonumentsMap.Domain.Models
         public virtual LocalizationSet Name { get; set; }
 
         public virtual IEnumerable<Monument> Monuments { get; set; }
-
-        [ForeignKey("UserId")]
-        public virtual ApplicationUser User { get; set; }
     }
 }

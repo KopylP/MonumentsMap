@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Api.Errors;
-using MonumentsMap.Application.Exceptions;
+using MonumentsMap.Application.Dto.User;
 using MonumentsMap.Application.Services.User;
-using MonumentsMap.Domain.Models;
-using MonumentsMap.Entities.ViewModels;
+using MonumentsMap.Contracts.Exceptions;
 
 namespace MonumentsMap.Controllers
 {
@@ -25,12 +24,12 @@ namespace MonumentsMap.Controllers
         public async Task<IActionResult> Get()
         {
             var users = await _userService.GetUsersAsync();
-            return Ok(users.Select(user => UserDto.FromUser(user)));
+            return Ok(users);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            UserDto user;
+            UserResponseDto user;
             try
             {
                 user = await _userService.GetUserByIdAsync(id);
@@ -44,7 +43,7 @@ namespace MonumentsMap.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            ApplicationUser user;
+            UserResponseDto user;
             try
             {
                 user = await _userService.DeleteUserAsync(id);
@@ -63,7 +62,7 @@ namespace MonumentsMap.Controllers
         [HttpGet("{id}/roles")]
         public async Task<IActionResult> GetRoles(string id)
         {
-            IEnumerable<RoleDto> roles;
+            IEnumerable<RoleResponseDto> roles;
             try
             {
                 roles = await _userService.GetUserRolesAsync(id);
@@ -76,9 +75,9 @@ namespace MonumentsMap.Controllers
         }
 
         [HttpPost("{id}/roles")]
-        public async Task<IActionResult> AddRole([FromRoute] string id, [FromBody] UserRoleDto userRoleViewModel)
+        public async Task<IActionResult> AddRole([FromRoute] string id, [FromBody] UserRoleRequestDto userRoleViewModel)
         {
-            UserDto user;
+            UserResponseDto user;
             try
             {
                 user = await _userService.ChangeUserRolesAsync(id, userRoleViewModel);
@@ -99,9 +98,9 @@ namespace MonumentsMap.Controllers
         }
 
         [HttpDelete("{id}/roles")]
-        public async Task<IActionResult> DeleteRole([FromRoute] string id, [FromBody] UserRoleDto userRoleViewModel)
+        public async Task<IActionResult> DeleteRole([FromRoute] string id, [FromBody] UserRoleRequestDto userRoleViewModel)
         {
-            UserDto user;
+            UserResponseDto user;
             try
             {
                 user = await _userService.RemoveUserFromRolesAsync(id, userRoleViewModel);
