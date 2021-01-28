@@ -57,10 +57,17 @@ namespace MonumentsMap.IdentityService.Consumers.Auth
             try
             {
                 var user = await _userManager.FindByEmailAsync(model.username);
+
                 if (user == null)
                 {
-                    return null;
+                    throw new UnauthorizedException("Email is incorrect");
                 }
+
+                if (!(await _userManager.CheckPasswordAsync(user, model.password)))
+                {
+                    throw new UnauthorizedException("Password is incorrect");
+                }
+
                 var rt = CreateRefreshToken(model.client_id, user.Id);
                 await _tokenRepository.Add(rt);
 
