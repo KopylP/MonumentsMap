@@ -54,32 +54,26 @@ namespace MonumentsMap.IdentityService.Consumers.Auth
 
         private async Task<GetTokenResult> GetTokenAsync(GetTokenCommand model)
         {
-            try
+
+            var user = await _userManager.FindByEmailAsync(model.username);
+
+            if (user == null)
             {
-                var user = await _userManager.FindByEmailAsync(model.username);
-
-                if (user == null)
-                {
-                    throw new UnauthorizedException("Email is incorrect");
-                }
-
-                if (!(await _userManager.CheckPasswordAsync(user, model.password)))
-                {
-                    throw new UnauthorizedException("Password is incorrect");
-                }
-
-                var rt = CreateRefreshToken(model.client_id, user.Id);
-                await _tokenRepository.Add(rt);
-
-                await _tokenRepository.SaveChangeAsync();
-
-                var t = await CreateAccessTokenAsync(user, rt.Value);
-                return t;
+                throw new UnauthorizedException("Email is incorrect");
             }
-            catch
+
+            if (!(await _userManager.CheckPasswordAsync(user, model.password)))
             {
-                return null;
+                throw new UnauthorizedException("Password is incorrect");
             }
+
+            var rt = CreateRefreshToken(model.client_id, user.Id);
+            await _tokenRepository.Add(rt);
+
+            await _tokenRepository.SaveChangeAsync();
+
+            var t = await CreateAccessTokenAsync(user, rt.Value);
+            return t;
         }
 
         private async Task<GetTokenResult> RefreshTokenAsync(GetTokenCommand model)
