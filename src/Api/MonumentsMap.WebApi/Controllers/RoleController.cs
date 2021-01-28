@@ -1,9 +1,7 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Application.Services.Roles;
 
 namespace MonumentsMap.Controllers
 {
@@ -13,15 +11,15 @@ namespace MonumentsMap.Controllers
     [Authorize(Roles = "Admin")]
     public class RoleController : ControllerBase
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IRolesService _rolesService;
 
-        public RoleController(RoleManager<IdentityRole> roleManager) => _roleManager = roleManager;
+        public RoleController(IRolesService rolesService) => _rolesService = rolesService;
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var roles = await _roleManager.Roles.ToListAsync();
-            return Ok(roles.Select(p => new { p.Name }));
+            var roles = await _rolesService.GetAllRolesAsync();
+            return Ok(roles);
         }
     }
 }

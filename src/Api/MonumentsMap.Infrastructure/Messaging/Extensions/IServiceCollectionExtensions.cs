@@ -1,5 +1,9 @@
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
+using MonumentsMap.Contracts.Auth;
+using MonumentsMap.Contracts.Invitations;
+using MonumentsMap.Contracts.Roles;
+using MonumentsMap.Contracts.User;
 
 namespace MonumentsMap.Infrastructure.Messaging.Extensions
 {
@@ -13,7 +17,21 @@ namespace MonumentsMap.Infrastructure.Messaging.Extensions
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(host);
+                    cfg.ConfigureEndpoints(context);
                 });
+
+                x.AddRequestClient<GetTokenCommand>();
+                x.AddRequestClient<InviteUserCommand>();
+
+                x.AddRequestClient<ChangeUserRolesCommand>();
+                x.AddRequestClient<DeleteUserByIdCommand>();
+                x.AddRequestClient<GetUserByIdCommand>();
+                x.AddRequestClient<GetUserRolesCommand>();
+                x.AddRequestClient<GetUsersCommand>();
+                x.AddRequestClient<RegisterUserCommand>();
+                x.AddRequestClient<RemoveUserFromRolesCommand>();
+
+                x.AddRequestClient<GetAllRolesCommand>();
             });
 
             services.AddMassTransitHostedService();

@@ -65,6 +65,15 @@ services:
     restart: unless-stopped
     depends_on: 
       - rabbitmq
+  identity_service:
+    container_name: identity_service
+    build:
+      context: ./src
+      dockerfile: ./IdentityService/Dockerfile
+    restart: unless-stopped
+    depends_on: 
+      - rabbitmq
+      - db
   certbot:
     image: certbot/certbot
     restart: unless-stopped

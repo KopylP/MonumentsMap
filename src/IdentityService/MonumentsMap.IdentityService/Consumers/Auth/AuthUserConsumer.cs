@@ -22,6 +22,15 @@ namespace MonumentsMap.IdentityService.Consumers.Auth
         private UserManager<ApplicationUser> _userManager;
         private ITokenRepository _tokenRepository; 
 
+        public AuthUserConsumer(IConfiguration configuration,
+            UserManager<ApplicationUser> userManager,
+            ITokenRepository tokenRepository)
+        {
+            _configuration = configuration;
+            _userManager = userManager;
+            _tokenRepository = tokenRepository;
+        }
+
         public async Task Consume(ConsumeContext<GetTokenCommand> context)
         {
             var model = context.Message;

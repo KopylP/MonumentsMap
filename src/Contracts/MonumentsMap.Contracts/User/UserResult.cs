@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace MonumentsMap.Contracts.User
 {
@@ -10,18 +9,6 @@ namespace MonumentsMap.Contracts.User
         public DateTime UpdatedAt { get; set; }
         public string Id { get; set; }
         public string Email { get; set; }
-        public List<RoleResult> Roles { get; set; }
-
-        //public static UserDto FromUser(ApplicationUser user)
-        //{
-        //    return new UserDto
-        //    {
-        //        Id = user.Id,
-        //        Email = user.Email,
-        //        CreatedAt = user.CreatedAt,
-        //        UpdatedAt = user.UpdatedAt,
-        //        DisplayName = user.DisplayName,
-        //    };
-        //}
+        public RoleResult[] Roles { get; set; }
     }
 }

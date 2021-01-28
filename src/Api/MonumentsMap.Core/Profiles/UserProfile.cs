@@ -11,6 +11,7 @@ namespace MonumentsMap.Core.Profiles
         public UserProfile()
         {
             CreateMap<InvitationRequestDto, InviteUserCommand>();
+            CreateMap<InviteUserResult, InvitationResponseDto>();
             CreateMap<UserResult, UserResponseDto>();
             CreateMap<RoleResult, RoleResponseDto>();
         }

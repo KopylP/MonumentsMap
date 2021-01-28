@@ -54,7 +54,7 @@ namespace MonumentsMap.Controllers
             {
                 user = await _userService.GetUserByIdAsync(userId);
             }
-            catch (UnauthorizedException ex)
+            catch (NotFoundException ex)
             {
                 return Unauthorized(new UnauthorizedError(ex.Message));
             }

@@ -17,7 +17,7 @@ namespace MonumentsMap.Application.Extensions
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt,
                 DisplayName = user.DisplayName,
-                Roles = (await userManager.GetRolesAsync(user)).Select(role => new RoleResult { Name = role }).ToList()
+                Roles = (await userManager.GetRolesAsync(user)).Select(role => new RoleResult { Name = role }).ToArray()
             };
         }
     }

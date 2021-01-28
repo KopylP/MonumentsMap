@@ -22,7 +22,7 @@ namespace MonumentsMap.IdentityService.Consumers.User
                 throw new NotFoundException("User not found");
             }
             await context.RespondAsync((await _userManager.GetRolesAsync(user))
-                .Select(p => new RoleResult { Name = p }));
+                .Select(p => new RoleResult { Name = p }).ToArray());
         }
     }
 }

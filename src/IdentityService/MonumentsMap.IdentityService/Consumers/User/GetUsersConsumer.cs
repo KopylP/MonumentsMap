@@ -16,14 +16,13 @@ namespace MonumentsMap.IdentityService.Consumers.User
 
         public async Task Consume(ConsumeContext<GetUsersCommand> context)
         {
-            var results = (await _userManager.Users.Select(user => new UserResult {
+            var results = await _userManager.Users.Select(user => new UserResult {
                 Id = user.Id,
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt,
                 DisplayName = user.DisplayName
-            }).ToListAsync())
-            .AsEnumerable();
+            }).ToArrayAsync();
 
             await context.RespondAsync(results);
         }

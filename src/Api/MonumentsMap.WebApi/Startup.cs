@@ -67,7 +67,7 @@ namespace MonumentsMap
 
             services.AddRepositories();
             services.AddServices();
-            services.AddMapping(typeof(Startup));
+            services.AddMapping();
 
             services.AddSingleton(Configuration.GetSection("ImageFilesParams").Get<ImageFilesParams>());
             services.AddScoped<CultureCodeResourceFilter>();
@@ -104,6 +104,10 @@ namespace MonumentsMap
             {
                 c.SwaggerDoc(name: "v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Monuments Map Api", Version = "v1" });
             });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<Startup>>();
+            services.AddSingleton(typeof(ILogger), logger);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

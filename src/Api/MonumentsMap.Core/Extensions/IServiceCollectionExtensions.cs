@@ -4,9 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using MonumentsMap.Application.Services.Auth;
 using MonumentsMap.Application.Services.Invitation;
 using MonumentsMap.Application.Services.Monuments;
+using MonumentsMap.Application.Services.Roles;
 using MonumentsMap.Application.Services.User;
 using MonumentsMap.Core.Services.Monuments;
 using MonumentsMap.Core.Services.Photo;
+using MonumentsMap.Core.Services.Roles;
 using MonumentsMap.Data.Services;
 
 namespace MonumentsMap.Core.Extensions
@@ -22,15 +24,17 @@ namespace MonumentsMap.Core.Extensions
             services.AddScoped<IParticipantService, ParticipantService>();
             services.AddScoped<IStatusService, StatusService>();
 
-            //services.AddTransient<ITokenService, TokenService>();
-            //services.AddTransient<IUserService, UserService>();
-            //services.AddTransient<IInvitationService, InvitationService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IInvitationService, InvitationService>();
+            services.AddScoped<IRolesService, RolesService>();
+
             services.AddScoped<IPhotoService, PhotoService>();
         }
 
-        public static void AddMapping(this IServiceCollection services, Type type)
+        public static void AddMapping(this IServiceCollection services)
         {
-            services.AddAutoMapper(type);
+            services.AddAutoMapper(typeof(IServiceCollectionExtensions));
         }
     }
 }

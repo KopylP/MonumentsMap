@@ -3,8 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using MonumentsMap.Application.Dto.User;
 using MonumentsMap.Application.Services.User;
+using MonumentsMap.Contracts.Exceptions;
 using MonumentsMap.Contracts.User;
 
 namespace MonumentsMap.Data.Services
@@ -18,6 +20,7 @@ namespace MonumentsMap.Data.Services
         private IRequestClient<GetUserByIdCommand> _getUserbyIdRequest;
         private IRequestClient<GetUserRolesCommand> _getUserRolesRequest;
         private IMapper _mapper;
+        private ILogger _logger;
 
         public UserService(
             IMapper mapper,
@@ -26,7 +29,8 @@ namespace MonumentsMap.Data.Services
             IRequestClient<DeleteUserByIdCommand> deleteUserByIdRequest,
             IRequestClient<RemoveUserFromRolesCommand> removeUserFromRolesRequest,
             IRequestClient<GetUserRolesCommand> getUserRolesRequest,
-            IRequestClient<GetUserByIdCommand> getUserByIdRequest)
+            IRequestClient<GetUserByIdCommand> getUserByIdRequest,
+            ILogger logger)
         {
             _mapper = mapper;
             _getUsersRequest = requestGetUsers;
@@ -35,70 +39,116 @@ namespace MonumentsMap.Data.Services
             _removeUserFromRolesRequest = removeUserFromRolesRequest;
             _getUserRolesRequest = getUserRolesRequest;
             _getUserbyIdRequest = getUserByIdRequest;
+            _logger = logger;
         }
 
         public async Task<UserResponseDto> ChangeUserRolesAsync(string userId, UserRoleRequestDto userRoleViewModel)
         {
-            var request = new ChangeUserRolesCommand
+            try
             {
-                UserId = userId,
-                RoleNames = userRoleViewModel.RoleNames
-            };
+                var request = new ChangeUserRolesCommand
+                {
+                    UserId = userId,
+                    RoleNames = userRoleViewModel.RoleNames.ToArray()
+                };
 
-            var response = await _changeUserRolesRequest.GetResponse<UserResult>(request);
-            return _mapper.Map<UserResponseDto>(response.Message);
+                _logger.LogInformation(string.Join(" ", request.RoleNames));
+
+                var response = await _changeUserRolesRequest.GetResponse<UserResult>(request);
+                return _mapper.Map<UserResponseDto>(response.Message);
+            }
+            catch (RequestFaultException ex)
+            {
+                ApiExceptionHandler.HandleRequestFaultException(ex);
+                return null;
+            }
         }
 
         public async Task<UserResponseDto> DeleteUserAsync(string userId)
         {
-            var request = new DeleteUserByIdCommand
+            try
             {
-                UserId = userId
-            };
+                var request = new DeleteUserByIdCommand
+                {
+                    UserId = userId
+                };
 
-            var response = await _deleteUserByIdRequest.GetResponse<UserResult>(request);
-            return _mapper.Map<UserResponseDto>(response.Message);
+                var response = await _deleteUserByIdRequest.GetResponse<UserResult>(request);
+                return _mapper.Map<UserResponseDto>(response.Message);
+            }
+            catch (RequestFaultException ex)
+            {
+                ApiExceptionHandler.HandleRequestFaultException(ex);
+                return null;
+            }
         }
 
         public async Task<UserResponseDto> GetUserByIdAsync(string userId)
         {
+
             var request = new GetUserByIdCommand
             {
                 UserId = userId
             };
 
-            var response = await _getUserbyIdRequest.GetResponse<UserResult>(request);
+            Response<UserResult> response = null;
+
+            try
+            {
+                response = await _getUserbyIdRequest.GetResponse<UserResult>(request);
+            }
+            catch (RequestFaultException ex)
+            {
+                ApiExceptionHandler.HandleRequestFaultException(ex);
+            }
+        
             return _mapper.Map<UserResponseDto>(response.Message);
         }
 
         public async Task<IEnumerable<RoleResponseDto>> GetUserRolesAsync(string userId)
         {
-            var request = new GetUserRolesCommand
+            try
             {
-                UserId = userId
-            };
+                var request = new GetUserRolesCommand
+                {
+                    UserId = userId
+                };
 
-            var response = await _getUserRolesRequest.GetResponse<IEnumerable<RoleResult>>(request);
-            return _mapper.Map<RoleResponseDto[]>(response.Message);
+                var response = await _getUserRolesRequest.GetResponse<RoleResult[]>(request);
+                return _mapper.Map<RoleResponseDto[]>(response.Message);
+            }
+            catch (RequestFaultException ex)
+            {
+                ApiExceptionHandler.HandleRequestFaultException(ex);
+                return null;
+            }
         }
 
         public async Task<IEnumerable<UserResponseDto>> GetUsersAsync()
         {
             var request = new GetUsersCommand { };
-            var response = await _getUsersRequest.GetResponse<IEnumerable<UserResult>>(request);
+            var response = await _getUsersRequest.GetResponse<UserResult[]>(request);
             return _mapper.Map<UserResponseDto[]>(response.Message).AsEnumerable();
         }
 
         public async Task<UserResponseDto> RemoveUserFromRolesAsync(string userId, UserRoleRequestDto userRoleViewModel)
         {
-            var request = new RemoveUserFromRolesCommand
+            try
             {
-                UserId = userId,
-                RoleNames = userRoleViewModel.RoleNames
-            };
+                var request = new RemoveUserFromRolesCommand
+                {
+                    UserId = userId,
+                    RoleNames = userRoleViewModel.RoleNames.ToArray()
+                };
 
-            var response = await _removeUserFromRolesRequest.GetResponse<UserResult>(request);
-            return _mapper.Map<UserResponseDto>(response.Message);
+                var response = await _removeUserFromRolesRequest.GetResponse<UserResult>(request);
+                return _mapper.Map<UserResponseDto>(response.Message);
+            }
+            catch (RequestFaultException ex)
+            {
+                ApiExceptionHandler.HandleRequestFaultException(ex);
+                return null;
+            }
         }
     }
 }

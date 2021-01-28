@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace MonumentsMap.IdentityService.Consumers.User
 {
-    public class ChangeUserRolesConsumer : IConsumer<ChangeUserRolesCommand>
+    public class RemoveUserFromRolesConsumer : IConsumer<RemoveUserFromRolesCommand>
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ChangeUserRolesConsumer(UserManager<ApplicationUser> userManager) => _userManager = userManager;
+        public RemoveUserFromRolesConsumer(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
-        public async Task Consume(ConsumeContext<ChangeUserRolesCommand> context)
+        public async Task Consume(ConsumeContext<RemoveUserFromRolesCommand> context)
         {
             var model = context.Message;
 

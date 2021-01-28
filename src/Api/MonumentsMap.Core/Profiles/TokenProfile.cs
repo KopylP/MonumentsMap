@@ -10,7 +10,7 @@ namespace MonumentsMap.Core.Profiles
     {
         public TokenProfile()
         {
-            CreateMap<TokenRequestDto, GetTokenCommand>();
+            CreateMap<TokenRequestDto, GetTokenCommand>().ReverseMap();
             CreateMap<GetTokenResult, TokenResponseDto>();
             CreateMap<RegisterUserRequestDto, RegisterUserCommand>();
         }
