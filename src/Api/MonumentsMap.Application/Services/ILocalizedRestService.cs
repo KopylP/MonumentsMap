@@ -1,15 +1,17 @@
 ﻿using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
-using System.Collections.Generic;
+using MonumentsMap.Application.Dto.Monuments.Filters;
+using MonumentsMap.Contracts.Paging;
 using System.Threading.Tasks;
 
 namespace MonumentsMap.Application.Services
 {
-    public interface ILocalizedRestService<TLocalized, TEditable>
+    public interface ILocalizedRestService<TLocalized, TEditable, TFilter>
         where TLocalized: BaseLocalizedDto
         where TEditable: BaseEditableLocalizedDto
+        where TFilter: BaseRequestFilterDto
     {
-        Task<IEnumerable<TLocalized>> GetAsync(string cultureCode);
+        Task<PagingList<TLocalized>> GetAsync(string cultureCode, TFilter filter);
         Task<TLocalized> GetAsync(int id, string cultureCode);
         Task<TEditable> GetEditable(int id);
         Task<int> EditAsync(TEditable model);

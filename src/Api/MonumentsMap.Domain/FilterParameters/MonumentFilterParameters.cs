@@ -1,6 +1,6 @@
 namespace MonumentsMap.Domain.FilterParameters
 {
-    public class MonumentFilterParameters
+    public class MonumentFilterParameters: BaseFilterParameters
     {
         public int[] Statuses { get; set; }
         public int[] Conditions { get; set; }
@@ -8,5 +8,6 @@ namespace MonumentsMap.Domain.FilterParameters
         public int? StartYear { get; set; }
         public int? EndYear { get; set; }
         public string CultureCode { get; set; }
+        public bool Hidden { get; set; }
     }
 }

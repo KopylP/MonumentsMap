@@ -4,18 +4,20 @@ using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
+using MonumentsMap.Application.Dto.Monuments.Filters;
 using MonumentsMap.Application.Services;
 using MonumentsMap.Contracts.Exceptions;
 using MonumentsMap.Filters;
 
-namespace MonumentsMap.Controllers
+namespace MonumentsMap.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LocalizedController<TLocalizedRestService, TLocalizedEntity, TEditableLocalizedEntity> : ControllerBase
-    where TLocalizedRestService : ILocalizedRestService<TLocalizedEntity, TEditableLocalizedEntity>
+    public class LocalizedController<TLocalizedRestService, TLocalizedEntity, TEditableLocalizedEntity, TFilter> : BaseController
+    where TLocalizedRestService : ILocalizedRestService<TLocalizedEntity, TEditableLocalizedEntity, TFilter>
     where TLocalizedEntity : BaseLocalizedDto
     where TEditableLocalizedEntity : BaseEditableLocalizedDto
+    where TFilter : BaseRequestFilterDto
     {
         protected readonly TLocalizedRestService localizedRestService;
         protected readonly string DefaultCulture;
@@ -26,10 +28,10 @@ namespace MonumentsMap.Controllers
         }
         [HttpGet]
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
-        public async virtual Task<IActionResult> Get([FromQuery] string cultureCode)
+        public async virtual Task<IActionResult> Get([FromQuery] string cultureCode, [FromQuery] TFilter filter)
         {
-            var localizedEntities = await localizedRestService.GetAsync(cultureCode);
-            return Ok(localizedEntities);
+            var localizedEntities = await localizedRestService.GetAsync(cultureCode, filter);
+            return PagingList(localizedEntities);
         }
         [HttpGet("{id:int}")]
         [ServiceFilter(typeof(CultureCodeResourceFilter))]

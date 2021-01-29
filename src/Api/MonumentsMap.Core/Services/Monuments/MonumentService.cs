@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
+using MonumentsMap.Application.Dto.Monuments.Filters;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Contracts.Exceptions;
+using MonumentsMap.Contracts.Paging;
 using MonumentsMap.Core.Extensions;
 using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
@@ -24,6 +27,7 @@ namespace MonumentsMap.Core.Services.Monuments
         private IStatusRepository _statusRepository;
         private IConditionRepository _conditionRepository;
         private ICityRepository _cityRepository;
+        private IMapper _mapper;
         
         public MonumentService(
             IConfiguration configuration,
@@ -31,7 +35,8 @@ namespace MonumentsMap.Core.Services.Monuments
             IParticipantMonumentRepository participantMonumentRepository,
             IStatusRepository statusRepository,
             IConditionRepository conditionRepository,
-            ICityRepository cityRepository)
+            ICityRepository cityRepository,
+            IMapper mapper)
         {
             slugLanguage = configuration["SlugLanguage"];
             _monumentRepository = monumentRepository;
@@ -39,6 +44,7 @@ namespace MonumentsMap.Core.Services.Monuments
             _statusRepository = statusRepository;
             _conditionRepository = conditionRepository;
             _cityRepository = cityRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> ToogleMonument(int monumentId)
@@ -189,15 +195,23 @@ namespace MonumentsMap.Core.Services.Monuments
                     .FirstOrDefault();
 
         }
-        public async Task<IEnumerable<LocalizedMonumentDto>> GetAsync(string cultureCode)
+        public async Task<PagingList<LocalizedMonumentDto>> GetAsync(string cultureCode, MonumentRequestFilterDto filterDto)
         {
-            var monuments = await _monumentRepository.GetAll(
+            filterDto ??= MonumentRequestFilterDto.Empty;
+
+            var filter = _mapper.Map<MonumentFilterParameters>(filterDto);
+            var monumentsPagingList = await _monumentRepository.Filter(
+                filter,
                 m => m.Condition.Description,
                 m => m.Condition.Name,
                 m => m.Name.Localizations,
                 m => m.MonumentPhotos);
 
-            return monuments.Select(p => LocalizedMonumentDto.ToDto(p, cultureCode));
+            var monuments = monumentsPagingList.Items
+                .Select(p => LocalizedMonumentDto.ToDto(p, cultureCode))
+                .ToList();
+
+            return new PagingList<LocalizedMonumentDto>(monuments, monumentsPagingList.PagingInformation);
         }
 
         public async Task<LocalizedMonumentDto> GetAsync(int id, string cultureCode)
@@ -267,12 +281,6 @@ namespace MonumentsMap.Core.Services.Monuments
             await _monumentRepository.SaveChangeAsync();
 
             return entity.Id;
-        }
-
-        public async Task<IEnumerable<LocalizedMonumentDto>> GetByFilterAsync(MonumentFilterParameters parameters)
-        {
-            var monuments = await _monumentRepository.GetByFilterAsync(parameters);
-            return await Task.FromResult(monuments.Select(p => LocalizedMonumentDto.ToDto(p, parameters.CultureCode, nameof(p.MonumentPhotos))));
         }
 
         public async Task<int> RemoveAsync(int id)

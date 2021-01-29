@@ -1,23 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
+﻿using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Services.Monuments;
-using MonumentsMap.Domain.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Application.Extensions;
+using AutoMapper;
+using MonumentsMap.Contracts.Paging;
+using MonumentsMap.Application.Dto.Monuments.Filters;
+using MonumentsMap.Domain.FilterParameters;
 
 namespace MonumentsMap.Core.Services.Monuments
 {
     public class ConditionService : IConditionService
     {
         private readonly IConditionRepository _conditionRepository;
+        private readonly IMapper _mapper;
 
-        public ConditionService(IConditionRepository conditionRepository)
+        public ConditionService(IConditionRepository conditionRepository, IMapper mapper)
         {
             _conditionRepository = conditionRepository;
+            _mapper = mapper;
+
         }
 
         public async Task<int> CreateAsync(EditableLocalizedConditionDto model)
@@ -42,23 +46,25 @@ namespace MonumentsMap.Core.Services.Monuments
                 return entity.Id;
         }
 
-        public async Task<IEnumerable<LocalizedConditionDto>> GetAsync(string cultureCode)
+        public async Task<PagingList<LocalizedConditionDto>> GetAsync(string cultureCode, ConditionRequestFilterDto filterDto)
         {
-                var conditions = _conditionRepository.GetQuery();
-                conditions = conditions
-                    .Include(prop => prop.Name.Localizations)
-                    .Include(p => p.Description.Localizations);
+            filterDto ??= ConditionRequestFilterDto.Empty;
 
-                var result = from condition in conditions
+            var filter = _mapper.Map<ConditionFilterParameters>(filterDto);
+
+            var conditionsPagingList = await _conditionRepository
+                .Filter(filter, prop => prop.Name.Localizations, p => p.Description.Localizations);
+
+                var conditionsDto = (from condition in conditionsPagingList.Items
                              select new LocalizedConditionDto
                              {
                                  Id = condition.Id,
                                  Name = condition.Name.GetNameByCode(cultureCode),
                                  Description = condition.Description.GetNameByCode(cultureCode),
                                  Abbreviation = condition.Abbreviation
-                             };
+                             }).ToList();
 
-                return await result.ToListAsync();
+                return new PagingList<LocalizedConditionDto>(conditionsDto, conditionsPagingList.PagingInformation);
         }
 
         public async Task<LocalizedConditionDto> GetAsync(int id, string cultureCode)

@@ -1,21 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
+﻿using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Services.Monuments;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Application.Extensions;
+using MonumentsMap.Contracts.Paging;
+using MonumentsMap.Application.Dto.Monuments.Filters;
+using AutoMapper;
+using MonumentsMap.Domain.FilterParameters;
 
 namespace MonumentsMap.Core.Services.Monuments
 {
     public class CityService: ICityService
     {
-        private ICityRepository _cityRepository;
-        public CityService(ICityRepository cityRepository)
+        private readonly ICityRepository _cityRepository;
+        private readonly IMapper _mapper;
+        public CityService(ICityRepository cityRepository, IMapper mapper)
         {
             _cityRepository = cityRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> CreateAsync(EditableLocalizedCityDto model)
@@ -38,19 +42,22 @@ namespace MonumentsMap.Core.Services.Monuments
                 return entity.Id;
         }
 
-        public async Task<IEnumerable<LocalizedCityDto>> GetAsync(string cultureCode)
+        public async Task<PagingList<LocalizedCityDto>> GetAsync(string cultureCode, CityRequestFilterDto filterDto)
         {
-                var cities = _cityRepository.GetQuery();
-                cities = cities.Include(prop => prop.Name.Localizations);
+                filterDto ??= CityRequestFilterDto.Empty;    
 
-                var result = from city in cities
+                var filter = _mapper.Map<CityFilterParameters>(filterDto);
+                var cities = await _cityRepository.Filter(filter, prop => prop.Name.Localizations);
+
+                var result = (from city in cities.Items
                 select new LocalizedCityDto
                 {
                     Id = city.Id,
                     Name = city.Name.GetNameByCode(cultureCode)
-                };
+                })
+                .ToList();
 
-                return await result.ToListAsync();
+                return new PagingList<LocalizedCityDto>(result, cities.PagingInformation);
         }
 
         public async Task<LocalizedCityDto> GetAsync(int id, string cultureCode)

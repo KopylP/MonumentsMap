@@ -1,22 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
+﻿using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Domain.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Application.Extensions;
+using AutoMapper;
+using MonumentsMap.Application.Dto.Monuments.Filters;
+using MonumentsMap.Contracts.Paging;
+using MonumentsMap.Domain.FilterParameters;
 
 namespace MonumentsMap.Core.Services.Monuments
 {
     public class StatusService : IStatusService
     {
         private IStatusRepository _statusRepository;
-        public StatusService(IStatusRepository statusRepository)
+        private IMapper _mapper;
+
+        public StatusService(IStatusRepository statusRepository, IMapper mapper)
         {
             _statusRepository = statusRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> CreateAsync(EditableLocalizedStatusDto model)
@@ -41,23 +46,26 @@ namespace MonumentsMap.Core.Services.Monuments
             return entity.Id;
         }
 
-        public async Task<IEnumerable<LocalizedStatusDto>> GetAsync(string cultureCode)
+        public async Task<PagingList<LocalizedStatusDto>> GetAsync(string cultureCode, StatusRequestFilterDto filterDto)
         {
-            var Statuss = _statusRepository.GetQuery();
-            Statuss = Statuss
-                .Include(prop => prop.Name.Localizations)
-                .Include(p => p.Description.Localizations);
+            filterDto ??= StatusRequestFilterDto.Empty;
 
-            var result = from Status in Statuss
+            var filter = _mapper.Map<StatusFilterParameters>(filterDto);
+
+            var statusesPagingList = await _statusRepository.Filter(filter, 
+                prop => prop.Name.Localizations,
+                p => p.Description.Localizations);
+
+            var localizedStatuses = (from Status in statusesPagingList.Items
                          select new LocalizedStatusDto
                          {
                              Id = Status.Id,
                              Name = Status.Name.GetNameByCode(cultureCode),
                              Description = Status.Description.GetNameByCode(cultureCode),
                              Abbreviation = Status.Abbreviation
-                         };
+                         }).ToList();
 
-            return await result.ToListAsync();
+            return new PagingList<LocalizedStatusDto>(localizedStatuses, statusesPagingList.PagingInformation);
         }
 
         public async Task<LocalizedStatusDto> GetAsync(int id, string cultureCode)

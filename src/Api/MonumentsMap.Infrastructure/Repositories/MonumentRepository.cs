@@ -1,25 +1,32 @@
 using Microsoft.EntityFrameworkCore;
+using MonumentsMap.Contracts.Paging;
 using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Framework.Enums.Monuments;
 using MonumentsMap.Infrastructure.Persistence;
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MonumentsMap.Infrastructure.Repositories
 {
-    public class MonumentRepository : Repository<Monument>, IMonumentRepository
+    public class MonumentRepository : FilterRepository<Monument, MonumentFilterParameters>, IMonumentRepository
     {
         public MonumentRepository(ApplicationContext context) : base(context)
         {
         }
 
-        public async Task<IEnumerable<Monument>> GetByFilterAsync(MonumentFilterParameters parameters)
+        public override async Task<PagingList<Monument>> Filter(MonumentFilterParameters parameters, params Expression<Func<Monument, object>>[] includes)
         {
-            var monuments = dbSet
-                .Where(p => p.Accepted);
+
+            var monuments = dbSet.AsQueryable();
+
+            if (!parameters.Hidden)
+            {
+                monuments = monuments.Where(p => p.Accepted);
+            }
 
             if (parameters.Statuses.Any())
             {
@@ -42,10 +49,12 @@ namespace MonumentsMap.Infrastructure.Repositories
                     where parameters.Cities.Contains(monument.CityId)
                     select monument;
             }
-            monuments = (await monuments.Include(p => p.Name.Localizations)
-                .Include(p => p.Condition.Name.Localizations)
-                .Include(p => p.MonumentPhotos)
-                .ToListAsync())
+
+            if (includes != null)
+                foreach (var include in includes)
+                    monuments = monuments.Include(include);
+
+            monuments = (await monuments.ToListAsync())
                 .AsQueryable();
 
 
@@ -64,7 +73,7 @@ namespace MonumentsMap.Infrastructure.Repositories
                     select monument;
             }
 
-            return monuments.ToList();
+            return await PagingList<Monument>.ToPagedListAsync(monuments, parameters.PageNumber, parameters.PageSize);
         }
 
         private bool IfRangeInEndYear(int endYear, (int startYear, int endYear) range) => endYear >= range.startYear;

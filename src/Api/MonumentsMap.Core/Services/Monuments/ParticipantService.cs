@@ -1,22 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
+﻿using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Services.Monuments;
-using MonumentsMap.Domain.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Application.Extensions;
+using MonumentsMap.Application.Dto.Monuments.Filters;
+using AutoMapper;
+using MonumentsMap.Domain.FilterParameters;
+using MonumentsMap.Contracts.Paging;
 
 namespace MonumentsMap.Core.Services.Monuments
 {
     public class ParticipantService : IParticipantService
     {
         private IParticipantRepository _participantRepository;
-        public ParticipantService(IParticipantRepository participantRepository)
+        private IMapper _mapper;
+        public ParticipantService(IParticipantRepository participantRepository, IMapper mapper)
         {
             _participantRepository = participantRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> CreateAsync(EditableLocalizedParticipantDto model)
@@ -40,21 +43,25 @@ namespace MonumentsMap.Core.Services.Monuments
             return entity.Id;
         }
 
-        public async Task<IEnumerable<LocalizedParticipantDto>> GetAsync(string cultureCode)
+        public async Task<PagingList<LocalizedParticipantDto>> GetAsync(string cultureCode, ParticipantRequestFilterDto filterDto)
         {
-            var participants = _participantRepository.GetQuery();
-            participants = participants.Include(prop => prop.Name.Localizations);
+            filterDto ??= ParticipantRequestFilterDto.Empty;
 
-            var result = from participant in participants
+            var filter = _mapper.Map<ParticipantFilterParameters>(filterDto);
+
+            var participantsPagingList = await  _participantRepository.Filter(filter,
+                prop => prop.Name.Localizations);
+
+            var localizedParticipants = (from participant in participantsPagingList.Items
                          select new LocalizedParticipantDto
                          {
                              Id = participant.Id,
                              Name = participant.Name.GetNameByCode(cultureCode),
                              ParticipantRole = participant.ParticipantRole,
                              DefaultName = participant.DefaultName
-                         };
+                         }).ToList();
 
-            return await result.ToListAsync();
+            return new PagingList<LocalizedParticipantDto>(localizedParticipants, participantsPagingList.PagingInformation);
         }
 
         public async Task<LocalizedParticipantDto> GetAsync(int id, string cultureCode)

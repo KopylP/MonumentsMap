@@ -4,14 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using AutoMapper;
 using Mapster;
 using MonumentsMap.Application.Dto.Monuments;
+using MonumentsMap.Application.Dto.Monuments.Filters;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Dto.Photo;
 using MonumentsMap.Application.Extensions;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Contracts.Exceptions;
+using MonumentsMap.Contracts.Paging;
 using MonumentsMap.Data.Services;
+using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
@@ -20,12 +24,14 @@ namespace MonumentsMap.Core.Services.Monuments
 {
     public class MonumentPhotoService : IMonumentPhotoService
     {
-        private IPhotoService _photoService;
-        private IMonumentPhotoRepository _monumentPhotoRepository;
-        public MonumentPhotoService(IMonumentPhotoRepository monumentPhotoRepository, IPhotoService photoService)
+        private readonly IPhotoService _photoService;
+        private readonly IMonumentPhotoRepository _monumentPhotoRepository;
+        private readonly IMapper _mapper;
+        public MonumentPhotoService(IMonumentPhotoRepository monumentPhotoRepository, IPhotoService photoService, IMapper mapper)
         {
             _photoService = photoService;
             _monumentPhotoRepository = monumentPhotoRepository;
+            _mapper = mapper;
         }
 
         public async Task<int> ToogleMajorPhotoAsync(int monumentPhotoId)
@@ -53,16 +59,20 @@ namespace MonumentsMap.Core.Services.Monuments
             return monumentPhoto.Id;
         }
 
-        public async Task<IEnumerable<LocalizedMonumentPhotoDto>> GetAsync(string cultureCode)
+        public async Task<PagingList<LocalizedMonumentPhotoDto>> GetAsync(string cultureCode, MonumentPhotoRequestFilterDto filterDto)
         {
+            filterDto ??= MonumentPhotoRequestFilterDto.Empty;
 
-            var localizedEntities = (await _monumentPhotoRepository.GetAll(
+            var filter = _mapper.Map<MonumentPhotoFilterParameters>(filterDto);
+
+            var entitiesPagingList = (await _monumentPhotoRepository.Filter(filter,
                 p => p.Description.Localizations,
                 p => p.Photo,
-                p => p.Sources))
-                .Select(p => LocalizeMonumentPhoto(p, cultureCode));
+                p => p.Sources));
 
-            return localizedEntities;
+            var localizedEntities = entitiesPagingList.Items.Select(p => LocalizeMonumentPhoto(p, cultureCode)).ToList();
+
+            return new PagingList<LocalizedMonumentPhotoDto>(localizedEntities, entitiesPagingList.PagingInformation);
         }
 
         public async Task<LocalizedMonumentPhotoDto> GetAsync(int id, string cultureCode)

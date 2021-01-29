@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
+using MonumentsMap.Application.Dto.Monuments.Filters;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Contracts.Exceptions;
-using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Filters;
 
-namespace MonumentsMap.Controllers
+namespace MonumentsMap.WebApi.Controllers
 {
     [ApiVersion("1.0")]
-    public class MonumentController : LocalizedController<IMonumentService, LocalizedMonumentDto, EditableLocalizedMonumentDto>
+    public class MonumentController : LocalizedController<IMonumentService, LocalizedMonumentDto, EditableLocalizedMonumentDto, MonumentRequestFilterDto>
     {
         private IMonumentPhotoService _monumentPhotoService;
         public MonumentController(IMonumentService localizedRestService, IMonumentPhotoService monumentPhotoService) : base(localizedRestService)
@@ -24,20 +24,15 @@ namespace MonumentsMap.Controllers
             _monumentPhotoService = monumentPhotoService;
         }
 
-        public async override Task<IActionResult> Get([FromQuery] string cultureCode)
+        public async override Task<IActionResult> Get([FromQuery] string cultureCode, MonumentRequestFilterDto monumentFilterParams)
         {
-            if (User.Identity.IsAuthenticated && HttpContext.Request.Query.ContainsKey("hidden"))
-            {
-                var hidden = Convert.ToBoolean(HttpContext.Request.Query["hidden"].ToString());
-                if (hidden)
-                {
-                    return Ok(await localizedRestService.GetAsync(cultureCode));
-                }
+            if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
+            { 
+                return Unauthorized(new UnauthorizedError("You cannot see hidden monuments"));
             }
 
-            var monuments = await localizedRestService.GetAccepted(cultureCode);
-
-            return Ok(monuments);
+            var monuments = await localizedRestService.GetAsync(cultureCode, monumentFilterParams);
+            return PagingList(monuments);
         }
 
         public async override Task<IActionResult> Get(int id, [FromQuery] string cultureCode)
@@ -60,26 +55,19 @@ namespace MonumentsMap.Controllers
 
         [HttpGet("filter")]
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
+        [Obsolete]
         public async Task<IActionResult> Get(
-            [FromQuery(Name = "statuses[]")] int[] statuses,
-            [FromQuery(Name = "conditions[]")] int[] conditions,
-            [FromQuery(Name = "cities[]")] int[] cities,
-            [FromQuery] int? startYear,
-            [FromQuery] int? endYear,
+            MonumentRequestFilterDto monumentFilterParams,
             [FromQuery] string cultureCode
         )
         {
-            var monumentFilterParams = new MonumentFilterParameters
+            if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
             {
-                Statuses = statuses,
-                Conditions = conditions,
-                Cities = cities,
-                StartYear = startYear,
-                EndYear = endYear,
-                CultureCode = cultureCode
-            };
-            var monuments = await localizedRestService.GetByFilterAsync(monumentFilterParams);
-            return Ok(monuments);
+                return Unauthorized("You cannot see hidden monuments");
+            }
+
+            var monuments = await localizedRestService.GetAsync(cultureCode, monumentFilterParams);
+            return PagingList(monuments);
         }
 
         [HttpPatch("{id:int}/toogle/accepted")]
