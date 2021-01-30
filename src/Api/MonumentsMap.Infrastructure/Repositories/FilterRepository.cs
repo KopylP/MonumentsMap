@@ -25,6 +25,8 @@ namespace MonumentsMap.Infrastructure.Repositories
                 foreach (var include in includes)
                     query = query.Include(include);
 
+            query = query.OrderBy(p => p.Id);
+
             return await PagingList<TEntity>.ToPagedListAsync(query, filterParameters.PageNumber, filterParameters.PageSize);
         }
     }
