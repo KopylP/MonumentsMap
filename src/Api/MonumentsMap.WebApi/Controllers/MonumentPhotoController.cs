@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Monuments.Filters;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
@@ -12,7 +13,7 @@ namespace MonumentsMap.WebApi.Controllers
     [ApiVersion("1.0")]
     public class MonumentPhotoController : LocalizedController<IMonumentPhotoService, LocalizedMonumentPhotoDto, EditableLocalizedMonumentPhotoDto, MonumentPhotoRequestFilterDto>
     {
-        public MonumentPhotoController(IMonumentPhotoService localizedRestService) : base(localizedRestService)
+        public MonumentPhotoController(IMonumentPhotoService localizedRestService, IConfiguration configuration) : base(localizedRestService, configuration)
         {
         }
 

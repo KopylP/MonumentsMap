@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
@@ -19,13 +20,17 @@ namespace MonumentsMap.WebApi.Controllers
     public class MonumentController : LocalizedController<IMonumentService, LocalizedMonumentDto, EditableLocalizedMonumentDto, MonumentRequestFilterDto>
     {
         private IMonumentPhotoService _monumentPhotoService;
-        public MonumentController(IMonumentService localizedRestService, IMonumentPhotoService monumentPhotoService) : base(localizedRestService)
+        public MonumentController(IMonumentService localizedRestService, 
+            IMonumentPhotoService monumentPhotoService, 
+            IConfiguration configuration) : base(localizedRestService, configuration)
         {
             _monumentPhotoService = monumentPhotoService;
         }
 
         public async override Task<IActionResult> Get([FromQuery] string cultureCode, [FromQuery] MonumentRequestFilterDto monumentFilterParams)
         {
+            cultureCode = SafetyGetCulture(cultureCode);
+
             if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
             { 
                 return UnauthorizedResponse("You cannot see hidden monuments");
@@ -55,12 +60,13 @@ namespace MonumentsMap.WebApi.Controllers
         }
 
         [HttpGet("filter")]
-        [ServiceFilter(typeof(CultureCodeResourceFilter))]
         public async Task<IActionResult> GetFilter(
-            [FromQuery] string cultureCode,
-            [FromQuery] MonumentRequestFilterDto monumentFilterParams
+            [FromQuery] MonumentRequestFilterDto monumentFilterParams,
+            [FromQuery] string cultureCode
         )
         {
+            cultureCode = SafetyGetCulture(cultureCode);
+
             if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
             {
                 return UnauthorizedResponse("You cannot see hidden monuments");

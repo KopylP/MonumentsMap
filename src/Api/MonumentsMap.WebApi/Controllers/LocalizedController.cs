@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.Filters;
@@ -19,14 +20,16 @@ namespace MonumentsMap.WebApi.Controllers
         protected readonly TLocalizedRestService localizedRestService;
         protected readonly string DefaultCulture;
 
-        public LocalizedController(TLocalizedRestService localizedRestService)
+        public LocalizedController(TLocalizedRestService localizedRestService, IConfiguration configuration)
         {
             this.localizedRestService = localizedRestService;
+            DefaultCulture = configuration["DefaultLanguage"];
         }
         [HttpGet]
-        [ServiceFilter(typeof(CultureCodeResourceFilter))]
         public async virtual Task<IActionResult> Get([FromQuery] string cultureCode, [FromQuery] TFilter filter)
         {
+            cultureCode = SafetyGetCulture(cultureCode);
+            
             var localizedEntities = await localizedRestService.GetAsync(cultureCode, filter);
             return PagingList(localizedEntities);
         }
@@ -113,5 +116,10 @@ namespace MonumentsMap.WebApi.Controllers
             return Ok(editableLocalizedEntity);
         }
 
+        protected string SafetyGetCulture(string cultureCode)
+        {
+            if (string.IsNullOrEmpty(cultureCode)) return DefaultCulture;
+            return cultureCode;
+        }
     }
 }
