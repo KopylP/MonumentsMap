@@ -1,13 +1,13 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Api.Errors;
+using MonumentsMap.WebApi.Controllers;
 
 namespace MonumentsMap.Controllers
 {
     [Route("/errors")]
-    [ApiController]
     [ApiVersion("1.0")]
-    public class ErrorsController : ControllerBase
+    public class ErrorsController : BaseController
     {
         [HttpGet("{code}")]
         public IActionResult Error(int code)

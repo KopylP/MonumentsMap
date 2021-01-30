@@ -26,7 +26,7 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
 
             return Ok(monumentPhotoId);

@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.Filters;
@@ -11,8 +10,6 @@ using MonumentsMap.Filters;
 
 namespace MonumentsMap.WebApi.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class LocalizedController<TLocalizedRestService, TLocalizedEntity, TEditableLocalizedEntity, TFilter> : BaseController
     where TLocalizedRestService : ILocalizedRestService<TLocalizedEntity, TEditableLocalizedEntity, TFilter>
     where TLocalizedEntity : BaseLocalizedDto
@@ -44,7 +41,7 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             return Ok(localizedEntity);
         }
@@ -59,7 +56,7 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, new InternalServerError(ex.Message));
+                return InternalServerErrorResponse(ex.Message);
             }
             return Ok(entityId);
         }
@@ -74,11 +71,11 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, new InternalServerError(ex.Message));
+                return InternalServerErrorResponse(ex.Message);
             }
             return Ok(entityId);
         }
@@ -92,11 +89,11 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, new InternalServerError(ex.Message));
+                return InternalServerErrorResponse(ex.Message);
             }
             return Ok(id);
         }
@@ -111,7 +108,7 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             return Ok(editableLocalizedEntity);
         }

@@ -1,20 +1,16 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.User;
 using MonumentsMap.Application.Services.User;
 using MonumentsMap.Contracts.Exceptions;
 
-namespace MonumentsMap.Controllers
+namespace MonumentsMap.WebApi.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiController]
-    [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IUserService _userService;
 
@@ -36,7 +32,7 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             return Ok(user);
         }
@@ -50,11 +46,11 @@ namespace MonumentsMap.Controllers
             }
             catch (ProhibitException ex)
             {
-                return StatusCode(403, new ForbidError(ex.Message)); 
+                return ForbidResponse(ex.Message);
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message)); 
+                return NotFoundResponse(ex.Message);
             }
             return Ok(user);
         }
@@ -69,7 +65,7 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message)); 
+                return NotFoundResponse(ex.Message);
             }
             return Ok(roles);
         }
@@ -84,15 +80,15 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message)); 
+                return NotFoundResponse(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, new InternalServerError(ex.Message));
+                return InternalServerErrorResponse(ex.Message);
             }
             catch (BadRequestException ex)
             {
-                return BadRequest(new BadRequestError(ex.Message)); 
+                return BadRequestResponse(ex.Message);
             }
             return Ok(user);
         }
@@ -107,15 +103,15 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message)); 
+                return NotFoundResponse(ex.Message);
             }
             catch (ProhibitException ex)
             {
-                return StatusCode(403, new ForbidError(ex.Message));
+                return ForbidResponse(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, new InternalServerError(ex.Message));
+                return InternalServerErrorResponse(ex.Message);
             }
             return Ok(user);
         }

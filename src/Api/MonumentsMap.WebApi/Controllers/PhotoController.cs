@@ -9,12 +9,12 @@ using MonumentsMap.Data.Services;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
 
-namespace MonumentsMap.Controllers
+namespace MonumentsMap.WebApi.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/[controller]")]
-    public class PhotoController : ControllerBase
+    public class PhotoController : BaseController
     {
         private IPhotoRepository _photoRepository;
         private IPhotoService _photoService;
@@ -43,7 +43,7 @@ namespace MonumentsMap.Controllers
             }
             catch
             {
-                return StatusCode(500, new InternalServerError());
+                return InternalServerErrorResponse();
             }
             return Ok(photo.Adapt<PhotoDto>());
         }
@@ -66,7 +66,7 @@ namespace MonumentsMap.Controllers
             }
             catch
             {
-                return StatusCode(500, new InternalServerError());
+                return InternalServerErrorResponse();
             }
         }
 
@@ -90,7 +90,7 @@ namespace MonumentsMap.Controllers
             }
             catch
             {
-                return StatusCode(500, new InternalServerError());
+                return InternalServerErrorResponse();
             }
         }
     }

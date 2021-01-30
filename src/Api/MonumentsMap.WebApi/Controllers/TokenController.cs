@@ -2,19 +2,16 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Auth;
 using MonumentsMap.Application.Dto.User;
 using MonumentsMap.Application.Services.Auth;
 using MonumentsMap.Application.Services.User;
 using MonumentsMap.Contracts.Exceptions;
 
-namespace MonumentsMap.Controllers
+namespace MonumentsMap.WebApi.Controllers
 {
-    [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/[controller]")]
-    public class TokenController : ControllerBase
+    public class TokenController : BaseController
     {
         private readonly ITokenService _tokenServise;
         private readonly IUserService _userService;
@@ -28,8 +25,8 @@ namespace MonumentsMap.Controllers
         [HttpPost("Auth")]
         public async Task<IActionResult> Auth([FromBody] TokenRequestDto model)
         {
-            if (model == null) 
-                return BadRequest(new BadRequestError("Model is incorrect"));
+            if (model == null)
+                return BadRequestResponse("Model is incorrect");
 
             try
             {
@@ -38,7 +35,7 @@ namespace MonumentsMap.Controllers
             }
             catch (UnauthorizedException ex)
             {
-                return Unauthorized(new UnauthorizedError(ex.Message));
+                return UnauthorizedResponse(ex.Message);
             }
         }
 
@@ -56,11 +53,11 @@ namespace MonumentsMap.Controllers
             }
             catch (NotFoundException ex)
             {
-                return Unauthorized(new UnauthorizedError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
-            
+
             if (user == null)
-                return Unauthorized(new UnauthorizedError());
+                return UnauthorizedResponse();
 
             return Ok(user);
         }

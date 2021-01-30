@@ -28,7 +28,7 @@ namespace MonumentsMap.WebApi.Controllers
         {
             if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
             { 
-                return Unauthorized(new UnauthorizedError("You cannot see hidden monuments"));
+                return UnauthorizedResponse("You cannot see hidden monuments");
             }
 
             var monuments = await localizedRestService.GetAsync(cultureCode, monumentFilterParams);
@@ -44,11 +44,11 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             if (!monument.Accepted && !User.Identity.IsAuthenticated)
             {
-                return Unauthorized(new UnauthorizedError());
+                return UnauthorizedResponse();
             }
             return Ok(monument);
         }
@@ -63,7 +63,7 @@ namespace MonumentsMap.WebApi.Controllers
         {
             if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
             {
-                return Unauthorized("You cannot see hidden monuments");
+                return UnauthorizedResponse("You cannot see hidden monuments");
             }
 
             var monuments = await localizedRestService.GetAsync(cultureCode, monumentFilterParams);
@@ -81,11 +81,11 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, new InternalServerError(ex.Message));
+                return InternalServerErrorResponse(ex.Message);
             }
 
             return Ok(monumentId);
@@ -105,11 +105,11 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             catch (InternalServerErrorException ex)
             {
-                return StatusCode(500, new InternalServerError(ex.Message));
+                return InternalServerErrorResponse(ex.Message);
             }
             return Ok(monumentId);
         }
@@ -141,7 +141,7 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             var monumentPhotos = await _monumentPhotoService.FindAsync(cultureCode, p => p.MonumentId == id);
             return Ok(monumentPhotos);
@@ -158,9 +158,9 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
-            return Ok(participants.Adapt<ParticipantDto[]>());
+            return Ok(participants);
         }
 
         [HttpGet("{slug}")]
@@ -173,11 +173,11 @@ namespace MonumentsMap.WebApi.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             if (!monument.Accepted && !User.Identity.IsAuthenticated)
             {
-                return Unauthorized(new UnauthorizedError());
+                return UnauthorizedResponse();
             }
             return Ok(monument);
         }

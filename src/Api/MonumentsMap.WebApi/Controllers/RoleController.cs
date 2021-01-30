@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Application.Services.Roles;
 
-namespace MonumentsMap.Controllers
+namespace MonumentsMap.WebApi.Controllers
 {
-    [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
-    public class RoleController : ControllerBase
+    public class RoleController : BaseController
     {
         private readonly IRolesService _rolesService;
 

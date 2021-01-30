@@ -1,18 +1,14 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Invitation;
 using MonumentsMap.Application.Dto.User;
 using MonumentsMap.Application.Services.Invitation;
 using MonumentsMap.Contracts.Exceptions;
 
-namespace MonumentsMap.Controllers
+namespace MonumentsMap.WebApi.Controllers
 {
-    [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/[controller]")]
-    public class RegistrationController : ControllerBase
+    public class RegistrationController : BaseController
     {
         private readonly IInvitationService _invitationService;
 
@@ -28,19 +24,19 @@ namespace MonumentsMap.Controllers
 
             try
             {
-               result = await _invitationService.RegisterAsync(registrationUserViewModel);
+                result = await _invitationService.RegisterAsync(registrationUserViewModel);
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new NotFoundError(ex.Message));
+                return NotFoundResponse(ex.Message);
             }
             catch (ConflictException ex)
             {
-                return Conflict(new ConflictError(ex.Message));
+                return ConflictResponse(ex.Message);
             }
             catch (ApiException ex)
             {
-                return Conflict(new InternalServerError(ex.Message));
+                return ConflictResponse(ex.Message);
             }
 
             return Ok(result);
@@ -57,7 +53,7 @@ namespace MonumentsMap.Controllers
             }
             catch (ConflictException ex)
             {
-                return Conflict(new ConflictError(ex.Message));
+                return ConflictResponse(ex.Message);
             }
 
             return Ok(result);
