@@ -24,7 +24,7 @@ namespace MonumentsMap.WebApi.Controllers
             _monumentPhotoService = monumentPhotoService;
         }
 
-        public async override Task<IActionResult> Get([FromQuery] string cultureCode, MonumentRequestFilterDto monumentFilterParams)
+        public async override Task<IActionResult> Get([FromQuery] string cultureCode, [FromQuery] MonumentRequestFilterDto monumentFilterParams)
         {
             if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
             { 
@@ -35,6 +35,7 @@ namespace MonumentsMap.WebApi.Controllers
             return PagingList(monuments);
         }
 
+        [ServiceFilter(typeof(CultureCodeResourceFilter))]
         public async override Task<IActionResult> Get(int id, [FromQuery] string cultureCode)
         {
             LocalizedMonumentDto monument = null;
@@ -55,10 +56,9 @@ namespace MonumentsMap.WebApi.Controllers
 
         [HttpGet("filter")]
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
-        [Obsolete]
-        public async Task<IActionResult> Get(
-            MonumentRequestFilterDto monumentFilterParams,
-            [FromQuery] string cultureCode
+        public async Task<IActionResult> GetFilter(
+            [FromQuery] string cultureCode,
+            [FromQuery] MonumentRequestFilterDto monumentFilterParams
         )
         {
             if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
