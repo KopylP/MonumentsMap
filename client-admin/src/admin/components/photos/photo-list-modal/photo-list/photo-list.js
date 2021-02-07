@@ -122,8 +122,6 @@ function PhotoList({ data, onUpdate = p => p }) {
     undoDeleteSnackBar(index);
   };
 
-  console.log("editMonumentPhotoId", editMonumentPhotoId);
-
   return (
     <React.Fragment>
       {monumentPhotos.map((monumentPhoto, i) => (
