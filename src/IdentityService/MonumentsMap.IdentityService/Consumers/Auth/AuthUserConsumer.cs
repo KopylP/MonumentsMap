@@ -82,11 +82,14 @@ namespace MonumentsMap.IdentityService.Consumers.Auth
             {
                 var rt = (await _tokenRepository.Find(t => t.ClientId == model.client_id && t.Value == model.refresh_token))
                     .FirstOrDefault();
-                if (rt == null) return null;
+
+                if (rt == null) 
+                    throw new UnauthorizedException("Refresh token is incorrect");
+
                 var user = await _userManager.FindByIdAsync(rt.UserId);
                 if (user == null)
                 {
-                    return null;
+                    throw new UnauthorizedException("Refresh token is incorrect");
                 }
                 var rtNew = CreateRefreshToken(rt.ClientId, rt.UserId);
                 await _tokenRepository.Delete(rt.Id);
@@ -98,7 +101,7 @@ namespace MonumentsMap.IdentityService.Consumers.Auth
             }
             catch
             {
-                return null;
+                throw new UnauthorizedException("Refresh token is incorrect");
             }
         }
 
