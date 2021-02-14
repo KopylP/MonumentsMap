@@ -115,8 +115,9 @@ export default memo(function AddPhotoForm({ monumentId, data = null, onComplited
       return monumentPhoto;
     };
 
+    setLoading(true);
+
     if (data == null) {
-      setLoading(true);
       monumentService
         .savePhoto(file)
         .then((photo) => {
