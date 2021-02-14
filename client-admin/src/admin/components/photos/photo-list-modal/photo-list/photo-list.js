@@ -1,19 +1,18 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useSnackbar } from "notistack";
 import { Button } from "@material-ui/core";
-import Slide from "@material-ui/core/Slide";
-import { usePrevious } from "../../../../../hooks/hooks";
 import EditPhotoModal from "../../add-photo-modal/edit-photo-modal";
 import errorNetworkSnackbar from "../../../../helpers/error-network-snackbar";
 import AdminContext from "../../../../context/admin-context";
-import MonumentPhotoListItem from "../photo-list-item/monument-photo-list-item";
 import withMonumentService from "../../../hoc-helpers/with-monument-service";
 import withData from "../../../hoc-helpers/with-data";
+import PhotoListSlide from "../photo-list-slide/photo-list-slide";
+
 /**
  *
  * @param {*} data - monuments
  */
-function PhotoList({ data, onUpdate = p => p }) {
+function PhotoList({ data, onUpdate = (p) => p }) {
   const {
     monumentService: { toogleMonumentMajorPhoto, deleteMonumentPhoto },
   } = useContext(AdminContext);
@@ -27,8 +26,9 @@ function PhotoList({ data, onUpdate = p => p }) {
     false
   );
 
-  const prevOpenEditMonumentPhotoModal = usePrevious(openEditMonumentPhotoModal);
-  
+  const handleSetEditMonumentPhotoId = (id) => {
+    if (editMonumentPhotoId !== id) setEditMonumentPhotoId(id);
+  };
 
   useEffect(() => {
     if (editMonumentPhotoId != null) {
@@ -37,10 +37,9 @@ function PhotoList({ data, onUpdate = p => p }) {
   }, [editMonumentPhotoId]);
 
   const onCloseModalEnded = () => {
-      setEditMonumentPhotoId(null);
-      onUpdate();
-  }
-
+    setEditMonumentPhotoId(null);
+    onUpdate();
+  };
 
   const onMonumentTooglePhotoError = (e, index, oldValue) => {
     const monumentPhotosModify = [...monumentPhotos];
@@ -108,10 +107,9 @@ function PhotoList({ data, onUpdate = p => p }) {
       onClose: (_, reason) => {
         if (reason === "timeout") {
           deleteMonumentPhoto(monumentPhotos[monumentPhotoIndex].id)
-            .then((e) => console.log(e))
+            .then(f => f)
             .catch((e) => {
               onDeleteMonumentPhotoError(e, monumentPhotoIndex);
-              console.log("onDelete", e);
             });
         }
       },
@@ -125,34 +123,21 @@ function PhotoList({ data, onUpdate = p => p }) {
   return (
     <React.Fragment>
       {monumentPhotos.map((monumentPhoto, i) => (
-        <Slide
+        <PhotoListSlide
+          monumentPhoto={monumentPhoto}
+          index={i}
           key={i}
-          style={{ margin: 10 }}
-          in={!monumentPhoto.deleted}
-          direction="up"
-          mountOnEnter
-          unmountOnExit
-          onExited={() => onDeleteMonumentPhoto(i)}
-        >
-          <div>
-            <MonumentPhotoListItem
-              index={i}
-              monumentPhoto={monumentPhoto}
-              setMonumentMajorPhotoByIndex={setMonumentMajorPhotoByIndex}
-              onDelete={() => hideMonumentPhoto(i)}
-              onEdit={(id) => setEditMonumentPhotoId(id)}
-            />
-          </div>
-        </Slide>
-      ))}
-      {!editMonumentPhotoId ? null : (
-        <EditPhotoModal
-          params={[editMonumentPhotoId]}
-          open={openEditMonumentPhotoModal}
-          onCloseAnimationEnded={onCloseModalEnded}
-          setOpen={setOpenEditMonumentPhotoModal}
+          onDeleteMonumentPhoto={onDeleteMonumentPhoto}
+          setMonumentMajorPhotoByIndex={setMonumentMajorPhotoByIndex}
+          onDelete={hideMonumentPhoto}
+          onEdit={handleSetEditMonumentPhotoId}
         />
-      )}
+      ))}
+        <EditPhotoModal
+          monumentPhotoId={editMonumentPhotoId}
+          onCloseAnimationEnded={onCloseModalEnded}
+          onClose={() => setEditMonumentPhotoId(null)}
+        />
     </React.Fragment>
   );
 }

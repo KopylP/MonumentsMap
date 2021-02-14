@@ -29,14 +29,22 @@ export const authErrorResponseInterceptor = function (error) {
 
   if(error == null || error.response.status == null) return Promise.reject(error);
 
+  const isUnauthorisedGet = error.response.status === 401;
+  const isUnauthorisedPost = error.response.status === 405 
+    && (error.response.headers["www-authenticate"] 
+    && error.response.headers["www-authenticate"].includes("invalid_token"));
+
+  const isUnauthorisedError = isUnauthorisedGet || isUnauthorisedPost;
+
   if (
-    (error.response.status === 401 &&
+    (isUnauthorisedError &&
       originalRequest.url === `token/auth`)
   ) {
     return Promise.reject(error);
   }
 
-  if (error.response.status === 401 && !originalRequest._retry) {
+
+  if (isUnauthorisedError && !originalRequest._retry) {
     originalRequest._retry = true;
     const refreshToken = localStorageService.getRefreshToken();
     return axios

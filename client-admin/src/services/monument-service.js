@@ -121,7 +121,6 @@ export default class MonumentService {
   }
 
   getAllConditions = async () => {
-    console.log("All conditions");
     return await this._getRequest("condition/");
   }
 
