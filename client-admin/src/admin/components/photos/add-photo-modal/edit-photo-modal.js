@@ -12,7 +12,7 @@ export default function EditPhotoModal({
       open={monumentPhotoId != null}
       maxWidth={850}
     >
-      <EditPhotoForm params={[monumentPhotoId]} onComplited={onClose} />
+      {monumentPhotoId && <EditPhotoForm params={[monumentPhotoId]} onComplited={onClose} />}
     </Dialog>
   );
 }
