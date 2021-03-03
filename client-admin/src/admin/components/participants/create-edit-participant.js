@@ -28,7 +28,7 @@ function CreateEditParticipant({ data, acceptForm, loading }) {
 
   const validationSchemafileds = {
     defaultName: Yup.string().required("Цу поле є обов'язковим"),
-    participantRole: Yup.number(),
+    participantRole: Yup.string(),
   };
 
   const submitForm = (values) => {

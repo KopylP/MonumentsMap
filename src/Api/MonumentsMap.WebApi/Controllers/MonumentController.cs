@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MonumentsMap.Api.Errors;
 using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.Filters;
@@ -37,7 +34,7 @@ namespace MonumentsMap.WebApi.Controllers
             }
 
             var monuments = await localizedRestService.GetAsync(cultureCode, monumentFilterParams);
-            return PagingList(monuments);
+            return PagingList(monuments, JsonSerializerSettings);
         }
 
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
@@ -56,7 +53,7 @@ namespace MonumentsMap.WebApi.Controllers
             {
                 return UnauthorizedResponse();
             }
-            return Ok(monument);
+            return new JsonResult(monument, JsonSerializerSettings);
         }
 
         [HttpGet("filter")]
@@ -73,7 +70,7 @@ namespace MonumentsMap.WebApi.Controllers
             }
 
             var monuments = await localizedRestService.GetAsync(cultureCode, monumentFilterParams);
-            return PagingList(monuments);
+            return PagingList(monuments, JsonSerializerSettings);
         }
 
         [HttpPatch("{id:int}/toogle/accepted")]
@@ -125,7 +122,7 @@ namespace MonumentsMap.WebApi.Controllers
         public async Task<IActionResult> GetMonumentParticipants([FromRoute] int id, [FromQuery] string cultureCode)
         {
             var participants = await localizedRestService.GetLocalizedParticipants(id, cultureCode);
-            return Ok(participants);
+            return new JsonResult(participants, JsonSerializerSettings);
         }
 
         [HttpGet("{id:int}/monumentPhotos")]
@@ -133,7 +130,7 @@ namespace MonumentsMap.WebApi.Controllers
         public async Task<IActionResult> MonumentPhotos([FromRoute] int id, [FromQuery] string cultureCode)
         {
             var monumentPhotos = await _monumentPhotoService.FindAsync(cultureCode, p => p.MonumentId == id);
-            return Ok(monumentPhotos);
+            return new JsonResult(monumentPhotos, JsonSerializerSettings);
         }
 
         [HttpGet("{slug}/monumentPhotos")]
@@ -150,7 +147,7 @@ namespace MonumentsMap.WebApi.Controllers
                 return NotFoundResponse(ex.Message);
             }
             var monumentPhotos = await _monumentPhotoService.FindAsync(cultureCode, p => p.MonumentId == id);
-            return Ok(monumentPhotos);
+            return new JsonResult(monumentPhotos, JsonSerializerSettings);
         }
 
         [Authorize(Roles = "Editor")]
@@ -166,7 +163,7 @@ namespace MonumentsMap.WebApi.Controllers
             {
                 return NotFoundResponse(ex.Message);
             }
-            return Ok(participants);
+            return new JsonResult(participants, JsonSerializerSettings);
         }
 
         [HttpGet("{slug}")]
@@ -185,7 +182,7 @@ namespace MonumentsMap.WebApi.Controllers
             {
                 return UnauthorizedResponse();
             }
-            return Ok(monument);
+            return new JsonResult(monument, JsonSerializerSettings);
         }
     }
 }

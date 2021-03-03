@@ -9,6 +9,7 @@ using MonumentsMap.Contracts.Exceptions;
 namespace MonumentsMap.WebApi.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [Authorize(Roles = "Admin")]
     public class UserController : BaseController
     {

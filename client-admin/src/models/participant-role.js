@@ -1,7 +1,7 @@
 const ParticipantRole = {
-    Architect: 0,
-    Sculptor: 1,
-    Сontractor: 2
+    Architect: "Architect",
+    Sculptor: "Sculptor",
+    Сontractor: "Сontractor"
 };
 
 export default ParticipantRole;

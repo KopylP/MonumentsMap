@@ -1,9 +1,9 @@
 const Period = {
-    StartOfCentury: 0,
-    Year: 1,
-    Decades: 2,
-    MiddleOfCentury: 3,
-    EndOfCentury: 4
+    StartOfCentury: "StartOfCentury",
+    Year: "Year",
+    Decades: "Decades",
+    MiddleOfCentury: "MiddleOfCentury",
+    EndOfCentury: "EndOfCentury"
 }
 
 export default Period;

@@ -15,6 +15,12 @@ namespace MonumentsMap.WebApi.Controllers
             return Ok(pagingList.Items);
         }
 
+        protected IActionResult PagingList<T>(PagingList<T> pagingList, JsonSerializerSettings jsonSerializerSettings)
+        {
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagingList.PagingInformation));
+            return new JsonResult(pagingList.Items, jsonSerializerSettings);
+        }
+
         protected IActionResult ApiErrorResponse(int statusCode, string message = null)
         {
             return StatusCode(statusCode, new ApiError(statusCode, message));

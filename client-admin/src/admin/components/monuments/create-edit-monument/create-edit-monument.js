@@ -117,7 +117,7 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
     },
     validationSchema: Yup.object({
       year: Yup.number().required("Це поле є обов'язковим"),
-      period: Yup.number().required("Це поле є обов'язковим"),
+      period: Yup.string().required("Це поле є обов'язковим"),
       city: Yup.mixed().required("Це поле є обов'язковим"),
       statusId: Yup.number().required("Це поле є обов'язковим"),
       conditionId: Yup.number().required("Це поле є обов'язковим"),

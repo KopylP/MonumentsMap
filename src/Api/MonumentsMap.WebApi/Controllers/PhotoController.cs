@@ -13,6 +13,7 @@ namespace MonumentsMap.WebApi.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [Route("api/[controller]")]
     public class PhotoController : BaseController
     {

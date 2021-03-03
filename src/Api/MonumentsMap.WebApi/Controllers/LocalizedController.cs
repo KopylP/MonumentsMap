@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using MonumentsMap.Application.Dto.Monuments.Filters;
 using MonumentsMap.Application.Services;
 using MonumentsMap.Contracts.Exceptions;
 using MonumentsMap.Filters;
+using Newtonsoft.Json;
 
 namespace MonumentsMap.WebApi.Controllers
 {
@@ -19,6 +21,7 @@ namespace MonumentsMap.WebApi.Controllers
     {
         protected readonly TLocalizedRestService localizedRestService;
         protected readonly string DefaultCulture;
+        protected virtual JsonSerializerSettings JsonSerializerSettings => null;
 
         public LocalizedController(TLocalizedRestService localizedRestService, IConfiguration configuration)
         {
@@ -31,7 +34,7 @@ namespace MonumentsMap.WebApi.Controllers
             cultureCode = SafetyGetCulture(cultureCode);
             
             var localizedEntities = await localizedRestService.GetAsync(cultureCode, filter);
-            return PagingList(localizedEntities);
+            return PagingList(localizedEntities, JsonSerializerSettings);
         }
         [HttpGet("{id:int}")]
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
@@ -46,7 +49,7 @@ namespace MonumentsMap.WebApi.Controllers
             {
                 return NotFoundResponse(ex.Message);
             }
-            return Ok(localizedEntity);
+            return new JsonResult(localizedEntity, JsonSerializerSettings);
         }
         [HttpPost]
         [Authorize(Roles = "Editor")]
@@ -113,7 +116,7 @@ namespace MonumentsMap.WebApi.Controllers
             {
                 return NotFoundResponse(ex.Message);
             }
-            return Ok(editableLocalizedEntity);
+            return new JsonResult(editableLocalizedEntity, JsonSerializerSettings);
         }
 
         protected string SafetyGetCulture(string cultureCode)

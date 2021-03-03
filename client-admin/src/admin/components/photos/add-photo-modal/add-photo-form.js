@@ -155,7 +155,7 @@ export default memo(function AddPhotoForm({ monumentId, data = null, onComplited
 
   const validationSchemafileds = {
     year: Yup.number().required("Це поле є обов'язковим"),
-    period: Yup.number().required("Це поле є обов'язковим"),
+    period: Yup.string().required("Це поле є обов'язковим"),
   };
 
   if (data == null) {

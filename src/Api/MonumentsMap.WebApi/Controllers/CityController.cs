@@ -8,6 +8,7 @@ using MonumentsMap.Application.Services.Monuments;
 namespace MonumentsMap.WebApi.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class CityController : LocalizedController<ICityService, LocalizedCityDto, EditableLocalizedCityDto, CityRequestFilterDto>
     {
         public CityController(ICityService localizedRestService, IConfiguration configuration) : base(localizedRestService, configuration)

@@ -17,6 +17,7 @@ export default class MonumentService {
       baseURL: this._baseURL,
       headers: {
         Accept: "*",
+        "X-version": "2.0"
       },
     });
 

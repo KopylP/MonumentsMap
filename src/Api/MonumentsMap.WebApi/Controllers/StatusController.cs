@@ -8,6 +8,7 @@ using MonumentsMap.Entities.ViewModels.LocalizedModels.EditableLocalizedModels;
 namespace MonumentsMap.WebApi.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class StatusController : LocalizedController<IStatusService, LocalizedStatusDto, EditableLocalizedStatusDto, StatusRequestFilterDto>
     {
         public StatusController(IStatusService localizedRestService, IConfiguration configuration) : base(localizedRestService, configuration)

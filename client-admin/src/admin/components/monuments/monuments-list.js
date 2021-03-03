@@ -17,7 +17,7 @@ function MonumentsList({ data }) {
 
   const history = useHistory();
 
-  const [columns, setColumns] = useState([
+  const [columns] = useState([
     { title: "Ім'я", field: "name" },
     { title: "Рік", field: "year" },
     { title: "Період", field: "period" },

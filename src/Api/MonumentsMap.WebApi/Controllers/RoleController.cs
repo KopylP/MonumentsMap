@@ -6,6 +6,7 @@ using MonumentsMap.Application.Services.Roles;
 namespace MonumentsMap.WebApi.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [Authorize(Roles = "Admin")]
     public class RoleController : BaseController
     {
