@@ -21,7 +21,6 @@ function MonumentsList({ data }) {
     { title: "Ім'я", field: "name" },
     { title: "Рік", field: "year" },
     { title: "Період", field: "period" },
-    { title: "Стан", field: "condition.name" },
     { title: "Захисний номер", field: "protectionNumber" },
     { title: "Додано", field: "createdAt" },
     {

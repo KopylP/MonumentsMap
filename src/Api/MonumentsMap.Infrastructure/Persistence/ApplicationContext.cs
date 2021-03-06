@@ -37,6 +37,10 @@ namespace MonumentsMap.Infrastructure.Persistence
                 .WithMany(p => p.Sources)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Source>()
+                .Property(p => p.SourceType)
+                .HasDefaultValue(SourceType.LINK);
+
             modelBuilder.Entity<Monument>()
                 .Property(p => p.Period)
                 .HasConversion(v => v.ToString(),

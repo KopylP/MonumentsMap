@@ -19,7 +19,7 @@ import * as Yup from "yup";
 import AdminContext from "../../../context/admin-context";
 import Period from "../../../../models/period";
 import { supportedCultures } from "../../../../config";
-import Source from "../../common/source";
+import Source from "../../common/ui/source/source";
 import SimpleSubmitForm from "../../common/simple-submit-form";
 import { useSnackbar } from "notistack";
 import errorNetworkSnackbar from "../../../helpers/error-network-snackbar";
@@ -37,7 +37,8 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 30,
     paddingBottom: 30,
     paddingTop: 10,
-    overflow: "hidden",
+    overflowY: "auto",
+    overflowX: "hidden"
   },
   image: {
     width: "40%",

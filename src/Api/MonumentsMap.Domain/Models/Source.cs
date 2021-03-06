@@ -1,3 +1,4 @@
+using MonumentsMap.Framework.Enums.Monuments;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,6 +14,8 @@ namespace MonumentsMap.Domain.Models
         public string Title { get; set; }
 
         public string SourceLink { get; set; }
+
+        public SourceType SourceType { get; set; }
 
         [ForeignKey("MonumentPhotoId")]
         public MonumentPhoto MonumentPhoto { get; set; }

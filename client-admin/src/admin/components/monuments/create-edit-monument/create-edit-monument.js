@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Paper, Grid, AppBar, Tabs, Tab } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Source from "../../common/source";
+import Source from "../../common/ui/source/source";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { supportedCultures } from "../../../../config";

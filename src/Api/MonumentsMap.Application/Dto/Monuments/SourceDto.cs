@@ -1,3 +1,5 @@
+using MonumentsMap.Framework.Enums.Monuments;
+
 namespace MonumentsMap.Application.Dto.Monuments
 {
     public class SourceDto
@@ -6,5 +8,6 @@ namespace MonumentsMap.Application.Dto.Monuments
         public int? MonumentId { get; set; }
         public string Title { get; set; }
         public string SourceLink { get; set; }
+        public SourceType? SourceType { get; set; }
     }
 }
