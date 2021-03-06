@@ -27,6 +27,7 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
         public int? MajorPhotoImageId { get; set; }
         public string ProtectionNumber { get; set; }
         public string Slug { get; set; }
+        public bool IsEasterEgg { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public List<SourceDto> Sources { get; set; }
@@ -56,6 +57,7 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
                 CreatedAt = monument.CreatedAt,
                 UpdatedAt = monument.UpdatedAt,
                 ProtectionNumber = monument.ProtectionNumber,
+                IsEasterEgg = monument.IsEasterEgg,
                 MajorPhotoImageId = monument.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId
             };
 

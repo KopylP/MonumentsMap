@@ -45,6 +45,9 @@ namespace MonumentsMap.Domain.Models
         [Column(TypeName = "varchar(100)")]
         public string Slug { get; set; }
 
+        [Required]
+        public bool IsEasterEgg { get; set; }
+
         public string ProtectionNumber { get; set; }
 
         [ForeignKey("CityId")]

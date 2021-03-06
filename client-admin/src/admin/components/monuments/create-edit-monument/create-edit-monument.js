@@ -18,6 +18,7 @@ import FormikDestroyYear from "./forms/formik/formik-destroy-year";
 import FormikDestroyPeriod from "./forms/formik/formik-destroy-period";
 import FormikPeriod from "./forms/formik/formik-period";
 import FormikYear from "./forms/formik/formik-year";
+import FormikEasterEgg from "./forms/formik/formik-easter-egg";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -114,6 +115,7 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
       city: defaultCity,
       destroyYear: data ? data.destroyYear : "",
       destroyPeriod: data ? data.destroyPeriod : "",
+      isEasterEgg: data ? data.isEasterEgg : false
     },
     validationSchema: Yup.object({
       year: Yup.number().required("Це поле є обов'язковим"),
@@ -126,6 +128,7 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
       protectionNumber: Yup.string(),
       destroyYear: Yup.mixed(),
       destroyPeriod: Yup.mixed(),
+      isEasterEgg: Yup.bool()
     }),
     onSubmit: onFormSubmit,
   });
@@ -245,8 +248,11 @@ export default function CreateEditMonument({ data, acceptForm, loading }) {
               <Grid item xs={3}>
                 <FormikLongitude formik={formik} />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={3}>
                 <FormikProtectionNumber formik={formik} />
+              </Grid>
+              <Grid item xs={3}>
+                <FormikEasterEgg formik={formik} />
               </Grid>
               <Grid item xs={6}>
                 <FormikDestroyYear

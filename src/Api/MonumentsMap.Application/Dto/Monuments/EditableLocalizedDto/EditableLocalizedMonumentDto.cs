@@ -22,6 +22,7 @@ namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string ProtectionNumber { get; set; }
+        public bool IsEasterEgg { get; set; }
         public List<SourceDto> Sources { get; set; }
         public Monument CreateEntity(Monument entity = null)
         {
@@ -60,6 +61,7 @@ namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
             monument.ProtectionNumber = ProtectionNumber;
             monument.DestroyYear = DestroyYear;
             monument.DestroyPeriod = DestroyPeriod;
+            monument.IsEasterEgg = IsEasterEgg;
             monument.Sources.AddRange(Sources.Adapt<Source[]>());
             foreach (var cultureValuePair in Name)
             {
@@ -96,6 +98,7 @@ namespace MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto
                 Year = entity.Year,
                 Longitude = entity.Longitude,
                 ProtectionNumber = entity.ProtectionNumber,
+                IsEasterEgg = entity.IsEasterEgg,
                 Sources = entity.Sources.Adapt<SourceDto[]>().ToList(),
                 Name = entity.Name.GetCultureValuePairs(),
                 Description = entity.Description.GetCultureValuePairs()
