@@ -1,9 +1,6 @@
 import React, { useContext, useState, memo } from "react";
-import Modal from "@material-ui/core/Modal";
 import {
   Paper,
-  Fade,
-  Backdrop,
   Grid,
   TextField,
   FormControl,
