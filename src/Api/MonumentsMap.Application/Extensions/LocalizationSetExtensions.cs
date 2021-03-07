@@ -22,7 +22,7 @@ namespace MonumentsMap.Application.Extensions
 
         public static string GetNameByCode(this LocalizationSet localizationSet, string cultureCode)
         {
-            if (localizationSet == null || localizationSet.Localizations == null) return "";
+            if (localizationSet == null || localizationSet.Localizations == null) return null;
             var name = localizationSet.Localizations.FirstOrDefault(p => p.CultureCode == cultureCode);
             return name?.Value ?? localizationSet.Localizations.FirstOrDefault()?.Value;
         }

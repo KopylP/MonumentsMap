@@ -26,7 +26,8 @@ namespace MonumentsMap.WebApi.Controllers.v2
             ContractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
-            }
+            },
+            NullValueHandling = NullValueHandling.Ignore
         };
     }
 }
