@@ -86,6 +86,7 @@ function PhotoList({ data, onUpdate = (p) => p }) {
     const monumentPhotosModify = [...monumentPhotos];
     monumentPhotosModify[index].deleted = true;
     setMonumentPhotos(monumentPhotosModify);
+    undoDeleteSnackBar(index);
   };
 
   const undoDeleteSnackBar = (monumentPhotoIndex) => {
