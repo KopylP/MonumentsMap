@@ -8,6 +8,7 @@ namespace MonumentsMap.Framework.Enums.Monuments
         PODCASTS_POCKETCASTS,
         PODCASTS_CASTBOX,
         BOOK,
-        VIDEO
+        VIDEO,
+        INSTAGRAM
     }
 }
