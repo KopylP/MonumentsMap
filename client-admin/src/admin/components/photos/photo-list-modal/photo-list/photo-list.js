@@ -117,10 +117,6 @@ function PhotoList({ data, onUpdate = (p) => p }) {
     });
   };
 
-  const onDeleteMonumentPhoto = (index) => {
-    undoDeleteSnackBar(index);
-  };
-
   return (
     <React.Fragment>
       {monumentPhotos.map((monumentPhoto, i) => (
@@ -128,7 +124,6 @@ function PhotoList({ data, onUpdate = (p) => p }) {
           monumentPhoto={monumentPhoto}
           index={i}
           key={i}
-          onDeleteMonumentPhoto={onDeleteMonumentPhoto}
           setMonumentMajorPhotoByIndex={setMonumentMajorPhotoByIndex}
           onDelete={hideMonumentPhoto}
           onEdit={handleSetEditMonumentPhotoId}
