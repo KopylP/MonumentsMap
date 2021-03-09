@@ -16,6 +16,7 @@ namespace MonumentsMap.Infrastructure.Extensions
             services.AddScoped<IParticipantMonumentRepository, ParticipantMonumentRepository>();
             services.AddScoped<IParticipantRepository, ParticipantRepository>();
             services.AddScoped<IStatusRepository, StatusRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
         }
     }
 }

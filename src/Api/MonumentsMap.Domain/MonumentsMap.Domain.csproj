@@ -5,18 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Enumerations\**" />
     <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Enumerations\**" />
     <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Enumerations\**" />
     <None Remove="Repositories\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Enumerations\" />
   </ItemGroup>
 
   <ItemGroup>

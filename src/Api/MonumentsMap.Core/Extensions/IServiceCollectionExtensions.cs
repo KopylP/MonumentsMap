@@ -23,6 +23,7 @@ namespace MonumentsMap.Core.Extensions
             services.AddScoped<IConditionService, ConditionService>();
             services.AddScoped<IParticipantService, ParticipantService>();
             services.AddScoped<IStatusService, StatusService>();
+            services.AddScoped<ITagService, TagService>();
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();

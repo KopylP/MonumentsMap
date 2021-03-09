@@ -17,5 +17,7 @@ namespace MonumentsMap.Application.Services.Monuments
         Task<LocalizedMonumentDto> GetMonumentBySlug(string slug, string cultureCode);
         Task<int> GetMonumentIdBySlug(string slug);
         Task<IEnumerable<LocalizedMonumentDto>> GetAccepted(string cultureCode);
+        Task<IEnumerable<string>> GetTags(int monumentId);
+        Task<IEnumerable<string>> EditTags(int monumentId, string[] tags);
     }
 }

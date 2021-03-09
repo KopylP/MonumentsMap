@@ -22,6 +22,7 @@ namespace MonumentsMap.Infrastructure.Persistence
         public DbSet<Source> Sources { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<ParticipantMonument> ParticipantMonuments { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,6 +55,14 @@ namespace MonumentsMap.Infrastructure.Persistence
             modelBuilder.Entity<Monument>()
                 .HasIndex(p => p.Slug)
                 .IsUnique();
+
+            modelBuilder.Entity<Monument>()
+                .HasMany(p => p.Tags)
+                .WithMany(p => p.Monuments);
+
+            modelBuilder.Entity<Tag>()
+                .HasMany(p => p.Monuments)
+                .WithMany(p => p.Tags);
 
             modelBuilder.Entity<MonumentPhoto>()
                 .Property(p => p.Period)

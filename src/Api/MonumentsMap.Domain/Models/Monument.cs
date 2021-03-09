@@ -70,5 +70,7 @@ namespace MonumentsMap.Domain.Models
         public virtual List<MonumentPhoto> MonumentPhotos { get; set; }
 
         public virtual List<ParticipantMonument> ParticipantMonuments { get; set; }
+
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

@@ -35,6 +35,7 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
         public LocalizedConditionDto Condition { get; set; }
         public LocalizedStatusDto Status { get; set; }
         public List<MonumentPhotoDto> MonumentPhotos { get; set; }
+        public List<string> Tags { get; set; }
 
         public static LocalizedMonumentDto ToDto(Monument monument, string cultureCode, params string[] excludes)
         {
@@ -100,6 +101,11 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
                     Name = monument.Status.Name.GetNameByCode(cultureCode),
                     Description = monument.Status.Description.GetNameByCode(cultureCode)
                 };
+            }
+
+            if (!excludes.Contains(nameof(monument.Tags)) && monument.Tags != null && monument.Tags.Any())
+            {
+                localizedMonument.Tags = monument.Tags.Select(p => p.TagName).ToList();
             }
 
             return localizedMonument;

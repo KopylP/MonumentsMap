@@ -21,6 +21,9 @@ namespace MonumentsMap.Application.Dto.Monuments.Filters
         [FromQuery(Name = "conditionAbbreviations[]")]
         public string[] ConditionAbbreviations { get; set; }
 
+        [FromQuery(Name = "tags[]")]
+        public string[] Tags { get; set; }
+
         [FromQuery] 
         public int? StartYear { get; set; }
 

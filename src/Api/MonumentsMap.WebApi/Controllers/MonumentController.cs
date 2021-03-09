@@ -184,5 +184,36 @@ namespace MonumentsMap.WebApi.Controllers
             }
             return new JsonResult(monument, JsonSerializerSettings);
         }
+
+        [HttpGet("{id:int}/tags")]
+        public async Task<IActionResult> GetTags(int id)
+        {
+            IEnumerable<string> tags = null;
+            try
+            {
+                tags = await localizedRestService.GetTags(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFoundResponse(ex.Message);
+            }
+            return Ok(tags);
+        }
+
+        [HttpPatch("{id:int}/tags")]
+        [Authorize(Roles = "Editor")]
+        public async Task<IActionResult> EditTags([FromRoute]int id, string[] tags)
+        {
+            IEnumerable<string> tagsResponse = null;
+            try
+            {
+                tagsResponse = await localizedRestService.EditTags(id, tags);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFoundResponse(ex.Message);
+            }
+            return Ok(tagsResponse);
+        }
     }
 }

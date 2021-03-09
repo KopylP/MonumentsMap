@@ -2,16 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MonumentsMap.Infrastructure.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace MonumentsMap.Data.Migrations
+namespace MonumentsMap.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210309184957_Tags2")]
+    partial class Tags2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace MonumentsMap.Data.Migrations
 
                     b.HasIndex("TagsTagName");
 
-                    b.ToTable("MonumentTag");
+                    b.ToTable("MonumentTags");
                 });
 
             modelBuilder.Entity("MonumentsMap.Domain.Models.City", b =>

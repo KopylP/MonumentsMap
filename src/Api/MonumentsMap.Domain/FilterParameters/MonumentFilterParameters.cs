@@ -7,6 +7,7 @@ namespace MonumentsMap.Domain.FilterParameters
         public int[] Cities { get; set; }
         public string[] StatusAbbreviations { get; set; }
         public string[] ConditionAbbreviations { get; set; }
+        public string[] Tags { get; set; }
         public int? StartYear { get; set; }
         public int? EndYear { get; set; }
         public string CultureCode { get; set; }

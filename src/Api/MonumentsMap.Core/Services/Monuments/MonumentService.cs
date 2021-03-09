@@ -27,6 +27,7 @@ namespace MonumentsMap.Core.Services.Monuments
         private IStatusRepository _statusRepository;
         private IConditionRepository _conditionRepository;
         private ICityRepository _cityRepository;
+        private ITagRepository _tagRepository;
         private IMapper _mapper;
         
         public MonumentService(
@@ -36,6 +37,7 @@ namespace MonumentsMap.Core.Services.Monuments
             IStatusRepository statusRepository,
             IConditionRepository conditionRepository,
             ICityRepository cityRepository,
+            ITagRepository tagRepository,
             IMapper mapper)
         {
             slugLanguage = configuration["SlugLanguage"];
@@ -44,6 +46,7 @@ namespace MonumentsMap.Core.Services.Monuments
             _statusRepository = statusRepository;
             _conditionRepository = conditionRepository;
             _cityRepository = cityRepository;
+            _tagRepository = tagRepository;
             _mapper = mapper;
         }
 
@@ -157,7 +160,8 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.Sources,
                 m => m.MonumentPhotos,
                 m => m.Name.Localizations,
-                m => m.Description.Localizations);
+                m => m.Description.Localizations,
+                m => m.Tags);
 
             if (monument == null)
             {
@@ -205,7 +209,8 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.Condition.Description,
                 m => m.Condition.Name,
                 m => m.Name.Localizations,
-                m => m.MonumentPhotos);
+                m => m.MonumentPhotos,
+                m => m.Tags);
 
             var monuments = monumentsPagingList.Items
                 .Select(p => LocalizedMonumentDto.ToDto(p, cultureCode))
@@ -220,7 +225,8 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.Sources,
                 m => m.MonumentPhotos,
                 m => m.Name.Localizations,
-                m => m.Description.Localizations);
+                m => m.Description.Localizations,
+                m => m.Tags);
 
             if (monument == null)
             {
@@ -298,7 +304,8 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.Condition.Description,
                 m => m.Condition.Name,
                 m => m.Name.Localizations,
-                m => m.MonumentPhotos);
+                m => m.MonumentPhotos,
+                m => m.Tags);
 
             return monuments.Select(p => LocalizedMonumentDto.ToDto(p, cultureCode));
         }
@@ -320,6 +327,44 @@ namespace MonumentsMap.Core.Services.Monuments
                 slugName += $"-{entity.Year}";
             }
             entity.Slug = slugName;
+        }
+
+        public async Task<IEnumerable<string>> GetTags(int monumentId)
+        {
+            var monument = await _monumentRepository.Get(monumentId, p => p.Tags);
+            if (monument == null)
+            {
+                throw new NotFoundException("Monument not found");
+            }
+            return monument.Tags.Select(p => p.TagName).ToList();
+        }
+
+        public async Task<IEnumerable<string>> EditTags(int monumentId, string[] tags)
+        {
+            var monument = await _monumentRepository.Get(monumentId, p => p.Tags);
+            if (monument == null)
+            {
+                throw new NotFoundException("Monument not found");
+            }
+
+            monument.Tags.Clear();
+
+            if (tags.Any())
+            {
+                foreach (var tagName in tags)
+                {
+                    var tag = await _tagRepository.Get(tagName);
+                    if (tag == null)
+                    {
+                        throw new NotFoundException("Tag not found");
+                    }
+                    monument.Tags.Add(tag);
+                }
+            }
+            await _monumentRepository.Update(monument);
+            await _monumentRepository.SaveChangeAsync();
+
+            return tags; 
         }
     }
 }
