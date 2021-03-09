@@ -50,6 +50,18 @@ namespace MonumentsMap.Infrastructure.Repositories
                     select monument;
             }
 
+            if (parameters.ConditionAbbreviations.Any())
+            {
+                monuments = monuments.Include(p => p.Condition)
+                    .Where(p => parameters.ConditionAbbreviations.Contains(p.Condition.Abbreviation));
+            }
+
+            if (parameters.StatusAbbreviations.Any())
+            {
+                monuments = monuments.Include(p => p.Status)
+                    .Where(p => parameters.StatusAbbreviations.Contains(p.Status.Abbreviation));
+            }
+
             if (includes != null)
                 foreach (var include in includes)
                     monuments = monuments.Include(include);

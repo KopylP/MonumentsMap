@@ -14,6 +14,12 @@ namespace MonumentsMap.Application.Dto.Monuments.Filters
 
         [FromQuery(Name = "cities[]")]
         public int[] Cities { get; set; }
+        
+        [FromQuery(Name = "statusAbbreviations[]")]
+        public string[] StatusAbbreviations { get; set; }
+        
+        [FromQuery(Name = "conditionAbbreviations[]")]
+        public string[] ConditionAbbreviations { get; set; }
 
         [FromQuery] 
         public int? StartYear { get; set; }
