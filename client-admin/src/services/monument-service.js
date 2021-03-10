@@ -169,6 +169,14 @@ export default class MonumentService {
     return await this._patchRequest(`monument/${monumentId}/participants`, participantsList);
   }
 
+  getMonumentTags = async (monumentId) => {
+    return await this._getRequest(`monument/${monumentId}/tags`, false);
+  }
+
+  editMonumentTags = async (monumentId, tags) => {
+    return await this._patchRequest(`monument/${monumentId}/tags`, tags);
+  }
+
   async savePhoto(photo) {
     return await this._postFormRequest("photo/", photo);
   }
@@ -210,10 +218,6 @@ export default class MonumentService {
     );
   };
 
-  getParticipants = async () => {
-    return await this._getRequest(`participant`);
-  };
-
   getEditableParticipant = async (participantId) => {
     return await this._getRequest(`participant/${participantId}/editable`);
   };
@@ -228,6 +232,10 @@ export default class MonumentService {
 
   createParticipant = async (participant) => {
     return await this._postRequest(`participant`, participant);
+  }
+
+  getTags = async () => {
+    return await this._getRequest('tag', false);
   }
 
   getMe = async () => {

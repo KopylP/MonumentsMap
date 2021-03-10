@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import PeopleIcon from "@material-ui/icons/People";
 import withMonumentService from "../hoc-helpers/with-monument-service";
 import withData from "../hoc-helpers/with-data";
+import LabelIcon from '@material-ui/icons/Label';
 
 function MonumentsList({ data }) {
   const {
@@ -66,6 +67,15 @@ function MonumentsList({ data }) {
               setOpenPhotoDialog(true);
             },
           },
+          {
+            icon: () => <LabelIcon />,
+            tooltip: "Теги",
+            onClick: (e, rowData) => {
+              history.push(
+                `monuments/${rowData.id}/tags?name=${rowData.name}`
+              );
+            },
+          }
         ]}
       />
       <PhotoListModal
