@@ -3,6 +3,7 @@ using MonumentsMap.Contracts.Paging;
 using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
+using MonumentsMap.Framework.Enums;
 using MonumentsMap.Framework.Enums.Monuments;
 using MonumentsMap.Infrastructure.Persistence;
 using System;
@@ -74,6 +75,15 @@ namespace MonumentsMap.Infrastructure.Repositories
             if (includes != null)
                 foreach (var include in includes)
                     monuments = monuments.Include(include);
+
+            monuments = parameters.SortBy switch
+            {
+                SortBy.NAME when parameters.SortDirection == SortDirection.ASC => monuments.OrderBy(p => p.Name),
+                SortBy.NAME when parameters.SortDirection == SortDirection.DESC => monuments.OrderByDescending(p => p.Name),
+                SortBy.CREATED_AT when parameters.SortDirection == SortDirection.ASC => monuments.OrderBy(p => p.CreatedAt),
+                SortBy.CREATED_AT when parameters.SortDirection == SortDirection.DESC => monuments.OrderByDescending(p => p.CreatedAt),
+                _ => throw new NotSupportedException()
+            };
 
             monuments = (await monuments.ToListAsync())
                 .AsQueryable();

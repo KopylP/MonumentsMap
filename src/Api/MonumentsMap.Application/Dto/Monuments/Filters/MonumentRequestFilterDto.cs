@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Application.Dto.Monuments.Filters
 {
-    public class MonumentRequestFilterDto: BaseRequestFilterDto
+    public class MonumentRequestFilterDto: BaseSortableRequestFilterDto<SortBy>
     {
         public readonly static MonumentRequestFilterDto Empty = new MonumentRequestFilterDto { };
 

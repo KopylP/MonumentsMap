@@ -1,6 +1,8 @@
+using MonumentsMap.Framework.Enums.Monuments;
+
 namespace MonumentsMap.Domain.FilterParameters
 {
-    public class MonumentFilterParameters: BaseFilterParameters
+    public class MonumentFilterParameters: BaseSortableFilterParameters<SortBy>
     {
         public int[] Statuses { get; set; }
         public int[] Conditions { get; set; }
