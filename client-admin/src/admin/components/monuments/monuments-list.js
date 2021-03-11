@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import PeopleIcon from "@material-ui/icons/People";
 import withMonumentService from "../hoc-helpers/with-monument-service";
 import withData from "../hoc-helpers/with-data";
-import LabelIcon from '@material-ui/icons/Label';
+import LabelIcon from "@material-ui/icons/Label";
 
 function MonumentsList({ data }) {
   const {
@@ -22,8 +22,11 @@ function MonumentsList({ data }) {
     { title: "Ім'я", field: "name" },
     { title: "Рік", field: "year" },
     { title: "Період", field: "period" },
-    { title: "Захисний номер", field: "protectionNumber" },
-    { title: "Додано", field: "createdAt" },
+    {
+      title: "Теги",
+      field: "tags",
+      render: ({ tags }) => tags && tags.join(", "),
+    },
     {
       title: "Активна пам'ятка",
       render: (rowData) => <AcceptMonumentTable monument={rowData} />,
@@ -71,11 +74,9 @@ function MonumentsList({ data }) {
             icon: () => <LabelIcon />,
             tooltip: "Теги",
             onClick: (e, rowData) => {
-              history.push(
-                `monuments/${rowData.id}/tags?name=${rowData.name}`
-              );
+              history.push(`monuments/${rowData.id}/tags?name=${rowData.name}`);
             },
-          }
+          },
         ]}
       />
       <PhotoListModal
