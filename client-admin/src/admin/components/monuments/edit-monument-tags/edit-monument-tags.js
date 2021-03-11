@@ -10,6 +10,11 @@ import withSimpleAcceptForm from "../../hoc-helpers/withSimpleAcceptForm";
 import TagChip from "./tag-chip";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center"
+  },
   tagsContainer: {
     display: "flex",
     justifyContent: "center",
@@ -39,7 +44,6 @@ function EditMonumentTags({ data, getOptionsMethod, loading, acceptForm }) {
     const newTags = [...tags];
     for (let tagName of tagNames) {
       const i = newTags.findIndex((p) => p.name == tagName);
-      console.log(i);
       newTags[i].checked = true;
     }
     setTags(newTags);
@@ -71,8 +75,8 @@ function EditMonumentTags({ data, getOptionsMethod, loading, acceptForm }) {
     return <CircularProgress color="secondary" />
 
   return (
-    <form style={{ width: 500 }} onSubmit={handleSubmit}>
-      <Grid container spacing={3}>
+    <form className={classes.root} onSubmit={handleSubmit}>
+      <Grid container spacing={3} style={{ width: "50%" }}>
         <SimpleTitle text={`Теги для пам'ятки "${query.get("name")}"`} />
         <div className={classes.tagsContainer}>{tagViews}</div>
         <Grid item xs={12}>
