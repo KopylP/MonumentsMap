@@ -78,8 +78,6 @@ namespace MonumentsMap.Infrastructure.Repositories
 
             monuments = parameters.SortBy switch
             {
-                SortBy.NAME when parameters.SortDirection == SortDirection.ASC => monuments.OrderBy(p => p.Name),
-                SortBy.NAME when parameters.SortDirection == SortDirection.DESC => monuments.OrderByDescending(p => p.Name),
                 SortBy.CREATED_AT when parameters.SortDirection == SortDirection.ASC => monuments.OrderBy(p => p.CreatedAt),
                 SortBy.CREATED_AT when parameters.SortDirection == SortDirection.DESC => monuments.OrderByDescending(p => p.CreatedAt),
                 _ => throw new NotSupportedException()

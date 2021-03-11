@@ -2,7 +2,6 @@
 {
     public enum SortBy
     {
-        CREATED_AT,
-        NAME
+        CREATED_AT
     }
 }
