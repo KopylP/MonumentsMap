@@ -36,7 +36,6 @@ export default function SimpleList({
       title={title}
       columns={columns}
       data={listData}
-      sor
       style={{ width: "100%", marginTop: 15 }}
       actions={[
         ...extraActions,
