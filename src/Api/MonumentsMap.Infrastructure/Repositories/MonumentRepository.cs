@@ -84,7 +84,9 @@ namespace MonumentsMap.Infrastructure.Repositories
             
             if (parameters.SortBy == SortBy.NAME)
             {
-                monuments = monuments.Include(p => p.Name);
+                monuments = monuments
+                    .Include(p => p.Name)
+                    .ThenInclude(p => p.Localizations);
             }
 
             if (includes != null)
