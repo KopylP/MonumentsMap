@@ -81,7 +81,7 @@ namespace MonumentsMap.Infrastructure.Repositories
                     _ => throw new NotImplementedException()
                 };
             }
-            else if (parameters.SortBy != SortBy.NAME)
+            else if (parameters.SortBy == SortBy.NAME)
             {
                 monuments.Include(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode));
 
