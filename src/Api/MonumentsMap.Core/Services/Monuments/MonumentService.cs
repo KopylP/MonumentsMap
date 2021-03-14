@@ -204,6 +204,9 @@ namespace MonumentsMap.Core.Services.Monuments
             filterDto ??= MonumentRequestFilterDto.Empty;
 
             var filter = _mapper.Map<MonumentFilterParameters>(filterDto);
+
+            filter.CultureCode = cultureCode;
+
             var monumentsPagingList = await _monumentRepository.Filter(
                 filter,
                 m => m.Condition.Description,

@@ -27,7 +27,6 @@ namespace MonumentsMap.WebApi.Controllers
         public async override Task<IActionResult> Get([FromQuery] string cultureCode, [FromQuery] MonumentRequestFilterDto monumentFilterParams)
         {
             cultureCode = SafetyGetCulture(cultureCode);
-            monumentFilterParams.CultureCode = cultureCode;
 
             if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
             { 
@@ -64,8 +63,6 @@ namespace MonumentsMap.WebApi.Controllers
         )
         {
             cultureCode = SafetyGetCulture(cultureCode);
-
-            monumentFilterParams.CultureCode = cultureCode;
 
             if (!User.Identity.IsAuthenticated && monumentFilterParams.Hidden)
             {
