@@ -72,16 +72,30 @@ namespace MonumentsMap.Infrastructure.Repositories
                 }
             }
 
+            if (parameters.SortBy == SortBy.CREATED_AT)
+            {
+                monuments = parameters.SortDirection switch
+                {
+                    SortDirection.ASC => monuments.OrderBy(p => p.CreatedAt),
+                    SortDirection.DESC => monuments.OrderByDescending(p => p.CreatedAt),
+                    _ => throw new NotImplementedException()
+                };
+            }
+            else if (parameters.SortBy != SortBy.NAME)
+            {
+                monuments.Include(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode));
+
+                monuments = parameters.SortDirection switch
+                {
+                    SortDirection.ASC => monuments.OrderBy(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault()),
+                    SortDirection.DESC => monuments.OrderByDescending(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault()),
+                    _ => throw new NotImplementedException()
+                };
+            }
+
             if (includes != null)
                 foreach (var include in includes)
                     monuments = monuments.Include(include);
-
-            monuments = parameters.SortBy switch
-            {
-                SortBy.CREATED_AT when parameters.SortDirection == SortDirection.ASC => monuments.OrderBy(p => p.CreatedAt),
-                SortBy.CREATED_AT when parameters.SortDirection == SortDirection.DESC => monuments.OrderByDescending(p => p.CreatedAt),
-                _ => throw new NotSupportedException()
-            };
 
             monuments = (await monuments.ToListAsync())
                 .AsQueryable();
@@ -102,6 +116,16 @@ namespace MonumentsMap.Infrastructure.Repositories
                     select monument;
             }
 
+            if (parameters.SortBy == SortBy.YEAR)
+            {
+                monuments = parameters.SortDirection switch
+                {
+                    SortDirection.ASC => monuments.OrderBy(p => GetYearForOrderByPeriod(p.Year, p.Period)),
+                    SortDirection.DESC => monuments.OrderByDescending(p => GetYearForOrderByPeriod(p.Year, p.Period)),
+                    _ => throw new NotImplementedException()
+                };
+            }
+
             return await PagingList<Monument>.ToPagedListAsync(monuments, parameters.PageNumber, parameters.PageSize);
         }
 
@@ -118,6 +142,19 @@ namespace MonumentsMap.Infrastructure.Repositories
                 Period.EndOfCentury => ((year - 1) * 100 + 71, year * 100 - 1),//[71, 99]
                 Period.Decades => (year, year + 9),
                 _ => (year, year)
+            };
+        }
+
+        private int GetYearForOrderByPeriod(int year, Period period)
+        {
+            return period switch
+            {
+                Period.Year => year,
+                Period.StartOfCentury => (year - 1) * 100,
+                Period.MiddleOfCentury => (year - 1) * 100 + 50,
+                Period.EndOfCentury => year * 100 - 1,
+                Period.Decades => year,
+                _ => year
             };
         }
     }

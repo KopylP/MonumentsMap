@@ -7,6 +7,7 @@ namespace MonumentsMap.Framework.Enums.Monuments
         PODCASTS_GOOGLE,
         PODCASTS_POCKETCASTS,
         PODCASTS_CASTBOX,
+        PODCASTS_PODLINK,
         BOOK,
         VIDEO,
         INSTAGRAM
