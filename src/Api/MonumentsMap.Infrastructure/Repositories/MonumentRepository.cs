@@ -84,7 +84,13 @@ namespace MonumentsMap.Infrastructure.Repositories
             
             if (parameters.SortBy == SortBy.NAME)
             {
-                monuments.Include(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode));
+                monuments = monuments.Include(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode));
+                monuments = parameters.SortDirection switch
+                {
+                    SortDirection.ASC => monuments.OrderBy(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault()),
+                    SortDirection.DESC => monuments.OrderByDescending(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault()),
+                    _ => throw new NotImplementedException()
+                };
             }
 
             if (includes != null)
@@ -116,16 +122,6 @@ namespace MonumentsMap.Infrastructure.Repositories
                 {
                     SortDirection.ASC => monuments.OrderBy(p => GetYearForOrderByPeriod(p.Year, p.Period)),
                     SortDirection.DESC => monuments.OrderByDescending(p => GetYearForOrderByPeriod(p.Year, p.Period)),
-                    _ => throw new NotImplementedException()
-                };
-            }
-
-            if (parameters.SortBy == SortBy.NAME)
-            {
-                monuments = parameters.SortDirection switch
-                {
-                    SortDirection.ASC => monuments.OrderBy(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault()),
-                    SortDirection.DESC => monuments.OrderByDescending(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault()),
                     _ => throw new NotImplementedException()
                 };
             }
