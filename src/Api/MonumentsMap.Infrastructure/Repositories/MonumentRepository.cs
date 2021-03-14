@@ -87,8 +87,8 @@ namespace MonumentsMap.Infrastructure.Repositories
                 monuments = monuments.Include(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode));
                 monuments = parameters.SortDirection switch
                 {
-                    SortDirection.ASC => monuments.OrderBy(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault()),
-                    SortDirection.DESC => monuments.OrderByDescending(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault()),
+                    SortDirection.ASC => monuments.OrderBy(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault().Value),
+                    SortDirection.DESC => monuments.OrderByDescending(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault().Value),
                     _ => throw new NotImplementedException()
                 };
             }
