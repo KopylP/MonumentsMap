@@ -107,7 +107,9 @@ export default class MonumentService {
         statuses,
         conditions,
         startYear: yearsRange[0],
-        endYear: yearsRange[1]
+        endYear: yearsRange[1],
+        sortDirection: "DESC",
+        sortBy: "CREATED_AT"
       },
       cancelCallback
     );

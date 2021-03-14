@@ -6,7 +6,8 @@ const SourceType = {
     PODCASTS_CASTBOX: "PODCASTS_CASTBOX",
     BOOK: "BOOK",
     VIDEO: "VIDEO",
-    INSTAGRAM: "INSTAGRAM"
+    INSTAGRAM: "INSTAGRAM",
+    PODCASTS_PODLINK: "PODCASTS_PODLINK"
 }
 
 export default SourceType;
