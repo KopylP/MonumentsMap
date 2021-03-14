@@ -33,5 +33,8 @@ namespace MonumentsMap.Application.Dto.Monuments.Filters
 
         [FromQuery]
         public bool Hidden { get; set; }
+
+        [FromQuery]
+        public string CultureCode { get; set; }
     }
 }
