@@ -19,6 +19,7 @@ export default function SourceTypeSelect({ value, handleChange }) {
       <MenuItem value={SourceType.VIDEO}>Відео</MenuItem>
       <MenuItem value={SourceType.BOOK}>Книга</MenuItem>
       <MenuItem value={SourceType.PODCASTS_PODLINK}>Podlink</MenuItem>
+      <MenuItem value={SourceType.PODCASTS_SPOTIFY}>Spotify подкасти</MenuItem>
     </Select>
   );
 }
