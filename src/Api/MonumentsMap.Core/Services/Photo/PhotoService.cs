@@ -14,14 +14,14 @@ namespace MonumentsMap.Core.Services.Photo
     class PhotoService : IPhotoService
     {
         private readonly IPhotoRepository _photoRepository;
-        private readonly IImageService _photoService;
+        private readonly IImageService _imageService;
         private readonly IMapper _mapper;
         private readonly UnitOfWork _unitOfWork;
 
         public PhotoService(IPhotoRepository photoRepository, IImageService photoService, IMapper mapper, UnitOfWork unitOfWork)
         {
             _photoRepository = photoRepository;
-            _photoService = photoService;
+            _imageService = photoService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -34,7 +34,7 @@ namespace MonumentsMap.Core.Services.Photo
 
             try
             {
-                return await _photoService.FetchImageAsync(photo.Id.ToString(), photo.FileName);
+                return await _imageService.FetchImageAsync(photo.Id.ToString(), photo.FileName);
             }
             catch
             {
@@ -52,7 +52,7 @@ namespace MonumentsMap.Core.Services.Photo
 
             try
             {
-                return await _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
+                return await _imageService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size);
             }
             catch
             {
@@ -75,7 +75,7 @@ namespace MonumentsMap.Core.Services.Photo
 
                 try
                 {
-                    photo.ImageScale = await _photoService.SaveImageAsync(file, photo.Id.ToString());
+                    photo.ImageScale = await _imageService.SaveImageAsync(file, photo.Id.ToString());
                     await _photoRepository.Update(photo);
                     await _photoRepository.SaveChangeAsync();
                 }
