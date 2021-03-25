@@ -24,14 +24,16 @@ namespace MonumentsMap.Core.Services.Monuments
 {
     public class MonumentPhotoService : IMonumentPhotoService
     {
-        private readonly IPhotoService _photoService;
+        private readonly IImageService _imageService;
         private readonly IMonumentPhotoRepository _monumentPhotoRepository;
         private readonly IMapper _mapper;
-        public MonumentPhotoService(IMonumentPhotoRepository monumentPhotoRepository, IPhotoService photoService, IMapper mapper)
+        private readonly IPhotoRepository _photoRepository;
+        public MonumentPhotoService(IMonumentPhotoRepository monumentPhotoRepository, IImageService imageService, IMapper mapper, IPhotoRepository photoRepository)
         {
-            _photoService = photoService;
+            _imageService = imageService;
             _monumentPhotoRepository = monumentPhotoRepository;
             _mapper = mapper;
+            _photoRepository = photoRepository;
         }
 
         public async Task<int> ToogleMajorPhotoAsync(int monumentPhotoId)
@@ -147,7 +149,8 @@ namespace MonumentsMap.Core.Services.Monuments
             }
             try
             {
-                _photoService.DeleteSubDir(monumentPhoto.PhotoId.ToString());
+                var photo = await _photoRepository.Get(monumentPhoto.PhotoId);
+                await _imageService.DeleteImageAsync(monumentPhoto.PhotoId.ToString(), photo.FileName);
             }
             catch (IOException ex)
             {

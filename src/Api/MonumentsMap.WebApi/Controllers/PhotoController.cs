@@ -1,13 +1,9 @@
-using System;
 using System.Threading.Tasks;
-using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MonumentsMap.Api.Errors;
-using MonumentsMap.Application.Dto.Photo;
-using MonumentsMap.Data.Services;
-using MonumentsMap.Domain.Models;
-using MonumentsMap.Domain.Repository;
+using MonumentsMap.Application.Services.Photo;
+using MonumentsMap.Contracts.Exceptions;
+using MonumentsMap.WebApi.Framework.ResponseBuilders;
 
 namespace MonumentsMap.WebApi.Controllers
 {
@@ -17,12 +13,10 @@ namespace MonumentsMap.WebApi.Controllers
     [Route("api/[controller]")]
     public class PhotoController : BaseController
     {
-        private IPhotoRepository _photoRepository;
         private IPhotoService _photoService;
 
-        public PhotoController(IPhotoRepository photoRepository, IPhotoService photoService)
+        public PhotoController(IPhotoService photoService)
         {
-            _photoRepository = photoRepository;
             _photoService = photoService;
         }
 
@@ -30,44 +24,36 @@ namespace MonumentsMap.WebApi.Controllers
         [RequestSizeLimit(6_000_000)]
         public async Task<IActionResult> Post([FromForm] IFormFile file)
         {
-            var photo = new Photo
-            {
-                FileName = file.FileName
-            };
-            await _photoRepository.Add(photo);
-            await _photoRepository.SaveChangeAsync();
             try
             {
-                photo.ImageScale = await _photoService.SavePhotoAsync(file, photo.Id.ToString());
-                await _photoRepository.Update(photo);
-                await _photoRepository.SaveChangeAsync();
+                return Ok(await _photoService.SavePhoto(file));
             }
-            catch
+            catch (InternalServerErrorException ex)
             {
-                return InternalServerErrorResponse();
+                return InternalServerErrorResponse(ex.Message);
             }
-            return Ok(photo.Adapt<PhotoDto>());
         }
 
         [HttpGet("{id}/image")]
         public async Task<IActionResult> GetImageAsync(int id, [FromQuery] bool base64 = false)
         {
-            var photo = await _photoRepository.Get(id);
             try
             {
-                var (fileType, image) = _photoService.FetchImage(photo.Id.ToString(), photo.FileName);
-                if (base64)
-                {
-                    byte[] imageBytes = new byte[image.Length];
-                    await image.ReadAsync(imageBytes, 0, (int)image.Length);
-                    return Ok(new { image = "data:image/png;base64," + Convert.ToBase64String(imageBytes) });
-                }
+                var image = await _photoService.GetPhotoImageAsync(id);
 
-                return File(image, fileType);
+                return ImageResultBuilder
+                    .Create(image)
+                    .WithStandartImage()
+                    .UseBase64(base64)
+                    .Build();
             }
-            catch
+            catch (NotFoundException ex)
             {
-                return InternalServerErrorResponse();
+                return NotFoundResponse(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return InternalServerErrorResponse(ex.Message);
             }
         }
 
@@ -75,23 +61,23 @@ namespace MonumentsMap.WebApi.Controllers
         public async Task<IActionResult> GetImageAsync(int id, int size, [FromQuery] bool base64 = false)
         {
 
-            var photo = await _photoRepository.Get(id);
-            if (photo == null)
-                return NotFound(new NotFoundError("Monument photo model not found"));
             try
             {
-                if (base64)
-                {
-                    return Ok(new { image = await _photoService.GetImageThumbnailBase64(photo.Id.ToString(), photo.FileName, size) });
-                }
-                else
-                {
-                    return File(await _photoService.GetImageThumbnail(photo.Id.ToString(), photo.FileName, size), "image/jpeg");
-                }
+                var image = await _photoService.GetPhotoImageThumbnailAsync(id, size);
+
+                return ImageResultBuilder
+                    .Create(image)
+                    .WithStandartImage()
+                    .UseBase64(base64)
+                    .Build();
             }
-            catch
+            catch (NotFoundException ex)
             {
-                return InternalServerErrorResponse();
+                return NotFoundResponse(ex.Message);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return InternalServerErrorResponse(ex.Message);
             }
         }
     }

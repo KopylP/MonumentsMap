@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.IO;
+using MonumentsMap.Application.Dto.Image;
+using MonumentsMap.Application.Dto.Photo;
 using System.Threading.Tasks;
 
-namespace MonumentsMap.Data.Services
+namespace MonumentsMap.Application.Services.Photo
 {
     public interface IPhotoService
     {
-        Task<double> SavePhotoAsync(IFormFile file, string subDir);
-        (string fileType, FileStream image) FetchImage(string subDir, string fileName);
-        bool DeleteSubDir(string subDir);
-        Task<byte[]> GetImageThumbnail(string subDir, string fileName, int resizeWidth);
-        Task<string> GetImageThumbnailBase64(string subDir, string fileName, int resizeWidth);
-
+        Task<ImageResponseDto> GetPhotoImageAsync(int photoId);
+        Task<ImageResponseDto> GetPhotoImageThumbnailAsync(int photoId, int size);
+        Task<PhotoDto> SavePhoto(IFormFile file);
     }
 }

@@ -6,7 +6,7 @@ namespace MonumentsMap.Framework.Utilities
 {
     public static class ImageUtility
     {
-        public static Stream GetIamgeThumbnail(FileStream stream, int resizeWidth)
+        public static Stream GetIamgeThumbnail(Stream stream, int resizeWidth)
         {
             using (var imageStream = new SKManagedStream(stream))
             {
@@ -37,7 +37,7 @@ namespace MonumentsMap.Framework.Utilities
             }
         }
 
-        public static double GetImageScale(FileStream stream)
+        public static double GetImageScale(Stream stream)
         {
             using (var imageStream = new SKManagedStream(stream))
             {

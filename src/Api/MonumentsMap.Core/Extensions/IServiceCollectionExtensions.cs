@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MonumentsMap.Application.Services.Auth;
 using MonumentsMap.Application.Services.Invitation;
 using MonumentsMap.Application.Services.Monuments;
+using MonumentsMap.Application.Services.Photo;
 using MonumentsMap.Application.Services.Roles;
 using MonumentsMap.Application.Services.User;
 using MonumentsMap.Core.Services.Monuments;
@@ -30,6 +31,7 @@ namespace MonumentsMap.Core.Extensions
             services.AddScoped<IInvitationService, InvitationService>();
             services.AddScoped<IRolesService, RolesService>();
 
+            services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IPhotoService, PhotoService>();
         }
 
