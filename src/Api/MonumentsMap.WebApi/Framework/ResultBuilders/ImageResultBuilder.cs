@@ -7,10 +7,15 @@ namespace MonumentsMap.WebApi.Framework.ResponseBuilders
 {
     class ImageResultBuilder
     {
-        private ImageResponseDto _imageResponseDto;
+        public enum ImageFormat
+        {
+            JPEG,
+            PNG
+        }
 
-        private string _imageType;
+        private ImageResponseDto _imageResponseDto;
         private bool _isBase64 = false;
+        private ImageFormat _imageFormat = ImageFormat.JPEG;
 
         private ImageResultBuilder() {  }
 
@@ -19,9 +24,9 @@ namespace MonumentsMap.WebApi.Framework.ResponseBuilders
             _imageResponseDto = dto;
         }
 
-        public ImageResultBuilder WithStandartImage()
+        public ImageResultBuilder WithImageFormat(ImageFormat imageFormat)
         {
-            _imageType = "image/jpeg";
+            _imageFormat = imageFormat;
             return this;
         }
 
@@ -33,14 +38,14 @@ namespace MonumentsMap.WebApi.Framework.ResponseBuilders
 
         public IActionResult Build()
         {
+            var imageFormatString = ConvertImageTypeToString(_imageFormat);
             if (_isBase64)
             {
-                return new JsonResult(new { image = "data:image/png;base64," + Convert.ToBase64String(_imageResponseDto.ImageBytes) });
+                return new JsonResult(new { image = $"data:image/{imageFormatString};base64," + Convert.ToBase64String(_imageResponseDto.ImageBytes) });
             }
             else
             {
-                Guard.NotNullOrEmpty(_imageType);
-                return new FileContentResult(_imageResponseDto.ImageBytes, _imageType);
+                return new FileContentResult(_imageResponseDto.ImageBytes, $"image/{imageFormatString}");
             }
         }
 
@@ -48,5 +53,12 @@ namespace MonumentsMap.WebApi.Framework.ResponseBuilders
         {
             return new ImageResultBuilder(dto);
         }
+
+        private string ConvertImageTypeToString(ImageFormat imageFormat) => imageFormat switch
+        {
+            ImageFormat.JPEG => "jpeg",
+            ImageFormat.PNG => "png",
+            _ => throw new NotImplementedException()
+        };
     }
 }

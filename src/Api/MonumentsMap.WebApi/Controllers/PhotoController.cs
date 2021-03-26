@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MonumentsMap.Application.Services.Photo;
 using MonumentsMap.Contracts.Exceptions;
 using MonumentsMap.WebApi.Framework.ResponseBuilders;
+using static MonumentsMap.WebApi.Framework.ResponseBuilders.ImageResultBuilder;
 
 namespace MonumentsMap.WebApi.Controllers
 {
@@ -43,7 +44,7 @@ namespace MonumentsMap.WebApi.Controllers
 
                 return ImageResultBuilder
                     .Create(image)
-                    .WithStandartImage()
+                    .WithImageFormat(ImageFormat.JPEG)
                     .UseBase64(base64)
                     .Build();
             }
@@ -67,7 +68,7 @@ namespace MonumentsMap.WebApi.Controllers
 
                 return ImageResultBuilder
                     .Create(image)
-                    .WithStandartImage()
+                    .WithImageFormat(ImageFormat.JPEG)
                     .UseBase64(base64)
                     .Build();
             }
