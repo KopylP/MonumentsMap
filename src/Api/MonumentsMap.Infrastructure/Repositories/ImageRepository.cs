@@ -27,7 +27,7 @@ namespace MonumentsMap.Infrastructure.Repositories
             await Task.FromResult(new object());
         }
 
-        public async Task<Image> GetImageAsync(string path, string imageName)
+        public async Task<Domain.Models.Image> GetImageAsync(string path, string imageName)
         {
             var fullPath = Path.Combine(GetDirPath(path), imageName);
             byte[] image = null;
@@ -37,10 +37,10 @@ namespace MonumentsMap.Infrastructure.Repositories
                     await stream.ReadAsync(image, 0, (int)stream.Length);
             }
 
-            return new Image(path, imageName, image);
+            return new Domain.Models.Image(path, imageName, image);
         }
 
-        public async Task SaveImageAsync(Image file)
+        public async Task SaveImageAsync(Domain.Models.Image file)
         {
             string dirPath = GetDirPath(file.ImagePath);
             DirectoryInfo dirInfo = new DirectoryInfo(dirPath);

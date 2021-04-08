@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MonumentsMap.Domain.Repository;
+using MonumentsMap.Framework.Converters.Image;
+using MonumentsMap.Infrastructure.Converters.Image;
 using MonumentsMap.Infrastructure.Repositories;
 
 namespace MonumentsMap.Infrastructure.Extensions
@@ -19,6 +21,8 @@ namespace MonumentsMap.Infrastructure.Extensions
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<UnitOfWork.UnitOfWork>();
+
+            services.AddScoped<IImageConverter, ImageConverter>();
         }
     }
 }
