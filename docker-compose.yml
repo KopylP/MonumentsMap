@@ -93,7 +93,7 @@ services:
       - ./wordpress:/var/www/html
   
   db_wordpress:
-    image: mysql:5.7
+    image: mysql:latest
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: f5XHdC9ExmH2ndXh
