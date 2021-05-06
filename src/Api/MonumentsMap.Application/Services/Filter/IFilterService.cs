@@ -6,6 +6,6 @@ namespace MonumentsMap.Application.Services.Filter
 {
     public interface IFilterService
     {
-        Task<FilterResponseDto> GetAllAvailableFiltersAsync(string cultureCode);
+        Task<MonumentFilterResponseDto> GetMonumentAllAvailableFiltersAsync(string cultureCode);
     }
 }

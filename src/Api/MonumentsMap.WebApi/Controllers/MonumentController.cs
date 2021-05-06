@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using MonumentsMap.Application.Dto.Monuments;
 using MonumentsMap.Application.Dto.Monuments.EditableLocalizedDto;
 using MonumentsMap.Application.Dto.Monuments.Filters;
 using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
+using MonumentsMap.Application.Services.Filter;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Contracts.Exceptions;
 using MonumentsMap.Filters;
@@ -17,11 +19,13 @@ namespace MonumentsMap.WebApi.Controllers
     public class MonumentController : LocalizedController<IMonumentService, LocalizedMonumentDto, EditableLocalizedMonumentDto, MonumentRequestFilterDto>
     {
         private IMonumentPhotoService _monumentPhotoService;
+        private readonly IFilterService _filterService;
         public MonumentController(IMonumentService localizedRestService, 
             IMonumentPhotoService monumentPhotoService, 
-            IConfiguration configuration) : base(localizedRestService, configuration)
+            IConfiguration configuration, IFilterService filterService) : base(localizedRestService, configuration)
         {
             _monumentPhotoService = monumentPhotoService;
+            _filterService = filterService;
         }
 
         public async override Task<IActionResult> Get([FromQuery] string cultureCode, [FromQuery] MonumentRequestFilterDto monumentFilterParams)
@@ -56,6 +60,7 @@ namespace MonumentsMap.WebApi.Controllers
             return new JsonResult(monument, JsonSerializerSettings);
         }
 
+        [Obsolete]
         [HttpGet("filter")]
         public async Task<IActionResult> GetFilter(
             [FromQuery] MonumentRequestFilterDto monumentFilterParams,
@@ -71,6 +76,17 @@ namespace MonumentsMap.WebApi.Controllers
 
             var monuments = await localizedRestService.GetAsync(cultureCode, monumentFilterParams);
             return PagingList(monuments, JsonSerializerSettings);
+        }
+
+        [HttpGet("filters")]
+        public async Task<IActionResult> GetFilters(
+            [FromQuery] string cultureCode
+        )
+        {
+            cultureCode = SafetyGetCulture(cultureCode);
+
+            var filters = await _filterService.GetMonumentAllAvailableFiltersAsync(cultureCode);
+            return Ok(filters);
         }
 
         [HttpPatch("{id:int}/toogle/accepted")]

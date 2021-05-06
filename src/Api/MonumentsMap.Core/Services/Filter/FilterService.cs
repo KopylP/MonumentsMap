@@ -22,9 +22,9 @@ namespace MonumentsMap.Core.Services.Filter
             _cityService = cityService;
         }
 
-        public async Task<FilterResponseDto> GetAllAvailableFiltersAsync(string cultureCode)
+        public async Task<MonumentFilterResponseDto> GetMonumentAllAvailableFiltersAsync(string cultureCode)
         {
-            return new FilterResponseDto
+            return new MonumentFilterResponseDto
             {
                 Statuses = (await _statusService.GetAsync(cultureCode, null)).Items,
                 Conditions = (await _conditionService.GetAsync(cultureCode, null)).Items,

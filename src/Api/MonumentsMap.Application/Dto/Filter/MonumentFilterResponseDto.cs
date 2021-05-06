@@ -3,7 +3,7 @@ using MonumentsMap.Application.Dto.Monuments.LocalizedDto;
 
 namespace MonumentsMap.Application.Dto.Filter
 {
-    public class FilterResponseDto
+    public class MonumentFilterResponseDto
     {
         public IEnumerable<LocalizedCityDto> Cities { get; set; }
         public IEnumerable<LocalizedConditionDto> Conditions { get; set; }
