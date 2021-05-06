@@ -43,3 +43,5 @@ appsettings.Development.json
 appsettings.json
 postgres-data/
 certbot/
+wordpress/
+wordpress_db/
