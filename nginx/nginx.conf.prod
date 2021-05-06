@@ -39,9 +39,13 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    location /map {
-       proxy_pass http://client;
+    location / {
+       proxy_pass http://wordpress;
     }
+
+#    location /map {
+#       proxy_pass http://client;
+#    }
 
     location /admin {
         proxy_pass http://client-admin;
