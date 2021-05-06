@@ -102,3 +102,5 @@ services:
       MYSQL_PASSWORD: ZfrcBqh887xWwdN3
     volumes:
       - ./db_wordpress:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
