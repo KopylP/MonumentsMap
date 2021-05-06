@@ -12,4 +12,7 @@
     <ProjectReference Include="..\MonumentsMap.Domain\MonumentsMap.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dto\Filter\" />
+  </ItemGroup>
 </Project>

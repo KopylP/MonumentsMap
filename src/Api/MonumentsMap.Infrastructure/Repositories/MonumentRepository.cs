@@ -163,5 +163,19 @@ namespace MonumentsMap.Infrastructure.Repositories
                 _ => year
             };
         }
+
+        public async Task<int> GetMinimumMonumentsYearAsync()
+        {
+            var monuments = await dbSet.AsQueryable().ToListAsync();
+            try
+            {
+                return monuments
+                    .Min(p => GetYearForOrderByPeriod(p.Year, p.Period));
+            }
+            catch
+            {
+                return 100;
+            }
+        }
     }
 }

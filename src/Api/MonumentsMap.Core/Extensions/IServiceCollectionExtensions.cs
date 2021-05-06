@@ -2,11 +2,13 @@ using System;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using MonumentsMap.Application.Services.Auth;
+using MonumentsMap.Application.Services.Filter;
 using MonumentsMap.Application.Services.Invitation;
 using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Application.Services.Photo;
 using MonumentsMap.Application.Services.Roles;
 using MonumentsMap.Application.Services.User;
+using MonumentsMap.Core.Services.Filter;
 using MonumentsMap.Core.Services.Monuments;
 using MonumentsMap.Core.Services.Photo;
 using MonumentsMap.Core.Services.Roles;
@@ -33,6 +35,8 @@ namespace MonumentsMap.Core.Extensions
 
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IPhotoService, PhotoService>();
+
+            services.AddScoped<IFilterService, FilterService>();
         }
 
         public static void AddMapping(this IServiceCollection services)

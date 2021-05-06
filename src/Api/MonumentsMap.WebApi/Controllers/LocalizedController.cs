@@ -13,21 +13,21 @@ using Newtonsoft.Json;
 
 namespace MonumentsMap.WebApi.Controllers
 {
-    public class LocalizedController<TLocalizedRestService, TLocalizedEntity, TEditableLocalizedEntity, TFilter> : BaseController
+    public class LocalizedController<TLocalizedRestService, TLocalizedEntity, TEditableLocalizedEntity, TFilter> : BaseCultureController
     where TLocalizedRestService : ILocalizedRestService<TLocalizedEntity, TEditableLocalizedEntity, TFilter>
     where TLocalizedEntity : BaseLocalizedDto
     where TEditableLocalizedEntity : BaseEditableLocalizedDto
     where TFilter : BaseRequestFilterDto
     {
         protected readonly TLocalizedRestService localizedRestService;
-        protected readonly string DefaultCulture;
+        
         protected virtual JsonSerializerSettings JsonSerializerSettings => null;
 
-        public LocalizedController(TLocalizedRestService localizedRestService, IConfiguration configuration)
+        public LocalizedController(TLocalizedRestService localizedRestService, IConfiguration configuration) : base(configuration)
         {
             this.localizedRestService = localizedRestService;
-            DefaultCulture = configuration["DefaultLanguage"];
         }
+
         [HttpGet]
         public async virtual Task<IActionResult> Get([FromQuery] string cultureCode, [FromQuery] TFilter filter)
         {
@@ -117,12 +117,6 @@ namespace MonumentsMap.WebApi.Controllers
                 return NotFoundResponse(ex.Message);
             }
             return new JsonResult(editableLocalizedEntity, JsonSerializerSettings);
-        }
-
-        protected string SafetyGetCulture(string cultureCode)
-        {
-            if (string.IsNullOrEmpty(cultureCode)) return DefaultCulture;
-            return cultureCode;
         }
     }
 }
