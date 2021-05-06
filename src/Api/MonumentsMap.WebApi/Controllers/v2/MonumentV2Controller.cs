@@ -4,6 +4,7 @@ using MonumentsMap.Application.Services.Monuments;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
+using MonumentsMap.Application.Services.Filter;
 
 namespace MonumentsMap.WebApi.Controllers.v2
 {
@@ -13,7 +14,7 @@ namespace MonumentsMap.WebApi.Controllers.v2
     {
         public MonumentV2Controller(IMonumentService localizedRestService,
             IMonumentPhotoService monumentPhotoService,
-            IConfiguration configuration) : base(localizedRestService, monumentPhotoService, configuration)
+            IConfiguration configuration, IFilterService filterService) : base(localizedRestService, monumentPhotoService, configuration, filterService)
         {
         }
 
