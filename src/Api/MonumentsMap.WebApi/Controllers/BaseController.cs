@@ -2,6 +2,7 @@
 using MonumentsMap.Api.Errors;
 using MonumentsMap.Contracts.Paging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace MonumentsMap.WebApi.Controllers
 {
@@ -17,7 +18,12 @@ namespace MonumentsMap.WebApi.Controllers
 
         protected IActionResult PagingList<T>(PagingList<T> pagingList, JsonSerializerSettings jsonSerializerSettings)
         {
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagingList.PagingInformation));
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagingList.PagingInformation,
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                }));
+
             return new JsonResult(pagingList.Items, jsonSerializerSettings);
         }
 
