@@ -75,7 +75,7 @@ namespace MonumentsMap.Core.Services.Photo
                 var image = await _imageRepository.GetImageAsync(subDir, fileName);
                 using (var stream = new MemoryStream(image.ImageBytes))
                 {
-                    using (var imageStream = ImageUtility.GetIamgeThumbnail(stream, resizeWidth))
+                    using (var imageStream = ImageUtility.GetImageThumbnail(stream, resizeWidth))
                     {
                         imageArray = new byte[imageStream.Length];
                         await imageStream.ReadAsync(imageArray, 0, (int)imageStream.Length);
