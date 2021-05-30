@@ -23,4 +23,7 @@
     <ProjectReference Include="..\MonumentsMap.Framework\MonumentsMap.Framework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Common\" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MonumentsMap.Application.Dto.Common;
 using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Application.Dto.Monuments.Filters
@@ -36,5 +37,8 @@ namespace MonumentsMap.Application.Dto.Monuments.Filters
 
         [FromQuery]
         public string CultureCode { get; set; }
+
+        [FromQuery]
+        public GeoPointDto CurrentPosition { get; set; }
     }
 }
