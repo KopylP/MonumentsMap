@@ -14,4 +14,8 @@
     <ProjectReference Include="..\..\Contracts\MonumentsMap.Contracts\MonumentsMap.Contracts.csproj" />
     <ProjectReference Include="..\MonumentsMap.Domain\MonumentsMap.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Comparers\" />
+    <Folder Include="Comparers\Monument\" />
+  </ItemGroup>
 </Project>

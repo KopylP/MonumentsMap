@@ -1,3 +1,4 @@
+using MonumentsMap.Domain.Models.Common;
 using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Domain.FilterParameters
@@ -14,5 +15,6 @@ namespace MonumentsMap.Domain.FilterParameters
         public int? EndYear { get; set; }
         public string CultureCode { get; set; }
         public bool Hidden { get; set; }
+        public GeoPoint CurrentPosition { get; set; }
     }
 }

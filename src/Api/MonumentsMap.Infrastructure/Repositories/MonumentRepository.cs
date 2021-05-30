@@ -5,6 +5,7 @@ using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
 using MonumentsMap.Framework.Enums;
 using MonumentsMap.Framework.Enums.Monuments;
+using MonumentsMap.Infrastructure.Comparers.Monument;
 using MonumentsMap.Infrastructure.Persistence;
 using System;
 using System.Linq;
@@ -128,6 +129,18 @@ namespace MonumentsMap.Infrastructure.Repositories
                 {
                     SortDirection.ASC => monuments.OrderBy(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault().Value),
                     SortDirection.DESC => monuments.OrderByDescending(p => p.Name.Localizations.Where(p => p.CultureCode == parameters.CultureCode).FirstOrDefault().Value),
+                    _ => throw new NotImplementedException()
+                };
+            }
+
+            if (parameters.SortBy == SortBy.DISTANCE)
+            {
+                MonumentDistanceComparer distanceComparer = new(parameters.CurrentPosition.Latitude, parameters.CurrentPosition.Longitude); ;
+
+                monuments = parameters.SortDirection switch
+                {
+                    SortDirection.ASC => monuments.OrderBy(p => p, distanceComparer),
+                    SortDirection.DESC => monuments.OrderByDescending(p => p, distanceComparer),
                     _ => throw new NotImplementedException()
                 };
             }

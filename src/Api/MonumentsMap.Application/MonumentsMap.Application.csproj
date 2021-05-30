@@ -14,5 +14,6 @@
 
   <ItemGroup>
     <Folder Include="Dto\Filter\" />
+    <Folder Include="Dto\Common\" />
   </ItemGroup>
 </Project>
