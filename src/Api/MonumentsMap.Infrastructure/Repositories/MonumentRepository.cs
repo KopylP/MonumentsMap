@@ -135,6 +135,9 @@ namespace MonumentsMap.Infrastructure.Repositories
 
             if (parameters.SortBy == SortBy.DISTANCE)
             {
+                if (parameters.CurrentPosition == null)
+                    throw new ArgumentException("Current position cannot be empty, if sort by distance");
+
                 MonumentDistanceComparer distanceComparer = new(parameters.CurrentPosition.Latitude, parameters.CurrentPosition.Longitude); ;
 
                 monuments = parameters.SortDirection switch

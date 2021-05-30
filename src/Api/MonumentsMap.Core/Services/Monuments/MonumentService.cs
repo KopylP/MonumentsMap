@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -207,19 +208,27 @@ namespace MonumentsMap.Core.Services.Monuments
 
             filter.CultureCode = cultureCode;
 
-            var monumentsPagingList = await _monumentRepository.Filter(
-                filter,
-                m => m.Condition.Description,
-                m => m.Condition.Name,
-                m => m.Name.Localizations,
-                m => m.MonumentPhotos,
-                m => m.Tags);
+            try
+            {
 
-            var monuments = monumentsPagingList.Items
-                .Select(p => LocalizedMonumentDto.ToDto(p, cultureCode))
-                .ToList();
+                var monumentsPagingList = await _monumentRepository.Filter(
+                    filter,
+                    m => m.Condition.Description,
+                    m => m.Condition.Name,
+                    m => m.Name.Localizations,
+                    m => m.MonumentPhotos,
+                    m => m.Tags);
 
-            return new PagingList<LocalizedMonumentDto>(monuments, monumentsPagingList.PagingInformation);
+                var monuments = monumentsPagingList.Items
+                    .Select(p => LocalizedMonumentDto.ToDto(p, cultureCode))
+                    .ToList();
+
+                return new PagingList<LocalizedMonumentDto>(monuments, monumentsPagingList.PagingInformation);
+            }
+            catch (Exception ex)
+            {
+                throw new BadRequestException(ex.Message);
+            }
         }
 
         public async Task<LocalizedMonumentDto> GetAsync(int id, string cultureCode)
