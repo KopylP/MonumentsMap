@@ -16,6 +16,7 @@ using MonumentsMap.Core.Extensions;
 using MonumentsMap.Domain.FilterParameters;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Repository;
+using MonumentsMap.Domain.Resolvers;
 
 namespace MonumentsMap.Core.Services.Monuments
 {
@@ -30,6 +31,7 @@ namespace MonumentsMap.Core.Services.Monuments
         private ICityRepository _cityRepository;
         private ITagRepository _tagRepository;
         private IMapper _mapper;
+        private IPhotoUrlResolver _photoUrlResolver;
         
         public MonumentService(
             IConfiguration configuration,
@@ -39,7 +41,8 @@ namespace MonumentsMap.Core.Services.Monuments
             IConditionRepository conditionRepository,
             ICityRepository cityRepository,
             ITagRepository tagRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IPhotoUrlResolver photoUrlResolver)
         {
             slugLanguage = configuration["SlugLanguage"];
             _monumentRepository = monumentRepository;
@@ -49,6 +52,7 @@ namespace MonumentsMap.Core.Services.Monuments
             _cityRepository = cityRepository;
             _tagRepository = tagRepository;
             _mapper = mapper;
+            _photoUrlResolver = photoUrlResolver;
         }
 
         public async Task<int> ToogleMonument(int monumentId)
@@ -180,7 +184,7 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.Description.Localizations,
                 m => m.Name.Localizations);
 
-            return LocalizedMonumentDto.ToDto(monument, cultureCode);
+            return LocalizedMonumentDto.ToDto(monument, cultureCode, _photoUrlResolver, _mapper);
         }
 
         public async Task<int> GetMonumentIdBySlug(string slug)
@@ -220,7 +224,7 @@ namespace MonumentsMap.Core.Services.Monuments
                     m => m.Tags);
 
                 var monuments = monumentsPagingList.Items
-                    .Select(p => LocalizedMonumentDto.ToDto(p, cultureCode))
+                    .Select(p => LocalizedMonumentDto.ToDto(p, cultureCode, _photoUrlResolver, _mapper))
                     .ToList();
 
                 return new PagingList<LocalizedMonumentDto>(monuments, monumentsPagingList.PagingInformation);
@@ -256,7 +260,7 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.Description.Localizations,
                 m => m.Name.Localizations);
 
-            return LocalizedMonumentDto.ToDto(monument, cultureCode);
+            return LocalizedMonumentDto.ToDto(monument, cultureCode, _photoUrlResolver, _mapper);
         }
 
         public async Task<EditableLocalizedMonumentDto> GetEditable(int id)
@@ -319,7 +323,7 @@ namespace MonumentsMap.Core.Services.Monuments
                 m => m.MonumentPhotos,
                 m => m.Tags);
 
-            return monuments.Select(p => LocalizedMonumentDto.ToDto(p, cultureCode));
+            return monuments.Select(p => LocalizedMonumentDto.ToDto(p, cultureCode, _photoUrlResolver, _mapper));
         }
 
         private void ChangeSlugOfMonument(Monument entity)

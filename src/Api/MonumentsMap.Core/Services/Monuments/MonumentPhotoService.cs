@@ -171,8 +171,8 @@ namespace MonumentsMap.Core.Services.Monuments
                 PhotoId = p.PhotoId,
                 MonumentId = p.MonumentId,
                 MajorPhoto = p.MajorPhoto,
-                Sources = p.Sources.Adapt<SourceDto[]>().ToList(),
-                Photo = p.Photo.Adapt<PhotoDto>(),
+                Sources = _mapper.Map<SourceDto[]>(p.Sources).ToList(),
+                Photo = _mapper.Map<PhotoDto>(p.Photo),
                 Description = p.Description.GetNameByCode(cultureCode)
             };
         }

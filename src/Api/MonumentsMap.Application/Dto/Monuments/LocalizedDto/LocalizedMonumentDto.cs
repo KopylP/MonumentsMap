@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mapster;
+using AutoMapper;
 using MonumentsMap.Application.Dto.Localized;
 using MonumentsMap.Application.Extensions;
 using MonumentsMap.Domain.Models;
+using MonumentsMap.Domain.Resolvers;
 using MonumentsMap.Framework.Enums.Monuments;
 
 namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
@@ -25,6 +26,7 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public int? MajorPhotoImageId { get; set; }
+        public string MajorPhotoImageUrl { get; set; }
         public string ProtectionNumber { get; set; }
         public string Slug { get; set; }
         public bool IsEasterEgg { get; set; }
@@ -37,8 +39,19 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
         public List<MonumentPhotoDto> MonumentPhotos { get; set; }
         public List<string> Tags { get; set; }
 
-        public static LocalizedMonumentDto ToDto(Monument monument, string cultureCode, params string[] excludes)
+        public static LocalizedMonumentDto ToDto(
+            Monument monument,
+            string cultureCode,
+            IPhotoUrlResolver photoUrlResolver,
+            IMapper mapper,
+            params string[] excludes)
         {
+            var majorPhotoImageId = monument.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId;
+
+            string majorPhotoImageUrl = majorPhotoImageId.HasValue
+                ? photoUrlResolver.GetUrl(majorPhotoImageId.Value)
+                : null;
+
             var localizedMonument = new LocalizedMonumentDto
             {
                 Id = monument.Id,
@@ -57,9 +70,10 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
                 Longitude = monument.Longitude,
                 CreatedAt = monument.CreatedAt,
                 UpdatedAt = monument.UpdatedAt,
+                MajorPhotoImageUrl = majorPhotoImageUrl,
                 ProtectionNumber = monument.ProtectionNumber,
                 IsEasterEgg = monument.IsEasterEgg,
-                MajorPhotoImageId = monument.MonumentPhotos.Where(p => p.MajorPhoto).FirstOrDefault()?.PhotoId
+                MajorPhotoImageId = majorPhotoImageId
             };
 
             if (monument.Condition != null && !excludes.Contains(nameof(monument.Condition)))
@@ -84,12 +98,13 @@ namespace MonumentsMap.Application.Dto.Monuments.LocalizedDto
 
             if (monument.Sources != null && !excludes.Contains(nameof(monument.Sources)))
             {
-                localizedMonument.Sources = monument.Sources.Adapt<SourceDto[]>().ToList();
+                localizedMonument.Sources = mapper.Map<SourceDto[]>(monument.Sources).ToList();
             }
 
             if (monument.MonumentPhotos != null && !excludes.Contains(nameof(monument.MonumentPhotos)))
             {
-                localizedMonument.MonumentPhotos = monument.MonumentPhotos.Adapt<MonumentPhotoDto[]>().ToList();
+                localizedMonument.MonumentPhotos = mapper
+                    .Map<MonumentPhotoDto[]>(monument.MonumentPhotos).ToList();
             }
 
             if (monument.Status != null && !excludes.Contains(nameof(monument.Status)))

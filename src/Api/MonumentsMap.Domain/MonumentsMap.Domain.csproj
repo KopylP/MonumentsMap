@@ -25,5 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Common\" />
+    <Folder Include="Resolvers\" />
   </ItemGroup>
 </Project>

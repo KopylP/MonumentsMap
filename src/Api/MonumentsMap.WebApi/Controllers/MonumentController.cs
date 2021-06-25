@@ -37,15 +37,15 @@ namespace MonumentsMap.WebApi.Controllers
                 return UnauthorizedResponse("You cannot see hidden monuments");
             }
 
-            try
-            {
+            //try
+            //{
                 var monuments = await localizedRestService.GetAsync(cultureCode, monumentFilterParams);
                 return PagingList(monuments, JsonSerializerSettings);
-            }
-            catch (BadRequestException ex)
-            {
-                return BadRequestResponse(ex.Message);
-            }
+            //}
+            //catch (BadRequestException ex)
+            //{
+            //    return BadRequestResponse(ex.Message);
+            //}
         }
 
         [ServiceFilter(typeof(CultureCodeResourceFilter))]
