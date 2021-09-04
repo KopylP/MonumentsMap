@@ -8,6 +8,7 @@ using MonumentsMap.Application.Services.Monuments;
 using MonumentsMap.Application.Services.Photo;
 using MonumentsMap.Application.Services.Roles;
 using MonumentsMap.Application.Services.User;
+using MonumentsMap.Core.Framework;
 using MonumentsMap.Core.Profiles;
 using MonumentsMap.Core.Profiles.Converters;
 using MonumentsMap.Core.Resolvers;
@@ -42,6 +43,7 @@ namespace MonumentsMap.Core.Extensions
 
             services.AddScoped<IFilterService, FilterService>();
             services.AddSingleton<IPhotoUrlResolver, PhotoUrlResolver>();
+            services.AddScoped<IUrlCreator, UrlCreator>();
         }
 
         public static void AddMapping(this IServiceCollection services)

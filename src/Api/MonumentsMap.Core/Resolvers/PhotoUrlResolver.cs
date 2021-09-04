@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using MonumentsMap.Core.Framework;
 using MonumentsMap.Domain.Models;
 using MonumentsMap.Domain.Resolvers;
 
@@ -7,21 +6,21 @@ namespace MonumentsMap.Core.Resolvers
 {
     public class PhotoUrlResolver : IPhotoUrlResolver
     {
-        private readonly string basePhotoUrl;
+        private readonly IUrlCreator _urlCreator;
 
-        public PhotoUrlResolver(IConfiguration configuration)
+        public PhotoUrlResolver(IUrlCreator urlCreator)
         {
-            basePhotoUrl = configuration["BasePhotoUrl"];
+            _urlCreator = urlCreator;
         }
 
         public string GetUrl(Photo photo)
         {
-            return string.Format(basePhotoUrl, photo.Id);
+            return GetUrl(photo.Id);
         }
 
         public string GetUrl(int photoId)
         {
-            return string.Format(basePhotoUrl, photoId);
+            return _urlCreator.Create("GetImageAsync", "Photo", new { id = photoId });
         }
     }
 }

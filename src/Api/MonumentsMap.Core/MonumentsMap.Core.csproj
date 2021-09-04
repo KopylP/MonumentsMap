@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Services\Monuments\MonumentPhotoService.cs~RF3a9988d2.TMP" />
+    <None Remove="Framework\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonumentsMap.Application\MonumentsMap.Application.csproj" />
@@ -24,5 +25,6 @@
     <Folder Include="Services\Filter\" />
     <Folder Include="Profiles\Converters\" />
     <Folder Include="Resolvers\" />
+    <Folder Include="Framework\" />
   </ItemGroup>
 </Project>
